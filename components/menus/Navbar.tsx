@@ -1,0 +1,48 @@
+import React from "react";
+
+import { Menu } from "@mantine/core";
+
+import Link from "next/link";
+
+import classes from "./Navbar.module.scss";
+
+import { typeMenuNavbar } from "@/types/menu/navbar";
+
+export default function Navbar({ children, subLinks }: typeMenuNavbar) {
+	const menuItems =
+		subLinks &&
+		subLinks.map(item => (
+			<Menu.Item
+				key={item.link}
+				component={Link}
+				href={item.link}
+				leftSection={item.iconLeft && <item.iconLeft size={14} />}
+				rightSection={item.iconRight && <item.iconRight size={14} />}
+			>
+				{item.label}
+			</Menu.Item>
+		));
+
+	return (
+		<Menu
+			shadow="xs"
+			width={"auto"}
+			trigger="hover"
+			position="bottom-end"
+			openDelay={50}
+			closeDelay={50}
+			classNames={{
+				dropdown: classes.dropdown,
+				arrow: classes.arrow,
+				divider: classes.divider,
+				label: classes.label,
+				item: classes.item,
+				itemLabel: classes.itemLabel,
+				itemSection: classes.itemSection,
+			}}
+		>
+			<Menu.Target>{children}</Menu.Target>
+			{menuItems && <Menu.Dropdown>{menuItems}</Menu.Dropdown>}
+		</Menu>
+	);
+}

@@ -1,0 +1,18 @@
+.navbar {
+	background-color: var(--mantine-color-body);
+	border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+	padding: var(--mantine-spacing-xs) 0;
+}
+
+.link {
+	padding: 0 calc(var(--mantine-spacing-xs) / 2);
+	text-decoration: none;
+	color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+	font-size: var(--mantine-font-size-sm);
+	font-weight: 500;
+	transition: 0.25s color ease;
+
+	@include hover {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-sec-6));
+	}
+}

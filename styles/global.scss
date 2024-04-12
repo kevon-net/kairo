@@ -21,3 +21,16 @@ body {
 
 body {
 }
+
+// responsive styles
+.textResponsive {
+	font-size: var(--mantine-font-size-xs);
+
+	@include larger-than($mantine-breakpoint-xs) {
+		font-size: var(--mantine-font-size-sm);
+	}
+
+	@include larger-than($mantine-breakpoint-sm) {
+		font-size: var(--mantine-font-size-md);
+	}
+}

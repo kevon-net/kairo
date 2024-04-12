@@ -1,15 +1,12 @@
 .root {
-	background-color: light-dark(var(--mantine-color-pri-6));
+	box-shadow: var(--mantine-shadow-xs);
 }
 
 .icon {
-	background-color: light-dark(var(--mantine-color-sec-6));
 }
 
 .title {
-	color: light-dark(var(--mantine-color-gray-3));
 }
 
 .description {
-	color: light-dark(var(--mantine-color-gray-3));
 }

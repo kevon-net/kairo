@@ -5,15 +5,14 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Anchor, Box, Button, Center, Checkbox, Grid, Stack, Text, TextInput, Title } from "@mantine/core";
+import { Anchor, Box, Button, Center, Checkbox, Grid, Stack, Text } from "@mantine/core";
 import { isNotEmpty, matchesField, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import utility from "@/utilities";
-
-import api from "@/apis";
+import controller from "@/controllers";
 
 import notificationSuccess from "@/styles/notifications/success.module.scss";
 import notificationFailure from "@/styles/notifications/failure.module.scss";
@@ -46,54 +45,28 @@ export default function Signup() {
 	};
 
 	const handleSubmit = async (formValues: typeSignUp) => {
-		if (form.isValid()) {
-			setSending(true);
+		try {
+			if (form.isValid()) {
+				setSending(true);
 
-			await api.user.authentication
-				.signUp(parse(formValues))
-				.then(response => {
-					if (!response) {
-						notifications.show({
-							id: "no-response",
-							color: "red",
-							icon: <IconX size={16} stroke={1.5} />,
-							autoClose: 5000,
-							title: "Server Unavailable",
-							message: `There was no response from the server.`,
-							classNames: {
-								root: notificationFailure.root,
-								icon: notificationFailure.icon,
-								description: notificationFailure.description,
-								title: notificationFailure.title,
-							},
-						});
-					} else {
-						if (response.exists == false) {
+				await controller.request
+					.post("http://localhost:3000/api/sign-up", {
+						method: "POST",
+						body: JSON.stringify(parse(formValues)),
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "application/json",
+						},
+					})
+					.then(response => {
+						if (!response) {
 							notifications.show({
-								id: "signup-success",
-								withCloseButton: false,
-								color: "pri.6",
-								icon: <IconCheck size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Registered",
-								message: "A verification code has been sent to the provided email.",
-								classNames: {
-									root: notificationSuccess.root,
-									icon: notificationSuccess.icon,
-									description: notificationSuccess.description,
-									title: notificationSuccess.title,
-								},
-							});
-
-							router.replace(`/auth/verify/${parse(formValues).email}`);
-						} else {
-							notifications.show({
-								id: "signup-exists",
+								id: "no-response",
 								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: `User Exists`,
-								message: `An account with the provided email already exists.`,
+								title: "Server Unavailable",
+								message: `There was no response from the server.`,
 								classNames: {
 									root: notificationFailure.root,
 									icon: notificationFailure.icon,
@@ -101,45 +74,74 @@ export default function Signup() {
 									title: notificationFailure.title,
 								},
 							});
+						} else {
+							if (!response.user) {
+								notifications.show({
+									id: "signup-success",
+									withCloseButton: false,
+									color: "pri.6",
+									icon: <IconCheck size={16} stroke={1.5} />,
+									autoClose: 5000,
+									title: "Registered",
+									message: "A verification code has been sent to the provided email.",
+									classNames: {
+										root: notificationSuccess.root,
+										icon: notificationSuccess.icon,
+										description: notificationSuccess.description,
+										title: notificationSuccess.title,
+									},
+								});
 
-							router.push(`/auth/log-in`);
+								router.replace(`/${response.userId}/verify`);
+							} else {
+								notifications.show({
+									id: "signup-exists",
+									color: "red",
+									icon: <IconX size={16} stroke={1.5} />,
+									autoClose: 5000,
+									title: `User Exists`,
+									message: `An account with the provided email already exists.`,
+									classNames: {
+										root: notificationFailure.root,
+										icon: notificationFailure.icon,
+										description: notificationFailure.description,
+										title: notificationFailure.title,
+									},
+								});
+
+								router.push(`/sign-in`);
+							}
+
+							form.reset();
 						}
-					}
-				})
-				.then(() => form.reset())
-				.catch(error => {
-					notifications.show({
-						id: "signup-fail",
-						color: "red",
-						icon: <IconX size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: `Send Failed`,
-						message: `Error: ${error.message}`,
-						classNames: {
-							root: notificationFailure.root,
-							icon: notificationFailure.icon,
-							description: notificationFailure.description,
-							title: notificationFailure.title,
-						},
 					});
-				});
-
+			}
+		} catch (error) {
+			notifications.show({
+				id: "signup-fail",
+				color: "red",
+				icon: <IconX size={16} stroke={1.5} />,
+				autoClose: 5000,
+				title: `Send Failed`,
+				message: (error as Error).message,
+				classNames: {
+					root: notificationFailure.root,
+					icon: notificationFailure.icon,
+					description: notificationFailure.description,
+					title: notificationFailure.title,
+				},
+			});
+		} finally {
 			setSending(false);
 		}
 	};
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate w={"100%"}>
+		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Stack gap={"xl"}>
-				<Stack gap={"xs"}>
-					<Title order={1} ta={"center"}>
-						Sign Up
-					</Title>
-					<Text ta={"center"}>Enter your details to create an account.</Text>
-				</Stack>
-				<Grid pb={"md"}>
+				<Grid>
 					<Grid.Col span={{ base: 12 }}>
-						<Component.Input.Text
+						<Component.Core.Input.Text
 							required
 							label={"Email"}
 							type="email"
@@ -149,7 +151,7 @@ export default function Signup() {
 						/>
 					</Grid.Col>
 					<Grid.Col span={{ base: 12, sm: 6 }}>
-						<Component.Input.Password
+						<Component.Core.Input.Password
 							required
 							label={"Password"}
 							type="password"
@@ -158,7 +160,7 @@ export default function Signup() {
 						/>
 					</Grid.Col>
 					<Grid.Col span={{ base: 12, sm: 6 }}>
-						<Component.Input.Password
+						<Component.Core.Input.Password
 							required
 							label={"Confirm Password"}
 							type="password"
@@ -169,6 +171,7 @@ export default function Signup() {
 					<Grid.Col span={{ base: 12, sm: 12 }}>
 						<Checkbox
 							size="xs"
+							ml={"lg"}
 							label={
 								<Text inherit>
 									I have read and accept the{" "}
@@ -189,10 +192,10 @@ export default function Signup() {
 							})}
 						/>
 					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
-						<Center py={"md"}>
-							<Button type="submit" w={{ base: "100%", sm: "50%" }} color="pri.8" loading={sending}>
-								{sending ? "Signing Up" : "Signup"}
+					<Grid.Col span={{ base: 8 }} mx={"auto"}>
+						<Center mt={"md"}>
+							<Button type="submit" w={{ base: "75%", sm: "50%" }} color="pri.8" loading={sending}>
+								{sending ? "Signing Up" : "Sign Up"}
 							</Button>
 						</Center>
 					</Grid.Col>

@@ -4,6 +4,16 @@
 	padding: var(--mantine-spacing-xs) 0;
 }
 
+.logo {
+	width: 40px;
+	height: 40px;
+
+	@include smaller-than($mantine-breakpoint-xs) {
+		width: 24px;
+		height: 24px;
+	}
+}
+
 .link {
 	padding: 0 calc(var(--mantine-spacing-xs) / 2);
 	text-decoration: none;
@@ -15,4 +25,8 @@
 	@include hover {
 		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-sec-6));
 	}
+}
+
+.linkActive {
+	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
 }

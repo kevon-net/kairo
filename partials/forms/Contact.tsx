@@ -1,20 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import ReactDOMServer from "react-dom/server";
 
 import Link from "next/link";
 
-import { Anchor, Box, Button, Checkbox, Grid, Input, Select, Text, TextInput, Textarea } from "@mantine/core";
+import { Anchor, Box, Button, Center, Checkbox, Grid, Text } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import Component from "@/components";
-import api from "@/apis";
 
-import Template from "@/templates";
+import controller from "@/controllers";
+
+import notificationSuccess from "@/styles/notifications/success.module.scss";
+import notificationFailure from "@/styles/notifications/failure.module.scss";
+
+import { typeContact } from "@/types/form";
 
 export default function Contact() {
 	const [submitted, setSubmitted] = useState(false);
@@ -34,95 +37,110 @@ export default function Contact() {
 			fname: value => (value.trim().length < 2 ? "At least 2 letters" : null),
 			lname: value => (value.trim().length < 2 ? "At least 2 letters" : null),
 			email: value => (/^\S+@\S+$/.test(value.trim()) ? null : "Invalid email"),
-			phone: value => (value && value.trim().length < 18 ? "Invalid Phone Number" : null),
+			phone: value => (value && value.trim().length < 10 ? "Invalid Phone Number" : null),
 			subject: value => (value.trim().length < 1 ? "Please select a topic" : null),
 			message: value => (value.trim().length < 10 ? "Message Too Short" : null),
 			policy: isNotEmpty("You must accept to proceed"),
 		},
 	});
 
-	const handleSubmit = async () => {
+	const parse = (rawData: typeContact) => {
+		return {
+			fname:
+				rawData.fname.trim().toLowerCase().charAt(0).toUpperCase() +
+				rawData.fname.trim().slice(1).toLowerCase(),
+			lname:
+				rawData.lname.trim().toLowerCase().charAt(0).toUpperCase() +
+				rawData.lname.trim().slice(1).toLowerCase(),
+			email: rawData.email.trim().toLowerCase(),
+			phone: rawData.phone,
+			subject: rawData.subject == "Other" ? "General" : `${rawData.subject}`,
+			message: rawData.message.trim(),
+		};
+	};
+
+	const handleSubmit = async (formValues: typeContact) => {
 		if (form.isValid()) {
-			setSubmitted(true);
+			try {
+				setSubmitted(true);
 
-			const templateParams = {
-				fname:
-					form.values.fname.trim().toLowerCase().charAt(0).toUpperCase() +
-					form.values.fname.trim().slice(1).toLowerCase(),
-				lname:
-					form.values.lname.trim().toLowerCase().charAt(0).toUpperCase() +
-					form.values.lname.trim().slice(1).toLowerCase(),
-				email: form.values.email.trim().toLowerCase(),
-				phone: form.values.phone,
-				subject: form.values.subject == "Other" ? "General" : `${form.values.subject}`,
-				message: form.values.message.trim(),
-			};
-
-			// console.log(templateParams);
-
-			const mailOptions = {
-				from: "kibochi.thuku@gmail.com",
-				to: "kibochi.thuku@gmail.com",
-				subject: `${templateParams.subject}`,
-				text: "This is some text",
-				html: ReactDOMServer.renderToString(<Template.Email.Contact formValues={templateParams} />),
-			};
-
-			await api
-				.contact(templateParams, mailOptions)
-				.then(() =>
-					notifications.show({
-						id: "contact-form-success",
-						withCloseButton: false,
-						color: "pri.6",
-						icon: <IconCheck size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Inquiry Sent",
-						message: "Someone will get back to you within 24 hours",
-						styles: theme => ({
-							icon: {
-								color: theme.colors.sec[4],
-							},
-							closeButton: {
-								color: theme.colors.pri[6],
-							},
-						}),
+				await controller.request
+					.post("http://localhost:3000/api/contact", {
+						method: "POST",
+						body: JSON.stringify(parse(formValues)),
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "application/json",
+						},
 					})
-				)
-				.then(() => form.reset())
-				.catch(error =>
-					notifications.show({
-						id: "contact-form-fail",
-						color: "red",
-						icon: <IconX size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Send Failed",
-						message: `Error: ${error.message}`,
-						styles: theme => ({
-							closeButton: {
-								color: theme.colors.red[6],
-							},
-						}),
-					})
-				);
+					.then(response => {
+						if (!response) {
+							notifications.show({
+								id: "form-contact-failed-no-response",
+								color: "red",
+								icon: <IconX size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Server Unavailable",
+								message: `There was no response from the server.`,
+								classNames: {
+									root: notificationFailure.root,
+									icon: notificationFailure.icon,
+									description: notificationFailure.description,
+									title: notificationFailure.title,
+								},
+							});
+						} else {
+							form.reset();
 
-			setSubmitted(false);
+							notifications.show({
+								id: "form-contact-success",
+								color: "pri.6",
+								icon: <IconCheck size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Form Submitted",
+								message: "Someone will get back to you within 24 hours",
+								classNames: {
+									root: notificationSuccess.root,
+									icon: notificationSuccess.icon,
+									description: notificationSuccess.description,
+									title: notificationSuccess.title,
+								},
+							});
+						}
+					});
+			} catch (error) {
+				notifications.show({
+					id: "form-contact-failed",
+					color: "red",
+					icon: <IconX size={16} stroke={1.5} />,
+					autoClose: 5000,
+					title: "Submisstion Failed",
+					message: (error as Error).message,
+					styles: theme => ({
+						closeButton: {
+							color: theme.colors.red[6],
+						},
+					}),
+				});
+			} finally {
+				setSubmitted(false);
+			}
 		}
 	};
 
 	return (
 		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid pb={"md"}>
-				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Component.Input.Text
+				<Grid.Col span={{ base: 12, xs: 6 }}>
+					<Component.Core.Input.Text
 						required
 						label={"First Name"}
 						placeholder="Your Name"
 						{...form.getInputProps("fname")}
 					/>
 				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Component.Input.Text
+				<Grid.Col span={{ base: 12, xs: 6 }}>
+					<Component.Core.Input.Text
 						required
 						label={"Last Name"}
 						placeholder="Your Name"
@@ -130,7 +148,7 @@ export default function Contact() {
 					/>
 				</Grid.Col>
 				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Component.Input.Text
+					<Component.Core.Input.Text
 						required
 						label={"Email"}
 						type="email"
@@ -139,7 +157,7 @@ export default function Contact() {
 					/>
 				</Grid.Col>
 				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Component.Input.Text
+					<Component.Core.Input.Text
 						required
 						label={"Phone"}
 						type="tel"
@@ -148,32 +166,23 @@ export default function Contact() {
 					/>
 				</Grid.Col>
 				<Grid.Col span={12}>
-					<Component.Input.Select
+					<Component.Core.Input.Select
 						label="Inquiry"
 						description="What are you inquiring about?"
-						// placeholder="Select an inquiry"
 						defaultValue={""}
 						data={[
 							{ label: "Select an Inquiry", value: "" },
 							{
-								label: "Course Enrollment",
-								value: "Course Enrollment",
+								label: "Option 1",
+								value: "1",
 							},
 							{
-								label: "Drone Purchase",
-								value: "Drone Purchase",
+								label: "Option 2",
+								value: "2",
 							},
 							{
-								label: "Callback Request",
-								value: "Callback Request",
-							},
-							{
-								label: "Drone Space Services",
-								value: "Drone Space Services",
-							},
-							{
-								label: "Drone Space Training",
-								value: "Drone Space Training",
+								label: "Option 3",
+								value: "3",
 							},
 							{ label: "Other", value: "Other" },
 						]}
@@ -182,7 +191,7 @@ export default function Contact() {
 					/>
 				</Grid.Col>
 				<Grid.Col span={12}>
-					<Component.Input.Textarea
+					<Component.Core.Input.Textarea
 						label={"Message"}
 						required
 						placeholder="Write your message here..."
@@ -194,6 +203,7 @@ export default function Contact() {
 				</Grid.Col>
 				<Grid.Col span={{ base: 12, sm: 12 }}>
 					<Checkbox
+						ml={"lg"}
 						size="xs"
 						label={
 							<Text inherit>
@@ -207,15 +217,29 @@ export default function Contact() {
 						{...form.getInputProps("policy", { type: "checkbox" })}
 					/>
 				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Button color="sec" type="reset" fullWidth onClick={() => form.reset()} disabled={submitted}>
-						Clear
-					</Button>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Button type="submit" fullWidth loading={submitted}>
-						{submitted ? "Submitting" : "Submit"}
-					</Button>
+				<Grid.Col span={12}>
+					<Grid mt={"md"}>
+						<Grid.Col span={{ base: 12, xs: 6 }}>
+							<Center>
+								<Button
+									w={{ base: "75%" }}
+									color="sec"
+									type="reset"
+									onClick={() => form.reset()}
+									disabled={submitted}
+								>
+									Clear
+								</Button>
+							</Center>
+						</Grid.Col>
+						<Grid.Col span={{ base: 12, xs: 6 }}>
+							<Center>
+								<Button w={{ base: "75%" }} type="submit" loading={submitted}>
+									{submitted ? "Submitting" : "Submit"}
+								</Button>
+							</Center>
+						</Grid.Col>
+					</Grid>
 				</Grid.Col>
 			</Grid>
 		</Box>

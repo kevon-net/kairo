@@ -2,14 +2,10 @@
 
 import React, { useState } from "react";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
-import { Anchor, Box, Button, Center, Grid, Stack } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { Box, Button, Center, Grid, Stack, Text } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
-// icons
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import utility from "@/utilities";
@@ -17,37 +13,37 @@ import utility from "@/utilities";
 import notificationSuccess from "@/styles/notifications/success.module.scss";
 import notificationFailure from "@/styles/notifications/failure.module.scss";
 
-import { typeSignIn } from "@/types/form";
 import Component from "@/components";
+
+import { typeForgot, typeRemaining } from "@/types/form";
 import controller from "@/controllers";
 
-export default function SignIn() {
+export default function Forgot() {
 	const [sending, setSending] = useState(false);
-	const router = useRouter();
+
+	const [time, setTime] = useState<typeRemaining>();
 
 	const form = useForm({
 		initialValues: {
 			email: "",
-			password: "",
 		},
 
 		validate: {
 			email: value => utility.validator.form.special.email(value),
-			password: isNotEmpty("Please fill out this field"),
 		},
 	});
 
-	const parse = (rawData: typeSignIn) => {
-		return { email: rawData.email.trim().toLowerCase(), password: rawData.password };
+	const parse = (rawData: typeForgot) => {
+		return { email: rawData.email };
 	};
 
-	const handleSubmit = async (formValues: typeSignIn) => {
+	const handleSubmit = async (formValues: typeForgot) => {
 		try {
 			if (form.isValid()) {
 				setSending(true);
 
 				await controller.request
-					.post("http://localhost:3000/api/sign-in", {
+					.post("http://localhost:3000/api/password/forgot", {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
 						headers: {
@@ -58,7 +54,7 @@ export default function SignIn() {
 					.then(response => {
 						if (!response) {
 							notifications.show({
-								id: "signin-failed-no-response",
+								id: "otl-send-failed-no-response",
 								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
@@ -74,12 +70,12 @@ export default function SignIn() {
 						} else {
 							if (!response.user) {
 								notifications.show({
-									id: "signin-failed-not-found",
+									id: "otl-send-failed-account-invalid",
 									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
-									title: `Not Found`,
-									message: `No account with that email has been found.`,
+									title: "Invalid Email",
+									message: `No account with the provided email has been found.`,
 									classNames: {
 										root: notificationFailure.root,
 										icon: notificationFailure.icon,
@@ -88,30 +84,15 @@ export default function SignIn() {
 									},
 								});
 							} else {
-								if (!response.user.passwordValid) {
+								if (!response.user.otl) {
 									notifications.show({
-										id: "signin-failed-invalid-login",
-										color: "red",
-										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: `Invalid Login`,
-										message: `Username password mismatch`,
-										classNames: {
-											root: notificationFailure.root,
-											icon: notificationFailure.icon,
-											description: notificationFailure.description,
-											title: notificationFailure.title,
-										},
-									});
-								} else {
-									notifications.show({
-										id: "signin-success",
+										id: "otl-send-success",
 										withCloseButton: false,
 										color: "pri.6",
 										icon: <IconCheck size={16} stroke={1.5} />,
 										autoClose: 5000,
-										title: "Authenticated",
-										message: `User has logged in.`,
+										title: "One-time Link Sent",
+										message: `A reset link has been sent to the provided email.`,
 										classNames: {
 											root: notificationSuccess.root,
 											icon: notificationSuccess.icon,
@@ -119,8 +100,41 @@ export default function SignIn() {
 											title: notificationSuccess.title,
 										},
 									});
+								} else {
+									if (!response.user.otl.expired) {
+										notifications.show({
+											id: "otl-resend-failed-not-expired",
+											color: "red",
+											icon: <IconX size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "Link Already Sent",
+											message: `Remember to check your spam/junk folder(s).`,
+											classNames: {
+												root: notificationFailure.root,
+												icon: notificationFailure.icon,
+												description: notificationFailure.description,
+												title: notificationFailure.title,
+											},
+										});
 
-									router.replace(`/`);
+										setTime(response.user.otl.time);
+									} else {
+										notifications.show({
+											id: "otl-resend-success",
+											withCloseButton: false,
+											color: "pri.6",
+											icon: <IconCheck size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "New One-time Link Sent",
+											message: `A new reset link has been sent to the provided email.`,
+											classNames: {
+												root: notificationSuccess.root,
+												icon: notificationSuccess.icon,
+												description: notificationSuccess.description,
+												title: notificationSuccess.title,
+											},
+										});
+									}
 								}
 							}
 
@@ -130,11 +144,11 @@ export default function SignIn() {
 			}
 		} catch (error) {
 			notifications.show({
-				id: "signin-failed",
+				id: "otl-send-failed",
 				color: "red",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
-				title: `Error`,
+				title: `Send Failed`,
 				message: (error as Error).message,
 				classNames: {
 					root: notificationFailure.root,
@@ -149,55 +163,42 @@ export default function SignIn() {
 	};
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
-			<Stack gap={"xl"}>
+		<Stack gap={"xl"}>
+			<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 				<Grid>
 					<Grid.Col span={{ base: 12 }}>
 						<Component.Core.Input.Text
 							required
 							label={"Email"}
 							type="email"
-							description="We will never share your email"
+							description="The email you signed up with"
 							placeholder="Your Email"
 							{...form.getInputProps("email")}
 						/>
 					</Grid.Col>
 					<Grid.Col span={{ base: 12 }}>
-						<Stack gap={"xs"} align="end">
-							<Component.Core.Input.Password
-								w={"100%"}
-								required
-								label={"Password"}
-								type="password"
-								placeholder="Your Password"
-								{...form.getInputProps("password")}
-							/>
-							<Anchor
-								component={Link}
-								href={"/password/forgot"}
-								inherit
-								fz={{ base: "xs", xs: "sm" }}
-								c={"pri.8"}
-							>
-								Lost your password?
-							</Anchor>
-						</Stack>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
 						<Center mt={"md"}>
-							<Button
-								type="submit"
-								w={{ base: "75%", sm: "50%" }}
-								miw={"fit-content"}
-								color="pri.8"
-								loading={sending}
-							>
-								{sending ? "Signing In" : "Sign In"}
+							<Button type="submit" color="pri.8" w={{ base: "75%", sm: "50%" }} loading={sending}>
+								{sending ? "Sending" : "Send"}
 							</Button>
 						</Center>
 					</Grid.Col>
 				</Grid>
+			</Box>
+			<Stack display={time ? "inherit" : "none"} c={"dimmed"} ta={"center"} fz={{ base: "xs", xs: "sm" }}>
+				<Text inherit>
+					The last link that was sent to the provided email hasn't expired yet. To limit the number of times a
+					user can change their password within a given time frame, a user can't request another link until
+					the existing link expires.
+				</Text>
+				<Text inherit>
+					Current link expires in{" "}
+					<Text component="span" inherit c={"pri"} fw={500}>
+						{`${time && time.minutes} minutes`}
+					</Text>
+					. Remember to check your spam/junk folder.
+				</Text>
 			</Stack>
-		</Box>
+		</Stack>
 	);
 }

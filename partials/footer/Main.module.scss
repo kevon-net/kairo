@@ -1,0 +1,23 @@
+.footer {
+	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-gray-0));
+}
+
+.listItem {
+	text-align: end;
+
+	@include smaller-than($mantine-breakpoint-md) {
+		text-align: center;
+	}
+}
+
+.link {
+	transition: 0.25s all ease;
+
+	color: light-dark(var(--mantine-color-dark-3), var(--mantine-color-dark-3));
+
+	@include hover {
+		text-decoration: none;
+
+		color: light-dark(var(--mantine-color-dark-6), var(--mantine-color-dark-6));
+	}
+}

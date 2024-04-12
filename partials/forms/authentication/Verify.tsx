@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Box, Button, Center, Grid, Group, PinInput, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Center, Flex, Grid, Group, PinInput, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
@@ -13,11 +13,10 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import notificationSuccess from "@/styles/notifications/success.module.scss";
 import notificationFailure from "@/styles/notifications/failure.module.scss";
 
-import api from "@/apis";
-
 import { typeRemaining, typeVerify } from "@/types/form";
+import controller from "@/controllers";
 
-export default function Verify({ userEmail }: { userEmail: string }) {
+export default function Verify({ userId }: { userId: string }) {
 	const [sending, setSending] = useState(false);
 	const [requested, setRequested] = useState(false);
 	const [time, setTime] = useState<typeRemaining>();
@@ -30,26 +29,155 @@ export default function Verify({ userEmail }: { userEmail: string }) {
 		},
 
 		validate: {
-			otp: value => value.length < 4,
+			otp: value => value.length != 4,
 		},
 	});
 
-	const parseEmail = userEmail.trim().toLowerCase();
-
 	const parse = (rawData: typeVerify) => {
-		return { email: parseEmail, otp: rawData.otp };
+		return { otp: rawData.otp };
 	};
 
 	const handleSubmit = async (formValues: typeVerify) => {
-		if (form.isValid()) {
-			setSending(true);
+		try {
+			if (form.isValid()) {
+				setSending(true);
 
-			await api.user.authentication
-				.otpSend(parse(formValues))
+				await controller.request
+					.post(`http://localhost:3000/api/${userId}/verify`, {
+						method: "POST",
+						body: JSON.stringify(parse(formValues)),
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "application/json",
+						},
+					})
+					.then(response => {
+						if (!response) {
+							notifications.show({
+								id: "otp-verify-failed-no-response",
+								color: "red",
+								icon: <IconX size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Server Unavailable",
+								message: `There was no response from the server.`,
+								classNames: {
+									root: notificationFailure.root,
+									icon: notificationFailure.icon,
+									description: notificationFailure.description,
+									title: notificationFailure.title,
+								},
+							});
+						} else {
+							if (!response.otp) {
+								notifications.show({
+									id: "otp-verify-failed-invalid",
+									color: "red",
+									icon: <IconX size={16} stroke={1.5} />,
+									autoClose: 5000,
+									title: "Invalid OTP",
+									message: `The email doesn't exist or has already been verified`,
+									classNames: {
+										root: notificationFailure.root,
+										icon: notificationFailure.icon,
+										description: notificationFailure.description,
+										title: notificationFailure.title,
+									},
+								});
+							} else {
+								if (!response.otp.match) {
+									notifications.show({
+										id: "otp-verify-failed-mismatch",
+										color: "red",
+										icon: <IconX size={16} stroke={1.5} />,
+										autoClose: 5000,
+										title: "Wrong OTP",
+										message: `You have entered the wrong OTP for this email.`,
+										classNames: {
+											root: notificationFailure.root,
+											icon: notificationFailure.icon,
+											description: notificationFailure.description,
+											title: notificationFailure.title,
+										},
+									});
+								} else {
+									if (!response.otp.expired) {
+										notifications.show({
+											id: "otp-verify-success",
+											withCloseButton: false,
+											color: "pri.6",
+											icon: <IconCheck size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "Email Verified",
+											message: `You can now log in to your account.`,
+											classNames: {
+												root: notificationSuccess.root,
+												icon: notificationSuccess.icon,
+												description: notificationSuccess.description,
+												title: notificationSuccess.title,
+											},
+										});
+
+										router.replace(`/sign-in`);
+									} else {
+										notifications.show({
+											id: "otp-verify-failed-expired",
+											color: "red",
+											icon: <IconX size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "OTP Expired",
+											message: `Request another in the link provided on this page`,
+											classNames: {
+												root: notificationFailure.root,
+												icon: notificationFailure.icon,
+												description: notificationFailure.description,
+												title: notificationFailure.title,
+											},
+										});
+									}
+								}
+							}
+
+							form.reset();
+						}
+					});
+			}
+		} catch (error) {
+			notifications.show({
+				id: "otp-verify-failed",
+				color: "red",
+				icon: <IconX size={16} stroke={1.5} />,
+				autoClose: 5000,
+				title: `Send Failed`,
+				message: (error as Error).message,
+				classNames: {
+					root: notificationFailure.root,
+					icon: notificationFailure.icon,
+					description: notificationFailure.description,
+					title: notificationFailure.title,
+				},
+			});
+		} finally {
+			setSending(false);
+		}
+	};
+
+	const handleRequest = async () => {
+		try {
+			setRequested(true);
+
+			await controller.request
+				.post(`http://localhost:3000/api/${userId}/verify/resend`, {
+					method: "POST",
+					body: JSON.stringify({ userId }),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				})
 				.then(response => {
 					if (!response) {
 						notifications.show({
-							id: "no-response",
+							id: "otp-request-failed-no-response",
 							color: "red",
 							icon: <IconX size={16} stroke={1.5} />,
 							autoClose: 5000,
@@ -63,30 +191,15 @@ export default function Verify({ userEmail }: { userEmail: string }) {
 							},
 						});
 					} else {
-						if (response.exists == false) {
-							notifications.show({
-								id: "otp-invalid",
-								color: "red",
-								icon: <IconX size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Invalid OTP",
-								message: `The email doesn't exist or has already been verified`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
-							});
-						} else {
-							if (response.match == false) {
+						if (!response.user.userVerified) {
+							if (!response.user.otp.expired) {
 								notifications.show({
-									id: "otp-mismatch",
+									id: "otp-request-failed-not-expired",
 									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
-									title: "Wrong OTP",
-									message: `You have entered the wrong OTP for this email.`,
+									title: "Already Sent",
+									message: `Remember to check the spam or junk folder.`,
 									classNames: {
 										root: notificationFailure.root,
 										icon: notificationFailure.icon,
@@ -94,112 +207,33 @@ export default function Verify({ userEmail }: { userEmail: string }) {
 										title: notificationFailure.title,
 									},
 								});
+
+								setTime(response.user.otp.timeToExpiry);
 							} else {
-								if (response.expired == true) {
-									notifications.show({
-										id: "otp-expired",
-										color: "red",
-										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "OTP Expired",
-										message: `Request another in the link provided on this page`,
-										classNames: {
-											root: notificationFailure.root,
-											icon: notificationFailure.icon,
-											description: notificationFailure.description,
-											title: notificationFailure.title,
-										},
-									});
-								} else {
-									notifications.show({
-										id: "otp-match",
-										withCloseButton: false,
-										color: "pri.6",
-										icon: <IconCheck size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "Email Verified",
-										message: `You can now log in to your account.`,
-										classNames: {
-											root: notificationSuccess.root,
-											icon: notificationSuccess.icon,
-											description: notificationSuccess.description,
-											title: notificationSuccess.title,
-										},
-									});
-
-									router.replace(`/auth/log-in`);
-								}
+								notifications.show({
+									id: "otp-request-success",
+									withCloseButton: false,
+									color: "pri.6",
+									icon: <IconCheck size={16} stroke={1.5} />,
+									autoClose: 5000,
+									title: "New OTP Sent",
+									message: `A new code has been sent to the provided email.`,
+									classNames: {
+										root: notificationSuccess.root,
+										icon: notificationSuccess.icon,
+										description: notificationSuccess.description,
+										title: notificationSuccess.title,
+									},
+								});
 							}
-						}
-					}
-				})
-				.then(() => form.reset())
-				.catch(error => {
-					notifications.show({
-						id: "otp-verify-fail",
-						color: "red",
-						icon: <IconX size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: `Send Failed`,
-						message: `Error: ${error.message}`,
-						classNames: {
-							root: notificationFailure.root,
-							icon: notificationFailure.icon,
-							description: notificationFailure.description,
-							title: notificationFailure.title,
-						},
-					});
-				});
-
-			setSending(false);
-		}
-	};
-
-	const handleRequest = async () => {
-		setRequested(true);
-
-		await api.user.authentication.otpResend(parseEmail).then(response => {
-			if (!response) {
-				notifications.show({
-					id: "no-response",
-					color: "red",
-					icon: <IconX size={16} stroke={1.5} />,
-					autoClose: 5000,
-					title: "Server Unavailable",
-					message: `There was no response from the server.`,
-					classNames: {
-						root: notificationFailure.root,
-						icon: notificationFailure.icon,
-						description: notificationFailure.description,
-						title: notificationFailure.title,
-					},
-				});
-			} else {
-				if (response.exists == false) {
-					notifications.show({
-						id: "otp-request-error",
-						color: "red",
-						icon: <IconX size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Not Found",
-						message: `The email doesn't exist or has already been verified`,
-						classNames: {
-							root: notificationFailure.root,
-							icon: notificationFailure.icon,
-							description: notificationFailure.description,
-							title: notificationFailure.title,
-						},
-					});
-				} else {
-					if (response.verified == false) {
-						if (response.expired == false) {
+						} else {
 							notifications.show({
-								id: "otp-not-sent",
+								id: "otp-request-failed-verified",
 								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Already Sent",
-								message: `Remember to check the spam or junk folder.`,
+								title: "Not Found",
+								message: `The account doesn't exist or has already been verified`,
 								classNames: {
 									root: notificationFailure.root,
 									icon: notificationFailure.icon,
@@ -207,65 +241,33 @@ export default function Verify({ userEmail }: { userEmail: string }) {
 									title: notificationFailure.title,
 								},
 							});
-
-							setTime(response.time);
-						} else {
-							notifications.show({
-								id: "otp-resent",
-								withCloseButton: false,
-								color: "pri.6",
-								icon: <IconCheck size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "New OTP Sent",
-								message: `A new code has been sent to the provided email.`,
-								classNames: {
-									root: notificationSuccess.root,
-									icon: notificationSuccess.icon,
-									description: notificationSuccess.description,
-									title: notificationSuccess.title,
-								},
-							});
 						}
-					} else {
-						notifications.show({
-							id: "user-verified",
-							withCloseButton: false,
-							color: "pri.6",
-							icon: <IconCheck size={16} stroke={1.5} />,
-							autoClose: 5000,
-							title: "User Verified",
-							message: `The email has already been verified.`,
-							classNames: {
-								root: notificationSuccess.root,
-								icon: notificationSuccess.icon,
-								description: notificationSuccess.description,
-								title: notificationSuccess.title,
-							},
-						});
 					}
-				}
-			}
-		});
-
-		setRequested(false);
+				});
+		} catch (error) {
+			notifications.show({
+				id: "otp-request-failed-no-response",
+				color: "red",
+				icon: <IconX size={16} stroke={1.5} />,
+				autoClose: 5000,
+				title: "Server Unavailable",
+				message: (error as Error).message,
+				classNames: {
+					root: notificationFailure.root,
+					icon: notificationFailure.icon,
+					description: notificationFailure.description,
+					title: notificationFailure.title,
+				},
+			});
+		} finally {
+			setRequested(false);
+		}
 	};
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate w={"100%"}>
-			<Stack gap={"xl"} ta={"center"}>
-				<Stack gap={"xs"}>
-					<Title order={1} ta={"center"}>
-						Verify Email
-					</Title>
-					<Text inherit>
-						A verification code has been sent to{" "}
-						<Text component="span" inherit c={"pri"} fw={"500"}>
-							{userEmail}
-						</Text>
-						. Copy the code from the email and paste it here.
-					</Text>
-				</Stack>
-				<Grid pb={"md"}>
+		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
+			<Stack gap={"xl"}>
+				<Grid>
 					<Grid.Col span={{ base: 12 }}>
 						<Center>
 							<PinInput
@@ -278,26 +280,33 @@ export default function Verify({ userEmail }: { userEmail: string }) {
 						</Center>
 					</Grid.Col>
 					<Grid.Col span={{ base: 12 }}>
-						<Center py={"md"}>
-							<Group grow w={"100%"}>
-								<Button
-									color="pri.8"
-									loading={requested}
-									variant="outline"
-									onClick={() => handleRequest()}
-								>
-									{requested ? "Requesting" : "Request Another"}
-								</Button>
-								<Button type="submit" color="pri.8" loading={sending}>
-									{sending ? "Verifying" : "Verify"}
-								</Button>
-							</Group>
-						</Center>
+						<Grid mt={"md"}>
+							<Grid.Col span={{ base: 12, xs: 6 }}>
+								<Center>
+									<Button
+										w={{ base: "75%" }}
+										color="pri.8"
+										loading={requested}
+										variant="outline"
+										onClick={() => handleRequest()}
+									>
+										{requested ? "Requesting" : "Request Another"}
+									</Button>
+								</Center>
+							</Grid.Col>
+							<Grid.Col span={{ base: 12, xs: 6 }}>
+								<Center>
+									<Button w={{ base: "75%" }} type="submit" color="pri.8" loading={sending}>
+										{sending ? "Verifying" : "Verify"}
+									</Button>
+								</Center>
+							</Grid.Col>
+						</Grid>
 					</Grid.Col>
 				</Grid>
 				{time && (
-					<Stack>
-						<Text c={"dimmed"} inherit fz={"sm"}>
+					<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>
+						<Text c={"dimmed"} inherit>
 							If the email you provided is valid, you should have received it. You can otherwise request
 							another code in{" "}
 							<Text component="span" inherit c={"pri"} fw={500}>

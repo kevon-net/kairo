@@ -3,12 +3,15 @@ import React from "react";
 import { Menu } from "@mantine/core";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import classes from "./Navbar.module.scss";
 
 import { typeMenuNavbar } from "@/types/menu/navbar";
 
 export default function Navbar({ children, subLinks }: typeMenuNavbar) {
+	const pathname = usePathname();
+
 	const menuItems =
 		subLinks &&
 		subLinks.map(item => (
@@ -18,6 +21,7 @@ export default function Navbar({ children, subLinks }: typeMenuNavbar) {
 				href={item.link}
 				leftSection={item.iconLeft && <item.iconLeft size={14} />}
 				rightSection={item.iconRight && <item.iconRight size={14} />}
+				className={`${classes.item} ${pathname == item.link ? classes.itemActive : undefined}`}
 			>
 				{item.label}
 			</Menu.Item>

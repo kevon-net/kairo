@@ -9,42 +9,48 @@ import data from "@/data";
 import Component from "@/components";
 
 import classes from "./Main.module.scss";
+import { usePathname } from "next/navigation";
 
 export default function Main({ ...restProps }: {} & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
+	const pathname = usePathname();
 
 	const navMobile = data.links.navbar.map(link => {
 		const subLinks =
 			link.subLinks &&
 			link.subLinks.map(subLink => (
-				<Component.Navlink.Navbar
+				<Component.Core.NavLink.Navbar
 					key={subLink.link}
 					href={subLink.link}
 					label={subLink.label}
+					active={pathname == subLink.link}
 					onClick={() => close()}
 				/>
 			));
 
 		return !subLinks ? (
-			<Component.Navlink.Navbar
+			<Component.Core.NavLink.Navbar
 				key={link.link}
 				href={link.link}
 				label={link.label}
+				active={pathname == link.link}
 				onClick={() => close()}
-				leftSection={link.iconLeft && <link.iconLeft size={14} />}
-				rightSection={link.iconRight && <link.iconRight size={14} />}
+				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
+				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
 			/>
 		) : (
-			<Component.Navlink.Navbar
+			<Component.Core.NavLink.Navbar
 				key={link.link}
 				href={link.link}
 				label={link.label}
+				active={pathname == link.link}
+				opened={link.subLinks.find(sl => sl.link == pathname)?.link == pathname ? true : undefined}
 				withChildren={true}
-				leftSection={link.iconLeft && <link.iconLeft size={14} />}
-				rightSection={link.iconRight && <link.iconRight size={14} />}
+				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
+				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
 			>
 				{subLinks}
-			</Component.Navlink.Navbar>
+			</Component.Core.NavLink.Navbar>
 		);
 	});
 
@@ -65,7 +71,7 @@ export default function Main({ ...restProps }: {} & React.ComponentProps<typeof 
 					root: classes.root,
 					title: classes.title,
 				}}
-				title={<Component.Media.Image src={asset.icon.software.code} alt="vscode" width={32} height={32} />}
+				title={<Component.Core.Media.Image src={asset.icon.tool.nextjs} alt="Logo" width={32} height={32} />}
 			>
 				{navMobile}
 			</Drawer>

@@ -17,8 +17,7 @@
 }
 
 .root {
-	padding-left: 0;
-	padding-right: 0;
+	padding: calc(var(--mantine-spacing-xs) / 2) var(--mantine-spacing-sm);
 }
 
 .section {

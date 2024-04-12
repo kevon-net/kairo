@@ -11,18 +11,24 @@ export default function Navbar({
 	withChildren,
 	href,
 	label,
+	active,
+	opened,
 	...restProps
 }: {
 	children?: React.ReactNode;
 	withChildren?: boolean;
 	href: string;
 	label: string;
+	active?: boolean;
+	opened?: boolean;
 } & React.ComponentProps<typeof NavLink>) {
 	return withChildren ? (
 		<NavLink
 			component={Link}
 			href={href}
 			label={label}
+			active={active}
+			opened={opened}
 			{...restProps}
 			classNames={{
 				body: classes.body,
@@ -42,6 +48,7 @@ export default function Navbar({
 			component={Link}
 			href={href}
 			label={label}
+			active={active}
 			{...restProps}
 			classNames={{
 				body: classes.body,

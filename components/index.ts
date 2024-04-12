@@ -1,21 +1,17 @@
 import Breadcrumb from "./breadcrumbs";
-import Input from "./inputs";
-import Media from "./media";
 import Menu from "./menus";
 import Anchor from "./anchors";
-import Container from "./containers";
 import Drawer from "./drawers";
-import Navlink from "./navlinks";
+
+import Core from "./core";
 
 const Component = {
 	Breadcrumb,
-	Input,
-	Media,
 	Menu,
 	Anchor,
-	Container,
 	Drawer,
-	Navlink,
+
+	Core,
 };
 
 export default Component;

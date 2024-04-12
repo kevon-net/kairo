@@ -2,8 +2,6 @@ import React from "react";
 
 import { Box, Container, Flex } from "@mantine/core";
 
-import Provider from "@/providers";
-
 import typeBody from "@/types/body";
 
 export default function Body({ header, nav, hero, children, aside, footer }: typeBody) {

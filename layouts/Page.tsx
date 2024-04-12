@@ -8,6 +8,7 @@ export default function Page({ padded, stacked, children, ...restProps }: typePa
 	return (
 		<Box
 			component={stacked ? Stack : "article"}
+			w={"100%"}
 			gap={stacked ? (typeof stacked == "boolean" ? 96 : stacked) : undefined}
 			py={padded ? (typeof padded == "boolean" ? 96 : padded) : undefined}
 			{...restProps}

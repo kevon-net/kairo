@@ -3,9 +3,8 @@ import React from "react";
 import { Box, Container } from "@mantine/core";
 
 type typeSection = {
-	containerized?: boolean;
-	containerSize?: "xs" | "sm" | "md" | "lg" | "xl";
-	padded?: boolean | number;
+	containerized?: boolean | string;
+	padded?: boolean | string | number;
 	margined?: boolean | number;
 	bordered?: boolean;
 	shadowed?: boolean;

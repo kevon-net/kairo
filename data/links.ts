@@ -2,15 +2,18 @@ const links = {
 	navbar: [
 		{ link: "/", label: "Home" },
 		{ link: "/about", label: "About" },
-		{ link: "/blog", label: "Blog" },
+		{
+			link: "/blog",
+			label: "Blog",
+			subLinks: [
+				{ link: "/blog/1", label: "Blog 1" },
+				{ link: "/blog/2", label: "Blog 2" },
+				{ link: "/blog/3", label: "Blog 3" },
+			],
+		},
 		{
 			link: "/contact",
 			label: "Contact",
-			subLinks: [
-				{ link: "/docs", label: "Documentation" },
-				{ link: "/resources", label: "Resources" },
-				{ link: "/community", label: "Community" },
-			],
 		},
 	],
 };

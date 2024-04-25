@@ -1,0 +1,33 @@
+.root {
+	box-shadow: var(--mantine-shadow-xs);
+
+	&[data-variant="success"] {
+	}
+
+	&[data-variant="fail"] {
+	}
+}
+
+.icon {
+	&[data-variant="success"] {
+	}
+
+	&[data-variant="fail"] {
+	}
+}
+
+.title {
+	&[data-variant="success"] {
+	}
+
+	&[data-variant="fail"] {
+	}
+}
+
+.description {
+	&[data-variant="success"] {
+	}
+
+	&[data-variant="fail"] {
+	}
+}

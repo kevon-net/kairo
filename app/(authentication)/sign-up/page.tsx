@@ -1,10 +1,10 @@
 import React from "react";
 
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 import { Metadata } from "next";
 
-import { Anchor, Stack, Text, Title, Image as MantineImage } from "@mantine/core";
+import { Anchor, Stack, Text, Title, Image } from "@mantine/core";
 
 import Layout from "@/layouts";
 import Partial from "@/partials";
@@ -20,11 +20,11 @@ export default function Signup() {
 			<Layout.Section containerized="xs">
 				<Stack gap={"xl"}>
 					<Stack align="center">
-						<MantineImage
+						<Image
 							src={asset.icon.tool.nextjs}
 							alt="next logo"
 							w={{ base: 56, xs: 72, md: 96 }}
-							component={Image}
+							component={NextImage}
 							priority
 						/>
 						<Stack gap={"xs"}>

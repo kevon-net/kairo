@@ -1,7 +1,8 @@
 import React from "react";
 
-import Layout from "@/layouts";
 import Link from "next/link";
+
+import Layout from "@/layouts";
 
 export default function Blog() {
 	return (

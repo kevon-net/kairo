@@ -1,9 +1,9 @@
 import React from "react";
 
 import { Metadata } from "next";
-import Image from "next/image";
+import NextImage from "next/image";
 
-import { Image as MantineImage, Stack, Text, Title } from "@mantine/core";
+import { Image, Stack, Text, Title } from "@mantine/core";
 
 import Layout from "@/layouts";
 import asset from "@/assets";
@@ -17,11 +17,11 @@ export default function Sent() {
 		<Layout.Page padded>
 			<Layout.Section containerized="xs">
 				<Stack align="center">
-					<MantineImage
+					<Image
 						src={asset.icon.tool.nextjs}
 						alt="next logo"
 						w={{ base: 56, xs: 72, md: 96 }}
-						component={Image}
+						component={NextImage}
 						priority
 					/>
 					<Stack gap={"xs"}>

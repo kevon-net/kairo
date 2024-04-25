@@ -1,6 +1,12 @@
 import React from "react";
 
+import { Metadata } from "next";
+
 import Layout from "@/layouts";
+
+export const metadata: Metadata = {
+	title: "About",
+};
 
 export default function About() {
 	return (

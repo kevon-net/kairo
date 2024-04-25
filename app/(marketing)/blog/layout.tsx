@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import Layout from "@/layouts";
 
 export const metadata: Metadata = {
-	title: { default: "Blog", template: "%s | Next Template - Blog" },
+	title: { default: "Blog", template: "%s - Blog - Next Template" },
 };
 
 export default function Blog({

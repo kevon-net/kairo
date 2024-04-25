@@ -2,25 +2,29 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Box, Breadcrumbs } from "@mantine/core";
+import { Anchor, Breadcrumbs } from "@mantine/core";
 
 import { IconChevronRight } from "@tabler/icons-react";
 
 import classes from "./hero.module.scss";
 
-export default function Hero({ data }: { data: { label: string; link: string }[] }) {
+import { typeLink } from "@/types/nav";
+
+export default function Hero({ data }: { data: typeLink[] }) {
+	const active = (breadcrumb: typeLink) => data.indexOf(breadcrumb) == data.length - 1;
+
 	return (
 		<Breadcrumbs separator={<IconChevronRight size={12} stroke={2} />}>
-			{data.map(crumb => (
-				<Box
+			{data.map(item => (
+				<Anchor
+					key={item.link}
 					component={Link}
-					href={crumb.link}
-					key={crumb.link}
+					href={item.link}
+					c={active(item) ? "pri" : undefined}
 					className={classes.link}
-					c={data.indexOf(crumb) == data.length - 1 ? "pri.8" : ""}
 				>
-					{crumb.label}
-				</Box>
+					{item.label}
+				</Anchor>
 			))}
 		</Breadcrumbs>
 	);

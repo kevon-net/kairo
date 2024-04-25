@@ -21,7 +21,7 @@ export default function Navbar({ children, subLinks }: typeMenuNavbar) {
 				href={item.link}
 				leftSection={item.iconLeft && <item.iconLeft size={14} />}
 				rightSection={item.iconRight && <item.iconRight size={14} />}
-				className={`${classes.item} ${pathname == item.link ? classes.itemActive : undefined}`}
+				className={`${classes.item} ${pathname == item.link ? classes.itemActive : ""}`}
 			>
 				{item.label}
 			</Menu.Item>

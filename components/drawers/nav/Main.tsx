@@ -1,25 +1,26 @@
 import React from "react";
 
-import { Burger, Drawer } from "@mantine/core";
+import { usePathname } from "next/navigation";
+
+import { Burger, Drawer, NavLink } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import asset from "@/assets";
-import data from "@/data";
+import Media from "@/components/media";
 
-import Component from "@/components";
+import { typeNav } from "@/types/nav";
 
 import classes from "./Main.module.scss";
-import { usePathname } from "next/navigation";
 
-export default function Main({ ...restProps }: {} & React.ComponentProps<typeof Burger>) {
+export default function Main({ data, ...restProps }: { data: typeNav[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const pathname = usePathname();
 
-	const navMobile = data.links.navbar.map(link => {
+	const navMobile = data.map(link => {
 		const subLinks =
 			link.subLinks &&
 			link.subLinks.map(subLink => (
-				<Component.Core.NavLink.Navbar
+				<NavLink
 					key={subLink.link}
 					href={subLink.link}
 					label={subLink.label}
@@ -28,8 +29,8 @@ export default function Main({ ...restProps }: {} & React.ComponentProps<typeof 
 				/>
 			));
 
-		return !subLinks ? (
-			<Component.Core.NavLink.Navbar
+		return subLinks ? (
+			<NavLink
 				key={link.link}
 				href={link.link}
 				label={link.label}
@@ -39,18 +40,17 @@ export default function Main({ ...restProps }: {} & React.ComponentProps<typeof 
 				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
 			/>
 		) : (
-			<Component.Core.NavLink.Navbar
+			<NavLink
 				key={link.link}
 				href={link.link}
 				label={link.label}
 				active={pathname == link.link}
-				opened={link.subLinks.find(sl => sl.link == pathname)?.link == pathname ? true : undefined}
-				withChildren={true}
+				opened={link.subLinks?.find(sl => sl.link == pathname)?.link == pathname ? true : undefined}
 				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
 				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
 			>
 				{subLinks}
-			</Component.Core.NavLink.Navbar>
+			</NavLink>
 		);
 	});
 
@@ -71,7 +71,7 @@ export default function Main({ ...restProps }: {} & React.ComponentProps<typeof 
 					root: classes.root,
 					title: classes.title,
 				}}
-				title={<Component.Core.Media.Image src={asset.icon.tool.nextjs} alt="Logo" width={32} height={32} />}
+				title={<Media.Image src={asset.icon.tool.nextjs} alt="Logo" width={32} height={32} />}
 			>
 				{navMobile}
 			</Drawer>

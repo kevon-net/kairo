@@ -4,7 +4,7 @@ import { Box, Container, Flex } from "@mantine/core";
 
 import typeBody from "@/types/body";
 
-export default function Body({ header, nav, hero, children, aside, footer }: typeBody) {
+export default function Body({ children, header, nav, hero, aside, footer }: typeBody) {
 	const handleAside = (side: React.ReactNode, width: string) => (
 		<Box
 			component="aside"

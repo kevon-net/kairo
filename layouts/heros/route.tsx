@@ -4,12 +4,12 @@ import { usePathname } from "next/navigation";
 
 import { Box, Container, Group, Title } from "@mantine/core";
 
-import Breadcrumbs from "@/components/breadcrumbs";
-import hook from "@/hooks";
+import Component from "@/components";
+import utility from "@/utilities";
 
 export default function Route() {
-	const location = usePathname();
-	const crumbs = hook.useCrumbify(location);
+	const pathname = usePathname();
+	const segments = utility.parser.string.crumbify(pathname);
 
 	return (
 		<Box
@@ -21,9 +21,9 @@ export default function Route() {
 		>
 			<Container>
 				<Group align="center" justify="space-between">
-					<Breadcrumbs.Hero data={crumbs} />
+					<Component.Breadcrumb.Hero data={segments} />
 					<Title order={1} fw={500} fz={24}>
-						{crumbs[crumbs.length - 1].label}
+						{segments[segments.length - 1].label}
 					</Title>
 				</Group>
 			</Container>

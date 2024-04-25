@@ -1,13 +1,10 @@
-"use client";
-
 import React from "react";
 
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 import { usePathname } from "next/navigation";
 
-import { Group, Box } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { Group, Box, Container, Image } from "@mantine/core";
 
 import { IconChevronDown } from "@tabler/icons-react";
 
@@ -19,7 +16,6 @@ import classes from "./Main.module.scss";
 
 export default function Main() {
 	const pathname = usePathname();
-	const xs = useMediaQuery("(max-width: 36em)");
 
 	const navDesktop = data.links.navbar.map(link => (
 		<Component.Menu.Navbar key={link.link} subLinks={link.subLinks}>
@@ -48,20 +44,31 @@ export default function Main() {
 
 	return (
 		<Box className={classes.navbar}>
-			<Component.Core.Container.Responsive>
+			<Container>
 				<Group justify="space-between">
 					<Link href={"/"}>
 						<Group>
-							<Image src={asset.icon.tool.nextjs} alt="next icon" className={classes.logo} priority />
+							<Image
+								src={asset.icon.tool.nextjs}
+								alt="next icon"
+								className={classes.logo}
+								component={NextImage}
+								priority
+							/>
 						</Group>
 					</Link>
+
 					<Group gap={"xs"} component={"nav"} visibleFrom="sm">
 						{navDesktop}
 					</Group>
 
-					<Component.Drawer.Nav.Main size={xs ? "xs" : "sm"} hiddenFrom="sm" aria-label="Toggle Navigation" />
+					<Component.Drawer.Nav.Main
+						data={data.links.navbar}
+						hiddenFrom="sm"
+						aria-label="Toggle Navigation"
+					/>
 				</Group>
-			</Component.Core.Container.Responsive>
+			</Container>
 		</Box>
 	);
 }

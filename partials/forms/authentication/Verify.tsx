@@ -4,17 +4,15 @@ import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Box, Button, Center, Flex, Grid, Group, PinInput, Stack, Text } from "@mantine/core";
+import { Box, Button, Center, Flex, Grid, GridCol, Group, PinInput, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import notificationSuccess from "@/styles/notifications/success.module.scss";
-import notificationFailure from "@/styles/notifications/failure.module.scss";
+import hook from "@/hooks";
 
 import { typeRemaining, typeVerify } from "@/types/form";
-import controller from "@/controllers";
 
 export default function Verify({ userId }: { userId: string }) {
 	const [sending, setSending] = useState(false);
@@ -42,7 +40,7 @@ export default function Verify({ userId }: { userId: string }) {
 			if (form.isValid()) {
 				setSending(true);
 
-				await controller.request
+				await hook.request
 					.post(`http://localhost:3000/api/${userId}/verify`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -60,12 +58,7 @@ export default function Verify({ userId }: { userId: string }) {
 								autoClose: 5000,
 								title: "Server Unavailable",
 								message: `There was no response from the server.`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 						} else {
 							if (!response.otp) {
@@ -76,12 +69,7 @@ export default function Verify({ userId }: { userId: string }) {
 									autoClose: 5000,
 									title: "Invalid OTP",
 									message: `The email doesn't exist or has already been verified`,
-									classNames: {
-										root: notificationFailure.root,
-										icon: notificationFailure.icon,
-										description: notificationFailure.description,
-										title: notificationFailure.title,
-									},
+									variant: "failed",
 								});
 							} else {
 								if (!response.otp.match) {
@@ -92,12 +80,7 @@ export default function Verify({ userId }: { userId: string }) {
 										autoClose: 5000,
 										title: "Wrong OTP",
 										message: `You have entered the wrong OTP for this email.`,
-										classNames: {
-											root: notificationFailure.root,
-											icon: notificationFailure.icon,
-											description: notificationFailure.description,
-											title: notificationFailure.title,
-										},
+										variant: "failed",
 									});
 								} else {
 									if (!response.otp.expired) {
@@ -109,12 +92,7 @@ export default function Verify({ userId }: { userId: string }) {
 											autoClose: 5000,
 											title: "Email Verified",
 											message: `You can now log in to your account.`,
-											classNames: {
-												root: notificationSuccess.root,
-												icon: notificationSuccess.icon,
-												description: notificationSuccess.description,
-												title: notificationSuccess.title,
-											},
+											variant: "success",
 										});
 
 										router.replace(`/sign-in`);
@@ -126,12 +104,7 @@ export default function Verify({ userId }: { userId: string }) {
 											autoClose: 5000,
 											title: "OTP Expired",
 											message: `Request another in the link provided on this page`,
-											classNames: {
-												root: notificationFailure.root,
-												icon: notificationFailure.icon,
-												description: notificationFailure.description,
-												title: notificationFailure.title,
-											},
+											variant: "failed",
 										});
 									}
 								}
@@ -149,12 +122,7 @@ export default function Verify({ userId }: { userId: string }) {
 				autoClose: 5000,
 				title: `Send Failed`,
 				message: (error as Error).message,
-				classNames: {
-					root: notificationFailure.root,
-					icon: notificationFailure.icon,
-					description: notificationFailure.description,
-					title: notificationFailure.title,
-				},
+				variant: "failed",
 			});
 		} finally {
 			setSending(false);
@@ -165,7 +133,7 @@ export default function Verify({ userId }: { userId: string }) {
 		try {
 			setRequested(true);
 
-			await controller.request
+			await hook.request
 				.post(`http://localhost:3000/api/${userId}/verify/resend`, {
 					method: "POST",
 					body: JSON.stringify({ userId }),
@@ -183,12 +151,7 @@ export default function Verify({ userId }: { userId: string }) {
 							autoClose: 5000,
 							title: "Server Unavailable",
 							message: `There was no response from the server.`,
-							classNames: {
-								root: notificationFailure.root,
-								icon: notificationFailure.icon,
-								description: notificationFailure.description,
-								title: notificationFailure.title,
-							},
+							variant: "failed",
 						});
 					} else {
 						if (!response.user.userVerified) {
@@ -200,12 +163,7 @@ export default function Verify({ userId }: { userId: string }) {
 									autoClose: 5000,
 									title: "Already Sent",
 									message: `Remember to check the spam or junk folder.`,
-									classNames: {
-										root: notificationFailure.root,
-										icon: notificationFailure.icon,
-										description: notificationFailure.description,
-										title: notificationFailure.title,
-									},
+									variant: "failed",
 								});
 
 								setTime(response.user.otp.timeToExpiry);
@@ -218,12 +176,7 @@ export default function Verify({ userId }: { userId: string }) {
 									autoClose: 5000,
 									title: "New OTP Sent",
 									message: `A new code has been sent to the provided email.`,
-									classNames: {
-										root: notificationSuccess.root,
-										icon: notificationSuccess.icon,
-										description: notificationSuccess.description,
-										title: notificationSuccess.title,
-									},
+									variant: "success",
 								});
 							}
 						} else {
@@ -234,12 +187,7 @@ export default function Verify({ userId }: { userId: string }) {
 								autoClose: 5000,
 								title: "Not Found",
 								message: `The account doesn't exist or has already been verified`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 						}
 					}
@@ -252,12 +200,7 @@ export default function Verify({ userId }: { userId: string }) {
 				autoClose: 5000,
 				title: "Server Unavailable",
 				message: (error as Error).message,
-				classNames: {
-					root: notificationFailure.root,
-					icon: notificationFailure.icon,
-					description: notificationFailure.description,
-					title: notificationFailure.title,
-				},
+				variant: "failed",
 			});
 		} finally {
 			setRequested(false);
@@ -268,7 +211,7 @@ export default function Verify({ userId }: { userId: string }) {
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Stack gap={"xl"}>
 				<Grid>
-					<Grid.Col span={{ base: 12 }}>
+					<GridCol span={{ base: 12 }}>
 						<Center>
 							<PinInput
 								oneTimeCode
@@ -278,10 +221,10 @@ export default function Verify({ userId }: { userId: string }) {
 								{...form.getInputProps("otp")}
 							/>
 						</Center>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
 						<Grid mt={"md"}>
-							<Grid.Col span={{ base: 12, xs: 6 }}>
+							<GridCol span={{ base: 12, xs: 6 }}>
 								<Center>
 									<Button
 										w={{ base: "75%" }}
@@ -293,16 +236,16 @@ export default function Verify({ userId }: { userId: string }) {
 										{requested ? "Requesting" : "Request Another"}
 									</Button>
 								</Center>
-							</Grid.Col>
-							<Grid.Col span={{ base: 12, xs: 6 }}>
+							</GridCol>
+							<GridCol span={{ base: 12, xs: 6 }}>
 								<Center>
 									<Button w={{ base: "75%" }} type="submit" color="pri.8" loading={sending}>
 										{sending ? "Verifying" : "Verify"}
 									</Button>
 								</Center>
-							</Grid.Col>
+							</GridCol>
 						</Grid>
-					</Grid.Col>
+					</GridCol>
 				</Grid>
 				{time && (
 					<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>

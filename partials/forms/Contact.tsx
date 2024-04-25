@@ -4,18 +4,14 @@ import React, { useState } from "react";
 
 import Link from "next/link";
 
-import { Anchor, Box, Button, Center, Checkbox, Grid, Text } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { Anchor, Box, Button, Center, Checkbox, Grid, GridCol, Select, Text, TextInput, Textarea } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import Component from "@/components";
-
-import controller from "@/controllers";
-
-import notificationSuccess from "@/styles/notifications/success.module.scss";
-import notificationFailure from "@/styles/notifications/failure.module.scss";
+import handler from "@/handlers";
+import hook from "@/hooks";
 
 import { typeContact } from "@/types/form";
 
@@ -24,8 +20,7 @@ export default function Contact() {
 
 	const form = useForm({
 		initialValues: {
-			fname: "",
-			lname: "",
+			name: "",
 			email: "",
 			phone: "",
 			subject: "",
@@ -34,24 +29,18 @@ export default function Contact() {
 		},
 
 		validate: {
-			fname: value => (value.trim().length < 2 ? "At least 2 letters" : null),
-			lname: value => (value.trim().length < 2 ? "At least 2 letters" : null),
-			email: value => (/^\S+@\S+$/.test(value.trim()) ? null : "Invalid email"),
-			phone: value => (value && value.trim().length < 10 ? "Invalid Phone Number" : null),
-			subject: value => (value.trim().length < 1 ? "Please select a topic" : null),
-			message: value => (value.trim().length < 10 ? "Message Too Short" : null),
-			policy: isNotEmpty("You must accept to proceed"),
+			name: value => handler.validator.form.special.text(value, 2, 255),
+			email: value => handler.validator.form.special.email(value),
+			phone: value => handler.validator.form.special.phone(value),
+			subject: value => handler.validator.form.special.text(value, 3, 255),
+			message: value => handler.validator.form.special.text(value, 3, 2048),
+			policy: value => handler.validator.form.generic.isEmpty.checkbox(value),
 		},
 	});
 
 	const parse = (rawData: typeContact) => {
 		return {
-			fname:
-				rawData.fname.trim().toLowerCase().charAt(0).toUpperCase() +
-				rawData.fname.trim().slice(1).toLowerCase(),
-			lname:
-				rawData.lname.trim().toLowerCase().charAt(0).toUpperCase() +
-				rawData.lname.trim().slice(1).toLowerCase(),
+			name: handler.parser.string.capitalize.words(rawData.name),
 			email: rawData.email.trim().toLowerCase(),
 			phone: rawData.phone,
 			subject: rawData.subject == "Other" ? "General" : `${rawData.subject}`,
@@ -64,7 +53,7 @@ export default function Contact() {
 			try {
 				setSubmitted(true);
 
-				await controller.request
+				await hook.request
 					.post("http://localhost:3000/api/contact", {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -82,12 +71,7 @@ export default function Contact() {
 								autoClose: 5000,
 								title: "Server Unavailable",
 								message: `There was no response from the server.`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 						} else {
 							form.reset();
@@ -99,12 +83,7 @@ export default function Contact() {
 								autoClose: 5000,
 								title: "Form Submitted",
 								message: "Someone will get back to you within 24 hours",
-								classNames: {
-									root: notificationSuccess.root,
-									icon: notificationSuccess.icon,
-									description: notificationSuccess.description,
-									title: notificationSuccess.title,
-								},
+								variant: "success",
 							});
 						}
 					});
@@ -116,11 +95,7 @@ export default function Contact() {
 					autoClose: 5000,
 					title: "Submisstion Failed",
 					message: (error as Error).message,
-					styles: theme => ({
-						closeButton: {
-							color: theme.colors.red[6],
-						},
-					}),
+					variant: "failed",
 				});
 			} finally {
 				setSubmitted(false);
@@ -129,44 +104,20 @@ export default function Contact() {
 	};
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
+		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid pb={"md"}>
-				<Grid.Col span={{ base: 12, xs: 6 }}>
-					<Component.Core.Input.Text
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput required label={"Name"} placeholder="Your Name" {...form.getInputProps("name")} />
+				</GridCol>
+				<GridCol span={{ base: 12, sm: 6 }}>
+					<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
+				</GridCol>
+				<GridCol span={{ base: 12, sm: 6 }}>
+					<TextInput required label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
+				</GridCol>
+				<GridCol span={12}>
+					<Select
 						required
-						label={"First Name"}
-						placeholder="Your Name"
-						{...form.getInputProps("fname")}
-					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, xs: 6 }}>
-					<Component.Core.Input.Text
-						required
-						label={"Last Name"}
-						placeholder="Your Name"
-						{...form.getInputProps("lname")}
-					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Component.Core.Input.Text
-						required
-						label={"Email"}
-						type="email"
-						placeholder="Your Email"
-						{...form.getInputProps("email")}
-					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 6 }}>
-					<Component.Core.Input.Text
-						required
-						label={"Phone"}
-						type="tel"
-						placeholder="Your Phone"
-						{...form.getInputProps("phone")}
-					/>
-				</Grid.Col>
-				<Grid.Col span={12}>
-					<Component.Core.Input.Select
 						label="Inquiry"
 						description="What are you inquiring about?"
 						defaultValue={""}
@@ -186,40 +137,32 @@ export default function Contact() {
 							},
 							{ label: "Other", value: "Other" },
 						]}
-						required
 						{...form.getInputProps("subject")}
 					/>
-				</Grid.Col>
-				<Grid.Col span={12}>
-					<Component.Core.Input.Textarea
-						label={"Message"}
+				</GridCol>
+				<GridCol span={12}>
+					<Textarea
 						required
+						label={"Message"}
 						placeholder="Write your message here..."
 						autosize
 						minRows={3}
 						maxRows={10}
 						{...form.getInputProps("message")}
 					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12, sm: 12 }}>
+				</GridCol>
+				<GridCol span={{ base: 12, sm: 12 }}>
 					<Checkbox
+						required
 						ml={"lg"}
 						size="xs"
-						label={
-							<Text inherit>
-								I have read and accept the{" "}
-								<Anchor component={Link} href={"/policy/terms-and-conditions"} inherit fw={500}>
-									terms of use
-								</Anchor>
-								.
-							</Text>
-						}
+						label={<Text inherit>I have read and accept the terms of use.</Text>}
 						{...form.getInputProps("policy", { type: "checkbox" })}
 					/>
-				</Grid.Col>
-				<Grid.Col span={12}>
+				</GridCol>
+				<GridCol span={12}>
 					<Grid mt={"md"}>
-						<Grid.Col span={{ base: 12, xs: 6 }}>
+						<GridCol span={{ base: 12, xs: 6 }}>
 							<Center>
 								<Button
 									w={{ base: "75%" }}
@@ -231,16 +174,16 @@ export default function Contact() {
 									Clear
 								</Button>
 							</Center>
-						</Grid.Col>
-						<Grid.Col span={{ base: 12, xs: 6 }}>
+						</GridCol>
+						<GridCol span={{ base: 12, xs: 6 }}>
 							<Center>
 								<Button w={{ base: "75%" }} type="submit" loading={submitted}>
 									{submitted ? "Submitting" : "Submit"}
 								</Button>
 							</Center>
-						</Grid.Col>
+						</GridCol>
 					</Grid>
-				</Grid.Col>
+				</GridCol>
 			</Grid>
 		</Box>
 	);

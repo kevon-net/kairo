@@ -1,56 +1,41 @@
-"use client";
-
 import React from "react";
 
 import Image from "next/image";
+import Link from "next/link";
 
-import {
-	Flex,
-	Grid,
-	Stack,
-	Image as MantineImage,
-	Text,
-	Title,
-	List,
-	Anchor,
-	Divider,
-	Group,
-	ActionIcon,
-} from "@mantine/core";
+import { Flex, Grid, Container, Image as MantineImage, Text, Title, List, Anchor, Divider, Group } from "@mantine/core";
 
 import Layout from "@/layouts";
 import asset from "@/assets";
-import Component from "@/components";
 
 import classes from "./Main.module.scss";
-import Link from "next/link";
 
 const linkSets = [
 	{
 		title: "About",
 		links: [
-			{ label: "Features", link: "#" },
-			{ label: "Pricing", link: "#" },
-			{ label: "Support", link: "#" },
-			{ label: "Forums", link: "#" },
+			{ label: "Features", link: "#Features" },
+			{ label: "Pricing", link: "#Pricing" },
+			{ label: "Support", link: "#Support" },
+			{ label: "Forums", link: "#Forums" },
 		],
 	},
 	{
 		title: "Project",
 		links: [
-			{ label: "Contribute", link: "#" },
-			{ label: "Media assets", link: "#" },
-			{ label: "Changelog", link: "#" },
-			{ label: "Releases", link: "#" },
+			{ label: "Contribute", link: "#Contribute" },
+			{ label: "Media assets", link: "#Media" },
+			{ label: "Changelog", link: "#Changelog" },
+			{ label: "Releases", link: "#Releases" },
 		],
 	},
 	{
 		title: "Community",
 		links: [
-			{ label: "Join Discord", link: "#" },
-			{ label: "Follow on Twitter", link: "#" },
-			{ label: "Email newsletter", link: "#" },
-			{ label: "GitHub discussions", link: "#" },
+			{ label: "Join Discord", link: "#Join" },
+			{ label: "Follow on Twitter", link: "#Follow" },
+			{ label: "Email newsletter", link: "#Email" },
+			{ label: "GitHub discussions", link: "#GitHub" },
 		],
 	},
 ];
@@ -76,7 +61,7 @@ const socials = [
 export default function Main() {
 	return (
 		<Layout.Section padded={"xl"} className={classes.footer}>
-			<Component.Core.Container.Responsive>
+			<Container>
 				<Grid py={{ xs: "xl" }}>
 					<Grid.Col span={{ base: 12, md: 4 }}>
 						<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"md"}>
@@ -120,9 +105,9 @@ export default function Main() {
 						</Grid>
 					</Grid.Col>
 				</Grid>
-			</Component.Core.Container.Responsive>
+			</Container>
 			<Divider my={"xl"} />
-			<Component.Core.Container.Responsive>
+			<Container>
 				<Flex
 					direction={{ base: "column", xs: "row" }}
 					align={"center"}
@@ -134,7 +119,7 @@ export default function Main() {
 					</Text>
 					<Group>
 						{socials.map(social => (
-							<a href={social.link}>
+							<a key={social.link} href={social.link}>
 								<MantineImage
 									src={social.icon}
 									alt={social.alt}
@@ -148,7 +133,7 @@ export default function Main() {
 						))}
 					</Group>
 				</Flex>
-			</Component.Core.Container.Responsive>
+			</Container>
 		</Layout.Section>
 	);
 }

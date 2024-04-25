@@ -4,20 +4,16 @@ import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Box, Button, Center, Grid } from "@mantine/core";
+import { Box, Button, Center, Grid, GridCol, PasswordInput } from "@mantine/core";
 import { matchesField, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import utility from "@/utilities";
-
-import notificationSuccess from "@/styles/notifications/success.module.scss";
-import notificationFailure from "@/styles/notifications/failure.module.scss";
+import handler from "@/handlers";
+import hook from "@/hooks";
 
 import { typeReset } from "@/types/form";
-import Component from "@/components";
-import controller from "@/controllers";
 
 export default function Reset({ params }: { params: { userId?: string; token?: string } }) {
 	const [sending, setSending] = useState(false);
@@ -30,7 +26,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 		},
 
 		validate: {
-			password: value => utility.validator.form.special.password(value, 8, 24),
+			password: value => handler.validator.form.special.password(value, 8, 24),
 			passwordConfirm: matchesField("password", "Passwords do not match"),
 		},
 	});
@@ -44,7 +40,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 			if (form.isValid()) {
 				setSending(true);
 
-				await controller.request
+				await hook.request
 					.post(`http://localhost:3000/api/${params.userId}password/reset/${params.token}`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -62,12 +58,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 								autoClose: 5000,
 								title: "Server Unavailable",
 								message: `There was no response from the server.`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 						} else {
 							if (!response.user) {
@@ -78,12 +69,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 									autoClose: 5000,
 									title: `Not Found`,
 									message: `The account is not valid.`,
-									classNames: {
-										root: notificationFailure.root,
-										icon: notificationFailure.icon,
-										description: notificationFailure.description,
-										title: notificationFailure.title,
-									},
+									variant: "failed",
 								});
 							} else {
 								if (!response.user.token) {
@@ -94,12 +80,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 										autoClose: 5000,
 										title: `Invalid Link`,
 										message: `The link is broken, expired or already used.`,
-										classNames: {
-											root: notificationFailure.root,
-											icon: notificationFailure.icon,
-											description: notificationFailure.description,
-											title: notificationFailure.title,
-										},
+										variant: "failed",
 									});
 								} else {
 									if (!response.user.password.match) {
@@ -111,12 +92,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 											autoClose: 5000,
 											title: "Password Changed",
 											message: `You have successfully cahnged your password.`,
-											classNames: {
-												root: notificationSuccess.root,
-												icon: notificationSuccess.icon,
-												description: notificationSuccess.description,
-												title: notificationSuccess.title,
-											},
+											variant: "success",
 										});
 
 										router.replace(`/log-in`);
@@ -128,12 +104,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 											autoClose: 5000,
 											title: `Change Error`,
 											message: `Cannot be the same as previous password.`,
-											classNames: {
-												root: notificationFailure.root,
-												icon: notificationFailure.icon,
-												description: notificationFailure.description,
-												title: notificationFailure.title,
-											},
+											variant: "failed",
 										});
 									}
 
@@ -151,12 +122,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 				autoClose: 5000,
 				title: `Send Failed`,
 				message: (error as Error).message,
-				classNames: {
-					root: notificationFailure.root,
-					icon: notificationFailure.icon,
-					description: notificationFailure.description,
-					title: notificationFailure.title,
-				},
+				variant: "failed",
 			});
 		} finally {
 			setSending(false);
@@ -166,29 +132,29 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid>
-				<Grid.Col span={{ base: 12 }}>
-					<Component.Core.Input.Password
+				<GridCol span={{ base: 12 }}>
+					<PasswordInput
 						required
 						label={"Password"}
 						placeholder="Your Password"
 						{...form.getInputProps("password")}
 					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12 }}>
-					<Component.Core.Input.Password
+				</GridCol>
+				<GridCol span={{ base: 12 }}>
+					<PasswordInput
 						required
 						label={"Confirm Password"}
 						placeholder="Confirm Your Password"
 						{...form.getInputProps("passwordConfirm")}
 					/>
-				</Grid.Col>
-				<Grid.Col span={{ base: 12 }}>
+				</GridCol>
+				<GridCol span={{ base: 12 }}>
 					<Center mt={"md"}>
 						<Button type="submit" w={{ base: "75%", sm: "50%" }} color="pri.8" loading={sending}>
 							{sending ? "Resetting" : "Reset"}
 						</Button>
 					</Center>
-				</Grid.Col>
+				</GridCol>
 			</Grid>
 		</Box>
 	);

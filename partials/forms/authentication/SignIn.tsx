@@ -5,21 +5,16 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Anchor, Box, Button, Center, Grid, Stack } from "@mantine/core";
+import { Anchor, Box, Button, Center, Grid, GridCol, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { isNotEmpty, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
-// icons
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import utility from "@/utilities";
-
-import notificationSuccess from "@/styles/notifications/success.module.scss";
-import notificationFailure from "@/styles/notifications/failure.module.scss";
+import handler from "@/handlers";
+import hook from "@/hooks";
 
 import { typeSignIn } from "@/types/form";
-import Component from "@/components";
-import controller from "@/controllers";
 
 export default function SignIn() {
 	const [sending, setSending] = useState(false);
@@ -32,7 +27,7 @@ export default function SignIn() {
 		},
 
 		validate: {
-			email: value => utility.validator.form.special.email(value),
+			email: value => handler.validator.form.special.email(value),
 			password: isNotEmpty("Please fill out this field"),
 		},
 	});
@@ -46,7 +41,7 @@ export default function SignIn() {
 			if (form.isValid()) {
 				setSending(true);
 
-				await controller.request
+				await hook.request
 					.post("http://localhost:3000/api/sign-in", {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -64,12 +59,7 @@ export default function SignIn() {
 								autoClose: 5000,
 								title: "Server Unavailable",
 								message: `There was no response from the server.`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 						} else {
 							if (!response.user) {
@@ -80,12 +70,7 @@ export default function SignIn() {
 									autoClose: 5000,
 									title: `Not Found`,
 									message: `No account with that email has been found.`,
-									classNames: {
-										root: notificationFailure.root,
-										icon: notificationFailure.icon,
-										description: notificationFailure.description,
-										title: notificationFailure.title,
-									},
+									variant: "failed",
 								});
 							} else {
 								if (!response.user.passwordValid) {
@@ -96,12 +81,7 @@ export default function SignIn() {
 										autoClose: 5000,
 										title: `Invalid Login`,
 										message: `Username password mismatch`,
-										classNames: {
-											root: notificationFailure.root,
-											icon: notificationFailure.icon,
-											description: notificationFailure.description,
-											title: notificationFailure.title,
-										},
+										variant: "failed",
 									});
 								} else {
 									notifications.show({
@@ -112,12 +92,7 @@ export default function SignIn() {
 										autoClose: 5000,
 										title: "Authenticated",
 										message: `User has logged in.`,
-										classNames: {
-											root: notificationSuccess.root,
-											icon: notificationSuccess.icon,
-											description: notificationSuccess.description,
-											title: notificationSuccess.title,
-										},
+										variant: "success",
 									});
 
 									router.replace(`/`);
@@ -136,12 +111,7 @@ export default function SignIn() {
 				autoClose: 5000,
 				title: `Error`,
 				message: (error as Error).message,
-				classNames: {
-					root: notificationFailure.root,
-					icon: notificationFailure.icon,
-					description: notificationFailure.description,
-					title: notificationFailure.title,
-				},
+				variant: "failed",
 			});
 		} finally {
 			setSending(false);
@@ -152,8 +122,8 @@ export default function SignIn() {
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Stack gap={"xl"}>
 				<Grid>
-					<Grid.Col span={{ base: 12 }}>
-						<Component.Core.Input.Text
+					<GridCol span={{ base: 12 }}>
+						<TextInput
 							required
 							label={"Email"}
 							type="email"
@@ -161,10 +131,10 @@ export default function SignIn() {
 							placeholder="Your Email"
 							{...form.getInputProps("email")}
 						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
 						<Stack gap={"xs"} align="end">
-							<Component.Core.Input.Password
+							<PasswordInput
 								w={"100%"}
 								required
 								label={"Password"}
@@ -182,8 +152,8 @@ export default function SignIn() {
 								Lost your password?
 							</Anchor>
 						</Stack>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
 						<Center mt={"md"}>
 							<Button
 								type="submit"
@@ -195,7 +165,7 @@ export default function SignIn() {
 								{sending ? "Signing In" : "Sign In"}
 							</Button>
 						</Center>
-					</Grid.Col>
+					</GridCol>
 				</Grid>
 			</Stack>
 		</Box>

@@ -2,21 +2,16 @@
 
 import React, { useState } from "react";
 
-import { Box, Button, Center, Grid, Stack, Text } from "@mantine/core";
+import { Box, Button, Center, Grid, GridCol, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import utility from "@/utilities";
-
-import notificationSuccess from "@/styles/notifications/success.module.scss";
-import notificationFailure from "@/styles/notifications/failure.module.scss";
-
-import Component from "@/components";
+import handler from "@/handlers";
+import hook from "@/hooks";
 
 import { typeForgot, typeRemaining } from "@/types/form";
-import controller from "@/controllers";
 
 export default function Forgot() {
 	const [sending, setSending] = useState(false);
@@ -29,7 +24,7 @@ export default function Forgot() {
 		},
 
 		validate: {
-			email: value => utility.validator.form.special.email(value),
+			email: value => handler.validator.form.special.email(value),
 		},
 	});
 
@@ -42,7 +37,7 @@ export default function Forgot() {
 			if (form.isValid()) {
 				setSending(true);
 
-				await controller.request
+				await hook.request
 					.post("http://localhost:3000/api/password/forgot", {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -60,12 +55,7 @@ export default function Forgot() {
 								autoClose: 5000,
 								title: "Server Unavailable",
 								message: `There was no response from the server.`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 						} else {
 							if (!response.user) {
@@ -76,12 +66,7 @@ export default function Forgot() {
 									autoClose: 5000,
 									title: "Invalid Email",
 									message: `No account with the provided email has been found.`,
-									classNames: {
-										root: notificationFailure.root,
-										icon: notificationFailure.icon,
-										description: notificationFailure.description,
-										title: notificationFailure.title,
-									},
+									variant: "failed",
 								});
 							} else {
 								if (!response.user.otl) {
@@ -93,12 +78,7 @@ export default function Forgot() {
 										autoClose: 5000,
 										title: "One-time Link Sent",
 										message: `A reset link has been sent to the provided email.`,
-										classNames: {
-											root: notificationSuccess.root,
-											icon: notificationSuccess.icon,
-											description: notificationSuccess.description,
-											title: notificationSuccess.title,
-										},
+										variant: "succes",
 									});
 								} else {
 									if (!response.user.otl.expired) {
@@ -109,12 +89,7 @@ export default function Forgot() {
 											autoClose: 5000,
 											title: "Link Already Sent",
 											message: `Remember to check your spam/junk folder(s).`,
-											classNames: {
-												root: notificationFailure.root,
-												icon: notificationFailure.icon,
-												description: notificationFailure.description,
-												title: notificationFailure.title,
-											},
+											variant: "failed",
 										});
 
 										setTime(response.user.otl.time);
@@ -127,12 +102,7 @@ export default function Forgot() {
 											autoClose: 5000,
 											title: "New One-time Link Sent",
 											message: `A new reset link has been sent to the provided email.`,
-											classNames: {
-												root: notificationSuccess.root,
-												icon: notificationSuccess.icon,
-												description: notificationSuccess.description,
-												title: notificationSuccess.title,
-											},
+											variant: "failed",
 										});
 									}
 								}
@@ -150,12 +120,7 @@ export default function Forgot() {
 				autoClose: 5000,
 				title: `Send Failed`,
 				message: (error as Error).message,
-				classNames: {
-					root: notificationFailure.root,
-					icon: notificationFailure.icon,
-					description: notificationFailure.description,
-					title: notificationFailure.title,
-				},
+				variant: "failed",
 			});
 		} finally {
 			setSending(false);
@@ -166,8 +131,8 @@ export default function Forgot() {
 		<Stack gap={"xl"}>
 			<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 				<Grid>
-					<Grid.Col span={{ base: 12 }}>
-						<Component.Core.Input.Text
+					<GridCol span={{ base: 12 }}>
+						<TextInput
 							required
 							label={"Email"}
 							type="email"
@@ -175,14 +140,14 @@ export default function Forgot() {
 							placeholder="Your Email"
 							{...form.getInputProps("email")}
 						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
 						<Center mt={"md"}>
 							<Button type="submit" color="pri.8" w={{ base: "75%", sm: "50%" }} loading={sending}>
 								{sending ? "Sending" : "Send"}
 							</Button>
 						</Center>
-					</Grid.Col>
+					</GridCol>
 				</Grid>
 			</Box>
 			<Stack display={time ? "inherit" : "none"} c={"dimmed"} ta={"center"} fz={{ base: "xs", xs: "sm" }}>

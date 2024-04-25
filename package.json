@@ -22,11 +22,13 @@
     "@mantine/nprogress": "^7.6.0",
     "@mantine/spotlight": "^7.6.0",
     "@mantine/tiptap": "^7.6.0",
+    "@prisma/client": "^5.13.0",
     "@tabler/icons-react": "^2.47.0",
     "@tiptap/extension-link": "^2.2.4",
     "@tiptap/react": "^2.2.4",
     "@tiptap/starter-kit": "^2.2.4",
-    "bcrypt": "^5.1.1",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.0.0",
@@ -52,6 +54,7 @@
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
+    "prisma": "^5.13.0",
     "sass": "^1.71.1",
     "typescript": "^5"
   }

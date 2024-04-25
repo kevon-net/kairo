@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	sassOptions: {
-		prependData: `@import "./styles/_mantine.scss";`,
+		prependData: `@import "./_mantine.scss";`,
 	},
 
 	images: {
@@ -14,6 +14,11 @@ const nextConfig = {
 				pathname: "/**",
 			},
 		],
+	},
+
+	webpack: config => {
+		config.externals = [...config.externals, "bcrypt"];
+		return config;
 	},
 };
 

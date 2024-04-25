@@ -1,7 +1,7 @@
-// import mern from "./mern";
+import next from "./next";
 
-// const database = {
-// 	mern,
-// };
+const database = {
+	next,
+};
 
-// export default database;
+export default database;

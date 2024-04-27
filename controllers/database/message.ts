@@ -1,21 +1,11 @@
-// models
-import model from "@/models";
-
-import { typeMessageInstance } from "@/types/models";
+import prisma from "@/databases/next";
+import { typeContact } from "@/types/form";
 
 const message = {
-	create: async (data: typeMessageInstance) => {
+	create: async (messageData: typeContact) => {
 		try {
-			await model.message.sync();
+			await prisma.message.create({ data: messageData });
 
-			await model.message.create({
-				fname: data.fname,
-				lname: data.lname,
-				email: data.email,
-				phone: data.phone,
-				subject: data.subject,
-				message: data.message,
-			});
 			console.log("+-> Message created");
 		} catch (error: any) {
 			console.error("x-> Couldn't create message:", error.message);

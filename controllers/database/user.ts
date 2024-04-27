@@ -1,21 +1,19 @@
-// models
-import model from "@/models";
+import { Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
-import { typeUserInstance } from "@/types/models";
+import prisma from "@/databases/next";
 
 const user = {
-	create: async (data: typeUserInstance) => {
+	create: async (userData: {
+		select?: Prisma.UserSelect<DefaultArgs> | null | undefined;
+		include?: Prisma.UserInclude<DefaultArgs> | null | undefined;
+		// data: (Prisma.Without<...> & Prisma.UserUncheckedCreateInput) | (Prisma.Without<...> & Prisma.UserCreateInput);
+		data: any;
+	}) => {
 		try {
-			await model.user.sync();
+			await prisma.user.create(userData);
 
-			await model.user.create({
-				fname: data.fname,
-				lname: data.lname,
-				email: data.email,
-				phone: data.phone,
-				password: data.password,
-				verified: data.verified,
-			});
+			console.log("+-> User created");
 		} catch (error: any) {
 			console.error("x-> Couldn't create user:", error.message);
 		}

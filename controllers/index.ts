@@ -1,11 +1,9 @@
-// import database from "./database";
-// import email from "./email";
-import request from "./request";
+import database from "./database";
+import email from "./email";
 
 const controller = {
-	// database,
-	// email,
-	request,
+	database,
+	email,
 };
 
 export default controller;

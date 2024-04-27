@@ -1,22 +1,14 @@
-// models
-import model from "@/models";
-
-import { typeOtpInstance } from "@/types/models";
+import prisma from "@/databases/next";
+import { typeOtp } from "@/types/ot";
 
 const otp = {
-	create: async (data: typeOtpInstance) => {
+	create: async (otpData: typeOtp) => {
 		try {
-			await model.otp.sync();
+			await prisma.otp.create({ data: otpData });
 
-			await model.otp.create({
-				email: data.email,
-				otp: data.otp,
-				createdAt: data.createdAt,
-				expiredAt: data.expiredAt,
-			});
-			console.log("+-> Otp created");
+			console.log("+-> Message created");
 		} catch (error: any) {
-			console.error("x-> Couldn't create otp:", error.message);
+			console.error("x-> Couldn't create message:", error.message);
 		}
 	},
 };

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { typeMail } from "@/types/options";
 
 // env file
-dotenv.config({ path: "/.env.local" });
+dotenv.config({ path: "/.env" });
 
 const createTransporter = () => {
 	try {

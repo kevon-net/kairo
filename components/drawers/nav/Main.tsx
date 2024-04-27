@@ -1,9 +1,11 @@
+"use client";
+
 import React from "react";
 
 import { usePathname } from "next/navigation";
 
 import { Burger, Drawer, NavLink } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 import asset from "@/assets";
 import Media from "@/components/media";
@@ -15,6 +17,7 @@ import classes from "./Main.module.scss";
 export default function Main({ data, ...restProps }: { data: typeNav[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const pathname = usePathname();
+	const mobile = useMediaQuery("(max-width: 36em)");
 
 	const navMobile = data.map(link => {
 		const subLinks =
@@ -29,7 +32,7 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 				/>
 			));
 
-		return subLinks ? (
+		return !subLinks ? (
 			<NavLink
 				key={link.link}
 				href={link.link}
@@ -60,7 +63,7 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 				opened={opened}
 				onClose={close}
 				withCloseButton={false}
-				size={200}
+				size={"200"}
 				classNames={{
 					body: classes.body,
 					close: classes.close,
@@ -76,7 +79,7 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 				{navMobile}
 			</Drawer>
 
-			<Burger opened={opened} onClick={toggle} {...restProps} />
+			<Burger opened={opened} onClick={toggle} size={mobile ? "xs" : "sm"} {...restProps} />
 		</>
 	);
 }

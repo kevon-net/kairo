@@ -26,7 +26,7 @@ export default function Body({ children, header, nav, hero, aside, footer }: typ
 			{nav && nav}
 			{hero && hero}
 			{aside ? (
-				<Container component={"article"}>
+				<Container size={'responsive'} component={"article"}>
 					<Flex gap={"xl"}>
 						{aside.left && handleAside(aside.left, "25%")}
 						<Box w={"75%"}>{children}</Box>

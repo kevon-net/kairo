@@ -3,7 +3,20 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { Flex, Grid, Container, Image as MantineImage, Text, Title, List, Anchor, Divider, Group } from "@mantine/core";
+import {
+	Flex,
+	Grid,
+	Container,
+	Image as MantineImage,
+	Text,
+	Title,
+	List,
+	Anchor,
+	Divider,
+	Group,
+	GridCol,
+	ListItem,
+} from "@mantine/core";
 
 import Layout from "@/layouts";
 import asset from "@/assets";
@@ -61,9 +74,9 @@ const socials = [
 export default function Main() {
 	return (
 		<Layout.Section padded={"xl"} className={classes.footer}>
-			<Container>
+			<Container size={"responsive"}>
 				<Grid py={{ xs: "xl" }}>
-					<Grid.Col span={{ base: 12, md: 4 }}>
+					<GridCol span={{ base: 12, md: 4 }}>
 						<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"md"}>
 							<MantineImage
 								src={asset.icon.tool.nextjs}
@@ -78,16 +91,16 @@ export default function Main() {
 								accessible web applications faster than ever.
 							</Text>
 						</Flex>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12, md: 8 }} visibleFrom="sm">
+					</GridCol>
+					<GridCol span={{ base: 12, md: 8 }} visibleFrom="sm">
 						<Grid mt={{ sm: "xl", md: 0 }}>
 							{linkSets.map(linkSet => (
-								<Grid.Col key={linkSet.title} span={"auto"}>
+								<GridCol key={linkSet.title} span={"auto"}>
 									<Flex direction={"column"} align={{ base: "center", md: "end" }} gap={"xs"}>
 										<Title order={4}>{linkSet.title}</Title>
 										<List listStyleType="none">
 											{linkSet.links.map(link => (
-												<List.Item key={link.link} className={classes.listItem}>
+												<ListItem key={link.link} className={classes.listItem}>
 													<Anchor
 														component={Link}
 														href={link.link}
@@ -96,18 +109,18 @@ export default function Main() {
 													>
 														{link.label}
 													</Anchor>
-												</List.Item>
+												</ListItem>
 											))}
 										</List>
 									</Flex>
-								</Grid.Col>
+								</GridCol>
 							))}
 						</Grid>
-					</Grid.Col>
+					</GridCol>
 				</Grid>
 			</Container>
 			<Divider my={"xl"} />
-			<Container>
+			<Container size={"responsive"}>
 				<Flex
 					direction={{ base: "column", xs: "row" }}
 					align={"center"}

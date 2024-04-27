@@ -69,8 +69,7 @@ export default function Signup() {
 					.then(response => {
 						if (!response) {
 							notifications.show({
-								id: "no-response",
-								color: "red",
+								id: "signup-failed-no-response",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Server Unavailable",
@@ -82,7 +81,6 @@ export default function Signup() {
 								notifications.show({
 									id: "signup-success",
 									withCloseButton: false,
-									color: "pri.6",
 									icon: <IconCheck size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: "Registered",
@@ -93,8 +91,7 @@ export default function Signup() {
 								router.replace(`/${response.userId}/verify`);
 							} else {
 								notifications.show({
-									id: "signup-exists",
-									color: "red",
+									id: "signup-failed-exists",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: `User Exists`,
@@ -111,8 +108,7 @@ export default function Signup() {
 			}
 		} catch (error) {
 			notifications.show({
-				id: "signup-fail",
-				color: "red",
+				id: "signup-failed",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
 				title: `Send Failed`,

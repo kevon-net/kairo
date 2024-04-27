@@ -53,7 +53,6 @@ export default function Verify({ userId }: { userId: string }) {
 						if (!response) {
 							notifications.show({
 								id: "otp-verify-failed-no-response",
-								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Server Unavailable",
@@ -64,7 +63,6 @@ export default function Verify({ userId }: { userId: string }) {
 							if (!response.otp) {
 								notifications.show({
 									id: "otp-verify-failed-invalid",
-									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: "Invalid OTP",
@@ -75,7 +73,6 @@ export default function Verify({ userId }: { userId: string }) {
 								if (!response.otp.match) {
 									notifications.show({
 										id: "otp-verify-failed-mismatch",
-										color: "red",
 										icon: <IconX size={16} stroke={1.5} />,
 										autoClose: 5000,
 										title: "Wrong OTP",
@@ -87,7 +84,6 @@ export default function Verify({ userId }: { userId: string }) {
 										notifications.show({
 											id: "otp-verify-success",
 											withCloseButton: false,
-											color: "pri.6",
 											icon: <IconCheck size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: "Email Verified",
@@ -99,7 +95,6 @@ export default function Verify({ userId }: { userId: string }) {
 									} else {
 										notifications.show({
 											id: "otp-verify-failed-expired",
-											color: "red",
 											icon: <IconX size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: "OTP Expired",
@@ -117,7 +112,6 @@ export default function Verify({ userId }: { userId: string }) {
 		} catch (error) {
 			notifications.show({
 				id: "otp-verify-failed",
-				color: "red",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
 				title: `Send Failed`,
@@ -146,7 +140,6 @@ export default function Verify({ userId }: { userId: string }) {
 					if (!response) {
 						notifications.show({
 							id: "otp-request-failed-no-response",
-							color: "red",
 							icon: <IconX size={16} stroke={1.5} />,
 							autoClose: 5000,
 							title: "Server Unavailable",
@@ -158,7 +151,6 @@ export default function Verify({ userId }: { userId: string }) {
 							if (!response.user.otp.expired) {
 								notifications.show({
 									id: "otp-request-failed-not-expired",
-									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: "Already Sent",
@@ -171,7 +163,6 @@ export default function Verify({ userId }: { userId: string }) {
 								notifications.show({
 									id: "otp-request-success",
 									withCloseButton: false,
-									color: "pri.6",
 									icon: <IconCheck size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: "New OTP Sent",
@@ -181,8 +172,7 @@ export default function Verify({ userId }: { userId: string }) {
 							}
 						} else {
 							notifications.show({
-								id: "otp-request-failed-verified",
-								color: "red",
+								id: "otp-request-failed-verified-or-not-found",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Not Found",
@@ -194,8 +184,7 @@ export default function Verify({ userId }: { userId: string }) {
 				});
 		} catch (error) {
 			notifications.show({
-				id: "otp-request-failed-no-response",
-				color: "red",
+				id: "otp-request-failed",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
 				title: "Server Unavailable",

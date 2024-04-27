@@ -53,7 +53,6 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 						if (!response) {
 							notifications.show({
 								id: "password-reset-failed-no-response",
-								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Server Unavailable",
@@ -64,7 +63,6 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 							if (!response.user) {
 								notifications.show({
 									id: "password-reset-failed-not-found",
-									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: `Not Found`,
@@ -75,7 +73,6 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 								if (!response.user.token) {
 									notifications.show({
 										id: "password-reset-failed-invalid-token",
-										color: "red",
 										icon: <IconX size={16} stroke={1.5} />,
 										autoClose: 5000,
 										title: `Invalid Link`,
@@ -87,7 +84,6 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 										notifications.show({
 											id: "password-reset-success",
 											withCloseButton: false,
-											color: "pri.6",
 											icon: <IconCheck size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: "Password Changed",
@@ -99,7 +95,6 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 									} else {
 										notifications.show({
 											id: "password-reset-failed-same-password",
-											color: "red",
 											icon: <IconX size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: `Change Error`,
@@ -117,7 +112,6 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 		} catch (error) {
 			notifications.show({
 				id: "password-reset-failed",
-				color: "red",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
 				title: `Send Failed`,

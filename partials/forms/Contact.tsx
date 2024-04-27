@@ -162,10 +162,10 @@ export default function Contact() {
 				</GridCol>
 				<GridCol span={12}>
 					<Grid mt={"md"}>
-						<GridCol span={{ base: 12, xs: 6 }}>
+						<GridCol span={{ base: 6 }}>
 							<Center>
 								<Button
-									w={{ base: "75%" }}
+									fullWidth
 									color="sec"
 									type="reset"
 									onClick={() => form.reset()}
@@ -175,9 +175,9 @@ export default function Contact() {
 								</Button>
 							</Center>
 						</GridCol>
-						<GridCol span={{ base: 12, xs: 6 }}>
+						<GridCol span={{ base: 6 }}>
 							<Center>
-								<Button w={{ base: "75%" }} type="submit" loading={submitted}>
+								<Button fullWidth type="submit" loading={submitted}>
 									{submitted ? "Submitting" : "Submit"}
 								</Button>
 							</Center>

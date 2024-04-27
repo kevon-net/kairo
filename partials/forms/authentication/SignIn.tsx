@@ -54,7 +54,6 @@ export default function SignIn() {
 						if (!response) {
 							notifications.show({
 								id: "signin-failed-no-response",
-								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Server Unavailable",
@@ -65,7 +64,6 @@ export default function SignIn() {
 							if (!response.user) {
 								notifications.show({
 									id: "signin-failed-not-found",
-									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: `Not Found`,
@@ -76,7 +74,6 @@ export default function SignIn() {
 								if (!response.user.passwordValid) {
 									notifications.show({
 										id: "signin-failed-invalid-login",
-										color: "red",
 										icon: <IconX size={16} stroke={1.5} />,
 										autoClose: 5000,
 										title: `Invalid Login`,
@@ -87,7 +84,6 @@ export default function SignIn() {
 									notifications.show({
 										id: "signin-success",
 										withCloseButton: false,
-										color: "pri.6",
 										icon: <IconCheck size={16} stroke={1.5} />,
 										autoClose: 5000,
 										title: "Authenticated",
@@ -106,7 +102,6 @@ export default function SignIn() {
 		} catch (error) {
 			notifications.show({
 				id: "signin-failed",
-				color: "red",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
 				title: `Error`,

@@ -50,7 +50,6 @@ export default function Forgot() {
 						if (!response) {
 							notifications.show({
 								id: "otl-send-failed-no-response",
-								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Server Unavailable",
@@ -61,7 +60,6 @@ export default function Forgot() {
 							if (!response.user) {
 								notifications.show({
 									id: "otl-send-failed-account-invalid",
-									color: "red",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
 									title: "Invalid Email",
@@ -73,7 +71,6 @@ export default function Forgot() {
 									notifications.show({
 										id: "otl-send-success",
 										withCloseButton: false,
-										color: "pri.6",
 										icon: <IconCheck size={16} stroke={1.5} />,
 										autoClose: 5000,
 										title: "One-time Link Sent",
@@ -84,7 +81,6 @@ export default function Forgot() {
 									if (!response.user.otl.expired) {
 										notifications.show({
 											id: "otl-resend-failed-not-expired",
-											color: "red",
 											icon: <IconX size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: "Link Already Sent",
@@ -97,7 +93,6 @@ export default function Forgot() {
 										notifications.show({
 											id: "otl-resend-success",
 											withCloseButton: false,
-											color: "pri.6",
 											icon: <IconCheck size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: "New One-time Link Sent",
@@ -115,7 +110,6 @@ export default function Forgot() {
 		} catch (error) {
 			notifications.show({
 				id: "otl-send-failed",
-				color: "red",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
 				title: `Send Failed`,

@@ -1,6 +1,9 @@
-import { Model } from "sequelize";
+interface typeAt {
+	createdAt: Date;
+	updatedAt: Date;
+}
 
-interface typeMessage {
+export interface typeMessage extends typeAt {
 	id?: number;
 	fname: string;
 	lname: string;
@@ -9,34 +12,24 @@ interface typeMessage {
 	subject: string;
 	message: string;
 }
-export interface typeMessageInstance extends Model<typeMessage>, typeMessage {}
 
-interface typeUser {
-	id?: number;
-	fname: string;
-	lname: string;
+export interface typeUser extends typeAt {
+	id: number;
 	email: string;
-	phone: string;
 	password: string;
 	verified: boolean | number;
+	role: string;
+	// posts: typePost[];
+	// coments: typeComment[];
+	// replies: typeReply[];
+	// otps: typeOtp[];
+	// profile: typeProfile;
+	// session: typeSession;
 }
-export interface typeUserInstance extends Model<typeUser>, typeUser {}
 
-interface typeOtl {
+export interface typeOtp extends typeAt {
 	id?: number;
-	email: string;
 	otl: string;
-	userId: number;
-	createdAt: number;
-	expiredAt: number;
+	expires: string;
+	user_id: number;
 }
-export interface typeOtlInstance extends Model<typeOtl>, typeOtl {}
-
-interface typeOtp {
-	id?: number;
-	email: string;
-	otp: string;
-	createdAt: number;
-	expiredAt: number;
-}
-export interface typeOtpInstance extends Model<typeOtp>, typeOtp {}

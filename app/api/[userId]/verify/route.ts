@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 
-import model from "@/models";
+import model from "@/prisma/models";
 import utility from "@/utilities";
 
 // env file
-dotenv.config({ path: "/.env.local" });
+dotenv.config({ path: "/.env" });
 
 export default async function POST(req: Request, res: Response, { params }: { params: { userId: string } }) {
 	try {

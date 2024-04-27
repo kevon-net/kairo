@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import controller from "@/controllers";
 
 // env file
-dotenv.config({ path: "/.env.local" });
+dotenv.config({ path: "/.env" });
 
 export async function POST(req: Request, res: Response) {
 	try {

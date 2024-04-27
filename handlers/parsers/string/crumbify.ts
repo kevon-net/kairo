@@ -1,4 +1,4 @@
-import utility from "@/utilities";
+import capitalize from "./capitalize";
 
 const crumbify = (path: string) => {
 	const crumbs = [{ link: "/", label: "Home" }];
@@ -12,7 +12,7 @@ const crumbify = (path: string) => {
 			item.length < 24 &&
 				crumbs.push({
 					link: currentLink,
-					label: `${utility.parser.string.capitalize.words(item.replaceAll("-", " "))}`,
+					label: `${capitalize.words(item.replaceAll("-", " "))}`,
 				});
 		});
 

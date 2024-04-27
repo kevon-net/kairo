@@ -1,11 +1,7 @@
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
-import model from "@/models";
+import model from "@/prisma/models";
 import utility from "@/utilities";
-
-// env file
-dotenv.config({ path: "/.env.local" });
 
 export default async function POST(req: Request, res: Response) {
 	try {
@@ -23,8 +19,9 @@ export default async function POST(req: Request, res: Response) {
 					user: { passwordValid: false },
 				});
 			} else {
+				// replace with session creator
 				const token = jwt.sign({ email: userRecord.email }, process.env.JWT_SECRET_KEY as string, {
-					expiresIn: "1d",
+					expiresIn: "7d",
 				});
 
 				return Response.json({ user: { passwordValid: true, token, record: userRecord } });

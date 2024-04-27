@@ -1,19 +1,19 @@
 import jwt from "jsonwebtoken";
+import prisma from "@/databases/next";
 import dotenv from "dotenv";
 
-import model from "@/models";
 import controller from "@/controllers";
 import utility from "@/utilities";
 
 // env file
-dotenv.config({ path: "/.env.local" });
+dotenv.config({ path: "/.env" });
 
 export async function POST(req: Request, res: Response) {
 	try {
 		const { email } = await req.json();
 
-		const userRecord = await model.user.findOne({ where: { email } });
-		const otlRecord = await model.otl.findOne({ where: { email } });
+		const userRecord = await prisma.user.findUnique({ where: { email } });
+		const otlRecord = await prisma.otl.findUnique({ where: { email } });
 
 		if (!userRecord) {
 			res.json();

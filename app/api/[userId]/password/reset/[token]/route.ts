@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import model from "@/models";
+import model from "@/prisma/models";
 import controller from "@/controllers";
 import utility from "@/utilities";
 
 // env file
-dotenv.config({ path: "/.env.local" });
+dotenv.config({ path: "/.env" });
 
 interface typeParams {
 	id: string;

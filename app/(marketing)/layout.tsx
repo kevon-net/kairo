@@ -9,10 +9,7 @@ export default function Marketing({
 	children: React.ReactNode;
 }) {
 	return (
-		<Layout.Body
-		// nav={<Partial.Navbar.Main />}
-		// footer={<Partial.Footer.Main />}
-		>
+		<Layout.Body nav={<Partial.Navbar.Main />} footer={<Partial.Footer.Main />}>
 			<main>{children}</main>
 		</Layout.Body>
 	);

@@ -14,17 +14,20 @@ export interface typeMessage extends typeAt {
 }
 
 export interface typeUser extends typeAt {
-	id: number;
+	id: string;
+	name?: string;
 	email: string;
-	password: string;
+	password?: string;
 	verified: boolean | number;
 	role: string;
-	// posts: typePost[];
-	// coments: typeComment[];
-	// replies: typeReply[];
-	// otps: typeOtp[];
-	// profile: typeProfile;
-	// session: typeSession;
+	posts: any[];
+	coments: any[];
+	replies: any[];
+	otps: any[];
+	otls: any[];
+	profile: any;
+	sessions: any;
+	accounts: any;
 }
 
 export interface typeOtp extends typeAt {

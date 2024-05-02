@@ -7,6 +7,7 @@ export interface typeContact {
 }
 
 export interface typeSignUp {
+	name: string;
 	email: string;
 	password: string;
 }
@@ -32,6 +33,6 @@ export interface typeReset {
 }
 
 export interface typeRemaining {
-	minutes: string;
+	minutes: number;
 	seconds: string;
 }

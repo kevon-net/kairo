@@ -22,7 +22,6 @@ const encryption = {
 	},
 	decrypt: async (session: string | undefined) => {
 		if (session === undefined) {
-			console.log("x-> Session is undefined");
 			return null; // or throw an error, depending on your use case
 		}
 

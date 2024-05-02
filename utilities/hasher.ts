@@ -9,9 +9,9 @@ const hasher = {
 		}
 	},
 
-	compare: async (password: string, passwordHashed: string) => {
+	compare: async (password: string, passwordHashed: string | null) => {
 		try {
-			return await bcryptjs.compare(password, passwordHashed);
+			return passwordHashed ? await bcryptjs.compare(password, passwordHashed) : null;
 		} catch (error) {
 			console.error("x-> Hash comparison failure:", (error as Error).message);
 		}

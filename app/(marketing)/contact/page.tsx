@@ -13,9 +13,9 @@ export default function Contact() {
 	return (
 		<Layout.Page padded>
 			<Layout.Section containerized={"responsive"}>Contact page</Layout.Section>
-			<Layout.Section containerized={"xs"}>
+			{/* <Layout.Section containerized={"xs"}>
 				<Partial.Form.Contact />
-			</Layout.Section>
+			</Layout.Section> */}
 		</Layout.Page>
 	);
 }

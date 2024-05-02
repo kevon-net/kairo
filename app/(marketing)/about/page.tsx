@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 	title: "About",
 };
 
-export default function About() {
+export default async function About() {
 	return (
 		<Layout.Page padded>
-			<Layout.Section containerized>About page</Layout.Section>
+			<Layout.Section containerized={"responsive"}>About page</Layout.Section>
 		</Layout.Page>
 	);
 }

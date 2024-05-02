@@ -12,8 +12,8 @@ export const generateMetadata = ({ params }: typeParams): Metadata => {
 
 export default function BlogDetails({ params }: typeParams) {
 	return (
-		<Layout.Page>
-			<Layout.Section containerized>Blog {params.blogId}</Layout.Section>
+		<Layout.Page padded>
+			<Layout.Section containerized={"responsive"}>Blog {params.blogId}</Layout.Section>
 		</Layout.Page>
 	);
 }

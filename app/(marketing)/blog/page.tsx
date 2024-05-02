@@ -7,7 +7,7 @@ import Layout from "@/layouts";
 export default function Blog() {
 	return (
 		<Layout.Page padded>
-			<Layout.Section containerized>
+			<Layout.Section containerized={"responsive"}>
 				<p>Blog page</p>
 				<ul>
 					<li>

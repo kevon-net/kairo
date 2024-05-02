@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Box, Button, Center, Flex, Grid, GridCol, Group, PinInput, Stack, Text } from "@mantine/core";
+import { Box, Button, Center, Grid, GridCol, PinInput, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
@@ -13,6 +13,9 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import hook from "@/hooks";
 
 import { typeRemaining, typeVerify } from "@/types/form";
+
+import { signIn } from "next-auth/react";
+import millToMinSec from "@/utilities/converters/millMinSec";
 
 export default function Verify({ userId }: { userId: string }) {
 	const [sending, setSending] = useState(false);
@@ -32,7 +35,7 @@ export default function Verify({ userId }: { userId: string }) {
 	});
 
 	const parse = (rawData: typeVerify) => {
-		return { otp: rawData.otp };
+		return { otp: rawData.otp, userId };
 	};
 
 	const handleSubmit = async (formValues: typeVerify) => {
@@ -41,7 +44,7 @@ export default function Verify({ userId }: { userId: string }) {
 				setSending(true);
 
 				await hook.request
-					.post(`http://localhost:3000/api/${userId}/verify`, {
+					.post(`http://localhost:3000/api/${userId}/auth/verify`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
 						headers: {
@@ -49,8 +52,8 @@ export default function Verify({ userId }: { userId: string }) {
 							Accept: "application/json",
 						},
 					})
-					.then(response => {
-						if (!response) {
+					.then(res => {
+						if (!res) {
 							notifications.show({
 								id: "otp-verify-failed-no-response",
 								icon: <IconX size={16} stroke={1.5} />,
@@ -60,39 +63,20 @@ export default function Verify({ userId }: { userId: string }) {
 								variant: "failed",
 							});
 						} else {
-							if (!response.otp) {
+							if (!res.user) {
 								notifications.show({
 									id: "otp-verify-failed-invalid",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
-									title: "Invalid OTP",
-									message: `The email doesn't exist or has already been verified`,
+									title: "Unauthorized",
+									message: `You are not allowed to perform this action.`,
 									variant: "failed",
 								});
-							} else {
-								if (!response.otp.match) {
-									notifications.show({
-										id: "otp-verify-failed-mismatch",
-										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "Wrong OTP",
-										message: `You have entered the wrong OTP for this email.`,
-										variant: "failed",
-									});
-								} else {
-									if (!response.otp.expired) {
-										notifications.show({
-											id: "otp-verify-success",
-											withCloseButton: false,
-											icon: <IconCheck size={16} stroke={1.5} />,
-											autoClose: 5000,
-											title: "Email Verified",
-											message: `You can now log in to your account.`,
-											variant: "success",
-										});
 
-										router.replace(`/sign-in`);
-									} else {
+								router.replace("/auth/sign-up");
+							} else {
+								if (!res.user.verified) {
+									if (!res.user.otp) {
 										notifications.show({
 											id: "otp-verify-failed-expired",
 											icon: <IconX size={16} stroke={1.5} />,
@@ -101,20 +85,72 @@ export default function Verify({ userId }: { userId: string }) {
 											message: `Request another in the link provided on this page`,
 											variant: "failed",
 										});
+
+										form.reset();
+									} else {
+										if (!res.user.otp.match) {
+											notifications.show({
+												id: "otp-verify-failed-mismatch",
+												icon: <IconX size={16} stroke={1.5} />,
+												autoClose: 5000,
+												title: "Wrong OTP",
+												message: `You have entered the wrong OTP for this email.`,
+												variant: "failed",
+											});
+
+											form.reset();
+										} else {
+											if (!res.user.otp.expired) {
+												notifications.show({
+													id: "otp-verify-success",
+													icon: <IconCheck size={16} stroke={1.5} />,
+													autoClose: 5000,
+													title: "Email Verified",
+													message: `You can now log in to your account.`,
+													variant: "success",
+												});
+
+												// router.replace(`/auth/sign-in`);
+												signIn();
+											} else {
+												notifications.show({
+													id: "otp-verify-failed-expired",
+													icon: <IconX size={16} stroke={1.5} />,
+													autoClose: 5000,
+													title: "OTP Expired",
+													message: `Request another in the link provided on this page`,
+													variant: "failed",
+												});
+
+												form.reset();
+											}
+										}
 									}
+								} else {
+									notifications.show({
+										id: "otp-verify-success",
+										icon: <IconCheck size={16} stroke={1.5} />,
+										autoClose: 5000,
+										title: "Verified",
+										message: `The email has already been verified`,
+										variant: "success",
+									});
+
+									// router.replace(`/auth/sign-in`);
+									signIn();
 								}
 							}
-
-							form.reset();
 						}
 					});
 			}
 		} catch (error) {
+			console.error("Error:", (error as Error).message);
+
 			notifications.show({
 				id: "otp-verify-failed",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
-				title: `Send Failed`,
+				title: `Verification Failed`,
 				message: (error as Error).message,
 				variant: "failed",
 			});
@@ -128,7 +164,7 @@ export default function Verify({ userId }: { userId: string }) {
 			setRequested(true);
 
 			await hook.request
-				.post(`http://localhost:3000/api/${userId}/verify/resend`, {
+				.post(`http://localhost:3000/api/${userId}/auth/verify/resend`, {
 					method: "POST",
 					body: JSON.stringify({ userId }),
 					headers: {
@@ -136,8 +172,8 @@ export default function Verify({ userId }: { userId: string }) {
 						Accept: "application/json",
 					},
 				})
-				.then(response => {
-					if (!response) {
+				.then(res => {
+					if (!res) {
 						notifications.show({
 							id: "otp-request-failed-no-response",
 							icon: <IconX size={16} stroke={1.5} />,
@@ -147,38 +183,64 @@ export default function Verify({ userId }: { userId: string }) {
 							variant: "failed",
 						});
 					} else {
-						if (!response.user.userVerified) {
-							if (!response.user.otp.expired) {
-								notifications.show({
-									id: "otp-request-failed-not-expired",
-									icon: <IconX size={16} stroke={1.5} />,
-									autoClose: 5000,
-									title: "Already Sent",
-									message: `Remember to check the spam or junk folder.`,
-									variant: "failed",
-								});
-
-								setTime(response.user.otp.timeToExpiry);
-							} else {
-								notifications.show({
-									id: "otp-request-success",
-									withCloseButton: false,
-									icon: <IconCheck size={16} stroke={1.5} />,
-									autoClose: 5000,
-									title: "New OTP Sent",
-									message: `A new code has been sent to the provided email.`,
-									variant: "success",
-								});
-							}
-						} else {
+						if (!res.user) {
 							notifications.show({
-								id: "otp-request-failed-verified-or-not-found",
+								id: "otp-request-failed-not-found",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Not Found",
-								message: `The account doesn't exist or has already been verified`,
+								title: "Unauthorized",
+								message: `You are not allowed to perform this action.`,
 								variant: "failed",
 							});
+
+							router.replace(`/auth/sign-up`);
+						} else {
+							if (!res.user.verified) {
+								if (!res.user.otp) {
+									notifications.show({
+										id: "otp-request-success-new-otp-created",
+										icon: <IconCheck size={16} stroke={1.5} />,
+										autoClose: 5000,
+										title: "New OTP Sent",
+										message: `A new code has been sent to the provided email.`,
+										variant: "success",
+									});
+								} else {
+									if (!res.user.otp.expired) {
+										notifications.show({
+											id: "otp-request-failed-not-expired",
+											icon: <IconX size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "Already Sent",
+											message: `Remember to check the spam/junk folder(s).`,
+											variant: "failed",
+										});
+
+										setTime(millToMinSec(parseInt(res.user.otp.expires) - Date.now()));
+									} else {
+										notifications.show({
+											id: "otp-request-success",
+											icon: <IconCheck size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "New OTP Sent",
+											message: `A new code has been sent to the provided email.`,
+											variant: "success",
+										});
+									}
+								}
+							} else {
+								notifications.show({
+									id: "otp-request-info-already-verified",
+									icon: <IconCheck size={16} stroke={1.5} />,
+									autoClose: 5000,
+									title: "Verified",
+									message: `The email has already been verified`,
+									variant: "success",
+								});
+
+								// router.replace(`/auth/sign-in`);
+								signIn();
+							}
 						}
 					}
 				});
@@ -187,7 +249,7 @@ export default function Verify({ userId }: { userId: string }) {
 				id: "otp-request-failed",
 				icon: <IconX size={16} stroke={1.5} />,
 				autoClose: 5000,
-				title: "Server Unavailable",
+				title: "Request Failed",
 				message: (error as Error).message,
 				variant: "failed",
 			});
@@ -242,7 +304,7 @@ export default function Verify({ userId }: { userId: string }) {
 							If the email you provided is valid, you should have received it. You can otherwise request
 							another code in{" "}
 							<Text component="span" inherit c={"pri"} fw={500}>
-								{`${time.minutes} minute(s)`}
+								{time.minutes} minutes
 							</Text>
 							.
 						</Text>

@@ -2,9 +2,7 @@
 
 import React, { useState } from "react";
 
-import Link from "next/link";
-
-import { Anchor, Box, Button, Center, Checkbox, Grid, GridCol, Select, Text, TextInput, Textarea } from "@mantine/core";
+import { Box, Button, Center, Checkbox, Grid, GridCol, Select, Text, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 

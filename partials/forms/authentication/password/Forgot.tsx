@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { Box, Button, Center, Grid, GridCol, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -17,6 +19,8 @@ export default function Forgot() {
 	const [sending, setSending] = useState(false);
 
 	const [time, setTime] = useState<typeRemaining>();
+
+	const router = useRouter();
 
 	const form = useForm({
 		initialValues: {
@@ -38,7 +42,7 @@ export default function Forgot() {
 				setSending(true);
 
 				await hook.request
-					.post("http://localhost:3000/api/password/forgot", {
+					.post("http://localhost:3000/api/auth/password/forgot", {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
 						headers: {
@@ -70,13 +74,14 @@ export default function Forgot() {
 								if (!response.user.otl) {
 									notifications.show({
 										id: "otl-send-success",
-										withCloseButton: false,
 										icon: <IconCheck size={16} stroke={1.5} />,
 										autoClose: 5000,
 										title: "One-time Link Sent",
 										message: `A reset link has been sent to the provided email.`,
 										variant: "succes",
 									});
+
+									router.replace("/auth/password/forgot/sent");
 								} else {
 									if (!response.user.otl.expired) {
 										notifications.show({
@@ -88,17 +93,18 @@ export default function Forgot() {
 											variant: "failed",
 										});
 
-										setTime(response.user.otl.time);
+										setTime(response.user.otl.expires);
 									} else {
 										notifications.show({
 											id: "otl-resend-success",
-											withCloseButton: false,
 											icon: <IconCheck size={16} stroke={1.5} />,
 											autoClose: 5000,
 											title: "New One-time Link Sent",
 											message: `A new reset link has been sent to the provided email.`,
 											variant: "failed",
 										});
+
+										router.replace("/auth/password/forgot/sent");
 									}
 								}
 							}
@@ -144,20 +150,22 @@ export default function Forgot() {
 					</GridCol>
 				</Grid>
 			</Box>
-			<Stack display={time ? "inherit" : "none"} c={"dimmed"} ta={"center"} fz={{ base: "xs", xs: "sm" }}>
-				<Text inherit>
-					The last link that was sent to the provided email hasn't expired yet. To limit the number of times a
-					user can change their password within a given time frame, a user can't request another link until
-					the existing link expires.
-				</Text>
-				<Text inherit>
-					Current link expires in{" "}
-					<Text component="span" inherit c={"pri"} fw={500}>
-						{`${time && time.minutes} minutes`}
+			{time && (
+				<Stack c={"dimmed"} ta={"center"} fz={{ base: "xs", xs: "sm" }}>
+					<Text inherit>
+						The last link that was sent to the provided email hasn't expired yet. To limit the number of
+						times a user can change their password within a given time frame, a user can't request another
+						link until the existing link expires.
 					</Text>
-					. Remember to check your spam/junk folder.
-				</Text>
-			</Stack>
+					<Text inherit>
+						Current link expires in{" "}
+						<Text component="span" inherit c={"pri"} fw={500}>
+							{time.minutes} minutes
+						</Text>
+						. Remember to check your spam/junk folder.
+					</Text>
+				</Stack>
+			)}
 		</Stack>
 	);
 }

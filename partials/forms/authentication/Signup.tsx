@@ -11,11 +11,13 @@ import {
 	Button,
 	Center,
 	Checkbox,
+	Divider,
 	Grid,
 	GridCol,
 	PasswordInput,
 	Stack,
 	Text,
+	Image,
 	TextInput,
 } from "@mantine/core";
 import { isNotEmpty, matchesField, useForm } from "@mantine/form";
@@ -25,15 +27,19 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 
 import handler from "@/handlers";
 import hook from "@/hooks";
+import Buttons from "@/partials/buttons";
 
 import { typeSignUp } from "@/types/form";
 
-export default function Signup() {
+import { signIn } from "next-auth/react";
+
+export default function Signup({ providers }: { providers: any }) {
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
 
 	const form = useForm({
 		initialValues: {
+			name: "",
 			email: "",
 			password: "",
 			passwordConfirm: "",
@@ -41,6 +47,7 @@ export default function Signup() {
 		},
 
 		validate: {
+			name: value => handler.validator.form.special.text(value, 2, 23),
 			email: value => handler.validator.form.special.email(value),
 			password: value => handler.validator.form.special.password(value, 8, 24),
 			passwordConfirm: matchesField("password", "Passwords do not match"),
@@ -49,74 +56,77 @@ export default function Signup() {
 	});
 
 	const parse = (rawData: typeSignUp) => {
-		return { email: rawData.email.trim().toLowerCase(), password: rawData.password };
+		return {
+			name: handler.parser.string.capitalize.words(rawData.name),
+			email: rawData.email.trim().toLowerCase(),
+			password: rawData.password,
+		};
 	};
 
 	const handleSubmit = async (formValues: typeSignUp) => {
-		try {
-			if (form.isValid()) {
-				setSending(true);
+		if (form.isValid()) {
+			setSending(true);
 
-				await hook.request
-					.post("http://localhost:3000/api/sign-up", {
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(response => {
-						if (!response) {
+			await hook.request
+				.post("http://localhost:3000/api/auth/sign-up", {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				})
+				.then(res => {
+					if (!res) {
+						notifications.show({
+							id: "signup-failed-no-response",
+							icon: <IconX size={16} stroke={1.5} />,
+							autoClose: 5000,
+							title: "Server Unavailable",
+							message: `There was no response from the server.`,
+							variant: "failed",
+						});
+					} else {
+						if (!res.exists) {
 							notifications.show({
-								id: "signup-failed-no-response",
+								id: "signup-success",
+								icon: <IconCheck size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: `Welcome to Next, ${res.user.name}`,
+								message: `A verification code has been sent to your email.`,
+								variant: "success",
+							});
+
+							router.replace(`/${res.user.id}/auth/verify`);
+						} else {
+							notifications.show({
+								id: "signup-failed-exists",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
+								title: `User Exists`,
+								message: `An account with the provided email already exists.`,
 								variant: "failed",
 							});
-						} else {
-							if (!response.user) {
-								notifications.show({
-									id: "signup-success",
-									withCloseButton: false,
-									icon: <IconCheck size={16} stroke={1.5} />,
-									autoClose: 5000,
-									title: "Registered",
-									message: "A verification code has been sent to the provided email.",
-									variant: "success",
-								});
 
-								router.replace(`/${response.userId}/verify`);
-							} else {
-								notifications.show({
-									id: "signup-failed-exists",
-									icon: <IconX size={16} stroke={1.5} />,
-									autoClose: 5000,
-									title: `User Exists`,
-									message: `An account with the provided email already exists.`,
-									variant: "failed",
-								});
-
-								router.push(`/sign-in`);
-							}
-
-							form.reset();
+							// router.push("/auth/sign-in");
+							res.user.verified ? signIn() : router.replace(`/${res.user.id}/auth/verify`);
 						}
+					}
+				})
+				.catch(error => {
+					notifications.show({
+						id: "signup-failed",
+						icon: <IconX size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: `Signup Failed`,
+						message: (error as Error).message,
+						variant: "failed",
 					});
-			}
-		} catch (error) {
-			notifications.show({
-				id: "signup-failed",
-				icon: <IconX size={16} stroke={1.5} />,
-				autoClose: 5000,
-				title: `Send Failed`,
-				message: (error as Error).message,
-				variant: "failed",
-			});
-		} finally {
-			setSending(false);
+				})
+				.finally(() => {
+					// form.reset();
+					setSending(false);
+				});
 		}
 	};
 
@@ -124,6 +134,20 @@ export default function Signup() {
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Stack gap={"xl"}>
 				<Grid>
+					<GridCol span={{ base: 12 }}>
+						<Buttons.Provider providers={providers} />
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Divider label={"or"} />
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<TextInput
+							required
+							label={"Name"}
+							placeholder="Your Full Name"
+							{...form.getInputProps("name")}
+						/>
+					</GridCol>
 					<GridCol span={{ base: 12 }}>
 						<TextInput
 							required

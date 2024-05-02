@@ -14,6 +14,7 @@ import handler from "@/handlers";
 import hook from "@/hooks";
 
 import { typeReset } from "@/types/form";
+import { signIn } from "next-auth/react";
 
 export default function Reset({ params }: { params: { userId?: string; token?: string } }) {
 	const [sending, setSending] = useState(false);
@@ -27,7 +28,8 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 
 		validate: {
 			password: value => handler.validator.form.special.password(value, 8, 24),
-			passwordConfirm: matchesField("password", "Passwords do not match"),
+			passwordConfirm: (value, values) =>
+				handler.validator.form.special.compare.string(values.password, values.passwordConfirm, "Password"),
 		},
 	});
 
@@ -41,9 +43,13 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 				setSending(true);
 
 				await hook.request
-					.post(`http://localhost:3000/api/${params.userId}password/reset/${params.token}`, {
+					.post(`http://localhost:3000/api/${params.userId}/auth/password/reset/${params.token}`, {
 						method: "POST",
-						body: JSON.stringify(parse(formValues)),
+						body: JSON.stringify({
+							userId: params.userId,
+							token: params.token,
+							password: parse(formValues).password,
+						}),
 						headers: {
 							"Content-Type": "application/json",
 							Accept: "application/json",
@@ -69,41 +75,59 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 									message: `The account is not valid.`,
 									variant: "failed",
 								});
+
+								router.replace("/auth/sign-up");
 							} else {
-								if (!response.user.token) {
+								if (!response.otl) {
 									notifications.show({
-										id: "password-reset-failed-invalid-token",
+										id: "password-reset-failed-unauthorized",
 										icon: <IconX size={16} stroke={1.5} />,
 										autoClose: 5000,
-										title: `Invalid Link`,
-										message: `The link is broken, expired or already used.`,
+										title: `Access Denied`,
+										message: `You are not authorized to perform this action.`,
 										variant: "failed",
 									});
-								} else {
-									if (!response.user.password.match) {
-										notifications.show({
-											id: "password-reset-success",
-											withCloseButton: false,
-											icon: <IconCheck size={16} stroke={1.5} />,
-											autoClose: 5000,
-											title: "Password Changed",
-											message: `You have successfully cahnged your password.`,
-											variant: "success",
-										});
 
-										router.replace(`/log-in`);
-									} else {
+									router.replace("/auth/password/forgot");
+								} else {
+									if (!response.user.token) {
 										notifications.show({
-											id: "password-reset-failed-same-password",
+											id: "password-reset-failed-invalid-token",
 											icon: <IconX size={16} stroke={1.5} />,
 											autoClose: 5000,
-											title: `Change Error`,
-											message: `Cannot be the same as previous password.`,
+											title: `Invalid Link`,
+											message: `The link is expired or already used.`,
 											variant: "failed",
 										});
-									}
 
-									form.reset();
+										router.replace("/auth/password/forgot");
+									} else {
+										if (!response.user.password.same) {
+											notifications.show({
+												id: "password-reset-success",
+												withCloseButton: false,
+												icon: <IconCheck size={16} stroke={1.5} />,
+												autoClose: 5000,
+												title: "Password Changed",
+												message: `You have successfully cahnged your password.`,
+												variant: "success",
+											});
+
+											// router.replace(`/auth/log-in`);
+											signIn();
+										} else {
+											notifications.show({
+												id: "password-reset-failed-same-password",
+												icon: <IconX size={16} stroke={1.5} />,
+												autoClose: 5000,
+												title: `Failed`,
+												message: `Cannot be the same as previous password.`,
+												variant: "failed",
+											});
+
+											form.reset();
+										}
+									}
 								}
 							}
 						}

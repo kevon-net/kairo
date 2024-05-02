@@ -1,6 +1,6 @@
 .navbar {
-	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-gray-0));
-	border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+	// background-color: var(--mantine-color-body);
+	border-bottom: rem(1px) solid var(--mantine-color-default-border);
 	padding: var(--mantine-spacing-xs) 0;
 }
 
@@ -9,7 +9,7 @@
 	height: 40px;
 
 	@include smaller-than($mantine-breakpoint-xs) {
-		width: 24px;
-		height: 24px;
+		width: 32px;
+		height: 32px;
 	}
 }

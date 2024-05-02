@@ -119,7 +119,7 @@ export default function Main() {
 					</GridCol>
 				</Grid>
 			</Container>
-			<Divider my={"xl"} />
+			<Divider my={"xl"} color="var(--mantine-color-default-border)" />
 			<Container size={"responsive"}>
 				<Flex
 					direction={{ base: "column", xs: "row" }}

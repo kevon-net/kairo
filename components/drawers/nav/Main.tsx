@@ -79,7 +79,7 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 				{navMobile}
 			</Drawer>
 
-			<Burger opened={opened} onClick={toggle} size={mobile ? "xs" : "sm"} {...restProps} />
+			<Burger opened={opened} onClick={toggle} size={mobile ? "sm" : "sm"} {...restProps} />
 		</>
 	);
 }

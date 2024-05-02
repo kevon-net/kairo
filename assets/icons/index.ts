@@ -5,6 +5,9 @@ import social from "./social";
 import software from "./software";
 import tool from "./tool";
 
-const icon = { browser, os, search, social, software, tool };
+import email from "./icons8-email.png";
+import microsoft from "./icons8-microsoft.svg";
+
+const icon = { browser, os, search, social, software, tool, other: { email, microsoft } };
 
 export default icon;

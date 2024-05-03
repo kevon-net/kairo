@@ -15,7 +15,7 @@ export default function Section({
 	bordered,
 	shadowed,
 	...restProps
-}: typeSection & React.ComponentProps<typeof Box>) {
+}: typeSection & React.ComponentProps<typeof Box & typeof Container>) {
 	return (
 		<Box
 			component={"section"}

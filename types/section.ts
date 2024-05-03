@@ -2,8 +2,8 @@ import React from "react";
 
 type typeSection = {
 	containerized?: boolean | string;
-	padded?: boolean | string | number;
-	margined?: boolean | number;
+	padded?: boolean | number | "xs" | "sm" | "md" | "lg" | "xl";
+	margined?: boolean | number | "xs" | "sm" | "md" | "lg" | "xl";
 	className?: string;
 	bordered?: boolean;
 	shadowed?: boolean;

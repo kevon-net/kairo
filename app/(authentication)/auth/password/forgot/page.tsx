@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 	title: "Forgot Password",
 };
 
-export default function Forgot() {
+export default async function Forgot() {
 	return (
 		<Layout.Page padded>
 			<Layout.Section containerized="xs">

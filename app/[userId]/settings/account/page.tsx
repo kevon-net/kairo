@@ -5,13 +5,13 @@ import { Metadata } from "next";
 import Layout from "@/layouts";
 
 export const metadata: Metadata = {
-	title: "Overview",
+	title: "Account",
 };
 
-export default async function Dashboard() {
+export default async function Account() {
 	return (
-		<Layout.Page padded>
-			<Layout.Section containerized>Dashboard page</Layout.Section>
+		<Layout.Page>
+			<Layout.Section containerized={"responsive"}>Account page</Layout.Section>
 		</Layout.Page>
 	);
 }

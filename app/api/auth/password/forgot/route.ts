@@ -18,7 +18,6 @@ export async function POST(req: Request, res: Response) {
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (!userRecord) {
-			res.json();
 			return Response.json({
 				user: false,
 			});

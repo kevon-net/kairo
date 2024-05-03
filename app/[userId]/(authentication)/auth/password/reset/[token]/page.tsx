@@ -2,6 +2,7 @@ import React from "react";
 
 import { Metadata } from "next";
 import NextImage from "next/image";
+import { redirect } from "next/navigation";
 
 import { Stack, Text, Title, Image } from "@mantine/core";
 
@@ -9,11 +10,17 @@ import Layout from "@/layouts";
 import Partial from "@/partials";
 import asset from "@/assets";
 
+import { auth } from "@/auth";
+
 export const metadata: Metadata = {
 	title: "Reset Password",
 };
 
-export default function Reset({ params }: { params: { userId: string; token: string } }) {
+export default async function Reset({ params }: { params: { userId: string; token: string } }) {
+	const session = await auth();
+
+	session && session.user && redirect("/");
+
 	return (
 		<Layout.Page padded>
 			<Layout.Section containerized="xs">

@@ -71,6 +71,7 @@ export async function POST(req: Request, res: Response) {
 						return Response.error();
 					}
 				} catch (error) {
+					await prisma.otl.delete({ where: { userId } });
 					console.error(`x-> Could not verify token:`, (error as Error).message);
 					return Response.json({ user: { otl: true, token: false } });
 				}

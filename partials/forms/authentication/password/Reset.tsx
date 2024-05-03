@@ -55,8 +55,8 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 							Accept: "application/json",
 						},
 					})
-					.then(response => {
-						if (!response) {
+					.then(res => {
+						if (!res) {
 							notifications.show({
 								id: "password-reset-failed-no-response",
 								icon: <IconX size={16} stroke={1.5} />,
@@ -66,7 +66,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 								variant: "failed",
 							});
 						} else {
-							if (!response.user) {
+							if (!res.user) {
 								notifications.show({
 									id: "password-reset-failed-not-found",
 									icon: <IconX size={16} stroke={1.5} />,
@@ -78,7 +78,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 
 								router.replace("/auth/sign-up");
 							} else {
-								if (!response.otl) {
+								if (!res.user.otl) {
 									notifications.show({
 										id: "password-reset-failed-unauthorized",
 										icon: <IconX size={16} stroke={1.5} />,
@@ -90,7 +90,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 
 									router.replace("/auth/password/forgot");
 								} else {
-									if (!response.user.token) {
+									if (!res.user.token) {
 										notifications.show({
 											id: "password-reset-failed-invalid-token",
 											icon: <IconX size={16} stroke={1.5} />,
@@ -102,7 +102,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 
 										router.replace("/auth/password/forgot");
 									} else {
-										if (!response.user.password.same) {
+										if (!res.user.password.same) {
 											notifications.show({
 												id: "password-reset-success",
 												withCloseButton: false,
@@ -120,7 +120,7 @@ export default function Reset({ params }: { params: { userId?: string; token?: s
 												id: "password-reset-failed-same-password",
 												icon: <IconX size={16} stroke={1.5} />,
 												autoClose: 5000,
-												title: `Failed`,
+												title: `Parity Error`,
 												message: `Cannot be the same as previous password.`,
 												variant: "failed",
 											});

@@ -14,6 +14,7 @@ import handler from "@/handlers";
 import hook from "@/hooks";
 
 import { typeForgot, typeRemaining } from "@/types/form";
+import millToMinSec from "@/utilities/converters/millMinSec";
 
 export default function Forgot() {
 	const [sending, setSending] = useState(false);
@@ -50,8 +51,8 @@ export default function Forgot() {
 							Accept: "application/json",
 						},
 					})
-					.then(response => {
-						if (!response) {
+					.then(res => {
+						if (!res) {
 							notifications.show({
 								id: "otl-send-failed-no-response",
 								icon: <IconX size={16} stroke={1.5} />,
@@ -61,7 +62,7 @@ export default function Forgot() {
 								variant: "failed",
 							});
 						} else {
-							if (!response.user) {
+							if (!res.user) {
 								notifications.show({
 									id: "otl-send-failed-account-invalid",
 									icon: <IconX size={16} stroke={1.5} />,
@@ -71,7 +72,7 @@ export default function Forgot() {
 									variant: "failed",
 								});
 							} else {
-								if (!response.user.otl) {
+								if (!res.user.otl) {
 									notifications.show({
 										id: "otl-send-success",
 										icon: <IconCheck size={16} stroke={1.5} />,
@@ -83,7 +84,7 @@ export default function Forgot() {
 
 									router.replace("/auth/password/forgot/sent");
 								} else {
-									if (!response.user.otl.expired) {
+									if (!res.user.otl.expired) {
 										notifications.show({
 											id: "otl-resend-failed-not-expired",
 											icon: <IconX size={16} stroke={1.5} />,
@@ -93,7 +94,7 @@ export default function Forgot() {
 											variant: "failed",
 										});
 
-										setTime(response.user.otl.expires);
+										setTime(millToMinSec(parseInt(res.user.otl.expires) - Date.now()));
 									} else {
 										notifications.show({
 											id: "otl-resend-success",

@@ -19,8 +19,8 @@ export default function Section({
 	return (
 		<Box
 			component={"section"}
-			py={padded ? (typeof padded == "boolean" ? 96 : padded) : undefined}
-			my={margined ? (typeof margined == "boolean" ? 96 : margined) : undefined}
+			py={padded ? (typeof padded == "boolean" ? 48 : padded) : undefined}
+			my={margined ? (typeof margined == "boolean" ? 48 : margined) : undefined}
 			className={`${className} ${bordered && classes.border} ${shadowed && classes.shadow}`}
 			{...restProps}
 		>

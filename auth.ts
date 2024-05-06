@@ -100,8 +100,7 @@ export const config: NextAuthOptions = {
 	jwt: {
 		// The maximum age of the NextAuth.js issued JWT in seconds.
 		// Defaults to `session.maxAge`.
-		// maxAge: 60 * 60 * 24 * 7, // 7 days
-		maxAge: 10,
+		maxAge: 60 * 60 * 24 * 7, // 7 days
 		// You can define your own encode/decode functions for signing and encryption
 		// async encode() {},
 		// async decode() {},
@@ -156,13 +155,13 @@ export const config: NextAuthOptions = {
 			}
 		},
 
-		async redirect({ url, baseUrl }) {
-			// Allows relative callback URLs
-			if (url.startsWith("/")) return `${baseUrl}${url}`;
-			// Allows callback URLs on the same origin
-			else if (new URL(url).origin === baseUrl) return url;
-			return baseUrl;
-		},
+		// async redirect({ url, baseUrl }) {
+		// 	// Allows relative callback URLs
+		// 	if (url.startsWith("/")) return `${baseUrl}${url}`;
+		// 	// Allows callback URLs on the same origin
+		// 	else if (new URL(url).origin === baseUrl) return url;
+		// 	return baseUrl;
+		// },
 
 		async jwt({ token, account, user, trigger, session }) {
 			// Persist the OAuth access_token and or the user id to the token right after signin

@@ -27,6 +27,7 @@ export interface typeForgot {
 }
 
 export interface typeReset {
+	passwordCurrent?: string;
 	password: string;
 	id?: string;
 	token?: string;

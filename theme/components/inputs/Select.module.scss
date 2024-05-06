@@ -2,7 +2,7 @@
 	&[data-variant="default"] {
 		border: 0px solid transparent;
 		border-radius: var(--mantine-radius-sm);
-		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-pri-light));
+		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
 		padding: 0 var(--mantine-spacing-md);
 		font-size: var(--mantine-font-size-xs);
 
@@ -42,13 +42,13 @@
 
 .dropdown {
 	border-radius: var(--mantine-radius-sm);
-	border: 2px solid light-dark(var(--mantine-color-gray-light), var(--mantine-color-pri-light));
-	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-sec-6));
+	border: 2px solid light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-body));
 }
 
 .option {
 	border-radius: var(--mantine-radius-sm);
-	color: light-dark(inherit, var(--mantine-color-pri-light));
+	color: var(--mantine-color-text);
 	font-size: var(--mantine-font-size-xs);
 
 	@include larger-than($mantine-breakpoint-xs) {
@@ -56,6 +56,6 @@
 	}
 
 	&:hover {
-		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-pri-light));
+		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
 	}
 }

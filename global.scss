@@ -37,13 +37,13 @@ body {
 
 // responsive styles
 .textResponsive {
-	font-size: var(--mantine-font-size-xs);
+	font-size: var(--mantine-font-size-xs) !important;
 
 	@include larger-than($mantine-breakpoint-xs) {
-		font-size: var(--mantine-font-size-sm);
+		font-size: var(--mantine-font-size-sm) !important;
 	}
 
 	@include larger-than($mantine-breakpoint-sm) {
-		font-size: var(--mantine-font-size-md);
+		font-size: var(--mantine-font-size-md) !important;
 	}
 }

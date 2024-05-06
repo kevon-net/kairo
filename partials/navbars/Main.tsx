@@ -48,7 +48,10 @@ export default async function Main() {
 					</Group>
 
 					{session?.user ? (
-						<Component.Menu.Avatar />
+						<Group>
+							<Component.Drawer.Cart />
+							<Component.Menu.Avatar />
+						</Group>
 					) : (
 						<Box visibleFrom="sm">
 							<Partial.Buttons.Auth />

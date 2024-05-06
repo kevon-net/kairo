@@ -121,7 +121,6 @@ export default function SignIn({ providers }: { providers: any }) {
 				variant: "failed",
 			});
 		} finally {
-			form.reset();
 			setSending(false);
 		}
 	};
@@ -142,7 +141,6 @@ export default function SignIn({ providers }: { providers: any }) {
 								<TextInput
 									required
 									label={"Email"}
-									type="email"
 									description="We will never share your email"
 									placeholder="Your Email"
 									{...form.getInputProps("email")}
@@ -154,7 +152,6 @@ export default function SignIn({ providers }: { providers: any }) {
 										w={"100%"}
 										required
 										label={"Password"}
-										type="password"
 										placeholder="Your Password"
 										{...form.getInputProps("password")}
 									/>

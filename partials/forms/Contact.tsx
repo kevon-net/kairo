@@ -60,11 +60,10 @@ export default function Contact() {
 							Accept: "application/json",
 						},
 					})
-					.then(response => {
-						if (!response) {
+					.then(res => {
+						if (!res) {
 							notifications.show({
 								id: "form-contact-failed-no-response",
-								color: "red",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Server Unavailable",
@@ -72,11 +71,8 @@ export default function Contact() {
 								variant: "failed",
 							});
 						} else {
-							form.reset();
-
 							notifications.show({
 								id: "form-contact-success",
-								color: "pri.6",
 								icon: <IconCheck size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: "Form Submitted",
@@ -88,7 +84,6 @@ export default function Contact() {
 			} catch (error) {
 				notifications.show({
 					id: "form-contact-failed",
-					color: "red",
 					icon: <IconX size={16} stroke={1.5} />,
 					autoClose: 5000,
 					title: "Submisstion Failed",
@@ -96,6 +91,7 @@ export default function Contact() {
 					variant: "failed",
 				});
 			} finally {
+				form.reset();
 				setSubmitted(false);
 			}
 		}

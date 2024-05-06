@@ -110,8 +110,7 @@ export default function Verify({ userId }: { userId: string }) {
 													variant: "success",
 												});
 
-												// router.replace(`/auth/sign-in`);
-												signIn();
+												router.replace(`/api/auth/signin`);
 											} else {
 												notifications.show({
 													id: "otp-verify-failed-expired",
@@ -136,8 +135,7 @@ export default function Verify({ userId }: { userId: string }) {
 										variant: "success",
 									});
 
-									// router.replace(`/auth/sign-in`);
-									signIn();
+									router.replace(`/api/auth/login`);
 								}
 							}
 						}
@@ -166,7 +164,7 @@ export default function Verify({ userId }: { userId: string }) {
 			await hook.request
 				.post(`http://localhost:3000/api/${userId}/auth/verify/resend`, {
 					method: "POST",
-					body: JSON.stringify({ userId }),
+					// body: JSON.stringify({ userId }),
 					headers: {
 						"Content-Type": "application/json",
 						Accept: "application/json",
@@ -238,8 +236,7 @@ export default function Verify({ userId }: { userId: string }) {
 									variant: "success",
 								});
 
-								// router.replace(`/auth/sign-in`);
-								signIn();
+								router.replace(`/api/auth/singin`);
 							}
 						}
 					}

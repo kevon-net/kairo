@@ -108,8 +108,9 @@ export default function Signup({ providers }: { providers: any }) {
 								variant: "failed",
 							});
 
-							// router.push("/auth/sign-in");
-							res.user.verified ? signIn() : router.replace(`/${res.user.id}/auth/verify`);
+							res.user.verified
+								? router.push("/api/auth/signin")
+								: router.replace(`/${res.user.id}/auth/verify`);
 						}
 					}
 				})
@@ -124,7 +125,7 @@ export default function Signup({ providers }: { providers: any }) {
 					});
 				})
 				.finally(() => {
-					// form.reset();
+					form.reset();
 					setSending(false);
 				});
 		}

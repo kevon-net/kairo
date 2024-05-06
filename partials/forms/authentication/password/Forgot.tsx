@@ -144,7 +144,7 @@ export default function Forgot() {
 					</GridCol>
 					<GridCol span={{ base: 12 }}>
 						<Center mt={"md"}>
-							<Button type="submit" color="pri.8" w={{ base: "75%", sm: "50%" }} loading={sending}>
+							<Button type="submit" w={{ base: "75%", sm: "50%" }} loading={sending}>
 								{sending ? "Sending" : "Send"}
 							</Button>
 						</Center>

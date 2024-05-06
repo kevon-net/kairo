@@ -1,11 +1,6 @@
-import dotenv from "dotenv";
-
 import controller from "@/controllers";
 
-// env file
-dotenv.config({ path: "/.env" });
-
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
 	try {
 		const data = await req.json();
 

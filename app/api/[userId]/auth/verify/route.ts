@@ -2,9 +2,10 @@ import prisma from "@/databases/next";
 
 import utility from "@/utilities";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, { params }: { params: { userId: string } }) {
 	try {
-		const { otp, userId } = await req.json();
+		const userId = params.userId;
+		const { otp } = await req.json();
 
 		const userRecord = await prisma.user.findUnique({ where: { id: userId } });
 		const otpRecord = await prisma.otp.findUnique({ where: { userId } });

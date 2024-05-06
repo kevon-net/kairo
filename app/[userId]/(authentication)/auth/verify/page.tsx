@@ -8,12 +8,18 @@ import { Stack, Text, Title, Image } from "@mantine/core";
 import asset from "@/assets";
 import Layout from "@/layouts";
 import Partial from "@/partials";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
 	title: "Verify Email",
 };
 
-export default function Verify({ params }: { params: { userId: string } }) {
+export default async function Verify({ params }: { params: { userId: string } }) {
+	const session = await auth();
+
+	session?.user && redirect("/");
+
 	return (
 		<Layout.Page padded>
 			<Layout.Section containerized="xs">

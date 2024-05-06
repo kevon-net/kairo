@@ -3,10 +3,10 @@ import prisma from "@/databases/next";
 import controller from "@/controllers";
 import utility from "@/utilities";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request, { params }: { params: { userId: string } }) {
 	try {
-		const { userId } = await req.json();
-
+		const userId = params.userId;
+		
 		const userRecord = await prisma.user.findUnique({ where: { id: userId } });
 
 		if (!userRecord) {

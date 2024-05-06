@@ -6,6 +6,7 @@ import Layout from "@/layouts";
 import Partial from "@/partials";
 
 import { auth } from "@/auth";
+import { Divider, Stack } from "@mantine/core";
 
 export const generateMetadata = async (): Metadata => {
 	const session = await auth();
@@ -27,13 +28,25 @@ export default function Profile({
 		<Layout.Body
 			nav={<Partial.Navbar.Main />}
 			footer={<Partial.Footer.Main />}
-			aside={{ left: <Partial.Aside.User /> }}
+			aside={{
+				gap: 48,
+				left: {
+					component: <Partial.Aside.User />,
+					width: { md: 30, lg: 22.5 },
+					withBorder: true,
+				},
+			}}
 		>
 			<Layout.Section component={"main"} padded>
-				<Layout.Section containerized={"responsive"} hiddenFrom="md" mb={"xl"}>
-					Profile nav (mobile)
-				</Layout.Section>
-				{children}
+				<Stack gap={48}>
+					<Layout.Section hiddenFrom="md">
+						<Partial.Navbar.User />
+					</Layout.Section>
+
+					<Divider hiddenFrom="md" />
+
+					{children}
+				</Stack>
 			</Layout.Section>
 		</Layout.Body>
 	);

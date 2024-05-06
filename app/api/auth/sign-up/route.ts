@@ -16,7 +16,6 @@ export async function POST(req: Request, res: Response) {
 			const otpHash = await utility.hasher.create(`${otp}`);
 
 			const expiryDate = await createExpiry();
-			console.log("Ser:", expiryDate);
 
 			passwordHash &&
 				otpHash &&

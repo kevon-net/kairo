@@ -1,17 +1,11 @@
-// import dotenv from "dotenv";
-
 import jwt from "jsonwebtoken";
 
 import prisma from "@/databases/next";
 
 import controller from "@/controllers";
 import utility from "@/utilities";
-import { typeUser } from "@/types/models";
 
-// // env file
-// dotenv.config({ path: "/.env" });
-
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
 	try {
 		const { email } = await req.json();
 

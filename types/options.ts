@@ -1,7 +1,7 @@
 export interface typeMail {
-	from: string;
+	from?: string;
 	to: string;
 	subject: string;
-	text: string;
-	html: string;
+	text?: string;
+	html?: string;
 }

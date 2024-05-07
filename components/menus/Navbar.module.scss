@@ -11,6 +11,15 @@
 }
 
 .item {
+	transition: 0.25s all ease;
+}
+
+.itemActive {
+	color: var(--mantine-color-anchor);
+
+	@include hover {
+		background-color: var(--mantine-color-anchor-light);
+	}
 }
 
 .itemLabel {

@@ -1,5 +1,6 @@
 import Nav from "./nav";
+import Cart from "./Cart";
 
-const Drawer = { Nav };
+const Drawer = { Nav, Cart };
 
 export default Drawer;

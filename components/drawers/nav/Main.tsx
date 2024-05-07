@@ -1,50 +1,59 @@
+"use client";
+
 import React from "react";
 
-import { Burger, Drawer } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { usePathname } from "next/navigation";
+
+import { Burger, Drawer, NavLink } from "@mantine/core";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 import asset from "@/assets";
-import data from "@/data";
+import Media from "@/components/media";
 
-import Component from "@/components";
+import { typeNav } from "@/types/nav";
 
 import classes from "./Main.module.scss";
 
-export default function Main({ ...restProps }: {} & React.ComponentProps<typeof Burger>) {
+export default function Main({ data, ...restProps }: { data: typeNav[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
+	const pathname = usePathname();
+	const mobile = useMediaQuery("(max-width: 36em)");
 
-	const navMobile = data.links.navbar.map(link => {
+	const navMobile = data.map(link => {
 		const subLinks =
 			link.subLinks &&
 			link.subLinks.map(subLink => (
-				<Component.Navlink.Navbar
+				<NavLink
 					key={subLink.link}
 					href={subLink.link}
 					label={subLink.label}
+					active={pathname == subLink.link}
 					onClick={() => close()}
 				/>
 			));
 
 		return !subLinks ? (
-			<Component.Navlink.Navbar
+			<NavLink
 				key={link.link}
 				href={link.link}
 				label={link.label}
+				active={pathname == link.link}
 				onClick={() => close()}
-				leftSection={link.iconLeft && <link.iconLeft size={14} />}
-				rightSection={link.iconRight && <link.iconRight size={14} />}
+				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
+				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
 			/>
 		) : (
-			<Component.Navlink.Navbar
+			<NavLink
 				key={link.link}
 				href={link.link}
 				label={link.label}
-				withChildren={true}
-				leftSection={link.iconLeft && <link.iconLeft size={14} />}
-				rightSection={link.iconRight && <link.iconRight size={14} />}
+				active={pathname == link.link}
+				opened={link.subLinks?.find(sl => sl.link == pathname)?.link == pathname ? true : undefined}
+				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
+				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
 			>
 				{subLinks}
-			</Component.Navlink.Navbar>
+			</NavLink>
 		);
 	});
 
@@ -54,7 +63,7 @@ export default function Main({ ...restProps }: {} & React.ComponentProps<typeof 
 				opened={opened}
 				onClose={close}
 				withCloseButton={false}
-				size={200}
+				size={"200"}
 				classNames={{
 					body: classes.body,
 					close: classes.close,
@@ -65,12 +74,12 @@ export default function Main({ ...restProps }: {} & React.ComponentProps<typeof 
 					root: classes.root,
 					title: classes.title,
 				}}
-				title={<Component.Media.Image src={asset.icon.software.code} alt="vscode" width={32} height={32} />}
+				title={<Media.Image src={asset.icon.tool.nextjs} alt="Logo" width={32} height={32} />}
 			>
 				{navMobile}
 			</Drawer>
 
-			<Burger opened={opened} onClick={toggle} {...restProps} />
+			<Burger opened={opened} onClick={toggle} size={mobile ? "sm" : "sm"} {...restProps} />
 		</>
 	);
 }

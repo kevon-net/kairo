@@ -4,12 +4,18 @@ import { Box, Stack } from "@mantine/core";
 
 import typePage from "@/types/page";
 
-export default function Page({ padded, stacked, children, ...restProps }: typePage) {
+export default function Page({
+	children,
+	padded,
+	stacked,
+	...restProps
+}: typePage & React.ComponentProps<typeof Box & typeof Stack>) {
 	return (
 		<Box
 			component={stacked ? Stack : "article"}
-			gap={stacked ? (typeof stacked == "boolean" ? 96 : stacked) : undefined}
-			py={padded ? (typeof padded == "boolean" ? 96 : padded) : undefined}
+			w={"100%"}
+			gap={stacked ? (typeof stacked == "boolean" ? 48 : stacked) : undefined}
+			py={padded ? (typeof padded == "boolean" ? 48 : padded) : undefined}
 			{...restProps}
 		>
 			{children}

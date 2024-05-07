@@ -1,9 +1,11 @@
-import parser from "./parser";
-import validator from "./validators";
+import authenticator from "./authenticators";
+import converter from "./converters";
+import hasher from "./hasher";
 
 const utility = {
-	parser,
-	validator,
+	authenticator,
+	converter,
+	hasher,
 };
 
 export default utility;

@@ -1,29 +1,27 @@
+"use client";
+
 import React from "react";
 
 import { usePathname } from "next/navigation";
 
 import { Box, Container, Group, Title } from "@mantine/core";
 
-import Breadcrumbs from "@/components/breadcrumbs";
-import hook from "@/hooks";
+import Breadcrumb from "@/components/breadcrumbs";
+import handler from "@/handlers";
 
-export default function Route() {
-	const location = usePathname();
-	const crumbs = hook.useCrumbify(location);
+import classes from "./Route.module.scss";
+
+export default function Route({ title }: { title?: string }) {
+	const pathname = usePathname();
+	const segments = handler.parser.string.crumbify(pathname);
 
 	return (
-		<Box
-			component="section"
-			style={theme => ({
-				backgroundColor: theme.colors.sec[0],
-				padding: `${theme.spacing.lg} 0`,
-			})}
-		>
-			<Container>
+		<Box component="section" className={classes.hero}>
+			<Container size="responsive">
 				<Group align="center" justify="space-between">
-					<Breadcrumbs.Hero data={crumbs} />
+					<Breadcrumb.Hero data={segments} />
 					<Title order={1} fw={500} fz={24}>
-						{crumbs[crumbs.length - 1].label}
+						{title ? title : segments[segments.length - 1].label}
 					</Title>
 				</Group>
 			</Container>

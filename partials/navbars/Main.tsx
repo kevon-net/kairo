@@ -1,12 +1,9 @@
-"use client";
-
 import React from "react";
 
 import Link from "next/link";
+import NextImage from "next/image";
 
-import { Group, Box, Stack } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconChevronDown } from "@tabler/icons-react";
+import { Group, Box, Container, Image } from "@mantine/core";
 
 import asset from "@/assets";
 import data from "@/data";
@@ -14,38 +11,54 @@ import Component from "@/components";
 
 import classes from "./Main.module.scss";
 
-export default function Main() {
-	const navDesktop = data.links.navbar.map(link => (
-		<Component.Menu.Navbar key={link.link} subLinks={link.subLinks}>
-			{!link.subLinks ? (
-				<Link href={link.link} className={classes.link}>
-					{link.label}
-				</Link>
-			) : (
-				<Link href={link.link} className={classes.link} onClick={e => e.preventDefault()}>
-					<Group gap={4}>
-						<span>{link.label}</span>
-						<IconChevronDown size={16} stroke={1.5} />
-					</Group>
-				</Link>
-			)}
-		</Component.Menu.Navbar>
-	));
+import Partial from "..";
+
+import { auth } from "@/auth";
+
+export default async function Main() {
+	const session = await auth();
 
 	return (
 		<Box className={classes.navbar}>
-			<Component.Container.Responsive>
+			<Container size={"responsive"}>
 				<Group justify="space-between">
-					<Link href={"/"}>
-						<Component.Media.Image src={asset.icon.software.code} alt="vscode" width={32} height={32} />
-					</Link>
-					<Group gap={"xs"} component={"nav"} visibleFrom="sm">
-						{navDesktop}
+					<Group>
+						<Box visibleFrom="sm">
+							<Link href={"/"}>
+								<Group>
+									<Image
+										src={asset.icon.tool.nextjs}
+										alt="next icon"
+										className={classes.logo}
+										component={NextImage}
+										priority
+									/>
+								</Group>
+							</Link>
+						</Box>
+						<Component.Drawer.Nav.Main
+							data={data.links.navbar}
+							hiddenFrom="sm"
+							aria-label="Toggle Navigation"
+						/>
+
+						<Group gap={"xs"} component={"nav"} visibleFrom="sm">
+							<Component.Navigation.Main />
+						</Group>
 					</Group>
 
-					<Component.Drawer.Nav.Main size="sm" hiddenFrom="sm" />
+					{session?.user ? (
+						<Group>
+							<Component.Drawer.Cart />
+							<Component.Menu.Avatar />
+						</Group>
+					) : (
+						<Box visibleFrom="sm">
+							<Partial.Buttons.Auth />
+						</Box>
+					)}
 				</Group>
-			</Component.Container.Responsive>
+			</Container>
 		</Box>
 	);
 }

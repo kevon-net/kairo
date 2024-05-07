@@ -1,6 +1,5 @@
 export interface typeContact {
-	fname: string;
-	lname: string;
+	name: string;
 	email: string;
 	phone: string;
 	subject: string;
@@ -8,6 +7,7 @@ export interface typeContact {
 }
 
 export interface typeSignUp {
+	name: string;
 	email: string;
 	password: string;
 }
@@ -27,12 +27,13 @@ export interface typeForgot {
 }
 
 export interface typeReset {
+	passwordCurrent?: string;
 	password: string;
 	id?: string;
 	token?: string;
 }
 
 export interface typeRemaining {
-	minutes: string;
+	minutes: number;
 	seconds: string;
 }

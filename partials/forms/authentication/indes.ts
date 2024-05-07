@@ -1,12 +1,11 @@
-import Forgot from "./Forgot";
-import Reset from "./Reset";
+import Password from "./password";
+
 import SignIn from "./SignIn";
 import Signup from "./Signup";
 import Verify from "./Verify";
 
 const Authentication = {
-	Forgot,
-	Reset,
+	Password,
 	SignIn,
 	Signup,
 	Verify,

@@ -4,32 +4,30 @@ import { Box, Container } from "@mantine/core";
 
 import typeSection from "@/types/section";
 
-import classes from "./section.module.scss";
-import Component from "@/components";
+import classes from "./Section.module.scss";
 
 export default function Section({
 	containerized,
 	padded,
 	margined,
+	children,
+	className,
 	bordered,
 	shadowed,
-	children,
 	...restProps
-}: typeSection) {
+}: typeSection & React.ComponentProps<typeof Box & typeof Container>) {
 	return (
 		<Box
 			component={"section"}
-			py={padded ? (typeof padded == "boolean" ? 96 : padded) : undefined}
-			my={margined ? (typeof margined == "boolean" ? 96 : margined) : undefined}
+			py={padded ? (typeof padded == "boolean" ? 48 : padded) : undefined}
+			my={margined ? (typeof margined == "boolean" ? 48 : margined) : undefined}
+			className={`${className} ${bordered && classes.border} ${shadowed && classes.shadow}`}
 			{...restProps}
-			className={`${bordered && classes.border} ${shadowed && classes.shadow}`}
 		>
 			{containerized ? (
-				<Component.Container.Responsive size={typeof containerized == "boolean" ? undefined : containerized}>
-					{children}
-				</Component.Container.Responsive>
+				<Container size={typeof containerized == "boolean" ? undefined : containerized}>{children}</Container>
 			) : (
-				{ children }
+				children
 			)}
 		</Box>
 	);

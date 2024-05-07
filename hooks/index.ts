@@ -1,8 +1,6 @@
 import timer from "./timers";
+import request from "./request";
 
-import useCrumbify from "./crumbify";
-import useLinkify from "./linkify";
-
-const hook = { timer, useLinkify, useCrumbify };
+const hook = { timer, request };
 
 export default hook;

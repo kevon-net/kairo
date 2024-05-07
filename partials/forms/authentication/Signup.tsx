@@ -5,28 +5,41 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Anchor, Box, Button, Center, Checkbox, Grid, Stack, Text, TextInput, Title } from "@mantine/core";
+import {
+	Anchor,
+	Box,
+	Button,
+	Center,
+	Checkbox,
+	Divider,
+	Grid,
+	GridCol,
+	PasswordInput,
+	Stack,
+	Text,
+	Image,
+	TextInput,
+} from "@mantine/core";
 import { isNotEmpty, matchesField, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import utility from "@/utilities";
-
-import api from "@/apis";
-
-import notificationSuccess from "@/styles/notifications/success.module.scss";
-import notificationFailure from "@/styles/notifications/failure.module.scss";
+import handler from "@/handlers";
+import hook from "@/hooks";
+import Buttons from "@/partials/buttons";
 
 import { typeSignUp } from "@/types/form";
-import Component from "@/components";
 
-export default function Signup() {
+import { signIn } from "next-auth/react";
+
+export default function Signup({ providers }: { providers: any }) {
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
 
 	const form = useForm({
 		initialValues: {
+			name: "",
 			email: "",
 			password: "",
 			passwordConfirm: "",
@@ -34,141 +47,137 @@ export default function Signup() {
 		},
 
 		validate: {
-			email: value => utility.validator.form.special.email(value),
-			password: value => utility.validator.form.special.password(value, 8, 24),
+			name: value => handler.validator.form.special.text(value, 2, 23),
+			email: value => handler.validator.form.special.email(value),
+			password: value => handler.validator.form.special.password(value, 8, 24),
 			passwordConfirm: matchesField("password", "Passwords do not match"),
 			policy: isNotEmpty("You must accept to proceed"),
 		},
 	});
 
 	const parse = (rawData: typeSignUp) => {
-		return { email: rawData.email.trim().toLowerCase(), password: rawData.password };
+		return {
+			name: handler.parser.string.capitalize.words(rawData.name),
+			email: rawData.email.trim().toLowerCase(),
+			password: rawData.password,
+		};
 	};
 
 	const handleSubmit = async (formValues: typeSignUp) => {
 		if (form.isValid()) {
 			setSending(true);
 
-			await api.user.authentication
-				.signUp(parse(formValues))
-				.then(response => {
-					if (!response) {
+			await hook.request
+				.post("http://localhost:3000/api/auth/sign-up", {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				})
+				.then(res => {
+					if (!res) {
 						notifications.show({
-							id: "no-response",
-							color: "red",
+							id: "signup-failed-no-response",
 							icon: <IconX size={16} stroke={1.5} />,
 							autoClose: 5000,
 							title: "Server Unavailable",
 							message: `There was no response from the server.`,
-							classNames: {
-								root: notificationFailure.root,
-								icon: notificationFailure.icon,
-								description: notificationFailure.description,
-								title: notificationFailure.title,
-							},
+							variant: "failed",
 						});
 					} else {
-						if (response.exists == false) {
+						if (!res.exists) {
 							notifications.show({
 								id: "signup-success",
-								withCloseButton: false,
-								color: "pri.6",
 								icon: <IconCheck size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Registered",
-								message: "A verification code has been sent to the provided email.",
-								classNames: {
-									root: notificationSuccess.root,
-									icon: notificationSuccess.icon,
-									description: notificationSuccess.description,
-									title: notificationSuccess.title,
-								},
+								title: `Welcome to Next, ${res.user.name}`,
+								message: `A verification code has been sent to your email.`,
+								variant: "success",
 							});
 
-							router.replace(`/auth/verify/${parse(formValues).email}`);
+							router.replace(`/${res.user.id}/auth/verify`);
 						} else {
 							notifications.show({
-								id: "signup-exists",
-								color: "red",
+								id: "signup-failed-exists",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
 								title: `User Exists`,
 								message: `An account with the provided email already exists.`,
-								classNames: {
-									root: notificationFailure.root,
-									icon: notificationFailure.icon,
-									description: notificationFailure.description,
-									title: notificationFailure.title,
-								},
+								variant: "failed",
 							});
 
-							router.push(`/auth/log-in`);
+							res.user.verified
+								? router.push("/api/auth/signin")
+								: router.replace(`/${res.user.id}/auth/verify`);
 						}
 					}
 				})
-				.then(() => form.reset())
 				.catch(error => {
 					notifications.show({
-						id: "signup-fail",
-						color: "red",
+						id: "signup-failed",
 						icon: <IconX size={16} stroke={1.5} />,
 						autoClose: 5000,
-						title: `Send Failed`,
-						message: `Error: ${error.message}`,
-						classNames: {
-							root: notificationFailure.root,
-							icon: notificationFailure.icon,
-							description: notificationFailure.description,
-							title: notificationFailure.title,
-						},
+						title: `Signup Failed`,
+						message: (error as Error).message,
+						variant: "failed",
 					});
+				})
+				.finally(() => {
+					form.reset();
+					setSending(false);
 				});
-
-			setSending(false);
 		}
 	};
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate w={"100%"}>
+		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Stack gap={"xl"}>
-				<Stack gap={"xs"}>
-					<Title order={1} ta={"center"}>
-						Sign Up
-					</Title>
-					<Text ta={"center"}>Enter your details to create an account.</Text>
-				</Stack>
-				<Grid pb={"md"}>
-					<Grid.Col span={{ base: 12 }}>
-						<Component.Input.Text
+				<Grid>
+					<GridCol span={{ base: 12 }}>
+						<Buttons.Provider providers={providers} />
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Divider label={"or"} />
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<TextInput
+							required
+							label={"Name"}
+							placeholder="Your Full Name"
+							{...form.getInputProps("name")}
+						/>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<TextInput
 							required
 							label={"Email"}
-							type="email"
 							description="We will never share your email"
 							placeholder="Your Email"
 							{...form.getInputProps("email")}
 						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12, sm: 6 }}>
-						<Component.Input.Password
+					</GridCol>
+					<GridCol span={{ base: 12, sm: 6 }}>
+						<PasswordInput
 							required
 							label={"Password"}
-							type="password"
 							placeholder="Your Password"
 							{...form.getInputProps("password")}
 						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12, sm: 6 }}>
-						<Component.Input.Password
+					</GridCol>
+					<GridCol span={{ base: 12, sm: 6 }}>
+						<PasswordInput
 							required
 							label={"Confirm Password"}
-							type="password"
 							placeholder="Confirm Your Password"
 							{...form.getInputProps("passwordConfirm")}
 						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12, sm: 12 }}>
+					</GridCol>
+					<GridCol span={{ base: 12, sm: 12 }}>
 						<Checkbox
 							size="xs"
+							ml={"lg"}
 							label={
 								<Text inherit>
 									I have read and accept the{" "}
@@ -188,14 +197,14 @@ export default function Signup() {
 								type: "checkbox",
 							})}
 						/>
-					</Grid.Col>
-					<Grid.Col span={{ base: 12 }}>
-						<Center py={"md"}>
-							<Button type="submit" w={{ base: "100%", sm: "50%" }} color="pri.8" loading={sending}>
-								{sending ? "Signing Up" : "Signup"}
+					</GridCol>
+					<GridCol span={{ base: 8 }} mx={"auto"}>
+						<Center mt={"md"}>
+							<Button type="submit" w={{ base: "75%", sm: "50%" }} color="pri.8" loading={sending}>
+								{sending ? "Signing Up" : "Sign Up"}
 							</Button>
 						</Center>
-					</Grid.Col>
+					</GridCol>
 				</Grid>
 			</Stack>
 		</Box>

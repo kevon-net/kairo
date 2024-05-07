@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import { MantineTransition, Transition } from "@mantine/core";
@@ -20,7 +22,7 @@ export default function Component({
 				duration={250}
 				timingFunction="ease"
 			>
-				{(styles) => <div style={styles}>{children}</div>}
+				{styles => <div style={styles}>{children}</div>}
 			</Transition>
 		</div>
 	);

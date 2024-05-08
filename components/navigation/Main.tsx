@@ -8,8 +8,9 @@ import { usePathname } from "next/navigation";
 import { Group } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 
-import data from "@/data";
 import Menu from "@/components/menus";
+
+import data from "@/data";
 
 import classes from "./Main.module.scss";
 

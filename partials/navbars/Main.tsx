@@ -3,23 +3,20 @@ import React from "react";
 import Link from "next/link";
 import NextImage from "next/image";
 
-import { Group, Box, Container, Image } from "@mantine/core";
+import { Group, Box, Container, Image, ButtonGroup, Button, Skeleton } from "@mantine/core";
 
 import asset from "@/assets";
 import data from "@/data";
 import Component from "@/components";
+import Layout from "@/layouts";
+
+import { SignedIn, SignedOut, SignInButton, SignUpButton, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 
 import classes from "./Main.module.scss";
 
-import Partial from "..";
-
-import { auth } from "@/auth";
-
 export default async function Main() {
-	const session = await auth();
-
 	return (
-		<Box className={classes.navbar}>
+		<Layout.Section withClerk className={classes.navbar}>
 			<Container size={"responsive"}>
 				<Group justify="space-between">
 					<Group>
@@ -47,18 +44,39 @@ export default async function Main() {
 						</Group>
 					</Group>
 
-					{session?.user ? (
+					<SignedOut>
+						<ButtonGroup>
+							<SignUpButton>
+								<Button size="xs">Sign Up</Button>
+							</SignUpButton>
+							<SignInButton>
+								<Button size="xs" variant="light">
+									Sign In
+								</Button>
+							</SignInButton>
+						</ButtonGroup>
+					</SignedOut>
+
+					<SignedIn>
 						<Group>
-							<Component.Drawer.Cart />
-							<Component.Menu.Avatar />
+							<ClerkLoading>
+								<Skeleton height={24} circle />
+							</ClerkLoading>
+							<ClerkLoaded>
+								<Component.Drawer.Cart />
+							</ClerkLoaded>
+
+							<ClerkLoading>
+								<Skeleton height={28} circle />
+							</ClerkLoading>
+							<ClerkLoaded>
+								<Component.Clerk.UserButton />
+								{/* <Component.Menu.Avatar /> */}
+							</ClerkLoaded>
 						</Group>
-					) : (
-						<Box visibleFrom="sm">
-							<Partial.Buttons.Auth />
-						</Box>
-					)}
+					</SignedIn>
 				</Group>
 			</Container>
-		</Box>
+		</Layout.Section>
 	);
 }

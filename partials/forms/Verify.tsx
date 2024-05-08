@@ -11,11 +11,9 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import hook from "@/hooks";
+import millToMinSec from "@/utilities/converters/millMinSec";
 
 import { typeRemaining, typeVerify } from "@/types/form";
-
-import { signIn } from "next-auth/react";
-import millToMinSec from "@/utilities/converters/millMinSec";
 
 export default function Verify({ userId }: { userId: string }) {
 	const [sending, setSending] = useState(false);

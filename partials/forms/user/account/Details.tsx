@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { Box, Button, Grid, GridCol, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -14,8 +14,6 @@ import handler from "@/handlers";
 import hook from "@/hooks";
 
 import { typeUser } from "@/types/models";
-
-import { useRouter } from "next/navigation";
 
 interface typeAccountDetails {
 	name: string;
@@ -94,7 +92,7 @@ export default function Details({ params, initial }: { params: { userId?: string
 										variant: "failed",
 									});
 
-									signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
+									// signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
 								} else {
 									notifications.show({
 										id: "account-details-update-success",

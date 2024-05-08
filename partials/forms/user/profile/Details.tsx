@@ -8,7 +8,6 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import handler from "@/handlers";
 import hook from "@/hooks";
 
 interface typeProfileDetails {

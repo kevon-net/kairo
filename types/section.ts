@@ -7,6 +7,7 @@ type typeSection = {
 	className?: string;
 	bordered?: boolean;
 	shadowed?: boolean;
+	withClerk?: boolean;
 	children: React.ReactNode;
 };
 

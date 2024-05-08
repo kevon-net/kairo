@@ -1,7 +1,7 @@
-import next from "./next";
+import next from "./vercel/next";
 
 const database = {
-	next,
+	vercel: { next },
 };
 
 export default database;

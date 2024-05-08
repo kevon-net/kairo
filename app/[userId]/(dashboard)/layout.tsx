@@ -3,15 +3,15 @@ import React from "react";
 import Layout from "@/layouts";
 import Partial from "@/partials";
 
-import { auth } from "@/auth";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const generateMetadata = async (): Metadata => {
-	const session = await auth();
+	const user = await currentUser();
 
 	return {
 		title: {
 			default: "Dashboard",
-			template: `%s - Dashboard - ${session?.user ? session.user.name : "User"} - Next Template`,
+			template: `%s - Dashboard - ${user ? user.fullName : "User"} - Next Template`,
 		},
 	};
 };

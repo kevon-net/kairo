@@ -6,16 +6,16 @@ import { Anchor, Avatar, Flex, Grid, GridCol, Stack, Title } from "@mantine/core
 
 import Layout from "@/layouts";
 import Partial from "@/partials";
-
-import { auth } from "@/auth";
 import handler from "@/handlers";
+
+import { currentUser } from "@clerk/nextjs/server";
 
 export const metadata: Metadata = {
 	title: "Profile",
 };
 
 export default async function Profile() {
-	const session = await auth();
+	const user = await currentUser();
 
 	return (
 		<Layout.Page stacked>
@@ -27,15 +27,15 @@ export default async function Profile() {
 					<Grid>
 						<GridCol span={{ base: 12, sm: 5, md: 12, lg: 12 }} order={{ base: 1, sm: 2, md: 1 }}>
 							<Flex direction={{ base: "column", md: "row" }} align={"center"} gap={"xl"}>
-								{session?.user.image ? (
+								{user?.imageUrl ? (
 									<Avatar
-										src={session?.user.image}
-										alt={session?.user.name ? session?.user.name : "User"}
+										src={user.imageUrl}
+										alt={user.fullName ? user.fullName : "User"}
 										size={160}
 									/>
-								) : session?.user.name ? (
-									<Avatar alt={session?.user.name} size={160}>
-										{handler.parser.string.initialize(session?.user.name)}
+								) : user?.fullName ? (
+									<Avatar alt={user.fullName} size={160}>
+										{handler.parser.string.initialize(user.fullName)}
 									</Avatar>
 								) : (
 									<Avatar size={160} />

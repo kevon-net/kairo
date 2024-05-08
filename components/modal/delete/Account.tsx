@@ -1,7 +1,8 @@
 "use client";
 
-import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Stack, Text } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+
 import Form from "@/partials/forms";
 
 export default function Account({ params }: { params: { userId: string } }) {

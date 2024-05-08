@@ -15,7 +15,6 @@ import handler from "@/handlers";
 import hook from "@/hooks";
 
 import { typeReset } from "@/types/form";
-import { signOut } from "next-auth/react";
 
 export default function Password({ params }: { params: { userId?: string } }) {
 	const [sending, setSending] = useState(false);
@@ -84,7 +83,7 @@ export default function Password({ params }: { params: { userId?: string } }) {
 									variant: "failed",
 								});
 
-								signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
+								// signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
 							} else {
 								if (!res.user.match) {
 									notifications.show({

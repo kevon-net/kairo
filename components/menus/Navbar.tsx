@@ -2,14 +2,14 @@
 
 import React from "react";
 
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 import { Menu } from "@mantine/core";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { typeMenuNavbar } from "@/types/menu/navbar";
 
 import classes from "./Navbar.module.scss";
-
-import { typeMenuNavbar } from "@/types/menu/navbar";
 
 export default function Navbar({ children, subLinks }: typeMenuNavbar) {
 	const pathname = usePathname();

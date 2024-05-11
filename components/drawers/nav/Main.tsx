@@ -7,14 +7,15 @@ import { usePathname } from "next/navigation";
 import { Burger, Drawer, NavLink } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
-import asset from "@/assets";
-import Media from "@/components/media";
+import MediaImage from "@/components/media/Image";
 
-import { typeNav } from "@/types/nav";
+import { nextjs } from "@/assets/icons/tool";
 
 import classes from "./Main.module.scss";
 
-export default function Main({ data, ...restProps }: { data: typeNav[] } & React.ComponentProps<typeof Burger>) {
+import { typeMenuNavbar } from "@/types/components/menu";
+
+export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const pathname = usePathname();
 	const mobile = useMediaQuery("(max-width: 36em)");
@@ -39,8 +40,8 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 				label={link.label}
 				active={pathname == link.link}
 				onClick={() => close()}
-				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
-				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
+				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
+				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
 			/>
 		) : (
 			<NavLink
@@ -49,8 +50,8 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 				label={link.label}
 				active={pathname == link.link}
 				opened={link.subLinks?.find(sl => sl.link == pathname)?.link == pathname ? true : undefined}
-				leftSection={link.iconLeft ? <link.iconLeft size={14} /> : undefined}
-				rightSection={link.iconRight ? <link.iconRight size={14} /> : undefined}
+				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
+				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
 			>
 				{subLinks}
 			</NavLink>
@@ -74,7 +75,7 @@ export default function Main({ data, ...restProps }: { data: typeNav[] } & React
 					root: classes.root,
 					title: classes.title,
 				}}
-				title={<Media.Image src={asset.icon.tool.nextjs} alt="Logo" width={32} height={32} />}
+				title={<MediaImage src={nextjs} alt="Logo" width={32} height={32} />}
 			>
 				{navMobile}
 			</Drawer>

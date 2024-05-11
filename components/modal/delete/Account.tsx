@@ -1,8 +1,9 @@
 "use client";
 
-import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Stack, Text } from "@mantine/core";
-import Form from "@/partials/forms";
+import { useDisclosure } from "@mantine/hooks";
+
+import FormUserAccountDelete from "@/partials/forms/user/account/Delete";
 
 export default function Account({ params }: { params: { userId: string } }) {
 	const [opened, { open, close }] = useDisclosure(false);
@@ -17,7 +18,7 @@ export default function Account({ params }: { params: { userId: string } }) {
 							Proceed with caution. This action is irreversible.
 						</Text>
 					</Text>
-					<Form.User.Account.Delete params={params} />
+					<FormUserAccountDelete params={params} />
 				</Stack>
 			</Modal>
 

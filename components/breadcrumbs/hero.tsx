@@ -6,9 +6,9 @@ import { Anchor, Breadcrumbs } from "@mantine/core";
 
 import { IconChevronRight } from "@tabler/icons-react";
 
-import classes from "./hero.module.scss";
+import classes from "./Hero.module.scss";
 
-import { typeLink } from "@/types/nav";
+import { typeLink } from "@/types/link";
 
 export default function Hero({ data }: { data: typeLink[] }) {
 	const active = (breadcrumb: typeLink) => data.indexOf(breadcrumb) == data.length - 1;

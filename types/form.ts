@@ -5,35 +5,3 @@ export interface typeContact {
 	subject: string;
 	message: string;
 }
-
-export interface typeSignUp {
-	name: string;
-	email: string;
-	password: string;
-}
-
-export interface typeSignIn {
-	email: string;
-	password: string;
-}
-
-export interface typeVerify {
-	email?: string;
-	otp: string;
-}
-
-export interface typeForgot {
-	email: string;
-}
-
-export interface typeReset {
-	passwordCurrent?: string;
-	password: string;
-	id?: string;
-	token?: string;
-}
-
-export interface typeRemaining {
-	minutes: number;
-	seconds: string;
-}

@@ -2,19 +2,20 @@ import React from "react";
 
 import { Metadata } from "next";
 
+import { Divider, Stack } from "@mantine/core";
+
 import Layout from "@/layouts";
 import Partial from "@/partials";
 
-import { auth } from "@/auth";
-import { Divider, Stack } from "@mantine/core";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const generateMetadata = async (): Metadata => {
-	const session = await auth();
+	const user = await currentUser();
 
 	return {
 		title: {
 			default: "Settings",
-			template: `%s - Settings - ${session?.user ? session.user.name : "User"} - Next Template`,
+			template: `%s - Settings - ${user ? user.fullName : "User"} - Next Template`,
 		},
 	};
 };

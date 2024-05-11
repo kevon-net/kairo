@@ -2,17 +2,15 @@
 
 import React, { useState } from "react";
 
-import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { Box, Button, Grid, GridCol, Group, PasswordInput, Stack, TextInput } from "@mantine/core";
+import { Box, Button, Group, PasswordInput, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import hook from "@/hooks";
-
-import { useRouter } from "next/navigation";
+import request from "@/hooks/request";
 
 interface typeAccountDelete {
 	password: string;
@@ -35,14 +33,14 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 		};
 	};
 
-	const handleSignOut = async () => signOut({ callbackUrl: "/" });
+	// const handleSignOut = async () => signOut({ callbackUrl: "/" });
 
 	const handleSubmit = async (formValues: typeAccountDelete) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				await hook.request
+				await request
 					.post(`http://localhost:3000/api/${params.userId}/settings/account/delete`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -72,7 +70,7 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 									variant: "failed",
 								});
 
-								signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
+								// signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
 							} else {
 								if (!res.user.match) {
 									notifications.show({
@@ -96,7 +94,7 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 									});
 
 									form.reset();
-									handleSignOut();
+									// handleSignOut();
 								}
 							}
 						}

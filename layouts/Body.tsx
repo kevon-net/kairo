@@ -2,10 +2,11 @@ import React from "react";
 
 import { Box, Container, Divider, Flex } from "@mantine/core";
 
-import { typeWidth, typeBody } from "@/types/body";
+import { typeBody } from "@/types/layout";
+import { widths } from "@/types/mantine";
 
 export default function Body({ children, header, nav, hero, aside, footer }: typeBody) {
-	const handleAside = (side: React.ReactNode, width?: typeWidth) => (
+	const handleAside = (side: React.ReactNode, width?: widths) => (
 		<Box
 			component="aside"
 			visibleFrom="md"

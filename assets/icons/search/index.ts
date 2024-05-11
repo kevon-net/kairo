@@ -1,8 +1,9 @@
-import bing from "./icons8-bing.svg";
-import duckduckgo from "./icons8-duckduckgo.svg";
-import google from "./icons8-google.svg";
-import yahoo from "./icons8-yahoo.svg";
+import icon1 from "./icons8-bing.svg";
+import icon2 from "./icons8-duckduckgo.svg";
+import icon3 from "./icons8-google.svg";
+import icon4 from "./icons8-yahoo.svg";
 
-const search = { bing, duckduckgo, google, yahoo };
-
-export default search;
+export const bing = icon1;
+export const duckduckgo = icon2;
+export const google = icon3;
+export const yahoo = icon4;

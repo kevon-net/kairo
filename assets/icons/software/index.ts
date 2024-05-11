@@ -1,39 +1,35 @@
-import dreamweaver from "./icons8-adobe-dreamweaver.svg";
-import illustrator from "./icons8-adobe-illustrator.svg";
-import photoshop from "./icons8-adobe-photoshop.svg";
-import canva from "./icons8-canva.svg";
-import figma from "./icons8-figma.svg";
-import onenote from "./icons8-microsoft-onenote-2019.svg";
-import teams from "./icons8-microsoft-teams-2019.svg";
-import notion from "./icons8-notion.svg";
-import obsidian from "./icons8-obsidian.svg";
-import outlook from "./icons8-outlook.svg";
-import ticktick from "./icons8-tick-tick.svg";
-import code from "./icons8-visual-studio-code-2019.svg";
-import visualstudio from "./icons8-visual-studio.svg";
-import intellij from "./icons8-intellij-idea.svg";
-import webstorm from "./icons8-webstorm.svg";
-import github from "./icons8-github.svg";
-import sublime from "./icons8-sublime.svg";
+import icon1 from "./icons8-adobe-dreamweaver.svg";
+import icon2 from "./icons8-adobe-illustrator.svg";
+import icon3 from "./icons8-adobe-photoshop.svg";
+import icon4 from "./icons8-canva.svg";
+import icon5 from "./icons8-figma.svg";
+import icon6 from "./icons8-microsoft-onenote-2019.svg";
+import icon7 from "./icons8-microsoft-teams-2019.svg";
+import icon8 from "./icons8-notion.svg";
+import icon9 from "./icons8-obsidian.svg";
+import icon10 from "./icons8-outlook.svg";
+import icon11 from "./icons8-tick-tick.svg";
+import icon12 from "./icons8-visual-studio-code-2019.svg";
+import icon13 from "./icons8-visual-studio.svg";
+import icon14 from "./icons8-intellij-idea.svg";
+import icon15 from "./icons8-webstorm.svg";
+import icon16 from "./icons8-github.svg";
+import icon17 from "./icons8-sublime.svg";
 
-const software = {
-	dreamweaver,
-	illustrator,
-	photoshop,
-	canva,
-	figma,
-	onenote,
-	teams,
-	notion,
-	obsidian,
-	outlook,
-	ticktick,
-	code,
-	visualstudio,
-	intellij,
-	webstorm,
-	github,
-	sublime,
-};
-
-export default software;
+export const dreamweaver = icon1;
+export const illustrator = icon2;
+export const photoshop = icon3;
+export const canva = icon4;
+export const figma = icon5;
+export const onenote = icon6;
+export const teams = icon7;
+export const notion = icon8;
+export const obsidian = icon9;
+export const outlook = icon10;
+export const ticktick = icon11;
+export const code = icon12;
+export const visualstudio = icon13;
+export const intellij = icon14;
+export const webstorm = icon15;
+export const github = icon16;
+export const sublime = icon17;

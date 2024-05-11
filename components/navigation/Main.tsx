@@ -8,16 +8,17 @@ import { usePathname } from "next/navigation";
 import { Group } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 
-import data from "@/data";
-import Menu from "@/components/menus";
+import MenuNavbar from "../menus/Navbar";
+
+import links from "@/data/links";
 
 import classes from "./Main.module.scss";
 
 export default function Main() {
 	const pathname = usePathname();
 
-	return data.links.navbar.map(link => (
-		<Menu.Navbar key={link.link} subLinks={link.subLinks}>
+	return links.navbar.map(link => (
+		<MenuNavbar key={link.link} subLinks={link.subLinks}>
 			{!link.subLinks ? (
 				<Link href={link.link} className={`${classes.link} ${pathname == link.link ? classes.linkActive : ""}`}>
 					{link.label}
@@ -36,6 +37,6 @@ export default function Main() {
 					</Group>
 				</Link>
 			)}
-		</Menu.Navbar>
+		</MenuNavbar>
 	));
 }

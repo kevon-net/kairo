@@ -11,11 +11,10 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import handler from "@/handlers";
-import hook from "@/hooks";
+import password from "@/handlers/validators/form/special/password";
+import compare from "@/handlers/validators/form/special/compare";
 
-import { typeReset } from "@/types/form";
-import { signOut } from "next-auth/react";
+import request from "@/hooks/request";
 
 export default function Password({ params }: { params: { userId?: string } }) {
 	const [sending, setSending] = useState(false);
@@ -29,29 +28,28 @@ export default function Password({ params }: { params: { userId?: string } }) {
 		},
 
 		validate: {
-			passwordCurrent: value => handler.validator.form.special.password(value, 8, 24),
+			passwordCurrent: value => password(value, 8, 24),
 			password: (value, values) =>
 				values.passwordCurrent == value
 					? "Current and new passwords cannot be the same"
-					: handler.validator.form.special.password(value, 8, 24),
-			passwordConfirm: (value, values) =>
-				handler.validator.form.special.compare.string(values.password, values.passwordConfirm, "Password"),
+					: password(value, 8, 24),
+			passwordConfirm: (value, values) => compare.string(values.password, values.passwordConfirm, "Password"),
 		},
 	});
 
-	const parse = (rawData: typeReset) => {
+	const parse = (rawData: any) => {
 		return {
 			passwordCurrent: rawData.passwordCurrent,
 			passwordNew: rawData.password,
 		};
 	};
 
-	const handleSubmit = async (formValues: typeReset) => {
+	const handleSubmit = async (formValues: any) => {
 		try {
 			if (form.isValid()) {
 				setSending(true);
 
-				await hook.request
+				await request
 					.post(`http://localhost:3000/api/${params.userId}/settings/account/password`, {
 						method: "POST",
 						body: JSON.stringify({
@@ -63,7 +61,7 @@ export default function Password({ params }: { params: { userId?: string } }) {
 							Accept: "application/json",
 						},
 					})
-					.then(res => {
+					.then((res: any) => {
 						if (!res) {
 							notifications.show({
 								id: "password-reset-failed-no-response",
@@ -84,7 +82,7 @@ export default function Password({ params }: { params: { userId?: string } }) {
 									variant: "failed",
 								});
 
-								signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
+								// signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
 							} else {
 								if (!res.user.match) {
 									notifications.show({

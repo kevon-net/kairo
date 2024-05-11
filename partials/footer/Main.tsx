@@ -18,8 +18,10 @@ import {
 	ListItem,
 } from "@mantine/core";
 
-import Layout from "@/layouts";
-import asset from "@/assets";
+import LayoutSection from "@/layouts/Section";
+
+import { facebook, instagram, twitter } from "@/assets/icons/social";
+import { nextjs } from "@/assets/icons/tool";
 
 import classes from "./Main.module.scss";
 
@@ -57,34 +59,28 @@ const socials = [
 	{
 		link: "#facebook",
 		alt: "facebook",
-		icon: asset.icon.social.facebook,
+		icon: facebook,
 	},
 	{
 		link: "#twitter",
 		alt: "twitter",
-		icon: asset.icon.social.twitter,
+		icon: twitter,
 	},
 	{
 		link: "#instagram",
 		alt: "instagram",
-		icon: asset.icon.social.instagram,
+		icon: instagram,
 	},
 ];
 
 export default function Main() {
 	return (
-		<Layout.Section padded={"xl"} className={classes.footer}>
+		<LayoutSection padded={"xl"} className={classes.footer}>
 			<Container size={"responsive"}>
 				<Grid py={{ xs: "xl" }}>
 					<GridCol span={{ base: 12, md: 4 }}>
 						<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"md"}>
-							<MantineImage
-								src={asset.icon.tool.nextjs}
-								alt="next logo"
-								w={{ base: 48 }}
-								component={Image}
-								priority
-							/>
+							<MantineImage src={nextjs} alt="next logo" w={{ base: 48 }} component={Image} priority />
 							<Text className="textResponsive" ta={{ base: "center", md: "start" }}>
 								Build fully functional accessible web applications faster than ever. Build fully
 								functional accessible web applications faster than ever. Build fully functional
@@ -147,6 +143,6 @@ export default function Main() {
 					</Group>
 				</Flex>
 			</Container>
-		</Layout.Section>
+		</LayoutSection>
 	);
 }

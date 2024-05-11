@@ -1,15 +1,8 @@
 import errors from "../errors";
-import generic from "../generic";
+import isEmpty from "../generic/empty";
+import hasLength from "../generic/length";
 
-const text = (val: string, min: number, max: number) => {
-	return generic.isEmpty.string(val, () =>
-		generic.hasLength.string(
-			val,
-			min,
-			max,
-			() => /[0-9]/.test(val.trim()) && errors.isText
-		)
-	);
-};
+const text = (val: string, min: number, max: number) =>
+	isEmpty.string(val, () => hasLength.string(val, min, max, () => /[0-9]/.test(val.trim()) && errors.isText));
 
 export default text;

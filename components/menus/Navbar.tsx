@@ -2,16 +2,16 @@
 
 import React from "react";
 
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 import { Menu } from "@mantine/core";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { typeMenuNavbar } from "@/types/components/menu";
 
 import classes from "./Navbar.module.scss";
 
-import { typeMenuNavbar } from "@/types/menu/navbar";
-
-export default function Navbar({ children, subLinks }: typeMenuNavbar) {
+export default function Navbar({ children, subLinks }: { children: React.ReactNode; subLinks?: typeMenuNavbar[] }) {
 	const pathname = usePathname();
 
 	const menuItems =
@@ -21,8 +21,8 @@ export default function Navbar({ children, subLinks }: typeMenuNavbar) {
 				key={item.link}
 				component={Link}
 				href={item.link}
-				leftSection={item.iconLeft && <item.iconLeft size={14} />}
-				rightSection={item.iconRight && <item.iconRight size={14} />}
+				leftSection={item.leftSection && <item.leftSection size={14} />}
+				rightSection={item.rightSection && <item.rightSection size={14} />}
 				className={`${classes.item} ${pathname == item.link ? classes.itemActive : ""}`}
 			>
 				{item.label}

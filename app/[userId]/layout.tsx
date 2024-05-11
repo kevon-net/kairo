@@ -2,6 +2,8 @@ import React from "react";
 
 import { Metadata } from "next";
 
+import { ClerkProvider } from "@clerk/nextjs";
+
 export interface typeParams {
 	params: { userId: string };
 }
@@ -15,5 +17,9 @@ export default function User({
 }: {
 	children: React.ReactNode;
 }) {
-	return <React.Fragment>{children}</React.Fragment>;
+	return (
+		<React.Fragment>
+			<ClerkProvider>{children}</ClerkProvider>
+		</React.Fragment>
+	);
 }

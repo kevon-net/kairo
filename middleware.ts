@@ -1,9 +1,7 @@
-export { default } from "next-auth/middleware";
+import { clerkMiddleware } from "@clerk/nextjs/server";
+
+export default clerkMiddleware();
 
 export const config = {
-	matcher: [
-		"/about",
-		"/protected",
-		"/protected/:path*", //use this to protect all child routes of '/protected'
-	],
+	matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };

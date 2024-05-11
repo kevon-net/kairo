@@ -1,4 +1,4 @@
-import prisma from "@/databases/next";
+import prisma from "@/databases/vercel/next";
 import utility from "@/utilities";
 
 export async function POST(req: Request, { params }: { params: { userId: string } }) {

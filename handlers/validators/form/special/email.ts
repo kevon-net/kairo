@@ -1,7 +1,7 @@
 import errors from "../errors";
-import generic from "../generic";
+import isEmpty from "../generic/empty";
 
 const email = (val: string) =>
-	generic.isEmpty.string(val, () => !/^\S+@\S+\.\S+$/.test(val.trim()) && errors.isInvalid("email"));
+	isEmpty.string(val, () => !/^\S+@\S+\.\S+$/.test(val.trim()) && errors.isInvalid("email"));
 
 export default email;

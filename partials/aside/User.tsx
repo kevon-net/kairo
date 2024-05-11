@@ -16,47 +16,47 @@ import {
 	IconUser,
 } from "@tabler/icons-react";
 
-import Layout from "@/layouts";
+import LayoutSection from "@/layouts/Section";
 
-import { signOut, useSession } from "next-auth/react";
+// import { signOut, useSession } from "next-auth/react";
 
 export default function User() {
-	const { data: session } = useSession({ required: true });
+	// const { data: session } = useSession({ required: true });
 
 	const pathname = usePathname();
 
-	const navLinkItems = [
-		{
-			icon: IconUser,
-			link: `/${session?.user.id}/settings/profile`,
-			label: "Profile Settings",
-		},
-		{
-			icon: IconCoins,
-			link: `/${session?.user.id}/settings/payment`,
-			label: "Payment Details",
-		},
-		{
-			icon: IconMapPin,
-			link: `/${session?.user.id}/settings/addresses`,
-			label: "Shipping Addresses",
-		},
-		{
-			icon: IconSettings,
-			link: `/${session?.user.id}/settings/account`,
-			label: "Account Settings",
-		},
-		{
-			icon: IconBellRinging,
-			link: `/${session?.user.id}/settings/notifications`,
-			label: "Notifications",
-		},
-	];
+	// const navLinkItems = [
+	// 	{
+	// 		icon: IconUser,
+	// 		link: `/${session?.user.id}/settings/profile`,
+	// 		label: "Profile Settings",
+	// 	},
+	// 	{
+	// 		icon: IconCoins,
+	// 		link: `/${session?.user.id}/settings/payment`,
+	// 		label: "Payment Details",
+	// 	},
+	// 	{
+	// 		icon: IconMapPin,
+	// 		link: `/${session?.user.id}/settings/addresses`,
+	// 		label: "Shipping Addresses",
+	// 	},
+	// 	{
+	// 		icon: IconSettings,
+	// 		link: `/${session?.user.id}/settings/account`,
+	// 		label: "Account Settings",
+	// 	},
+	// 	{
+	// 		icon: IconBellRinging,
+	// 		link: `/${session?.user.id}/settings/notifications`,
+	// 		label: "Notifications",
+	// 	},
+	// ];
 
 	return (
-		<Layout.Section padded>
+		<LayoutSection padded>
 			<Stack>
-				<Stack gap={0}>
+				{/* <Stack gap={0}>
 					{navLinkItems.map(item => (
 						<NavLink
 							key={item.label}
@@ -68,7 +68,7 @@ export default function User() {
 							active={item.link == pathname}
 						/>
 					))}
-				</Stack>
+				</Stack> */}
 
 				<Divider />
 
@@ -77,9 +77,9 @@ export default function User() {
 					active
 					color="red.6"
 					leftSection={<IconLogout size={16} />}
-					onClick={async () => await signOut()}
+					// onClick={async () => await signOut()}
 				/>
 			</Stack>
-		</Layout.Section>
+		</LayoutSection>
 	);
 }

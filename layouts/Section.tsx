@@ -4,7 +4,7 @@ import { Box, Container } from "@mantine/core";
 
 import { ClerkProvider } from "@clerk/nextjs";
 
-import typeSection from "@/types/section";
+import { typeSection } from "@/types/layout";
 
 import classes from "./Section.module.scss";
 

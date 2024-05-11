@@ -2,7 +2,7 @@ import React from "react";
 
 import { Box, Stack } from "@mantine/core";
 
-import typePage from "@/types/page";
+import { typePage } from "@/types/layout";
 
 export default function Page({
 	children,

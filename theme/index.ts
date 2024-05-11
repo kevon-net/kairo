@@ -1,6 +1,8 @@
 "use client";
 
-import component from "./components";
+import input from "./components/inputs";
+import container from "./components/container";
+import notification from "./components/notification";
 
 import { Container, Notification, PasswordInput, Select, TextInput, Textarea, createTheme, rem } from "@mantine/core";
 
@@ -145,13 +147,13 @@ const projectName = createTheme({
 	cursorType: "pointer",
 
 	components: {
-		PasswordInput: PasswordInput.extend(component.input.password),
-		Select: Select.extend(component.input.select),
-		TextInput: TextInput.extend(component.input.text),
-		Textarea: Textarea.extend(component.input.textarea),
+		PasswordInput: PasswordInput.extend(input.password),
+		Select: Select.extend(input.select),
+		TextInput: TextInput.extend(input.text),
+		Textarea: Textarea.extend(input.textarea),
 
-		Container: Container.extend(component.container),
-		Notification: Notification.extend(component.notification),
+		Container: Container.extend(container),
+		Notification: Notification.extend(notification),
 	},
 });
 

@@ -1,8 +1,8 @@
 import errors from "../errors";
-import generic from "../generic";
+import isEmpty from "../generic/empty";
 
 const phone = (val: string) =>
-	generic.isEmpty.string(
+	isEmpty.string(
 		val,
 		() =>
 			!/^(07)\d{8}$/.test(val.trim()) && errors.isInvalid("phone number")

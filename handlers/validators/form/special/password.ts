@@ -1,9 +1,10 @@
 import errors from "../errors";
-import generic from "../generic";
+import isEmpty from "../generic/empty";
+import hasLength from "../generic/length";
 
 const password = (val: string, min: number, max: number) =>
-	generic.isEmpty.string(val, () =>
-		generic.hasLength.string(
+	isEmpty.string(val, () =>
+		hasLength.string(
 			val,
 			min,
 			max,

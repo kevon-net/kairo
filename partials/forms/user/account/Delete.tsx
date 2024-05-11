@@ -10,7 +10,7 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import hook from "@/hooks";
+import request from "@/hooks/request";
 
 interface typeAccountDelete {
 	password: string;
@@ -40,7 +40,7 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 			try {
 				setSubmitted(true);
 
-				await hook.request
+				await request
 					.post(`http://localhost:3000/api/${params.userId}/settings/account/delete`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),

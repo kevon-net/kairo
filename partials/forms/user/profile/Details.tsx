@@ -8,7 +8,7 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import hook from "@/hooks";
+import request from "@/hooks/request";
 
 interface typeProfileDetails {
 	username: string;
@@ -53,7 +53,7 @@ export default function Details() {
 				} else {
 					setSubmitted(true);
 
-					await hook.request
+					await request
 						.post("http://localhost:3000/api/contact", {
 							method: "POST",
 							body: JSON.stringify(parse(formValues)),

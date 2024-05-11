@@ -16,7 +16,7 @@ import {
 	IconUser,
 } from "@tabler/icons-react";
 
-import Layout from "@/layouts";
+import LayoutSection from "@/layouts/Section";
 
 // import { signOut, useSession } from "next-auth/react";
 
@@ -54,7 +54,7 @@ export default function User() {
 	// ];
 
 	return (
-		<Layout.Section padded>
+		<LayoutSection padded>
 			<Stack>
 				{/* <Stack gap={0}>
 					{navLinkItems.map(item => (
@@ -80,6 +80,6 @@ export default function User() {
 					// onClick={async () => await signOut()}
 				/>
 			</Stack>
-		</Layout.Section>
+		</LayoutSection>
 	);
 }

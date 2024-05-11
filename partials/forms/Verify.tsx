@@ -10,15 +10,17 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import hook from "@/hooks";
-import millToMinSec from "@/utilities/converters/millMinSec";
+import request from "@/hooks/request";
 
-import { typeRemaining, typeVerify } from "@/types/form";
+import converter from "@/utilities/converter";
 
 export default function Verify({ userId }: { userId: string }) {
 	const [sending, setSending] = useState(false);
 	const [requested, setRequested] = useState(false);
-	const [time, setTime] = useState<typeRemaining>();
+	const [time, setTime] = useState<{
+		minutes: number;
+		seconds: string;
+	}>();
 
 	const router = useRouter();
 
@@ -32,16 +34,16 @@ export default function Verify({ userId }: { userId: string }) {
 		},
 	});
 
-	const parse = (rawData: typeVerify) => {
+	const parse = (rawData: any) => {
 		return { otp: rawData.otp, userId };
 	};
 
-	const handleSubmit = async (formValues: typeVerify) => {
+	const handleSubmit = async (formValues: any) => {
 		try {
 			if (form.isValid()) {
 				setSending(true);
 
-				await hook.request
+				await request
 					.post(`http://localhost:3000/api/${userId}/auth/verify`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
@@ -159,7 +161,7 @@ export default function Verify({ userId }: { userId: string }) {
 		try {
 			setRequested(true);
 
-			await hook.request
+			await request
 				.post(`http://localhost:3000/api/${userId}/auth/verify/resend`, {
 					method: "POST",
 					// body: JSON.stringify({ userId }),
@@ -212,7 +214,7 @@ export default function Verify({ userId }: { userId: string }) {
 											variant: "failed",
 										});
 
-										setTime(millToMinSec(parseInt(res.user.otp.expires) - Date.now()));
+										setTime(converter.millSec(parseInt(res.user.otp.expires) - Date.now()));
 									} else {
 										notifications.show({
 											id: "otp-request-success",

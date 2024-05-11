@@ -10,13 +10,16 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import handler from "@/handlers";
-import hook from "@/hooks";
+import text from "@/handlers/validators/form/special/text";
+import email from "@/handlers/validators/form/special/email";
+import capitalize from "@/handlers/parsers/string/capitalize";
 
-import { typeUser } from "@/types/models";
+import request from "@/hooks/request";
+
+import { typeUser } from "@/types/model";
 
 interface typeAccountDetails {
-	name: string;
+	name?: string;
 	email: string;
 }
 
@@ -32,14 +35,14 @@ export default function Details({ params, initial }: { params: { userId?: string
 		},
 
 		validate: {
-			name: value => handler.validator.form.special.text(value, 2, 255),
-			email: value => handler.validator.form.special.email(value),
+			name: value => (value && value?.trim().length > 0 ? text(value, 2, 255) : "Please fill out this field."),
+			email: value => email(value),
 		},
 	});
 
 	const parse = (rawData: typeAccountDetails) => {
 		return {
-			name: handler.parser.string.capitalize.words(rawData.name),
+			name: rawData.name && capitalize.words(rawData.name),
 			email: rawData.email.trim().toLowerCase(),
 		};
 	};
@@ -59,7 +62,7 @@ export default function Details({ params, initial }: { params: { userId?: string
 				} else {
 					setSubmitted(true);
 
-					await hook.request
+					await request
 						.post(`http://localhost:3000/api/${params.userId}/settings/account/details`, {
 							method: "POST",
 							body: JSON.stringify({

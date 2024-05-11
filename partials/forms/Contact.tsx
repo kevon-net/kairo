@@ -8,8 +8,13 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import handler from "@/handlers";
-import hook from "@/hooks";
+import text from "@/handlers/validators/form/special/text";
+import email from "@/handlers/validators/form/special/email";
+import phone from "@/handlers/validators/form/special/phone";
+import isEmpty from "@/handlers/validators/form/generic/empty";
+import capitalize from "@/handlers/parsers/string/capitalize";
+
+import request from "@/hooks/request";
 
 import { typeContact } from "@/types/form";
 
@@ -27,18 +32,18 @@ export default function Contact() {
 		},
 
 		validate: {
-			name: value => handler.validator.form.special.text(value, 2, 255),
-			email: value => handler.validator.form.special.email(value),
-			phone: value => handler.validator.form.special.phone(value),
-			subject: value => handler.validator.form.special.text(value, 3, 255),
-			message: value => handler.validator.form.special.text(value, 3, 2048),
-			policy: value => handler.validator.form.generic.isEmpty.checkbox(value),
+			name: value => text(value, 2, 255),
+			email: value => email(value),
+			phone: value => phone(value),
+			subject: value => text(value, 3, 255),
+			message: value => text(value, 3, 2048),
+			policy: value => isEmpty.checkbox(value),
 		},
 	});
 
 	const parse = (rawData: typeContact) => {
 		return {
-			name: handler.parser.string.capitalize.words(rawData.name),
+			name: capitalize.words(rawData.name),
 			email: rawData.email.trim().toLowerCase(),
 			phone: rawData.phone,
 			subject: rawData.subject == "Other" ? "General" : `${rawData.subject}`,
@@ -51,7 +56,7 @@ export default function Contact() {
 			try {
 				setSubmitted(true);
 
-				await hook.request
+				await request
 					.post("http://localhost:3000/api/contact", {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),

@@ -5,10 +5,14 @@ import NextImage from "next/image";
 
 import { Group, Box, Container, Image, ButtonGroup, Button, Skeleton } from "@mantine/core";
 
-import asset from "@/assets";
-import data from "@/data";
-import Component from "@/components";
-import Layout from "@/layouts";
+import LayoutSection from "@/layouts/Section";
+import DrawerNavMain from "@/components/drawers/nav/Main";
+import NavigationMain from "@/components/navigation/Main";
+import DrawerCart from "@/components/drawers/Cart";
+import ClerkUserButton from "@/components/clerk/UserButton";
+
+import links from "@/data/links";
+import { nextjs } from "@/assets/icons/tool";
 
 import { SignedIn, SignedOut, SignInButton, SignUpButton, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 
@@ -16,7 +20,7 @@ import classes from "./Main.module.scss";
 
 export default async function Main() {
 	return (
-		<Layout.Section withClerk className={classes.navbar}>
+		<LayoutSection withClerk className={classes.navbar}>
 			<Container size={"responsive"}>
 				<Group justify="space-between">
 					<Group>
@@ -24,7 +28,7 @@ export default async function Main() {
 							<Link href={"/"}>
 								<Group>
 									<Image
-										src={asset.icon.tool.nextjs}
+										src={nextjs}
 										alt="next icon"
 										className={classes.logo}
 										component={NextImage}
@@ -33,14 +37,10 @@ export default async function Main() {
 								</Group>
 							</Link>
 						</Box>
-						<Component.Drawer.Nav.Main
-							data={data.links.navbar}
-							hiddenFrom="sm"
-							aria-label="Toggle Navigation"
-						/>
+						<DrawerNavMain data={links.navbar} hiddenFrom="sm" aria-label="Toggle Navigation" />
 
 						<Group gap={"xs"} component={"nav"} visibleFrom="sm">
-							<Component.Navigation.Main />
+							<NavigationMain />
 						</Group>
 					</Group>
 
@@ -63,20 +63,20 @@ export default async function Main() {
 								<Skeleton height={24} circle />
 							</ClerkLoading>
 							<ClerkLoaded>
-								<Component.Drawer.Cart />
+								<DrawerCart />
 							</ClerkLoaded>
 
 							<ClerkLoading>
 								<Skeleton height={28} circle />
 							</ClerkLoading>
 							<ClerkLoaded>
-								<Component.Clerk.UserButton />
+								<ClerkUserButton />
 								{/* <Component.Menu.Avatar /> */}
 							</ClerkLoaded>
 						</Group>
 					</SignedIn>
 				</Group>
 			</Container>
-		</Layout.Section>
+		</LayoutSection>
 	);
 }

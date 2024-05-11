@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 
 const hasher = {
-	create: async (password: string) => {
+	async create(password: string): Promise<string | undefined> {
 		try {
 			return await bcryptjs.hash(password, 10);
 		} catch (error) {
@@ -9,7 +9,7 @@ const hasher = {
 		}
 	},
 
-	compare: async (password: string, passwordHashed: string | null) => {
+	async compare(password: string, passwordHashed: string | null): Promise<boolean | null | undefined> {
 		try {
 			return passwordHashed ? await bcryptjs.compare(password, passwordHashed) : null;
 		} catch (error) {

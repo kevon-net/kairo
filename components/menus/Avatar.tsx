@@ -31,7 +31,7 @@ import {
 
 import classes from "./Avatar.module.scss";
 
-import handler from "@/handlers";
+import initialize from "@/handlers/parsers/string/initialize";
 
 import { SignOutButton, useUser } from "@clerk/nextjs";
 
@@ -101,7 +101,7 @@ export default function Avatar() {
 							title={user.fullName ? user.fullName : "User"}
 							className={classes.avatar}
 						>
-							{user.fullName ? handler.parser.string.initialize(user?.fullName) : "FN"}
+							{user.fullName ? initialize(user?.fullName) : "FN"}
 						</MantineAvatar>
 					) : (
 						<MantineAvatar

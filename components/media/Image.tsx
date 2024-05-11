@@ -2,18 +2,18 @@ import React from "react";
 
 import NextImage from "next/image";
 
-import { AspectRatio, Image } from "@mantine/core";
+import { AspectRatio, Image as MantineImage } from "@mantine/core";
 
-export default function MediaImage({
+export default function Image({
 	src,
 	alt,
 	width,
 	height,
 	...restProps
-}: { src?: string; alt: string; width: number; height: number } & React.ComponentProps<typeof Image>) {
+}: { src?: string; alt: string; width: number; height: number } & React.ComponentProps<typeof MantineImage>) {
 	return (
 		<AspectRatio ratio={width / height} w={width}>
-			<Image
+			<MantineImage
 				src={src}
 				alt={alt}
 				title={alt}

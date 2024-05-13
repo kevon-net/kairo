@@ -2,7 +2,8 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import Layout from "@/layouts";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
 
 import { typeParams } from "./layout";
 
@@ -12,8 +13,8 @@ export const generateMetadata = ({ params }: typeParams): Metadata => {
 
 export default function BlogDetails({ params }: typeParams) {
 	return (
-		<Layout.Page padded>
-			<Layout.Section containerized={"responsive"}>Blog {params.blogId}</Layout.Section>
-		</Layout.Page>
+		<LayoutPage padded>
+			<LayoutSection containerized={"responsive"}>Blog {params.blogId}</LayoutSection>
+		</LayoutPage>
 	);
 }

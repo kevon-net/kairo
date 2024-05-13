@@ -2,11 +2,13 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import Layout from "@/layouts";
 import { Center, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/core";
 
-import Partial from "@/partials";
-import Component from "@/components";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
+import FormUserAccountDetails from "@/partials/forms/user/account/Details";
+import FormUserAccountPassword from "@/partials/forms/user/account/Password";
+import ModalDeleteAccount from "@/components/modal/delete/Account";
 
 export const metadata: Metadata = {
 	title: "Account",
@@ -27,15 +29,15 @@ export default async function Account({ params }: { params: { userId: string } }
 
 	const data = await getDataAccount();
 	return (
-		<Layout.Page stacked>
-			<Layout.Section>
+		<LayoutPage stacked>
+			<LayoutSection>
 				<Grid gutter={"xl"}>
 					<GridCol span={{ base: 12, md: 7, lg: 5.5 }}>
 						<Stack gap={"lg"}>
 							<Title order={2} fz={"xl"}>
 								Account Details
 							</Title>
-							<Partial.Form.User.Account.Details params={params} initial={data} />
+							<FormUserAccountDetails params={params} initial={data} />
 						</Stack>
 					</GridCol>
 					<GridCol span={{ base: 12, md: 7, lg: 1 }}>
@@ -48,15 +50,15 @@ export default async function Account({ params }: { params: { userId: string } }
 							<Title order={2} fz={"xl"}>
 								Update Password
 							</Title>
-							<Partial.Form.User.Account.Password params={params} />
+							<FormUserAccountPassword params={params} />
 						</Stack>
 					</GridCol>
 				</Grid>
-			</Layout.Section>
+			</LayoutSection>
 
 			<Divider />
 
-			<Layout.Section>
+			<LayoutSection>
 				<Stack gap={"lg"} align="start">
 					<Title order={2} fz={"xl"}>
 						Delete Account
@@ -69,9 +71,9 @@ export default async function Account({ params }: { params: { userId: string } }
 							</Text>
 						</Text>
 					</Stack>
-					<Component.Modal.Delete.Account params={params} />
+					<ModalDeleteAccount params={params} />
 				</Stack>
-			</Layout.Section>
-		</Layout.Page>
+			</LayoutSection>
+		</LayoutPage>
 	);
 }

@@ -2,7 +2,8 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import Layout from "@/layouts";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
 
 export const metadata: Metadata = {
 	title: "Overview",
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
 	return (
-		<Layout.Page padded>
-			<Layout.Section containerized>Dashboard page</Layout.Section>
-		</Layout.Page>
+		<LayoutPage padded>
+			<LayoutSection containerized>Dashboard page</LayoutSection>
+		</LayoutPage>
 	);
 }

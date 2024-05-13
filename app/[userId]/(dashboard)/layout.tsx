@@ -1,11 +1,14 @@
 import React from "react";
 
-import Layout from "@/layouts";
-import Partial from "@/partials";
+import { Metadata } from "next";
+
+import LayoutBody from "@/layouts/Body";
+// import NavbarMain from "@/partials/navbars/Main";
+// import FooterMain from "@/partials/footer/Main";
 
 import { currentUser } from "@clerk/nextjs/server";
 
-export const generateMetadata = async (): Metadata => {
+export const generateMetadata = async (): Promise<Metadata> => {
 	const user = await currentUser();
 
 	return {
@@ -22,11 +25,11 @@ export default function Marketing({
 	children: React.ReactNode;
 }) {
 	return (
-		<Layout.Body
-		// nav={<Partial.Navbar.Main />}
-		// footer={<Partial.Footer.Main />}
+		<LayoutBody
+		// nav={<NavbarMain />}
+		// footer={<FooterMain />}
 		>
 			<main>{children}</main>
-		</Layout.Body>
+		</LayoutBody>
 	);
 }

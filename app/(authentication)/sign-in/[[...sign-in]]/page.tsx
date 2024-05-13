@@ -5,22 +5,23 @@ import { redirect } from "next/navigation";
 
 import { Center } from "@mantine/core";
 
-import Layout from "@/layouts";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
 
 import { SignIn as ClerkSignIn } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
-	title: "Sign Up",
+	title: "Sign In",
 };
 
-export default async function SignUp() {
+export default async function SignIn() {
 	return (
-		<Layout.Page padded={40}>
-			<Layout.Section containerized="xs">
+		<LayoutPage padded={40}>
+			<LayoutSection containerized="xs">
 				<Center>
 					<ClerkSignIn />
 				</Center>
-			</Layout.Section>
-		</Layout.Page>
+			</LayoutSection>
+		</LayoutPage>
 	);
 }

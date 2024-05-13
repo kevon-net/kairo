@@ -3,8 +3,9 @@ import React from "react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import Layout from "@/layouts";
-import Partial from "@/partials";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
+import FormContact from "@/partials/forms/Contact";
 
 export const metadata: Metadata = {
 	title: "Contact",
@@ -12,11 +13,11 @@ export const metadata: Metadata = {
 
 export default async function Contact() {
 	return (
-		<Layout.Page padded>
-			<Layout.Section containerized={"responsive"}>Contact page</Layout.Section>
-			{/* <Layout.Section containerized={"xs"}>
-				<Partial.Form.Contact />
-			</Layout.Section> */}
-		</Layout.Page>
+		<LayoutPage padded>
+			<LayoutSection containerized={"responsive"}>Contact page</LayoutSection>
+			{/* <LayoutSection containerized={"xs"}>
+				<FormContact />
+			</LayoutSection> */}
+		</LayoutPage>
 	);
 }

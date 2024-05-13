@@ -8,7 +8,7 @@ import { Center } from "@mantine/core";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
-import { SignUp as ClerkSignUp } from "@clerk/nextjs";
+import ClerkSignUp from "@/components/clerk/SignUp";
 
 export const metadata: Metadata = {
 	title: "Sign Up",

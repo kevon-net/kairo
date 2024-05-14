@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { Box, Button, Center, Checkbox, Grid, GridCol, Select, Text, TextInput, Textarea } from "@mantine/core";
+import { Box, Button, Center, Grid, GridCol, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
@@ -11,7 +11,6 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import text from "@/handlers/validators/form/special/text";
 import email from "@/handlers/validators/form/special/email";
 import phone from "@/handlers/validators/form/special/phone";
-import isEmpty from "@/handlers/validators/form/generic/empty";
 import capitalize from "@/handlers/parsers/string/capitalize";
 
 import request from "@/hooks/request";
@@ -23,30 +22,31 @@ export default function Contact() {
 
 	const form = useForm({
 		initialValues: {
-			name: "",
+			fname: "",
+			lname: "",
 			email: "",
 			phone: "",
 			subject: "",
 			message: "",
-			policy: false,
 		},
 
 		validate: {
-			name: value => text(value, 2, 255),
+			fname: value => text(value, 2, 24),
+			lname: value => text(value, 2, 24),
 			email: value => email(value),
-			phone: value => phone(value),
+			phone: value => value.trim().length > 0 && phone(value),
 			subject: value => text(value, 3, 255),
 			message: value => text(value, 3, 2048),
-			policy: value => isEmpty.checkbox(value),
 		},
 	});
 
 	const parse = (rawData: typeContact) => {
 		return {
-			name: capitalize.words(rawData.name),
+			fname: capitalize.word(rawData.fname.trim()),
+			lname: capitalize.word(rawData.lname.trim()),
 			email: rawData.email.trim().toLowerCase(),
-			phone: rawData.phone,
-			subject: rawData.subject == "Other" ? "General" : `${rawData.subject}`,
+			phone: rawData.phone?.trim() ? (rawData.phone.trim().length > 0 ? rawData.phone : null) : null,
+			subject: capitalize.words(rawData.subject.trim()),
 			message: rawData.message.trim(),
 		};
 	};
@@ -106,36 +106,32 @@ export default function Contact() {
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid pb={"md"}>
 				<GridCol span={{ base: 12, xs: 6 }}>
-					<TextInput required label={"Name"} placeholder="Your Name" {...form.getInputProps("name")} />
+					<TextInput
+						required
+						label={"Frist Name"}
+						placeholder="Your First Name"
+						{...form.getInputProps("fname")}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={"Last Name"}
+						placeholder="Your Last Name"
+						{...form.getInputProps("lname")}
+					/>
 				</GridCol>
 				<GridCol span={{ base: 12, sm: 6 }}>
 					<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 				</GridCol>
 				<GridCol span={{ base: 12, sm: 6 }}>
-					<TextInput required label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
+					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
 				</GridCol>
 				<GridCol span={12}>
-					<Select
+					<TextInput
 						required
 						label="Inquiry"
-						description="What are you inquiring about?"
-						defaultValue={""}
-						data={[
-							{ label: "Select an Inquiry", value: "" },
-							{
-								label: "Option 1",
-								value: "1",
-							},
-							{
-								label: "Option 2",
-								value: "2",
-							},
-							{
-								label: "Option 3",
-								value: "3",
-							},
-							{ label: "Other", value: "Other" },
-						]}
+						placeholder="What are you inquiring about?"
 						{...form.getInputProps("subject")}
 					/>
 				</GridCol>
@@ -148,15 +144,6 @@ export default function Contact() {
 						minRows={3}
 						maxRows={10}
 						{...form.getInputProps("message")}
-					/>
-				</GridCol>
-				<GridCol span={{ base: 12, sm: 12 }}>
-					<Checkbox
-						required
-						ml={"lg"}
-						size="xs"
-						label={<Text inherit>I have read and accept the terms of use.</Text>}
-						{...form.getInputProps("policy", { type: "checkbox" })}
 					/>
 				</GridCol>
 				<GridCol span={12}>

@@ -1,20 +1,17 @@
-import controller from "@/controllers";
+import { send as emailSend, contacts as emailContacts } from "@/handlers/email";
 
 export async function POST(req: Request) {
 	try {
-		const data = await req.json();
+		const dataForm = await req.json();
 
-		await controller.email.send({
-			from: process.env.SENDER_USERNAME as string,
-			to: data.email as string,
-			subject: data.subject as string,
-			text: data.message,
-		});
+		// send email
+		const email = await emailSend(dataForm);
+		// add to audience
+		const contact = await emailContacts.create(dataForm);
 
-		await controller.database.message.create(data);
-
-		return Response.json(data);
-	} catch (error: any) {
-		console.error("x-> Error sending contact message:", error.message);
+		return Response.json({ email, contact });
+	} catch (error) {
+		console.error("x-> Error sending contact message:", (error as Error).message);
+		return Response.error();
 	}
 }

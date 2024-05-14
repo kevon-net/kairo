@@ -25,6 +25,8 @@
 		"@mantine/tiptap": "^7.6.0",
 		"@next/env": "^14.2.3",
 		"@prisma/client": "^5.13.0",
+		"@react-email/components": "0.0.17",
+		"@supabase/supabase-js": "^2.43.1",
 		"@tabler/icons-react": "^2.47.0",
 		"@tiptap/extension-link": "^2.2.4",
 		"@tiptap/react": "^2.2.4",
@@ -43,7 +45,9 @@
 		"nodemailer": "^6.9.13",
 		"react": "^18",
 		"react-dom": "^18",
+		"react-email": "2.1.2",
 		"recharts": "^2.12.1",
+		"resend": "^3.2.0",
 		"sequelize": "^6.37.1"
 	},
 	"devDependencies": {

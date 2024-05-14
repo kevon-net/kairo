@@ -6,10 +6,10 @@ import { usePathname } from "next/navigation";
 
 import { Box, Container, Group, Title } from "@mantine/core";
 
-import BreadcrumbHero from "@/components/breadcrumbs/Hero";
+import BreadcrumbHero from "@/components/breadcrumbs/hero";
 import crumbify from "@/handlers/parsers/string/crumbify";
 
-import classes from "./Route.module.scss";
+import classes from "./Main.module.scss";
 
 export default function Route({ title }: { title?: string }) {
 	const pathname = usePathname();

@@ -39,15 +39,7 @@ export default function Body({ children, header, nav, hero, aside, footer }: typ
 			{hero && hero}
 			{aside ? (
 				<Container size={"responsive"} component={"article"}>
-					<Flex
-						gap={
-							aside.left?.withBorder || aside.right?.withBorder
-								? aside.gap
-									? aside.gap
-									: "xl"
-								: undefined
-						}
-					>
+					<Flex gap={aside.gap ? aside.gap : "xl"}>
 						{aside.left && handleAside(aside.left.component, aside.left.width)}
 						{aside.left?.withBorder && <Divider orientation="vertical" visibleFrom="md" />}
 						<Box w={{ base: "100%", md: `${widthMain.md}%`, lg: `${widthMain.lg}%` }}>{children}</Box>

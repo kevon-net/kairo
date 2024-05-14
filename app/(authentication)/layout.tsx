@@ -2,7 +2,7 @@ import React from "react";
 
 import { Center } from "@mantine/core";
 
-import Layout from "@/layouts";
+import LayoutBody from "@/layouts/Body";
 
 import { ClerkProvider } from "@clerk/nextjs";
 
@@ -12,10 +12,10 @@ export default function Authentication({
 	children: React.ReactNode;
 }) {
 	return (
-		<Layout.Body>
+		<LayoutBody>
 			<Center component="main" mih={"100vh"}>
 				<ClerkProvider>{children}</ClerkProvider>
 			</Center>
-		</Layout.Body>
+		</LayoutBody>
 	);
 }

@@ -1,6 +1,6 @@
 import React from "react";
 
-import Layout from "@/layouts";
+import LayoutBody from "@/layouts/Body";
 
 export interface typeParams {
 	params: { blogId: string };
@@ -11,5 +11,5 @@ export default function BlogDetails({
 }: {
 	children: React.ReactNode;
 }) {
-	return <Layout.Body>{children}</Layout.Body>;
+	return <LayoutBody>{children}</LayoutBody>;
 }

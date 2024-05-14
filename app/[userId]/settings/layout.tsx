@@ -4,12 +4,16 @@ import { Metadata } from "next";
 
 import { Divider, Stack } from "@mantine/core";
 
-import Layout from "@/layouts";
-import Partial from "@/partials";
+import LayoutBody from "@/layouts/Body";
+import LayoutSection from "@/layouts/Section";
+import NavbarMain from "@/partials/navbars/Main";
+import NavbarUser from "@/partials/navbars/User";
+import AsideUser from "@/partials/aside/User";
+import FooterMain from "@/partials/footer/Main";
 
 import { currentUser } from "@clerk/nextjs/server";
 
-export const generateMetadata = async (): Metadata => {
+export const generateMetadata = async (): Promise<Metadata> => {
 	const user = await currentUser();
 
 	return {
@@ -26,29 +30,29 @@ export default function Profile({
 	children: React.ReactNode;
 }) {
 	return (
-		<Layout.Body
-			nav={<Partial.Navbar.Main />}
-			footer={<Partial.Footer.Main />}
+		<LayoutBody
+			nav={<NavbarMain />}
+			footer={<FooterMain />}
 			aside={{
 				gap: 48,
 				left: {
-					component: <Partial.Aside.User />,
+					component: <AsideUser />,
 					width: { md: 30, lg: 22.5 },
 					withBorder: true,
 				},
 			}}
 		>
-			<Layout.Section component={"main"} padded>
+			<LayoutSection component={"main"} padded>
 				<Stack gap={48}>
-					<Layout.Section hiddenFrom="md">
-						<Partial.Navbar.User />
-					</Layout.Section>
+					<LayoutSection hiddenFrom="md">
+						<NavbarUser />
+					</LayoutSection>
 
 					<Divider hiddenFrom="md" />
 
 					{children}
 				</Stack>
-			</Layout.Section>
-		</Layout.Body>
+			</LayoutSection>
+		</LayoutBody>
 	);
 }

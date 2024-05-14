@@ -1,7 +1,8 @@
 import React from "react";
 
-import Layout from "@/layouts";
-import Partial from "@/partials";
+import LayoutBody from "@/layouts/Body";
+import NavbarMain from "@/partials/navbars/Main";
+import FooterMain from "@/partials/footer/Main";
 
 export default function Marketing({
 	children, // will be a page or nested layout
@@ -9,8 +10,8 @@ export default function Marketing({
 	children: React.ReactNode;
 }) {
 	return (
-		<Layout.Body nav={<Partial.Navbar.Main />} footer={<Partial.Footer.Main />}>
+		<LayoutBody nav={<NavbarMain />} footer={<FooterMain />}>
 			<main>{children}</main>
-		</Layout.Body>
+		</LayoutBody>
 	);
 }

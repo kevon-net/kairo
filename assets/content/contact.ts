@@ -1,4 +1,8 @@
+const companyName = "Next Template";
+const appName = companyName;
+
 const contact = {
+	name: { company: companyName, app: appName },
 	phones: [{ type: "", label: "", value: "" }],
 	email: [{ type: "", value: "" }],
 	socials: [
@@ -21,12 +25,12 @@ const contact = {
 	],
 	hours: [
 		{ label: "days", value: "Mon - Fri" },
-		{ label: "times", value: "8AM - 5PM" },
+		{ label: "times", value: "8 AM - 5 PM" },
 	],
 	locations: [
 		{
 			place: "Main Office",
-			label: "6th Floor, Prosperity House, Chiromo, Westlands, Nairobi",
+			label: "410 Terry Ave. North, Seattle, WA 98109",
 			link: "#",
 		},
 	],

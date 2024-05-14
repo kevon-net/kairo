@@ -2,7 +2,8 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import Layout from "@/layouts";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
 
 export const metadata: Metadata = {
 	title: "Notifications",
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
 
 export default async function Notification() {
 	return (
-		<Layout.Page>
-			<Layout.Section containerized={"responsive"}>Notifications page</Layout.Section>
-		</Layout.Page>
+		<LayoutPage>
+			<LayoutSection containerized={"responsive"}>Notifications page</LayoutSection>
+		</LayoutPage>
 	);
 }

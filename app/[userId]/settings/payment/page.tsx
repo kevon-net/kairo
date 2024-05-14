@@ -2,7 +2,8 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import Layout from "@/layouts";
+import LayoutPage from "@/layouts/Page";
+import LayoutSection from "@/layouts/Section";
 
 export const metadata: Metadata = {
 	title: "Payment",
@@ -10,8 +11,8 @@ export const metadata: Metadata = {
 
 export default async function Payment() {
 	return (
-		<Layout.Page>
-			<Layout.Section>Payment details page</Layout.Section>
-		</Layout.Page>
+		<LayoutPage>
+			<LayoutSection>Payment details page</LayoutSection>
+		</LayoutPage>
 	);
 }

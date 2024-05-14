@@ -2,7 +2,7 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import Layout from "@/layouts";
+import LayoutBody from "@/layouts/Body";
 
 export const metadata: Metadata = {
 	title: { default: "Blog", template: "%s - Blog - Next Template" },
@@ -13,5 +13,5 @@ export default function Blog({
 }: {
 	children: React.ReactNode;
 }) {
-	return <Layout.Body>{children}</Layout.Body>;
+	return <LayoutBody>{children}</LayoutBody>;
 }

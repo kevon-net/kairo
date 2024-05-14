@@ -1,7 +1,8 @@
 export interface typeContact {
-	name: string;
+	fname: string;
+	lname: string;
 	email: string;
-	phone: string;
+	phone: string | null;
 	subject: string;
 	message: string;
 }

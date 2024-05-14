@@ -1,4 +1,4 @@
-import prisma from "@/databases/vercel/next";
+import prisma from "@/databases/vercel";
 
 import utility from "@/utilities";
 

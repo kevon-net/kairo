@@ -36,14 +36,14 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" data-mantine-color-scheme="dark">
+		<html lang="en" data-mantine-color-scheme="light">
 			<head>
-				<ColorSchemeScript defaultColorScheme="dark" />
+				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
 			<body /* className={inter.className} */>
 				<MantineProvider
 					theme={projectName}
-					defaultColorScheme="dark"
+					defaultColorScheme="light"
 					classNamesPrefix="next-template"
 					withStaticClasses={false}
 					withGlobalClasses={true}

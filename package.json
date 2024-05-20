@@ -33,6 +33,7 @@
 		"@tiptap/starter-kit": "^2.2.4",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/nodemailer": "^6.4.14",
+		"@vercel/speed-insights": "^1.0.10",
 		"bcryptjs": "^2.4.3",
 		"dayjs": "^1.11.10",
 		"dotenv": "^16.4.5",

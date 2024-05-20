@@ -21,6 +21,8 @@ import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import projectName from "@/theme";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -41,6 +43,8 @@ export default async function RootLayout({
 				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
 			<body /* className={inter.className} */>
+				<SpeedInsights />
+
 				<MantineProvider
 					theme={projectName}
 					defaultColorScheme="light"

@@ -5,7 +5,8 @@ import resend from "@/services/resend";
 import { typeContact } from "@/types/form";
 
 export const send = async (formData: typeContact) => {
-	const { data, error } = await resend.emails.send({
+	// switch to 'resend.general' when your domain is configured
+	const { data, error } = await resend.onboarding.emails.send({
 		// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
 		from: `${formData.fname} ${formData.lname} <onboarding@resend.dev>`,
 		to: ["kevon.kibochi@outlook.com"],
@@ -25,7 +26,7 @@ export const send = async (formData: typeContact) => {
 
 export const contacts = {
 	async create(formData: typeContact) {
-		const { data, error } = await resend.contacts.create({
+		const { data, error } = await resend.onboarding.contacts.create({
 			// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
 			email: formData.email,
 			firstName: formData.fname,

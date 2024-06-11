@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function Account({ params }: { params: { userId: string } }) {
 	const getDataAccount = async () => {
 		try {
-			const res = await fetch(`http://localhost:3000/api/${params.userId}/settings/account`, {
+			const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account`, {
 				next: { revalidate: 60 * 60 },
 			});
 

@@ -54,7 +54,7 @@ export default function Details() {
 					setSubmitted(true);
 
 					await request
-						.post("http://localhost:3000/api/contact", {
+						.post(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
 							method: "POST",
 							body: JSON.stringify(parse(formValues)),
 							headers: {

@@ -50,7 +50,7 @@ export default function Password({ params }: { params: { userId?: string } }) {
 				setSending(true);
 
 				await request
-					.post(`http://localhost:3000/api/${params.userId}/settings/account/password`, {
+					.post(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account/password`, {
 						method: "POST",
 						body: JSON.stringify({
 							passwordCurrent: parse(formValues).passwordCurrent,

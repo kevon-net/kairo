@@ -41,7 +41,7 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 				setSubmitted(true);
 
 				await request
-					.post(`http://localhost:3000/api/${params.userId}/settings/account/delete`, {
+					.post(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account/delete`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
 						headers: {

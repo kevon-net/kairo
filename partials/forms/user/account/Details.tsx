@@ -63,7 +63,7 @@ export default function Details({ params, initial }: { params: { userId?: string
 					setSubmitted(true);
 
 					await request
-						.post(`http://localhost:3000/api/${params.userId}/settings/account/details`, {
+						.post(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account/details`, {
 							method: "POST",
 							body: JSON.stringify({
 								name: parse(formValues).name,

@@ -44,7 +44,7 @@ export default function Verify({ userId }: { userId: string }) {
 				setSending(true);
 
 				await request
-					.post(`http://localhost:3000/api/${userId}/auth/verify`, {
+					.post(process.env.NEXT_PUBLIC_API_URL + `/api/${userId}/auth/verify`, {
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
 						headers: {
@@ -162,7 +162,7 @@ export default function Verify({ userId }: { userId: string }) {
 			setRequested(true);
 
 			await request
-				.post(`http://localhost:3000/api/${userId}/auth/verify/resend`, {
+				.post(process.env.NEXT_PUBLIC_API_URL + `/api/${userId}/auth/verify/resend`, {
 					method: "POST",
 					// body: JSON.stringify({ userId }),
 					headers: {

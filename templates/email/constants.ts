@@ -1,4 +1,4 @@
-import contact from "@/assets/content/contact";
+import contact from "@/data/contact";
 
 const constants = {
 	year: new Date().getFullYear(),

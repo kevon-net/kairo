@@ -9,18 +9,15 @@ import LayoutSection from "@/layouts/Section";
 import DrawerNavMain from "@/components/drawers/nav/Main";
 import NavigationMain from "@/components/navigation/Main";
 import DrawerCart from "@/components/drawers/Cart";
-import ClerkUserButton from "@/components/clerk/UserButton";
 
 import links from "@/data/links";
 import { nextjs } from "@/assets/icons/tool";
-
-import { SignedIn, SignedOut, SignInButton, SignUpButton, ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 
 import classes from "./Main.module.scss";
 
 export default async function Main() {
 	return (
-		<LayoutSection withClerk className={classes.navbar}>
+		<LayoutSection className={classes.navbar}>
 			<Container size={"responsive"}>
 				<Group justify="space-between">
 					<Group>
@@ -44,7 +41,7 @@ export default async function Main() {
 						</Group>
 					</Group>
 
-					<SignedOut>
+					{/* <SignedOut>
 						<ButtonGroup>
 							<SignUpButton>
 								<Button size="xs">Sign Up</Button>
@@ -71,10 +68,10 @@ export default async function Main() {
 							</ClerkLoading>
 							<ClerkLoaded>
 								<ClerkUserButton />
-								{/* <Component.Menu.Avatar /> */}
+								<Component.Menu.Avatar />
 							</ClerkLoaded>
 						</Group>
-					</SignedIn>
+					</SignedIn> */}
 				</Group>
 			</Container>
 		</LayoutSection>

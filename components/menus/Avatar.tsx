@@ -33,10 +33,8 @@ import classes from "./Avatar.module.scss";
 
 import initialize from "@/handlers/parsers/string/initialize";
 
-import { SignOutButton, useUser } from "@clerk/nextjs";
-
 export default function Avatar() {
-	const { isLoaded, isSignedIn, user } = useUser();
+	// const { isLoaded, isSignedIn, user } = useUser();
 
 	const mobile = useMediaQuery("(max-width: 48em)");
 

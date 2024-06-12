@@ -11,7 +11,7 @@ export const send = async (formData: typeContact) => {
 		from: `${formData.fname} ${formData.lname} <onboarding@resend.dev>`,
 		to: ["kevon.kibochi@outlook.com"],
 		subject: formData.subject,
-		react: TemplateEmailContact({ data: formData }),
+		react: TemplateEmailContact(formData),
 		reply_to: formData.email,
 		// cc:[]
 	});

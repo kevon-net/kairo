@@ -3,11 +3,11 @@ import React from "react";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
-export default function Home() {
+export default async function Payment() {
 	return (
-		<LayoutPage padded>
-			<LayoutSection containerized={"responsive"}>
-				<div>Home Page</div>
+		<LayoutPage>
+			<LayoutSection padded containerized={"responsive"}>
+				Payment details page
 			</LayoutSection>
 		</LayoutPage>
 	);

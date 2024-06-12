@@ -5,14 +5,14 @@ import { Metadata } from "next";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
-export const metadata: Metadata = {
-	title: "Payment",
-};
+export const metadata: Metadata = { title: "Overview" };
 
-export default async function Payment() {
+export default async function Overview() {
 	return (
 		<LayoutPage>
-			<LayoutSection>Payment details page</LayoutSection>
+			<LayoutSection padded containerized={"responsive"}>
+				Overview page
+			</LayoutSection>
 		</LayoutPage>
 	);
 }

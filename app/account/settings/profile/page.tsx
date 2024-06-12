@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Metadata } from "next";
-
 import { Anchor, Avatar, Flex, Grid, GridCol, Stack, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
@@ -11,10 +9,6 @@ import FormUserProfileDetails from "@/partials/forms/user/profile/Details";
 import { currentUser } from "@clerk/nextjs/server";
 
 import initialize from "@/handlers/parsers/string/initialize";
-
-export const metadata: Metadata = {
-	title: "Profile",
-};
 
 export default async function Profile() {
 	const user = await currentUser();

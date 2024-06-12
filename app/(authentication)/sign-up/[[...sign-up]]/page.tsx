@@ -8,19 +8,13 @@ import { Center } from "@mantine/core";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
-import ClerkSignUp from "@/components/clerk/SignUp";
-
-export const metadata: Metadata = {
-	title: "Sign Up",
-};
+export const metadata: Metadata = { title: "Sign Up" };
 
 export default async function SignUp() {
 	return (
-		<LayoutPage padded={40}>
-			<LayoutSection containerized="xs">
-				<Center>
-					<ClerkSignUp />
-				</Center>
+		<LayoutPage>
+			<LayoutSection padded containerized="xs">
+				<Center>sign up form</Center>
 			</LayoutSection>
 		</LayoutPage>
 	);

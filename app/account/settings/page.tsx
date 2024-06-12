@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Metadata } from "next";
-
 import { Center, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
@@ -10,11 +8,7 @@ import FormUserAccountDetails from "@/partials/forms/user/account/Details";
 import FormUserAccountPassword from "@/partials/forms/user/account/Password";
 import ModalDeleteAccount from "@/components/modal/delete/Account";
 
-export const metadata: Metadata = {
-	title: "Account",
-};
-
-export default async function Account({ params }: { params: { userId: string } }) {
+export default async function Settings({ params }: { params: { userId: string } }) {
 	const getDataAccount = async () => {
 		try {
 			const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account`, {

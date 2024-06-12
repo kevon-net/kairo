@@ -11,18 +11,7 @@ import NavbarUser from "@/partials/navbars/User";
 import AsideUser from "@/partials/aside/User";
 import FooterMain from "@/partials/footer/Main";
 
-import { currentUser } from "@clerk/nextjs/server";
-
-export const generateMetadata = async (): Promise<Metadata> => {
-	const user = await currentUser();
-
-	return {
-		title: {
-			default: "Settings",
-			template: `%s - Settings - ${user ? user.fullName : "User"} - Next Template`,
-		},
-	};
-};
+export const metadata: Metadata = { title: "Settings" };
 
 export default function Profile({
 	children, // will be a page or nested layout

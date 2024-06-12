@@ -25,14 +25,16 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import projectName from "@/theme";
 
+import contact from "@/data/contact";
+
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: { default: "Next Template", template: "%s - Next Template" },
+	title: { default: `${contact.name.app}`, template: `%s - ${contact.name.app}` },
 	description: "App description",
 };
 
-export default async function RootLayout({
+export default async function App({
 	children,
 }: Readonly<{
 	children: React.ReactNode;

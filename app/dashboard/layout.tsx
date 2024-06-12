@@ -6,14 +6,16 @@ import LayoutBody from "@/layouts/Body";
 
 import contact from "@/data/contact";
 
-export const metadata: Metadata = {
-	title: { default: "Blog", template: `%s - Blog - ${contact.name.app}` },
-};
+export const metadata: Metadata = { title: { default: "Dashboard", template: `%s - Dashboard - ${contact.name.app}` } };
 
-export default function Blog({
+export default function Dashboard({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;
 }) {
-	return <LayoutBody>{children}</LayoutBody>;
+	return (
+		<LayoutBody>
+			<main>{children}</main>
+		</LayoutBody>
+	);
 }

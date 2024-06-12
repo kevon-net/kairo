@@ -8,20 +8,18 @@ import FormContact from "@/partials/forms/Contact";
 
 import TemplateEmailContact from "@/templates/email/Contact";
 
-export const metadata: Metadata = {
-	title: "Contact",
-};
+export const metadata: Metadata = { title: "Contact" };
 
 export default async function Contact() {
 	return (
-		<LayoutPage padded>
-			{/* <LayoutSection containerized={"responsive"}>Contact page</LayoutSection> */}
+		<LayoutPage>
+			{/* <TemplateEmailContact /> */}
 
-			<LayoutSection containerized={"xs"}>
+			{/* <LayoutSection padded containerized={"responsive"}>Contact page</LayoutSection> */}
+
+			<LayoutSection padded containerized={"xs"}>
 				<FormContact />
 			</LayoutSection>
-
-			{/* <TemplateEmailContact /> */}
 		</LayoutPage>
 	);
 }

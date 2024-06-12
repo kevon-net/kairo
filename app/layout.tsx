@@ -15,7 +15,7 @@ import "@mantine/nprogress/styles.css";
 import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 
-import "@/global.scss";
+import "@/styles/global.scss";
 
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";

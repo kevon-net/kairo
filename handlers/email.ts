@@ -27,7 +27,6 @@ export const send = async (formData: typeContact) => {
 export const contacts = {
 	async create(formData: typeContact) {
 		const { data, error } = await resend.onboarding.contacts.create({
-			// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
 			email: formData.email,
 			firstName: formData.fname,
 			lastName: formData.lname,

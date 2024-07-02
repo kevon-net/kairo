@@ -5,7 +5,7 @@ import { Box, Container, Divider, Flex } from "@mantine/core";
 import { typeBody } from "@/types/layout";
 import { widths } from "@/types/mantine";
 
-export default function Body({ children, header, nav, hero, aside, footer }: typeBody) {
+export default function Body({ children, bar, header, nav, hero, aside, footer }: typeBody) {
 	const handleAside = (side: React.ReactNode, width?: widths) => (
 		<Box
 			component="aside"
@@ -13,7 +13,7 @@ export default function Body({ children, header, nav, hero, aside, footer }: typ
 			w={width ? { md: `${width.md}%`, lg: `${width.lg}%` } : `${25}%`}
 			style={{
 				position: "sticky",
-				top: 48,
+				top: 64,
 				maxHeight: "100%",
 			}}
 		>
@@ -34,6 +34,7 @@ export default function Body({ children, header, nav, hero, aside, footer }: typ
 
 	return (
 		<>
+			{bar && bar}
 			{header && header}
 			{nav && nav}
 			{hero && hero}

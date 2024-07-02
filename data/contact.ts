@@ -1,26 +1,43 @@
-const companyName = "Next Template";
+import {
+	IconBrandFacebook,
+	IconBrandInstagram,
+	IconBrandLinkedin,
+	IconBrandTwitter,
+	IconBrandYoutube,
+} from "@tabler/icons-react";
+
+const companyName = "Brix";
 const appName = companyName;
 
 const contact = {
 	name: { company: companyName, app: appName },
-	phones: [{ type: "", label: "", value: "" }],
-	email: [{ type: "", value: "" }],
+	phones: [{ type: "main", label: "(254) 123 456-789", value: "+254123456789" }],
+	emails: [{ type: "main", value: "info@brix.com" }],
 	socials: [
 		{
 			title: `${companyName} @ Twitter`,
 			link: "#",
+			icon: IconBrandTwitter,
 		},
 		{
 			title: `${companyName} @ Facebook`,
-			link: "#",
+			link: "#Facebook",
+			icon: IconBrandFacebook,
 		},
 		{
 			title: `${companyName} @ Instagram`,
-			link: "#",
+			link: "#Instagram",
+			icon: IconBrandInstagram,
 		},
 		{
 			title: `${companyName} @ LinkedIn`,
-			link: "#",
+			link: "#LinkedIn",
+			icon: IconBrandLinkedin,
+		},
+		{
+			title: `${companyName} @ YouTube`,
+			link: "#YouTube",
+			icon: IconBrandYoutube,
 		},
 	],
 	hours: [

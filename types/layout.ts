@@ -3,6 +3,7 @@ import React from "react";
 import { sizes, widths } from "./mantine";
 
 export interface typeBody {
+	bar?: React.ReactNode;
 	header?: React.ReactNode;
 	nav?: React.ReactNode;
 	hero?: React.ReactNode;
@@ -30,7 +31,7 @@ export interface typePage {
 }
 
 export interface typeSection {
-	containerized?: boolean | string;
+	containerized?: boolean | sizes | "responsive";
 	padded?: boolean | number | sizes;
 	margined?: boolean | number | sizes;
 	className?: string;

@@ -6,3 +6,13 @@ export interface typeContact {
 	subject: string;
 	message: string;
 }
+
+export interface typeSignUp {
+	email: string;
+	password: string;
+}
+
+export interface typeSignIn {
+	email: string;
+	password: string;
+}

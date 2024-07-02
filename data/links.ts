@@ -3,12 +3,12 @@ const links = {
 		{ link: "/", label: "Home" },
 		{ link: "/about", label: "About" },
 		{
-			link: "/blog",
-			label: "Blog",
+			link: "/features",
+			label: "Features",
 			subLinks: [
-				{ link: "/blog/1", label: "Blog 1" },
-				{ link: "/blog/2", label: "Blog 2" },
-				{ link: "/blog/3", label: "Blog 3" },
+				{ link: "/features/1", label: "Feature 1" },
+				{ link: "/features/2", label: "Feature 2" },
+				{ link: "/features/3", label: "Feature 3" },
 			],
 		},
 		{

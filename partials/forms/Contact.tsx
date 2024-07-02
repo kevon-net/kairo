@@ -105,7 +105,7 @@ export default function Contact() {
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid pb={"md"}>
-				<GridCol span={{ base: 12, xs: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput
 						required
 						label={"Frist Name"}
@@ -113,7 +113,7 @@ export default function Contact() {
 						{...form.getInputProps("fname")}
 					/>
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput
 						required
 						label={"Last Name"}
@@ -121,10 +121,10 @@ export default function Contact() {
 						{...form.getInputProps("lname")}
 					/>
 				</GridCol>
-				<GridCol span={{ base: 12, sm: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 				</GridCol>
-				<GridCol span={{ base: 12, sm: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
 				</GridCol>
 				<GridCol span={12}>
@@ -149,22 +149,22 @@ export default function Contact() {
 				<GridCol span={12}>
 					<Grid mt={"md"}>
 						<GridCol span={{ base: 6 }}>
-							<Center>
+							{/* <Center>
 								<Button
+									variant="light"
 									fullWidth
-									color="sec"
 									type="reset"
 									onClick={() => form.reset()}
 									disabled={submitted}
 								>
 									Clear
 								</Button>
-							</Center>
+							</Center> */}
 						</GridCol>
 						<GridCol span={{ base: 6 }}>
 							<Center>
 								<Button fullWidth type="submit" loading={submitted}>
-									{submitted ? "Submitting" : "Submit"}
+									{submitted ? "Sending" : "Send"}
 								</Button>
 							</Center>
 						</GridCol>

@@ -8,8 +8,8 @@ import LayoutBody from "@/layouts/Body";
 import LayoutSection from "@/layouts/Section";
 import NavbarMain from "@/partials/navbars/Main";
 import NavbarUser from "@/partials/navbars/User";
-import AsideUser from "@/partials/aside/User";
-import FooterMain from "@/partials/footer/Main";
+import AsideUser from "@/partials/asides/User";
+import FooterMain from "@/partials/footers/Main";
 
 export const metadata: Metadata = { title: "Settings" };
 

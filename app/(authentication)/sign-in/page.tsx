@@ -3,18 +3,17 @@ import React from "react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { Center } from "@mantine/core";
-
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
+import FormAuthSignIn from "@/partials/forms/auth/SignIn";
 
-export const metadata: Metadata = { title: "Sign Up" };
+export const metadata: Metadata = { title: "Sign In" };
 
-export default async function SignUp() {
+export default async function SignIn() {
 	return (
 		<LayoutPage>
 			<LayoutSection padded containerized="xs">
-				<Center>sign up form</Center>
+				<FormAuthSignIn />
 			</LayoutSection>
 		</LayoutPage>
 	);

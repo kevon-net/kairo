@@ -1,15 +1,16 @@
-import { send as emailSend, contacts as emailContacts } from "@/handlers/email";
+import inquiry from "@/handlers/resend/email/inquiry";
+import contact from "@/handlers/resend/contact";
 
 export async function POST(req: Request) {
 	try {
 		const dataForm = await req.json();
 
 		// send email
-		const email = await emailSend(dataForm);
+		const emailResponse = await inquiry.general(dataForm);
 		// add to audience
-		const contact = await emailContacts.create(dataForm);
+		const contactResponse = await contact.create(dataForm);
 
-		return Response.json({ email, contact });
+		return Response.json({ email: emailResponse, contact: contactResponse });
 	} catch (error) {
 		console.error("x-> Error sending contact message:", (error as Error).message);
 		return Response.error();

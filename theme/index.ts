@@ -25,28 +25,16 @@ const projectName = createTheme({
 	// color
 	colors: {
 		pri: [
-			"#fff8e1",
-			"#ffefcc",
-			"#ffdd9b",
-			"#ffca64",
-			"#ffba38",
-			"#ffb01b",
-			"#ffab09",
-			"#e39500",
-			"#ca8500",
-			"#af7100",
-		],
-		sec: [
-			"#ffe9e9",
-			"#ffd1d1",
-			"#fba0a1",
-			"#f76d6d",
-			"#f34141",
-			"#f22625",
-			"#f21616",
-			"#d8070b",
-			"#c10008",
-			"#a90003",
+			"#f3f3fe",
+			"#e4e6ed",
+			"#c8cad3",
+			"#a9adb9",
+			"#9093a4",
+			"#808496",
+			"#767c91",
+			"#656a7e",
+			"#585e72",
+			"#4a5167",
 		],
 	},
 
@@ -65,7 +53,7 @@ const projectName = createTheme({
 	 *  { primaryShade: 6 } // shade 6 is used both for dark and light color schemes
 	 *  { primaryShade: { light: 6, dark: 7 } } // different shades for dark and light color schemes
 	 * */
-	primaryShade: { light: 6, dark: 6 },
+	primaryShade: { light: 7, dark: 7 },
 
 	defaultGradient: {
 		from: "pri",

@@ -1,10 +1,23 @@
 "use client";
 
 import input from "./components/inputs";
-import container from "./components/container";
 import notification from "./components/notification";
+import container from "./components/container";
+import title from "./components/title";
+import text from "./components/text";
 
-import { Container, Notification, PasswordInput, Select, TextInput, Textarea, createTheme, rem } from "@mantine/core";
+import {
+	Container,
+	Notification,
+	PasswordInput,
+	Select,
+	Text,
+	TextInput,
+	Textarea,
+	Title,
+	createTheme,
+	rem,
+} from "@mantine/core";
 
 const projectName = createTheme({
 	/** Controls focus ring styles. Supports the following options:
@@ -141,6 +154,8 @@ const projectName = createTheme({
 		Textarea: Textarea.extend(input.textarea),
 
 		Container: Container.extend(container),
+		Title: Title.extend(title),
+		Text: Text.extend(text),
 		Notification: Notification.extend(notification),
 	},
 });

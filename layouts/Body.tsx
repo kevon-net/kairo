@@ -10,7 +10,7 @@ export default function Body({ children, bar, header, nav, hero, aside, footer }
 		<Box
 			component="aside"
 			visibleFrom="md"
-			w={width ? { md: `${width.md}%`, lg: `${width.lg}%` } : `${25}%`}
+			w={width ? { md: `${width.md}%`, lg: `${width.lg}%` } : { md: `${33}%`, lg: `${25}%` }}
 			style={{
 				position: "sticky",
 				top: 64,

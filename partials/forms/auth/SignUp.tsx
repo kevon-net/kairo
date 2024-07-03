@@ -4,11 +4,30 @@ import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Box, Button, Grid, GridCol, PasswordInput, Stack, TextInput } from "@mantine/core";
+import {
+	ActionIcon,
+	Anchor,
+	Box,
+	Button,
+	Divider,
+	Grid,
+	GridCol,
+	Group,
+	PasswordInput,
+	Stack,
+	Text,
+	TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import {
+	IconBrandAppleFilled,
+	IconBrandFacebookFilled,
+	IconBrandGoogleFilled,
+	IconCheck,
+	IconX,
+} from "@tabler/icons-react";
 
 import email from "@/handlers/validators/form/special/email";
 import password from "@/handlers/validators/form/special/password";
@@ -16,6 +35,7 @@ import password from "@/handlers/validators/form/special/password";
 import { typeSignUp } from "@/types/form";
 import request from "@/hooks/request";
 import compare from "@/handlers/validators/form/special/compare";
+import Link from "next/link";
 
 export default function SignUp() {
 	const [submitted, setSubmitted] = useState(false);
@@ -108,8 +128,8 @@ export default function SignUp() {
 
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
-			<Stack>
-				<Grid pb={"md"}>
+			<Stack gap={40}>
+				<Grid>
 					<GridCol span={{ base: 12, sm: 12 }}>
 						<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 					</GridCol>
@@ -129,11 +149,33 @@ export default function SignUp() {
 							{...form.getInputProps("passwordConfirm")}
 						/>
 					</GridCol>
+					<GridCol span={12} mt={"md"}>
+						<Button fullWidth type="submit" loading={submitted}>
+							{submitted ? "Signing Up" : "Sign Up"}
+						</Button>
+					</GridCol>
 				</Grid>
 
-				<Button w={{ md: "50%" }} mx={"auto"} type="submit" loading={submitted}>
-					{submitted ? "Signing Up" : "Sign Up"}
-				</Button>
+				<Divider label="or continue with" />
+
+				<Group justify="center">
+					<ActionIcon size={40} radius={"xl"} variant="light">
+						<IconBrandGoogleFilled size={20} />
+					</ActionIcon>
+					<ActionIcon size={40} radius={"xl"} variant="light">
+						<IconBrandAppleFilled size={20} />
+					</ActionIcon>
+					<ActionIcon size={40} radius={"xl"} variant="light">
+						<IconBrandFacebookFilled size={20} />
+					</ActionIcon>
+				</Group>
+
+				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
+					Already have an account?{" "}
+					<Anchor inherit fw={500} component={Link} href={"/sign-in"} underline="hover">
+						Sign In
+					</Anchor>
+				</Text>
 			</Stack>
 		</Box>
 	);

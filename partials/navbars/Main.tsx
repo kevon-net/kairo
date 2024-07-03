@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import NextImage from "next/image";
 
-import { Group, Box, Image, Button } from "@mantine/core";
+import { Group, Box, Image, Button, Divider } from "@mantine/core";
 
 import LayoutSection from "@/layouts/Section";
 import DrawerNavMain from "@/components/drawers/nav/Main";
@@ -13,18 +13,19 @@ import links from "@/data/links";
 import brand from "@/assets/images/brand";
 
 import classes from "./Main.module.scss";
+import contact from "@/data/contact";
 
 export default async function Main() {
 	return (
 		<LayoutSection containerized="responsive" shadowed padded="lg" className={classes.navbar}>
 			<Group justify="space-between">
-				<Group align="end">
+				<Group align="end" gap={"lg"}>
 					<Box>
 						<Link href={"/"}>
 							<Group>
 								<Image
 									src={brand.logo.light}
-									alt="next icon"
+									alt={contact.name.app}
 									h={{ base: 24 }}
 									component={NextImage}
 									priority
@@ -33,13 +34,15 @@ export default async function Main() {
 						</Link>
 					</Box>
 
-					<Group gap={"xs"} component={"nav"} visibleFrom="sm">
+					<Divider orientation="vertical" visibleFrom="sm" color="pri.3" />
+
+					<Group component={"nav"} visibleFrom="sm">
 						<NavigationMain />
 					</Group>
 				</Group>
 
 				<Group visibleFrom="sm">
-					<Button size="xs" variant="default">
+					<Button size="xs" variant="default" component={Link} href={"/sign-in"}>
 						Log In
 					</Button>
 					<Button size="xs">Get in Touch</Button>

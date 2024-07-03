@@ -12,9 +12,9 @@ export default function Authentication({
 	return (
 		<LayoutBody>
 			<main>
-				<Center component="main" mih={"100vh"}>
-					{children}
-				</Center>
+				{/* <Center component="main" mih={"100vh"}> */}
+				{children}
+				{/* </Center> */}
 			</main>
 		</LayoutBody>
 	);

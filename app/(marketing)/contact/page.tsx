@@ -9,6 +9,7 @@ import { IconMail, IconPhone } from "@tabler/icons-react";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormContact from "@/partials/forms/Contact";
+import AccordionFaq from "@/components/accordions/Faq";
 
 import TemplateEmailContact from "@/templates/email/Contact";
 
@@ -74,7 +75,7 @@ export default async function Contact() {
 
 								<Flex
 									align={"center"}
-									direction={{ base: "column", md: "row" }}
+									direction={{ base: "column", sm: "row" }}
 									gap={{ base: "md", md: "xl" }}
 								>
 									{dataContact.map(item => (
@@ -103,7 +104,7 @@ export default async function Contact() {
 								</Flex>
 
 								<Flex align={{ base: "center", sm: "start" }} direction={"column"} gap={"xs"}>
-									<Text ta={{ base: "center", md: "start" }}>Follow us on social media:</Text>
+									<Text ta={{ base: "center", sm: "start" }}>Follow us on social media:</Text>
 
 									<Group>
 										{contact.socials.map(social => (
@@ -117,6 +118,8 @@ export default async function Contact() {
 										))}
 									</Group>
 								</Flex>
+
+								<AccordionFaq />
 							</Stack>
 						</GridCol>
 					</Grid>

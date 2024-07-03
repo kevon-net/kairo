@@ -3,13 +3,18 @@ import React from "react";
 import { Metadata } from "next";
 
 import LayoutBody from "@/layouts/Body";
+import AsideBlog from "@/partials/asides/Blog";
+
+import link from "@/handlers/parsers/string/link";
+
+import posts from "@/data/blog";
 
 export interface typeParams {
 	params: { blogId: string };
 }
 
 export const generateMetadata = ({ params }: typeParams): Metadata => {
-	return { title: params.blogId };
+	return { title: posts.find(p => link.linkify(p.titleLink) == params.blogId)?.title };
 };
 
 export default function Post({
@@ -17,5 +22,5 @@ export default function Post({
 }: {
 	children: React.ReactNode;
 }) {
-	return <LayoutBody aside={{ right: { component: <div>aside blog</div> } }}>{children}</LayoutBody>;
+	return <LayoutBody aside={{ right: { component: <AsideBlog /> } }}>{children}</LayoutBody>;
 }

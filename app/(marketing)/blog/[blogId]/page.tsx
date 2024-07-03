@@ -8,9 +8,7 @@ import { typeParams } from "./layout";
 export default function Post({ params }: typeParams) {
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"responsive"}>
-				Blog {params.blogId}
-			</LayoutSection>
+			<LayoutSection padded>Blog {params.blogId}</LayoutSection>
 		</LayoutPage>
 	);
 }

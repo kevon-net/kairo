@@ -34,7 +34,7 @@ export default function Navbar({ children, subLinks }: { children: React.ReactNo
 			shadow="xs"
 			width={"auto"}
 			trigger="hover"
-			position="bottom-end"
+			// position="bottom-end"
 			openDelay={50}
 			closeDelay={50}
 			classNames={{

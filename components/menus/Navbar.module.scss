@@ -15,7 +15,7 @@
 }
 
 .itemActive {
-	color: var(--mantine-color-anchor);
+	font-weight: 500;
 
 	@include hover {
 		background-color: var(--mantine-color-anchor-light);
@@ -23,6 +23,7 @@
 }
 
 .itemLabel {
+	color: light-dark(var(--mantine-color-anchor));
 }
 
 .itemSection {

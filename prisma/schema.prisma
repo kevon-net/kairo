@@ -16,9 +16,11 @@ model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
   password String
+  verified Boolean  @default(false)
   name     String?
   role     Role     @default(USER)
   posts    Post[]
+  otps     Otp[]
   profile  Profile?
 
   @@map("users")
@@ -62,4 +64,17 @@ model Category {
   posts Post[]
 
   @@map(name: "categories")
+}
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  otp       String
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  expiresAt DateTime @updatedAt @map(name: "expires_at")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique @map("user_id")
+
+  @@map(name: "otps")
 }

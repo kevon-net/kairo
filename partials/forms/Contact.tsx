@@ -35,8 +35,8 @@ export default function Contact() {
 			lname: value => text(value, 2, 24),
 			email: value => email(value),
 			phone: value => value.trim().length > 0 && phone(value),
-			subject: value => text(value, 3, 255),
-			message: value => text(value, 3, 2048),
+			subject: value => text(value, 3, 255, true),
+			message: value => text(value, 3, 2048, true),
 		},
 	});
 

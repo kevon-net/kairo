@@ -1,20 +1,23 @@
 import React from "react";
 
-import NextImage from "next/image";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import NextImage from "next/image";
+import Link from "next/link";
+
+import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormAuthSignUp from "@/partials/forms/auth/SignUp";
-import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
-import Link from "next/link";
+
 import brand from "@/assets/images/brand";
 import contact from "@/data/contact";
 
-export const metadata: Metadata = { title: "Sign Up" };
+export const metadata: Metadata = {
+	title: "Sign Up",
+};
 
-export default async function SignUp() {
+export default function SignUp() {
 	return (
 		<LayoutPage>
 			<Grid gutter={0}>
@@ -49,21 +52,7 @@ export default async function SignUp() {
 				</GridCol>
 				<GridCol span={{ base: 12, md: 6 }}>
 					<Center mih={"100vh"}>
-						<LayoutSection padded containerized={"xs"}>
-							<Stack gap={40} px={{ md: 40 }}>
-								<Stack gap={"xs"}>
-									<Title order={2} ta={{ base: "center", md: "start" }}>
-										Create Your Account
-									</Title>
-									<Text ta={{ base: "center", md: "start" }}>
-										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet
-										velit ma.
-									</Text>
-								</Stack>
-
-								<FormAuthSignUp />
-							</Stack>
-						</LayoutSection>
+						<FormAuthSignUp />
 					</Center>
 				</GridCol>
 			</Grid>

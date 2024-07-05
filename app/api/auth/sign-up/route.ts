@@ -9,11 +9,18 @@ export async function POST(req: Request) {
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (!userRecord) {
-			const passwordHash = await hasher.create(password);
 			// create user record
+			const passwordHash = await hasher.create(password);
 			passwordHash && (await createUser({ email, password: passwordHash }));
 
-			return Response.json({ user: { exists: false } });
+			// create otp record
+			const otp = Math.floor(1000 + Math.random() * 9000);
+			const otpHash = await hasher.create(otp.toString());
+			otpHash && (await createOtp({ email, otp: otpHash }));
+
+			// email otp
+
+			return Response.json({ user: { exists: false, otp } });
 		} else {
 			return Response.json({ user: { exists: true } });
 		}
@@ -30,6 +37,26 @@ const createUser = async (fields: { email: string; password: string }) => {
 		});
 	} catch (error) {
 		console.error("x-> Error creating user record:", (error as Error).message);
+		throw error;
+	}
+};
+
+const createOtp = async (fields: { email: string; otp: string }) => {
+	const expiry = new Date(Date.now() + 60 * 60 * 1000);
+
+	try {
+		await prisma.user.update({
+			where: {
+				email: fields.email,
+			},
+			data: {
+				otps: {
+					create: [{ email: fields.email, otp: fields.otp, expiresAt: expiry }],
+				},
+			},
+		});
+	} catch (error) {
+		console.error("x-> Error creating otp record:", (error as Error).message);
 		throw error;
 	}
 };

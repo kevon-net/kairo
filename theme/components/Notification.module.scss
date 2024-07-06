@@ -2,32 +2,14 @@
 	box-shadow: var(--mantine-shadow-xs);
 
 	&[data-variant="success"] {
+		.icon {
+			background-color: var(--mantine-color-green-6);
+		}
 	}
 
 	&[data-variant="failed"] {
-	}
-}
-
-.icon {
-	&[data-variant="success"] {
-	}
-
-	&[data-variant="failed"] {
-	}
-}
-
-.title {
-	&[data-variant="success"] {
-	}
-
-	&[data-variant="failed"] {
-	}
-}
-
-.description {
-	&[data-variant="success"] {
-	}
-
-	&[data-variant="failed"] {
+		.icon {
+			background-color: var(--mantine-color-red-6);
+		}
 	}
 }

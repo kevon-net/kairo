@@ -22,6 +22,7 @@ import {
 	Transition,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useTimeout } from "@mantine/hooks";
 
 import { notifications } from "@mantine/notifications";
 import {
@@ -44,11 +45,45 @@ import Link from "next/link";
 import converter from "@/utilities/converter";
 
 export default function SignUp() {
-	const [submitted, setSubmitted] = useState(false);
-
-	const [verify, setverify] = useState(false);
-
 	const router = useRouter();
+	const [submitted, setSubmitted] = useState(false);
+	const [verify, setverify] = useState(false);
+	const { start, clear } = useTimeout(() => switchContext(), 1000);
+
+	const switchContext = async () => {
+		form2.reset();
+		setverify(!verify);
+	};
+
+	// notifications
+	const notification = {
+		noResponse: {
+			id: "otp-verify-failed-no-response",
+			icon: <IconX size={16} stroke={1.5} />,
+			autoClose: 5000,
+			title: "Server Unreachable",
+			message: `Check your network connection.`,
+			variant: "failed",
+		},
+		unauthorized: {
+			id: "otp-request-failed-not-found",
+			icon: <IconX size={16} stroke={1.5} />,
+			autoClose: 5000,
+			title: "Unauthorized",
+			message: `You are not allowed to perform this action.`,
+			variant: "failed",
+		},
+		verified: {
+			id: "otp-request-info-already-verified",
+			icon: <IconCheck size={16} stroke={1.5} />,
+			autoClose: 5000,
+			title: "Verified",
+			message: `The email has already been verified`,
+			variant: "success",
+		},
+	};
+
+	// form 1 logic
 
 	const form = useForm({
 		initialValues: {
@@ -76,54 +111,48 @@ export default function SignUp() {
 			try {
 				setSubmitted(true);
 
-				// test request body
+				// // test request body
 				// console.log(parse(formValues));
 
-				request
-					.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-up", {
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						if (!res) {
+				const res = await request.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-up", {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
+
+				if (!res) {
+					notifications.show(notification.noResponse);
+				} else {
+					if (res.user.exists == false) {
+						setSubmitted(false);
+						switchContext();
+
+						// // test otp value response
+						// console.log(res.otp.value);
+					} else {
+						if (res.user.verified == false) {
+							switchContext();
+						} else {
 							notifications.show({
-								id: "sign-up-failed-no-response",
+								id: "sign-up-failed-exists",
 								icon: <IconX size={16} stroke={1.5} />,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
+								title: "Account Exists",
+								message: "An account with that email already exists",
 								variant: "failed",
 							});
-						} else {
-							if (res.user.exists == false) {
-								notifications.show({
-									id: "sign-up-success",
-									icon: <IconCheck size={16} stroke={1.5} />,
-									title: "Signed Up",
-									message: "Your account has been created",
-									variant: "success",
-								});
 
-								// switch to verification
-								switchContext();
-							} else {
-								notifications.show({
-									id: "sign-up-failed-exists",
-									icon: <IconX size={16} stroke={1.5} />,
-									title: "Account Exists",
-									message: "An account with that email already exists",
-									variant: "failed",
-								});
-
-								// redirect to sign-in
-								router.push("/auth/sign-in");
-							}
+							// redirect to sign-in
+							form.reset();
+							router.push("/sign-in");
 						}
-					});
+					}
+				}
 			} catch (error) {
+				console.error("X-> Error:", (error as Error).message);
+
 				notifications.show({
 					id: "sign-up-failed",
 					icon: <IconX size={16} stroke={1.5} />,
@@ -131,8 +160,9 @@ export default function SignUp() {
 					message: (error as Error).message,
 					variant: "failed",
 				});
+
+				form.reset();
 			} finally {
-				// form.reset();
 				setSubmitted(false);
 			}
 		}
@@ -141,11 +171,13 @@ export default function SignUp() {
 	// form 2 logic
 
 	const [requested, setRequested] = useState(false);
-	const [sending, setSending] = useState(false);
-	const [time, setTime] = useState<{
-		minutes: number;
-		seconds: string;
-	}>();
+	const [time, setTime] = useState<
+		| {
+				minutes: number;
+				seconds: string;
+		  }
+		| undefined
+	>(undefined);
 
 	const form2 = useForm({
 		initialValues: {
@@ -153,7 +185,7 @@ export default function SignUp() {
 		},
 
 		validate: {
-			otp: value => (value.length < 1 ? "A code is required" : value.length == 6 ? null : "Invalid code"),
+			otp: value => (value.length < 1 ? "A code is required" : value.length == 4 ? null : "Invalid code"),
 		},
 	});
 
@@ -164,42 +196,70 @@ export default function SignUp() {
 	const handleVerify = async (formValues: any) => {
 		try {
 			if (form2.isValid()) {
-				setSending(true);
+				setSubmitted(true);
 
-				await request
-					.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify`, {
-						method: "POST",
-						body: JSON.stringify(parse2(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						if (!res) {
-							notifications.show({
-								id: "otp-verify-failed-no-response",
-								icon: <IconX size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
-								variant: "failed",
-							});
-						} else {
-							if (!res.user) {
+				// // test request body
+				// console.log(parse2(formValues));
+
+				const res = await request.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify`, {
+					method: "POST",
+					body: JSON.stringify(parse2(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
+
+				if (!res) {
+					notifications.show(notification.noResponse);
+				} else {
+					if (!res.user.exists) {
+						notifications.show(notification.unauthorized);
+
+						// revert context
+						form.reset();
+						switchContext();
+					} else {
+						if (!res.user.verified) {
+							if (!res.otp.exists) {
 								notifications.show({
-									id: "otp-verify-failed-invalid",
+									id: "otp-verify-failed-expired",
 									icon: <IconX size={16} stroke={1.5} />,
 									autoClose: 5000,
-									title: "Unauthorized",
-									message: `You are not allowed to perform this action.`,
+									title: "No OTP Found",
+									message: `Request another OTP in the link provided on this page`,
 									variant: "failed",
 								});
 
-								router.replace("/auth/sign-up");
+								form2.reset();
 							} else {
-								if (!res.user.verified) {
-									if (!res.user.otp) {
+								if (!res.otp.matches) {
+									notifications.show({
+										id: "otp-verify-failed-mismatch",
+										icon: <IconX size={16} stroke={1.5} />,
+										autoClose: 5000,
+										title: "Wrong OTP",
+										message: `You have entered the wrong OTP for this email.`,
+										variant: "failed",
+									});
+
+									form2.reset();
+								} else {
+									if (!res.otp.expired) {
+										notifications.show({
+											id: "otp-verify-success",
+											icon: <IconCheck size={16} stroke={1.5} />,
+											autoClose: 5000,
+											title: "Account Created",
+											message: `You can now log in to your account.`,
+											variant: "success",
+										});
+
+										// redirect to sign in
+										form.reset();
+										form2.reset();
+										router.replace(`/sign-in`);
+									} else {
 										notifications.show({
 											id: "otp-verify-failed-expired",
 											icon: <IconX size={16} stroke={1.5} />,
@@ -210,62 +270,22 @@ export default function SignUp() {
 										});
 
 										form2.reset();
-									} else {
-										if (!res.user.otp.match) {
-											notifications.show({
-												id: "otp-verify-failed-mismatch",
-												icon: <IconX size={16} stroke={1.5} />,
-												autoClose: 5000,
-												title: "Wrong OTP",
-												message: `You have entered the wrong OTP for this email.`,
-												variant: "failed",
-											});
-
-											form2.reset();
-										} else {
-											if (!res.user.otp.expired) {
-												notifications.show({
-													id: "otp-verify-success",
-													icon: <IconCheck size={16} stroke={1.5} />,
-													autoClose: 5000,
-													title: "Email Verified",
-													message: `You can now log in to your account.`,
-													variant: "success",
-												});
-
-												router.replace(`/api/auth/signin`);
-											} else {
-												notifications.show({
-													id: "otp-verify-failed-expired",
-													icon: <IconX size={16} stroke={1.5} />,
-													autoClose: 5000,
-													title: "OTP Expired",
-													message: `Request another in the link provided on this page`,
-													variant: "failed",
-												});
-
-												form2.reset();
-											}
-										}
 									}
-								} else {
-									notifications.show({
-										id: "otp-verify-success",
-										icon: <IconCheck size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "Verified",
-										message: `The email has already been verified`,
-										variant: "success",
-									});
-
-									router.replace(`/api/auth/login`);
 								}
 							}
+						} else {
+							notifications.show(notification.verified);
+
+							// redirect to sign in
+							form.reset();
+							form2.reset();
+							router.replace(`/sign-in`);
 						}
-					});
+					}
+				}
 			}
 		} catch (error) {
-			console.error("Error:", (error as Error).message);
+			console.error("X-> Error:", (error as Error).message);
 
 			notifications.show({
 				id: "otp-verify-failed",
@@ -276,7 +296,7 @@ export default function SignUp() {
 				variant: "failed",
 			});
 		} finally {
-			setSending(false);
+			setSubmitted(false);
 		}
 	};
 
@@ -284,86 +304,88 @@ export default function SignUp() {
 		try {
 			setRequested(true);
 
-			await request
-				.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify/resend`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-					},
-				})
-				.then(res => {
-					if (!res) {
-						notifications.show({
-							id: "otp-request-failed-no-response",
-							icon: <IconX size={16} stroke={1.5} />,
-							autoClose: 5000,
-							title: "Server Unavailable",
-							message: `There was no response from the server.`,
-							variant: "failed",
-						});
-					} else {
-						if (!res.user) {
+			// // test request body
+			// console.log({ email: form.values.email });
+
+			const res = await request.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify/resend`, {
+				method: "POST",
+				body: JSON.stringify({ email: form.values.email }),
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json",
+				},
+			});
+
+			if (!res) {
+				notifications.show(notification.noResponse);
+			} else {
+				if (!res.user.exists) {
+					notifications.show(notification.unauthorized);
+
+					// revert context
+					form.reset();
+					switchContext();
+				} else {
+					if (!res.user.verified) {
+						if (!res.otp.exists) {
+							// // test new otp value response
+							// console.log(res.otp.value);
+
 							notifications.show({
-								id: "otp-request-failed-not-found",
-								icon: <IconX size={16} stroke={1.5} />,
+								id: "otp-request-success-new-otp-created",
+								icon: <IconCheck size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Unauthorized",
-								message: `You are not allowed to perform this action.`,
-								variant: "failed",
+								title: "New OTP Sent",
+								message: `A new code has been sent to the provided email.`,
+								variant: "success",
 							});
 
-							router.replace(`/auth/sign-up`);
+							form2.reset();
 						} else {
-							if (!res.user.verified) {
-								if (!res.user.otp) {
-									notifications.show({
-										id: "otp-request-success-new-otp-created",
-										icon: <IconCheck size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "New OTP Sent",
-										message: `A new code has been sent to the provided email.`,
-										variant: "success",
-									});
-								} else {
-									if (!res.user.otp.expired) {
-										notifications.show({
-											id: "otp-request-failed-not-expired",
-											icon: <IconX size={16} stroke={1.5} />,
-											autoClose: 5000,
-											title: "Already Sent",
-											message: `Remember to check the spam/junk folder(s).`,
-											variant: "failed",
-										});
+							if (!res.otp.expired) {
+								setTime(res.otp.time);
 
-										setTime(converter.millSec(parseInt(res.user.otp.expires) - Date.now()));
-									} else {
-										notifications.show({
-											id: "otp-request-success",
-											icon: <IconCheck size={16} stroke={1.5} />,
-											autoClose: 5000,
-											title: "New OTP Sent",
-											message: `A new code has been sent to the provided email.`,
-											variant: "success",
-										});
-									}
-								}
+								// // test otp tte response
+								// console.log(res.otp.time);
+
+								!time &&
+									notifications.show({
+										id: "otp-request-failed-not-expired",
+										icon: <IconX size={16} stroke={1.5} />,
+										autoClose: 5000,
+										title: "OTP Already Sent",
+										message: `Remember to check your spam/junk folder(s).`,
+										variant: "failed",
+									});
 							} else {
+								// // test new otp value response
+								// console.log(res.otp.value);
+
 								notifications.show({
-									id: "otp-request-info-already-verified",
+									id: "otp-request-success",
 									icon: <IconCheck size={16} stroke={1.5} />,
 									autoClose: 5000,
-									title: "Verified",
-									message: `The email has already been verified`,
+									title: "New OTP Sent",
+									message: `A new code has been sent to the provided email.`,
 									variant: "success",
 								});
 
-								router.replace(`/api/auth/singin`);
+								form2.reset();
 							}
 						}
+					} else {
+						notifications.show(notification.verified);
+
+						// redirect to sign in
+						form.reset();
+						form2.reset();
+						router.replace(`/sign-in`);
 					}
-				});
+				}
+			}
 		} catch (error) {
+			console.error("X-> Error:", (error as Error).message);
+
 			notifications.show({
 				id: "otp-request-failed",
 				icon: <IconX size={16} stroke={1.5} />,
@@ -375,13 +397,6 @@ export default function SignUp() {
 		} finally {
 			setRequested(false);
 		}
-	};
-
-	// end of form 2 logic
-
-	const switchContext = async () => {
-		form2.reset();
-		setverify(!verify);
 	};
 
 	return (
@@ -529,25 +544,36 @@ export default function SignUp() {
 														</Button>
 													</GridCol>
 													<GridCol span={{ base: 12, xs: 6 }}>
-														<Button fullWidth type="submit" loading={sending}>
-															{sending ? "Verifying" : "Verify"}
+														<Button fullWidth type="submit" loading={submitted}>
+															{submitted ? "Verifying" : "Verify"}
 														</Button>
 													</GridCol>
 												</Grid>
 											</GridCol>
 										</Grid>
-										{time && (
-											<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>
-												<Text c={"dimmed"} inherit>
-													If the email you provided is valid, you should have received it. You
-													can otherwise request another code in{" "}
-													<Text component="span" inherit c={"pri"} fw={500}>
-														{time.minutes} minutes
-													</Text>
-													.
-												</Text>
-											</Stack>
-										)}
+
+										<Transition mounted={time != undefined} transition="fade" duration={0}>
+											{styles => (
+												<Box
+													style={{ ...styles, transition: "0.25s all ease" }}
+													opacity={requested ? "0" : "1"}
+												>
+													<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>
+														<Text c={"dimmed"} inherit>
+															If the email you provided is valid, you should have received
+															it. Remember to check your spam/junk folder(s).
+														</Text>
+														<Text c={"dimmed"} inherit>
+															You can otherwise request another code in{" "}
+															<Text component="span" inherit c={"pri"} fw={500}>
+																{time?.minutes} minutes
+															</Text>
+															.
+														</Text>
+													</Stack>
+												</Box>
+											)}
+										</Transition>
 									</Stack>
 								</Box>
 							</Stack>

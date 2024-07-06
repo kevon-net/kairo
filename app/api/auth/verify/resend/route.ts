@@ -1,3 +1,5 @@
+import otp from "@/handlers/generators/otp";
+import code from "@/handlers/resend/email/auth/code";
 import prisma from "@/services/prisma";
 import converter from "@/utilities/converter";
 import hasher from "@/utilities/hasher";
@@ -18,39 +20,42 @@ export async function POST(req: Request) {
 
 				if (!otpRecord) {
 					// create otp record
-					const otp = Math.floor(1000 + Math.random() * 9000);
-					const otpHash = await hasher.create(otp.toString());
+					const otpValue = otp();
+					const otpHash = await hasher.create(otpValue.toString());
 					otpHash && (await createOtp({ email, otp: otpHash }));
 
-					// email otp
+					// send otp email
+					const emailResponse = await code.signUp({ otp: otpValue.toString(), email });
 
-					return Response.json({ user: { exists: true, verified: false, otp: { exists: false, otp } } });
+					return Response.json({
+						user: { exists: true, verified: false },
+						otp: { exists: false, value: otpValue },
+					});
 				} else {
 					const now = new Date();
 					const expired = otpRecord && otpRecord.expiresAt < now;
 
 					if (!expired) {
 						const expiry = otpRecord && otpRecord.expiresAt.getTime() - now.getTime();
+
 						return Response.json({
-							user: {
-								exists: true,
-								verified: false,
-								otp: { exists: true, expired: false, time: expiry ? converter.millSec(expiry) : null },
-							},
+							user: { exists: true, verified: false },
+							otp: { exists: true, expired: false, time: converter.millSec(expiry) },
 						});
 					} else {
 						// delete expired otp record
 						await prisma.otp.delete({ where: { email } });
 
 						// create new otp record
-						const otp = Math.floor(1000 + Math.random() * 9000);
-						const otpHash = await hasher.create(otp.toString());
+						const otpValue = otp();
+						const otpHash = await hasher.create(otpValue.toString());
 						otpHash && (await createOtp({ email, otp: otpHash }));
 
 						// email new otp
 
 						return Response.json({
-							user: { exists: true, verified: false, otp: { exists: true, expired: true, otp } },
+							user: { exists: true, verified: false },
+							otp: { exists: true, expired: true, value: otpValue },
 						});
 					}
 				}

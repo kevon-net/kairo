@@ -1,3 +1,6 @@
+import otp from "@/handlers/generators/otp";
+import contact from "@/handlers/resend/contact";
+import code from "@/handlers/resend/email/auth/code";
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 
@@ -14,15 +17,22 @@ export async function POST(req: Request) {
 			passwordHash && (await createUser({ email, password: passwordHash }));
 
 			// create otp record
-			const otp = Math.floor(1000 + Math.random() * 9000);
-			const otpHash = await hasher.create(otp.toString());
+			const otpValue = otp();
+			const otpHash = await hasher.create(otpValue.toString());
 			otpHash && (await createOtp({ email, otp: otpHash }));
 
-			// email otp
+			// send otp email
+			const emailResponse = await code.signUp({ otp: otpValue.toString(), email });
+			// add to audience
+			const contactResponse = await contact.create({ email });
 
-			return Response.json({ user: { exists: false, otp } });
+			return Response.json({ user: { exists: false }, otp: { value: otpValue } });
 		} else {
-			return Response.json({ user: { exists: true } });
+			if (!userRecord.verified) {
+				return Response.json({ user: { exists: true, verified: false } });
+			} else {
+				return Response.json({ user: { exists: true, verified: true } });
+			}
 		}
 	} catch (error) {
 		console.error("x-> Error signing up:", (error as Error).message);

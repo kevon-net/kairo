@@ -9,8 +9,6 @@ export async function POST(req: Request) {
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (!userRecord) {
-			const otpHash = await hasher.create(otp);
-
 			return Response.json({ user: { exists: false } });
 		} else {
 			if (!userRecord.verified) {
@@ -19,14 +17,16 @@ export async function POST(req: Request) {
 
 				if (!otpRecord) {
 					return Response.json({
-						user: { exists: true, otp: { exists: false }, verified: false, matches: false },
+						user: { exists: true, verified: false },
+						otp: { exists: false },
 					});
 				} else {
 					const matches = otpRecord && (await hasher.compare(otp, otpRecord?.otp));
 
 					if (!matches) {
 						return Response.json({
-							user: { exists: true, otp: { exists: true }, verified: false, matches: false },
+							user: { exists: true, verified: false },
+							otp: { exists: true, matches: false },
 						});
 					} else {
 						const now = new Date();
@@ -39,30 +39,22 @@ export async function POST(req: Request) {
 							await prisma.user.update({ where: { email }, data: { verified: true } });
 
 							return Response.json({
-								user: {
-									exists: true,
-									otp: { exists: true, expired: false },
-									verified: false,
-									matches: true,
-								},
+								user: { exists: true, verified: false },
+								otp: { exists: true, matches: true, expired: false },
 							});
 						} else {
 							// delete expired otp record
 							await prisma.otp.delete({ where: { email } });
 
 							return Response.json({
-								user: {
-									exists: true,
-									otp: { exists: true, expired: true },
-									verified: false,
-									matches: true,
-								},
+								user: { exists: true, verified: false },
+								otp: { exists: true, matches: true, expired: true },
 							});
 						}
 					}
 				}
 			} else {
-				return Response.json({ user: { exists: true, verified: true, matches: true } });
+				return Response.json({ user: { exists: true, verified: true } });
 			}
 		}
 	} catch (error) {

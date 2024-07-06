@@ -13,6 +13,8 @@ import FormAuthSignUp from "@/partials/forms/auth/SignUp";
 import brand from "@/assets/images/brand";
 import contact from "@/data/contact";
 
+// import TemplateEmailCodeSignUp from "@/templates/email/code/SignUp";
+
 export const metadata: Metadata = {
 	title: "Sign Up",
 };
@@ -46,6 +48,8 @@ export default function SignUp() {
 										velit ma.
 									</Text>
 								</Stack>
+
+								{/* {TemplateEmailCodeSignUp("8978")} */}
 							</Stack>
 						</LayoutSection>
 					</Center>

@@ -1,7 +1,7 @@
 import resend from "@/services/resend";
 
 const contact = {
-	async create(formData: { fname: string; lname: string; email: string }) {
+	async create(formData: { fname?: string; lname?: string; email: string }) {
 		const { data, error } = await resend.onboarding.contacts.create({
 			email: formData.email,
 			firstName: formData.fname,

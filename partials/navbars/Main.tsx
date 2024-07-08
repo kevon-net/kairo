@@ -8,6 +8,7 @@ import { Group, Box, Image, Button, Divider } from "@mantine/core";
 import LayoutSection from "@/layouts/Section";
 import DrawerNavMain from "@/components/drawers/nav/Main";
 import NavigationMain from "@/components/navigation/Main";
+import MenuAvatar from "@/components/menus/Avatar";
 
 import links from "@/data/links";
 import brand from "@/assets/images/brand";
@@ -15,7 +16,11 @@ import brand from "@/assets/images/brand";
 import classes from "./Main.module.scss";
 import contact from "@/data/contact";
 
+import { auth } from "@/auth";
+
 export default async function Main() {
+	const session = await auth();
+
 	return (
 		<LayoutSection containerized="responsive" shadowed padded="lg" className={classes.navbar}>
 			<Group justify="space-between">
@@ -42,9 +47,13 @@ export default async function Main() {
 				</Group>
 
 				<Group visibleFrom="sm">
-					<Button size="xs" variant="default" component={Link} href={"/sign-in"}>
-						Log In
-					</Button>
+					{!session?.user ? (
+						<Button size="xs" variant="default" component={Link} href={"/sign-in"}>
+							Log In
+						</Button>
+					) : (
+						<MenuAvatar />
+					)}
 					<Button size="xs">Get in Touch</Button>
 				</Group>
 

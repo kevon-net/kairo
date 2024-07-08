@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import {
@@ -21,20 +22,17 @@ import {
 import { useForm } from "@mantine/form";
 
 import { notifications } from "@mantine/notifications";
-import {
-	IconBrandAppleFilled,
-	IconBrandFacebookFilled,
-	IconBrandGoogle,
-	IconBrandGoogleFilled,
-	IconCheck,
-	IconX,
-} from "@tabler/icons-react";
+import { IconBrandAppleFilled, IconBrandFacebookFilled, IconBrandGoogleFilled, IconX } from "@tabler/icons-react";
+
+import PartialOAuth from "@/partials/Oauth";
 
 import email from "@/handlers/validators/form/special/email";
 
-import { typeSignIn } from "@/types/form";
 import request from "@/hooks/request";
-import Link from "next/link";
+
+import { signIn as authSignIn } from "next-auth/react";
+
+import { typeSignIn } from "@/types/form";
 
 export default function SignIn() {
 	const [submitted, setSubmitted] = useState(false);
@@ -48,6 +46,7 @@ export default function SignIn() {
 
 		validate: {
 			email: value => email(value.trim()),
+			password: value => (value.trim().length > 0 ? null : "Please fill out this field"),
 		},
 	});
 
@@ -63,52 +62,32 @@ export default function SignIn() {
 			try {
 				setSubmitted(true);
 
-				// test request body
+				// // test request body
 				// console.log(parse(formValues));
 
-				request
-					.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-in", {
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						console.log(res);
+				// const res = await request.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-in", {
+				// 	method: "POST",
+				// 	body: JSON.stringify(parse(formValues)),
+				// 	headers: {
+				// 		"Content-Type": "application/json",
+				// 		Accept: "application/json",
+				// 	},
+				// });
 
-						// if (!res) {
-						// 	notifications.show({
-						// 		id: "form-contact-failed-no-response",
-						// 		icon: <IconX size={16} stroke={1.5} />,
-						// 		autoClose: 5000,
-						// 		title: "Server Unavailable",
-						// 		message: `There was no response from the server.`,
-						// 		variant: "failed",
-						// 	});
-						// } else {
-						// 	notifications.show({
-						// 		id: "form-contact-success",
-						// 		icon: <IconCheck size={16} stroke={1.5} />,
-						// 		autoClose: 5000,
-						// 		title: "Form Submitted",
-						// 		message: "Someone will get back to you within 24 hours",
-						// 		variant: "success",
-						// 	});
-						// }
-					});
+				await authSignIn("credentials", parse(formValues));
+
+				// // redirect to home page
+				// router.replace(`${res.url}`);
 			} catch (error) {
 				notifications.show({
-					id: "form-contact-failed",
+					id: "sign-in-failed-unauthorized",
 					icon: <IconX size={16} stroke={1.5} />,
-					autoClose: 5000,
-					title: "Sign Up Failed",
-					message: (error as Error).message,
+					title: "Unauthorized",
+					message: `Incorrect username/password.`,
 					variant: "failed",
 				});
 			} finally {
-				form.reset();
+				// form.reset();
 				setSubmitted(false);
 			}
 		}
@@ -144,17 +123,7 @@ export default function SignIn() {
 
 				<Divider label="or continue with" />
 
-				<Group justify="center">
-					<ActionIcon size={40} radius={"xl"} variant="light">
-						<IconBrandGoogleFilled size={20} />
-					</ActionIcon>
-					<ActionIcon size={40} radius={"xl"} variant="light">
-						<IconBrandAppleFilled size={20} />
-					</ActionIcon>
-					<ActionIcon size={40} radius={"xl"} variant="light">
-						<IconBrandFacebookFilled size={20} />
-					</ActionIcon>
-				</Group>
+				<PartialOAuth />
 
 				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 					Don&apos;t have an account?{" "}

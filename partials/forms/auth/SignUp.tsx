@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import {
 	ActionIcon,
@@ -13,7 +14,6 @@ import {
 	Grid,
 	GridCol,
 	Group,
-	NumberInput,
 	PasswordInput,
 	Stack,
 	Text,
@@ -22,33 +22,25 @@ import {
 	Transition,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useTimeout } from "@mantine/hooks";
 
 import { notifications } from "@mantine/notifications";
-import {
-	IconBrandAppleFilled,
-	IconBrandFacebookFilled,
-	IconBrandGoogleFilled,
-	IconCheck,
-	IconX,
-} from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 import LayoutSection from "@/layouts/Section";
+import PartialOAuth from "@/partials/Oauth";
 
 import email from "@/handlers/validators/form/special/email";
 import password from "@/handlers/validators/form/special/password";
 
-import { typeSignUp } from "@/types/form";
 import request from "@/hooks/request";
 import compare from "@/handlers/validators/form/special/compare";
-import Link from "next/link";
-import converter from "@/utilities/converter";
 
-export default function SignUp() {
+import { typeSignUp } from "@/types/form";
+
+export default function SignUp({ userEmail }: { userEmail?: string }) {
 	const router = useRouter();
 	const [submitted, setSubmitted] = useState(false);
-	const [verify, setverify] = useState(false);
-	const { start, clear } = useTimeout(() => switchContext(), 1000);
+	const [verify, setverify] = useState(userEmail ? true : false);
 
 	const switchContext = async () => {
 		form2.reset();
@@ -103,6 +95,7 @@ export default function SignUp() {
 		return {
 			email: rawData.email.trim().toLowerCase(),
 			password: rawData.password.trim(),
+			unverified: true,
 		};
 	};
 
@@ -190,7 +183,7 @@ export default function SignUp() {
 	});
 
 	const parse2 = (rawData: any) => {
-		return { otp: rawData.otp, email: form.values.email };
+		return { otp: rawData.otp, email: userEmail ? userEmail : form.values.email };
 	};
 
 	const handleVerify = async (formValues: any) => {
@@ -456,17 +449,7 @@ export default function SignUp() {
 
 										<Divider label="or continue with" />
 
-										<Group justify="center">
-											<ActionIcon size={40} radius={"xl"} variant="light">
-												<IconBrandGoogleFilled size={20} />
-											</ActionIcon>
-											<ActionIcon size={40} radius={"xl"} variant="light">
-												<IconBrandAppleFilled size={20} />
-											</ActionIcon>
-											<ActionIcon size={40} radius={"xl"} variant="light">
-												<IconBrandFacebookFilled size={20} />
-											</ActionIcon>
-										</Group>
+										<PartialOAuth />
 
 										<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 											Already have an account?{" "}

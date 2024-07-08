@@ -6,7 +6,7 @@ import hasher from "@/utilities/hasher";
 
 export async function POST(req: Request) {
 	try {
-		const { email, password } = await req.json();
+		const { email, password, unverified } = await req.json();
 
 		// query database for user
 		const userRecord = await prisma.user.findUnique({ where: { email } });
@@ -21,12 +21,11 @@ export async function POST(req: Request) {
 			const otpHash = await hasher.create(otpValue.toString());
 			otpHash && (await createOtp({ email, otp: otpHash }));
 
-			// send otp email
-			const emailResponse = await code.signUp({ otp: otpValue.toString(), email });
-			// add to audience
-			const contactResponse = await contact.create({ email });
-
-			return Response.json({ user: { exists: false }, otp: { value: otpValue } });
+			return Response.json({
+				user: { exists: false },
+				otp: { value: otpValue },
+				resend: unverified ? await verify(otpValue, email) : null,
+			});
 		} else {
 			if (!userRecord.verified) {
 				return Response.json({ user: { exists: true, verified: false } });
@@ -69,4 +68,13 @@ const createOtp = async (fields: { email: string; otp: string }) => {
 		console.error("x-> Error creating otp record:", (error as Error).message);
 		throw error;
 	}
+};
+
+const verify = async (otpValue: number, email: string) => {
+	// send otp email
+	const emailResponse = await code.signUp({ otp: otpValue.toString(), email });
+	// add to audience
+	const contactResponse = await contact.create({ email });
+
+	return { email: emailResponse, contact: contactResponse };
 };

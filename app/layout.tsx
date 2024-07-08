@@ -27,6 +27,10 @@ import projectName from "@/theme";
 
 import contact from "@/data/contact";
 
+import { SessionProvider } from "next-auth/react";
+
+import { auth } from "@/auth";
+
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -39,6 +43,9 @@ export default async function App({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	// obtain sessioin
+	const session = await auth();
+
 	return (
 		<html lang="en" data-mantine-color-scheme="light">
 			<head>
@@ -56,7 +63,9 @@ export default async function App({
 				>
 					<Notifications limit={3} />
 
-					<ModalsProvider>{children}</ModalsProvider>
+					<ModalsProvider>
+						<SessionProvider session={session}>{children}</SessionProvider>
+					</ModalsProvider>
 				</MantineProvider>
 			</body>
 		</html>

@@ -3,6 +3,7 @@ import React from "react";
 import { Metadata } from "next";
 import NextImage from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
@@ -13,13 +14,19 @@ import FormAuthSignUp from "@/partials/forms/auth/SignUp";
 import brand from "@/assets/images/brand";
 import contact from "@/data/contact";
 
+import { auth } from "@/auth";
+
 // import TemplateEmailCodeSignUp from "@/templates/email/code/SignUp";
 
 export const metadata: Metadata = {
 	title: "Sign Up",
 };
 
-export default function SignUp() {
+export default async function SignUp() {
+	const session = await auth();
+
+	session?.user && redirect("/");
+
 	return (
 		<LayoutPage>
 			<Grid gutter={0}>

@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 
 import hasher from "./utilities/hasher";
 import prisma from "./services/prisma";
@@ -15,25 +16,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			},
 			authorize: async credentials => {
 				try {
-					// logic to salt and hash password
-					const passwordHash = await hasher.create(credentials.password as string);
-
-					// logic to verify if user exists
+					// check if user exists
 					const userRecord = await prisma.user.findUnique({ where: { email: credentials.email as string } });
 
 					if (!userRecord) {
-						// No user found, so this is their first attempt to login
-						// meaning this is also the place you could do registration
-						throw new Error("User not found.");
+						throw new Error("User not found");
 					} else {
-						const passwordMatch = hasher.compare(passwordHash as string, userRecord.password);
+						// check if provided password is correct
+						const passwordMatch = await hasher.compare(credentials.password as string, userRecord.password);
 
 						if (!passwordMatch) {
-							// Return `null` to indicate that the credentials are invalid
 							return null;
 						} else {
-							// return user object with the their profile data
-							return { email: userRecord.email, password: userRecord.password };
+							return { ...userRecord };
 						}
 					}
 				} catch (error) {
@@ -42,5 +37,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				}
 			},
 		}),
+
+		Google,
 	],
+
+	pages: {
+		signIn: "sign-in",
+		signOut: "sign-out",
+		newUser: "welcome",
+		error: "error",
+	},
+
+	session: {
+		maxAge: 60 * 60 * 24 * 7,
+	},
 });

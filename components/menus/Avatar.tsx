@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 
 import Link from "next/link";
 
@@ -28,8 +28,6 @@ import {
 	IconBellRinging,
 	IconDashboard,
 } from "@tabler/icons-react";
-
-import ProviderAuthSignUserOut from "@/providers/auth/signOut";
 
 import classes from "./Avatar.module.scss";
 
@@ -89,6 +87,7 @@ export default function Avatar() {
 		danger: [
 			{
 				icon: IconLogout,
+				link: `/api/auth/signout`,
 				label: "Sign Out",
 				color: "red",
 			},
@@ -165,11 +164,15 @@ export default function Avatar() {
 				<MenuDivider />
 
 				{menuItems.danger.map(item => (
-					<ProviderAuthSignUserOut key={item.label}>
-						<MenuItem leftSection={<item.icon size={16} />} color={item.color}>
-							{item.label}
-						</MenuItem>
-					</ProviderAuthSignUserOut>
+					<MenuItem
+						key={item.label}
+						leftSection={<item.icon size={16} />}
+						component={Link}
+						href={item.link}
+						color={item.color}
+					>
+						{item.label}
+					</MenuItem>
 				))}
 			</MenuDropdown>
 		</Menu>

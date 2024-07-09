@@ -6,14 +6,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import {
-	ActionIcon,
 	Anchor,
 	Box,
 	Button,
 	Divider,
 	Grid,
 	GridCol,
-	Group,
 	PasswordInput,
 	Stack,
 	Text,
@@ -22,13 +20,11 @@ import {
 import { useForm } from "@mantine/form";
 
 import { notifications } from "@mantine/notifications";
-import { IconBrandAppleFilled, IconBrandFacebookFilled, IconBrandGoogleFilled, IconX } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 
 import PartialOAuth from "@/partials/Oauth";
 
 import email from "@/handlers/validators/form/special/email";
-
-import request from "@/hooks/request";
 
 import { signIn as authSignIn } from "next-auth/react";
 
@@ -65,19 +61,8 @@ export default function SignIn() {
 				// // test request body
 				// console.log(parse(formValues));
 
-				// const res = await request.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-in", {
-				// 	method: "POST",
-				// 	body: JSON.stringify(parse(formValues)),
-				// 	headers: {
-				// 		"Content-Type": "application/json",
-				// 		Accept: "application/json",
-				// 	},
-				// });
-
 				await authSignIn("credentials", parse(formValues));
 
-				// // redirect to home page
-				// router.replace(`${res.url}`);
 			} catch (error) {
 				notifications.show({
 					id: "sign-in-failed-unauthorized",
@@ -87,7 +72,7 @@ export default function SignIn() {
 					variant: "failed",
 				});
 			} finally {
-				// form.reset();
+				form.reset();
 				setSubmitted(false);
 			}
 		}
@@ -127,7 +112,7 @@ export default function SignIn() {
 
 				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 					Don&apos;t have an account?{" "}
-					<Anchor inherit fw={500} component={Link} href={"/sign-up"} underline="hover">
+					<Anchor inherit fw={500} component={Link} href={"/auth/sign-up"} underline="hover">
 						Sign Up
 					</Anchor>
 				</Text>

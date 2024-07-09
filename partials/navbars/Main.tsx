@@ -10,6 +10,8 @@ import DrawerNavMain from "@/components/drawers/nav/Main";
 import NavigationMain from "@/components/navigation/Main";
 import MenuAvatar from "@/components/menus/Avatar";
 
+import ProviderAuthSignIn from "@/providers/auth/signIn";
+
 import links from "@/data/links";
 import brand from "@/assets/images/brand";
 
@@ -48,9 +50,11 @@ export default async function Main() {
 
 				<Group visibleFrom="sm">
 					{!session?.user ? (
-						<Button size="xs" variant="default" component={Link} href={"/sign-in"}>
-							Log In
-						</Button>
+						<ProviderAuthSignIn>
+							<Button size="xs" variant="default">
+								Log In
+							</Button>
+						</ProviderAuthSignIn>
 					) : (
 						<MenuAvatar />
 					)}

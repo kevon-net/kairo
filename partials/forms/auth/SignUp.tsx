@@ -6,14 +6,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import {
-	ActionIcon,
 	Anchor,
 	Box,
 	Button,
 	Divider,
 	Grid,
 	GridCol,
-	Group,
 	PasswordInput,
 	Stack,
 	Text,
@@ -122,9 +120,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 					if (res.user.exists == false) {
 						setSubmitted(false);
 						switchContext();
-
-						// // test otp value response
-						// console.log(res.otp.value);
 					} else {
 						if (res.user.verified == false) {
 							switchContext();
@@ -137,9 +132,9 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 								variant: "failed",
 							});
 
-							// redirect to sign-in
+							// redirect to sign in
 							form.reset();
-							router.push("/sign-in");
+							router.push("/api/auth/signin");
 						}
 					}
 				}
@@ -251,7 +246,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 										// redirect to sign in
 										form.reset();
 										form2.reset();
-										router.replace(`/sign-in`);
+										router.push("/api/auth/signin");
 									} else {
 										notifications.show({
 											id: "otp-verify-failed-expired",
@@ -272,7 +267,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 							// redirect to sign in
 							form.reset();
 							form2.reset();
-							router.replace(`/sign-in`);
+							router.push("/api/auth/signin");
 						}
 					}
 				}
@@ -372,7 +367,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 						// redirect to sign in
 						form.reset();
 						form2.reset();
-						router.replace(`/sign-in`);
+						router.push("/api/auth/signin");
 					}
 				}
 			}
@@ -457,7 +452,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 												inherit
 												fw={500}
 												component={Link}
-												href={"/sign-in"}
+												href={"/api/auth/signin"}
 												underline="hover"
 											>
 												Sign In

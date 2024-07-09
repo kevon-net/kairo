@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Center } from "@mantine/core";
-
 import LayoutBody from "@/layouts/Body";
 
 export default function Authentication({
@@ -11,11 +9,7 @@ export default function Authentication({
 }) {
 	return (
 		<LayoutBody>
-			<main>
-				{/* <Center component="main" mih={"100vh"}> */}
-				{children}
-				{/* </Center> */}
-			</main>
+			<main>{children}</main>
 		</LayoutBody>
 	);
 }

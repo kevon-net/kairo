@@ -16,12 +16,12 @@ import contact from "@/data/contact";
 
 import { auth } from "@/auth";
 
-import { signOut as authSignOut } from "@/auth";
+export const metadata: Metadata = { title: "Welcome" };
 
-export const metadata: Metadata = { title: "Signed Out" };
-
-export default async function SignOut() {
+export default async function Welcome() {
 	const session = await auth();
 
-	return <LayoutPage>Signed Out</LayoutPage>;
+	session?.user && redirect("/");
+
+	return <LayoutPage>welcome</LayoutPage>;
 }

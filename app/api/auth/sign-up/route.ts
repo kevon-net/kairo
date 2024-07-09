@@ -24,6 +24,7 @@ export async function POST(req: Request) {
 			return Response.json({
 				user: { exists: false },
 				otp: { value: otpValue },
+				// send otp email and output result in response body
 				resend: unverified ? await verify(otpValue, email) : null,
 			});
 		} else {

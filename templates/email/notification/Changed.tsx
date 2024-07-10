@@ -5,8 +5,10 @@ import { Body, Container, Head, Heading, Html, Img, Link, Preview, Section, Text
 import constants from "../constants";
 import contact from "@/data/contact";
 
-export default function SignUp(otp: string) {
-	const message = `Thanks for starting the new ${contact.name.app} account creation process. We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
+export default function Changed() {
+	const message = `You have successfully changed your password. If you didn't initiate this process, contact support immediately via the link provided below.`;
+
+	const supportEmail = contact.emails.find(e => e.type == "main");
 
 	return (
 		<Html lang="en">
@@ -31,16 +33,28 @@ export default function SignUp(otp: string) {
 					<Section style={main}>
 						<Container style={container}>
 							<Section style={section}>
-								<Heading style={h2}>Verify Your Email Address</Heading>
+								<Heading style={h2}>Password Changed</Heading>
 								<Text style={text}>{message}</Text>
 							</Section>
 
 							<Section style={{ ...section, margin: "40px 0px" }}>
-								<Text style={{ ...text, textAlign: "center", fontWeight: "bold", fontSize: 32 }}>
-									{otp}
+								<Text
+									style={{
+										...text,
+										textAlign: "center",
+										marginTop: "8px",
+										fontWeight: "bold",
+										fontSize: 24,
+									}}
+								>
+									Password Changed
 								</Text>
 								<Text style={{ ...text, textAlign: "center", marginTop: "8px" }}>
-									(this code is valid for 1 hour)
+									(if this was not you,{" "}
+									<Link href={`mailto:${supportEmail?.value}`} style={{ fontWeight: "bold" }}>
+										contact support
+									</Link>{" "}
+									immediately)
 								</Text>
 							</Section>
 

@@ -5,8 +5,8 @@ import { Body, Container, Head, Heading, Html, Img, Link, Preview, Section, Text
 import constants from "../constants";
 import contact from "@/data/contact";
 
-export default function SignUp(otp: string) {
-	const message = `Thanks for starting the new ${contact.name.app} account creation process. We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
+export default function Forgot(otl: string) {
+	const message = `Thanks for starting the pasword reset process. We want to make sure it's really you. Please use the following link to reset your password. If you don't want to reset your password or didn't request this email, you can ignore this message.`;
 
 	return (
 		<Html lang="en">
@@ -31,16 +31,18 @@ export default function SignUp(otp: string) {
 					<Section style={main}>
 						<Container style={container}>
 							<Section style={section}>
-								<Heading style={h2}>Verify Your Email Address</Heading>
+								<Heading style={h2}>Reset Your Password</Heading>
 								<Text style={text}>{message}</Text>
 							</Section>
 
 							<Section style={{ ...section, margin: "40px 0px" }}>
-								<Text style={{ ...text, textAlign: "center", fontWeight: "bold", fontSize: 32 }}>
-									{otp}
+								<Text style={{ ...text, textAlign: "center", marginTop: "8px" }}>
+									<Link href={otl} style={{ ...text, fontWeight: "bold", fontSize: 24 }}>
+										Reset Password
+									</Link>
 								</Text>
 								<Text style={{ ...text, textAlign: "center", marginTop: "8px" }}>
-									(this code is valid for 1 hour)
+									(this link is valid for 5 minutes)
 								</Text>
 							</Section>
 

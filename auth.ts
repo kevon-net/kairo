@@ -17,7 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		signOut: "/auth/sign-out",
 		error: "/auth/error", // Error code passed in query string as ?error=
 		verifyRequest: "/auth/verify-request", // (used for check email message)
-		newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
+		// newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
 	},
 
 	session: {
@@ -49,9 +49,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 						throw new Error("User not found");
 					} else {
 						if (!res.user.password.matches) {
-							return null;
+							throw new Error("Incorrect password");
 						} else {
-							console.log(res.user.data);
 							return { ...res.user.data };
 						}
 					}

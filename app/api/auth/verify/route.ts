@@ -33,10 +33,11 @@ export async function POST(req: Request) {
 						const expired = otpRecord && otpRecord.expiresAt < now;
 
 						if (!expired) {
-							// delete used otp record
-							await prisma.otp.delete({ where: { email } });
 							// update user field to verified
 							await prisma.user.update({ where: { email }, data: { verified: true } });
+
+							// delete used otp record
+							await prisma.otp.delete({ where: { email } });
 
 							return Response.json({
 								user: { exists: true, verified: false },

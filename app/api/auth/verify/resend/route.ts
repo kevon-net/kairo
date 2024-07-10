@@ -24,12 +24,11 @@ export async function POST(req: Request) {
 					const otpHash = await hasher.create(otpValue.toString());
 					otpHash && (await createOtp({ email, otp: otpHash }));
 
-					// send otp email
-					const emailResponse = await code.signUp({ otp: otpValue.toString(), email });
-
 					return Response.json({
 						user: { exists: true, verified: false },
 						otp: { exists: false, value: otpValue },
+						// send otp email
+						resend: await code.signUp({ otp: otpValue.toString(), email }),
 					});
 				} else {
 					const now = new Date();
@@ -40,22 +39,22 @@ export async function POST(req: Request) {
 
 						return Response.json({
 							user: { exists: true, verified: false },
-							otp: { exists: true, expired: false, time: converter.millSec(expiry) },
+							otp: { exists: true, expired: false, expiry },
 						});
 					} else {
 						// delete expired otp record
 						await prisma.otp.delete({ where: { email } });
 
 						// create new otp record
-						const otpValue = otp();
-						const otpHash = await hasher.create(otpValue.toString());
-						otpHash && (await createOtp({ email, otp: otpHash }));
-
-						// email new otp
+						const otpValueNew = otp();
+						const otpNewHash = await hasher.create(otpValueNew.toString());
+						otpNewHash && (await createOtp({ email, otp: otpNewHash }));
 
 						return Response.json({
 							user: { exists: true, verified: false },
-							otp: { exists: true, expired: true, value: otpValue },
+							otp: { exists: true, expired: true, value: otpValueNew },
+							// send new otp email
+							resend: await code.signUp({ otp: otpValueNew.toString(), email }),
 						});
 					}
 				}

@@ -5,7 +5,7 @@ import { Center, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/cor
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormUserAccountDetails from "@/partials/forms/user/account/Details";
-import FormUserAccountPassword from "@/partials/forms/user/account/Password";
+import FormUserAccountPassword from "@/partials/forms/auth/password/Reset";
 import ModalDeleteAccount from "@/components/modal/delete/Account";
 
 export default async function Settings({ params }: { params: { userId: string } }) {

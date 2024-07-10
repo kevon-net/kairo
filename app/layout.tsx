@@ -31,6 +31,8 @@ import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
 
+import AffixTheme from "@/components/affixi/Theme";
+
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -64,7 +66,10 @@ export default async function App({
 					<Notifications limit={3} />
 
 					<ModalsProvider>
-						<SessionProvider session={session}>{children}</SessionProvider>
+						<SessionProvider session={session}>
+							<AffixTheme />
+							{children}
+						</SessionProvider>
 					</ModalsProvider>
 				</MantineProvider>
 			</body>

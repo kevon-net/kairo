@@ -6,12 +6,13 @@ import Link from "next/link";
 
 import { Button, Flex, Group, Stack, Text, Title } from "@mantine/core";
 
+import { IconArrowRight } from "@tabler/icons-react";
+
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import ProviderAuthSignOut from "@/providers/auth/signOut";
 
 import { auth } from "@/auth";
-import { IconArrowRight } from "@tabler/icons-react";
 
 export const metadata: Metadata = { title: "Sign Out" };
 

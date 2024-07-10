@@ -9,6 +9,7 @@ import {
 	Anchor,
 	Box,
 	Button,
+	Center,
 	Divider,
 	Grid,
 	GridCol,
@@ -61,14 +62,40 @@ export default function SignIn() {
 				// // test request body
 				// console.log(parse(formValues));
 
-				await authSignIn("credentials", parse(formValues));
+				const res = await authSignIn("credentials", {
+					...parse(formValues),
+					redirect: false,
+					callbackUrl: "/",
+				});
 
+				if (!res) {
+					notifications.show({
+						id: "otp-verify-failed-no-response",
+						icon: <IconX size={16} stroke={1.5} />,
+						title: "Server Unreachable",
+						message: `Check your network connection.`,
+						variant: "failed",
+					});
+				} else {
+					if (!res.url) {
+						notifications.show({
+							id: "otp-verify-failed-no-response",
+							icon: <IconX size={16} stroke={1.5} />,
+							title: "Unauthorized",
+							message: `Incorrect username/password`,
+							variant: "failed",
+						});
+					} else {
+						// apply callbackurl
+						router.replace(res.url);
+					}
+				}
 			} catch (error) {
 				notifications.show({
 					id: "sign-in-failed-unauthorized",
 					icon: <IconX size={16} stroke={1.5} />,
 					title: "Unauthorized",
-					message: `Incorrect username/password.`,
+					message: (error as Error).message,
 					variant: "failed",
 				});
 			} finally {
@@ -94,15 +121,25 @@ export default function SignIn() {
 								{...form.getInputProps("password")}
 								w={"100%"}
 							/>
-							<Anchor underline="hover" inherit fz={"xs"} ta={"end"} w={"fit-content"}>
+							<Anchor
+								underline="hover"
+								inherit
+								fz={"xs"}
+								ta={"end"}
+								w={"fit-content"}
+								component={Link}
+								href={"/auth/password/forgot"}
+							>
 								Forgot password
 							</Anchor>
 						</Stack>
 					</GridCol>
 					<GridCol span={12} mt={"md"}>
-						<Button fullWidth type="submit" loading={submitted}>
-							{submitted ? "Signing In" : "Sign In"}
-						</Button>
+						<Center>
+							<Button w={{ base: "100%", xs: "50%", md: "100%" }} type="submit" loading={submitted}>
+								{submitted ? "Signing In" : "Sign In"}
+							</Button>
+						</Center>
 					</GridCol>
 				</Grid>
 

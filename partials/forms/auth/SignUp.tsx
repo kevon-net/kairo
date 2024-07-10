@@ -9,6 +9,7 @@ import {
 	Anchor,
 	Box,
 	Button,
+	Center,
 	Divider,
 	Grid,
 	GridCol,
@@ -34,6 +35,7 @@ import request from "@/hooks/request";
 import compare from "@/handlers/validators/form/special/compare";
 
 import { typeSignUp } from "@/types/form";
+import converter from "@/utilities/converter";
 
 export default function SignUp({ userEmail }: { userEmail?: string }) {
 	const router = useRouter();
@@ -50,7 +52,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 		noResponse: {
 			id: "otp-verify-failed-no-response",
 			icon: <IconX size={16} stroke={1.5} />,
-			autoClose: 5000,
 			title: "Server Unreachable",
 			message: `Check your network connection.`,
 			variant: "failed",
@@ -58,7 +59,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 		unauthorized: {
 			id: "otp-request-failed-not-found",
 			icon: <IconX size={16} stroke={1.5} />,
-			autoClose: 5000,
 			title: "Unauthorized",
 			message: `You are not allowed to perform this action.`,
 			variant: "failed",
@@ -66,7 +66,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 		verified: {
 			id: "otp-request-info-already-verified",
 			icon: <IconCheck size={16} stroke={1.5} />,
-			autoClose: 5000,
 			title: "Verified",
 			message: `The email has already been verified`,
 			variant: "success",
@@ -161,7 +160,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 	const [requested, setRequested] = useState(false);
 	const [time, setTime] = useState<
 		| {
-				minutes: number;
+				minutes: string;
 				seconds: string;
 		  }
 		| undefined
@@ -213,7 +212,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 								notifications.show({
 									id: "otp-verify-failed-expired",
 									icon: <IconX size={16} stroke={1.5} />,
-									autoClose: 5000,
 									title: "No OTP Found",
 									message: `Request another OTP in the link provided on this page`,
 									variant: "failed",
@@ -225,7 +223,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 									notifications.show({
 										id: "otp-verify-failed-mismatch",
 										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
 										title: "Wrong OTP",
 										message: `You have entered the wrong OTP for this email.`,
 										variant: "failed",
@@ -237,7 +234,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 										notifications.show({
 											id: "otp-verify-success",
 											icon: <IconCheck size={16} stroke={1.5} />,
-											autoClose: 5000,
 											title: "Account Created",
 											message: `You can now log in to your account.`,
 											variant: "success",
@@ -251,7 +247,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 										notifications.show({
 											id: "otp-verify-failed-expired",
 											icon: <IconX size={16} stroke={1.5} />,
-											autoClose: 5000,
 											title: "OTP Expired",
 											message: `Request another in the link provided on this page`,
 											variant: "failed",
@@ -278,7 +273,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			notifications.show({
 				id: "otp-verify-failed",
 				icon: <IconX size={16} stroke={1.5} />,
-				autoClose: 5000,
 				title: `Verification Failed`,
 				message: (error as Error).message,
 				variant: "failed",
@@ -322,7 +316,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 							notifications.show({
 								id: "otp-request-success-new-otp-created",
 								icon: <IconCheck size={16} stroke={1.5} />,
-								autoClose: 5000,
 								title: "New OTP Sent",
 								message: `A new code has been sent to the provided email.`,
 								variant: "success",
@@ -331,7 +324,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 							form2.reset();
 						} else {
 							if (!res.otp.expired) {
-								setTime(res.otp.time);
+								setTime(converter.millSec(res.otp.expiry));
 
 								// // test otp tte response
 								// console.log(res.otp.time);
@@ -340,7 +333,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 									notifications.show({
 										id: "otp-request-failed-not-expired",
 										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
 										title: "OTP Already Sent",
 										message: `Remember to check your spam/junk folder(s).`,
 										variant: "failed",
@@ -352,7 +344,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 								notifications.show({
 									id: "otp-request-success",
 									icon: <IconCheck size={16} stroke={1.5} />,
-									autoClose: 5000,
 									title: "New OTP Sent",
 									message: `A new code has been sent to the provided email.`,
 									variant: "success",
@@ -377,7 +368,6 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			notifications.show({
 				id: "otp-request-failed",
 				icon: <IconX size={16} stroke={1.5} />,
-				autoClose: 5000,
 				title: "Request Failed",
 				message: (error as Error).message,
 				variant: "failed",
@@ -435,10 +425,16 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 													{...form.getInputProps("passwordConfirm")}
 												/>
 											</GridCol>
-											<GridCol span={12} mt={"md"}>
-												<Button fullWidth type="submit" loading={submitted}>
-													{submitted ? "Signing Up" : "Sign Up"}
-												</Button>
+											<GridCol span={12} mt={"lg"}>
+												<Center>
+													<Button
+														w={{ base: "100%", xs: "50%", md: "100%" }}
+														type="submit"
+														loading={submitted}
+													>
+														{submitted ? "Signing Up" : "Sign Up"}
+													</Button>
+												</Center>
 											</GridCol>
 										</Grid>
 

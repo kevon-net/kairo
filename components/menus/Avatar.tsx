@@ -60,27 +60,27 @@ export default function Avatar() {
 		user: [
 			{
 				icon: IconUser,
-				link: `/settings/profile`,
+				link: `/account/settings/profile`,
 				label: "Profile Settings",
 			},
 			{
 				icon: IconCoins,
-				link: `/settings/payment`,
+				link: `/account/settings/payment`,
 				label: "Payment Details",
 			},
 			{
 				icon: IconMapPin,
-				link: `/settings/addresses`,
+				link: `/account/settings/addresses`,
 				label: "Shipping Addresses",
 			},
 			{
 				icon: IconSettings,
-				link: `/settings/account`,
+				link: `/account/settings`,
 				label: "Account Settings",
 			},
 			{
 				icon: IconBellRinging,
-				link: `/settings/notifications`,
+				link: `/account/settings/notifications`,
 				label: "Notifications",
 			},
 		],

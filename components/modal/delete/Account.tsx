@@ -4,9 +4,12 @@ import { Modal, Button, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import FormUserAccountDelete from "@/partials/forms/user/account/Delete";
+import { useSession } from "next-auth/react";
 
-export default function Account({ params }: { params: { userId: string } }) {
+export default function Account() {
 	const [opened, { open, close }] = useDisclosure(false);
+
+	const session = useSession();
 
 	return (
 		<>
@@ -18,7 +21,7 @@ export default function Account({ params }: { params: { userId: string } }) {
 							Proceed with caution. This action is irreversible.
 						</Text>
 					</Text>
-					<FormUserAccountDelete params={params} />
+					{session.data && <FormUserAccountDelete data={session.data} />}
 				</Stack>
 			</Modal>
 

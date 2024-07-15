@@ -6,10 +6,11 @@ import { IconMoonStars, IconSun } from "@tabler/icons-react";
 
 export default function Theme() {
 	const computedColorScheme = useComputedColorScheme("light", { getInitialValueInEffect: true });
-	const { colorScheme, setColorScheme } = useMantineColorScheme({ keepTransitions: true ,});
+	const { colorScheme, setColorScheme } = useMantineColorScheme({ keepTransitions: true });
 
 	return (
 		<Switch
+			radius={"sm"}
 			defaultChecked={colorScheme == "dark" ? true : false}
 			offLabel={<IconMoonStars size={16} stroke={2.5} />}
 			onLabel={<IconSun size={16} stroke={2.5} />}

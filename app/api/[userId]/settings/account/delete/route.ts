@@ -1,5 +1,5 @@
 import prisma from "@/services/prisma";
-import utility from "@/utilities";
+import hasher from "@/utilities/hasher";
 
 export async function POST(req: Request, { params }: { params: { userId: string } }) {
 	try {
@@ -9,23 +9,21 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 		const userRecord = await prisma.user.findUnique({ where: { id: userId } });
 
 		if (!userRecord) {
-			return Response.json({
-				user: false,
-			});
+			return Response.json({ user: { exists: false } });
 		} else {
-			const passwordMatch = await utility.hasher.compare(password, userRecord.password);
+			const passwordMatch = await hasher.compare(password, userRecord.password);
 
 			if (!passwordMatch) {
 				if (!userRecord.password) {
 					if (!password) {
 						await handleDelete(userId);
 
-						return Response.json({ user: { match: true } });
+						return Response.json({ user: { exists: true, password: { match: true } } });
 					} else {
-						return Response.json({ user: { match: false } });
+						return Response.json({ user: { exists: true, password: { match: false } } });
 					}
 				} else {
-					return Response.json({ user: { match: false } });
+					return Response.json({ user: { exists: true, password: { match: false } } });
 				}
 			} else {
 				await handleDelete(userId);

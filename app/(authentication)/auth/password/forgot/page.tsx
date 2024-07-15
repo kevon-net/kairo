@@ -3,7 +3,6 @@ import React from "react";
 import NextImage from "next/image";
 import { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
@@ -14,15 +13,9 @@ import FormAuthPasswordForgot from "@/partials/forms/auth/password/Forgot";
 import brand from "@/assets/images/brand";
 import contact from "@/data/contact";
 
-import { auth } from "@/auth";
-
 export const metadata: Metadata = { title: "Forgot Password" };
 
 export default async function Forgot() {
-	const session = await auth();
-
-	session && redirect("/");
-
 	return (
 		<LayoutPage>
 			<Grid gutter={0}>

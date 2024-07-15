@@ -1,27 +1,24 @@
 import React from "react";
 
+import { redirect } from "next/navigation";
+
 import { Center, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormUserAccountDetails from "@/partials/forms/user/account/Details";
-import FormUserAccountPassword from "@/partials/forms/auth/password/Reset";
+import FormUserAccountPassword from "@/partials/forms/user/account/Password";
 import ModalDeleteAccount from "@/components/modal/delete/Account";
 
-export default async function Settings({ params }: { params: { userId: string } }) {
-	const getDataAccount = async () => {
-		try {
-			const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account`, {
-				next: { revalidate: 60 * 60 },
-			});
+import { auth } from "@/auth";
 
-			return res.json();
-		} catch (error) {
-			console.log("Fetch Error:", (error as Error).message);
-		}
-	};
+export default async function Settings() {
+	const session = await auth();
 
-	const data = await getDataAccount();
+	!session?.user && redirect("/");
+
+	// console.log(session?.user)
+
 	return (
 		<LayoutPage stacked>
 			<LayoutSection>
@@ -31,7 +28,7 @@ export default async function Settings({ params }: { params: { userId: string } 
 							<Title order={2} fz={"xl"}>
 								Account Details
 							</Title>
-							<FormUserAccountDetails params={params} initial={data} />
+							{session && session.user && <FormUserAccountDetails data={session} />}
 						</Stack>
 					</GridCol>
 					<GridCol span={{ base: 12, md: 7, lg: 1 }}>
@@ -44,7 +41,7 @@ export default async function Settings({ params }: { params: { userId: string } 
 							<Title order={2} fz={"xl"}>
 								Update Password
 							</Title>
-							<FormUserAccountPassword params={params} />
+							{session && session.user && <FormUserAccountPassword data={session} />}
 						</Stack>
 					</GridCol>
 				</Grid>
@@ -65,7 +62,8 @@ export default async function Settings({ params }: { params: { userId: string } 
 							</Text>
 						</Text>
 					</Stack>
-					<ModalDeleteAccount params={params} />
+
+					<ModalDeleteAccount />
 				</Stack>
 			</LayoutSection>
 		</LayoutPage>

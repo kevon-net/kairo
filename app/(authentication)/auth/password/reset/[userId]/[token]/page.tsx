@@ -16,8 +16,6 @@ import contact from "@/data/contact";
 
 import { typePasswordReset } from "@/types/apis";
 
-import { auth } from "@/auth";
-
 export interface typeParams {
 	params: typePasswordReset;
 }
@@ -25,10 +23,6 @@ export interface typeParams {
 export const metadata: Metadata = { title: "Reset Password" };
 
 export default async function Reset({ params }: typeParams) {
-	const session = await auth();
-
-	session && redirect("/");
-
 	return (
 		<LayoutPage>
 			<Grid gutter={0}>

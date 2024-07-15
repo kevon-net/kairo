@@ -1,32 +1,48 @@
 import otp from "@/handlers/generators/otp";
 import contact from "@/handlers/resend/contact";
 import code from "@/handlers/resend/email/auth/code";
+import password from "@/handlers/validators/form/special/password";
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 
 export async function POST(req: Request) {
 	try {
-		const { email, password, unverified } = await req.json();
+		const { email, password } = await req.json();
 
 		// query database for user
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (!userRecord) {
-			// create user record
-			const passwordHash = await hasher.create(password);
-			passwordHash && (await createUser({ email, password: passwordHash }));
+			if (!password) {
+				// create user record
+				await createUser({ email });
 
-			// create otp record
-			const otpValue = otp();
-			const otpHash = await hasher.create(otpValue.toString());
-			otpHash && (await createOtp({ email, otp: otpHash }));
+				return Response.json({
+					user: { exists: false },
+					otp: null,
+					resend: null,
+				});
+			} else {
+				// create password hash
+				const passwordHash = await hasher.create(password);
 
-			return Response.json({
-				user: { exists: false },
-				otp: { value: otpValue },
-				// send otp email and output result in response body
-				resend: unverified ? await verify(otpValue, email) : null,
-			});
+				// create user record
+				passwordHash && (await createUser({ email, password: passwordHash }));
+
+				// create otp
+				const otpValue = otp();
+				// create otp hash
+				const otpHash = await hasher.create(otpValue.toString());
+				// create otp record
+				otpHash && (await createOtp({ email, otp: otpHash }));
+
+				return Response.json({
+					user: { exists: false },
+					otp: { value: otpValue },
+					// send otp email and output result in response body
+					resend: await verify(otpValue, email),
+				});
+			}
 		} else {
 			if (!userRecord.verified) {
 				return Response.json({ user: { exists: true, verified: false } });
@@ -40,10 +56,14 @@ export async function POST(req: Request) {
 	}
 }
 
-const createUser = async (fields: { email: string; password: string }) => {
+const createUser = async (fields: { email: string; password?: string }) => {
 	try {
 		await prisma.user.create({
-			data: { email: fields.email, password: fields.password },
+			data: {
+				email: fields.email,
+				password: fields.password ? fields.password : null,
+				verified: fields.password ? false : true,
+			},
 		});
 	} catch (error) {
 		console.error("x-> Error creating user record:", (error as Error).message);

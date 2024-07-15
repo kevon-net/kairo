@@ -33,9 +33,11 @@ import password from "@/handlers/validators/form/special/password";
 
 import request from "@/hooks/request";
 import compare from "@/handlers/validators/form/special/compare";
+import converter from "@/utilities/converter";
 
 import { typeSignUp } from "@/types/form";
-import converter from "@/utilities/converter";
+
+import { signIn as authSignIn } from "next-auth/react";
 
 export default function SignUp({ userEmail }: { userEmail?: string }) {
 	const router = useRouter();
@@ -133,7 +135,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 
 							// redirect to sign in
 							form.reset();
-							router.push("/api/auth/signin");
+							await authSignIn();
 						}
 					}
 				}
@@ -242,7 +244,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 										// redirect to sign in
 										form.reset();
 										form2.reset();
-										router.push("/api/auth/signin");
+										await authSignIn();
 									} else {
 										notifications.show({
 											id: "otp-verify-failed-expired",
@@ -262,7 +264,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 							// redirect to sign in
 							form.reset();
 							form2.reset();
-							router.push("/api/auth/signin");
+							await authSignIn();
 						}
 					}
 				}
@@ -358,7 +360,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 						// redirect to sign in
 						form.reset();
 						form2.reset();
-						router.push("/api/auth/signin");
+						await authSignIn();
 					}
 				}
 			}
@@ -447,9 +449,11 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 											<Anchor
 												inherit
 												fw={500}
-												component={Link}
-												href={"/api/auth/signin"}
 												underline="hover"
+												onClick={async e => {
+													e.preventDefault();
+													await authSignIn();
+												}}
 											>
 												Sign In
 											</Anchor>

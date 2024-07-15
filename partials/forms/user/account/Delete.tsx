@@ -12,11 +12,14 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 
 import request from "@/hooks/request";
 
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+
 interface typeAccountDelete {
 	password: string;
 }
 
-export default function Delete({ params }: { params: { userId?: string } }) {
+export default function Delete({ data }: { data: Session }) {
 	const [submitted, setSubmitted] = useState(false);
 
 	const router = useRouter();
@@ -33,72 +36,72 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 		};
 	};
 
-	// const handleSignOut = async () => signOut({ callbackUrl: "/" });
+	const handleSignOut = async () =>
+		await signOut({ redirect: false, callbackUrl: "/" }).then(() => router.replace("/"));
 
 	const handleSubmit = async (formValues: typeAccountDelete) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				await request
-					.post(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account/delete`, {
+				const res = await request.post(
+					process.env.NEXT_PUBLIC_API_URL + `/api/${data.userId}/settings/account/delete`,
+					{
 						method: "POST",
 						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						if (!res) {
+						headers: { "Content-Type": "application/json", Accept: "application/json" },
+					}
+				);
+
+				if (!res) {
+					notifications.show({
+						id: "account-deletion-failed-no-response",
+						icon: <IconX size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: "Server Unavailable",
+						message: `There was no response from the server.`,
+						variant: "failed",
+					});
+				} else {
+					if (!res.user.exists) {
+						notifications.show({
+							id: "password-reset-failed-not-found",
+							icon: <IconX size={16} stroke={1.5} />,
+							autoClose: 5000,
+							title: `Not Found`,
+							message: `The account is not valid.`,
+							variant: "failed",
+						});
+
+						form.reset();
+						await handleSignOut();
+					} else {
+						if (!res.user.password.match) {
 							notifications.show({
-								id: "account-deletion-failed-no-response",
+								id: "password-reset-failed-not-found",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
+								title: `Authentication Error`,
+								message: `Incorrect password provided.`,
 								variant: "failed",
 							});
+
+							form.reset();
 						} else {
-							if (!res.user) {
-								notifications.show({
-									id: "password-reset-failed-not-found",
-									icon: <IconX size={16} stroke={1.5} />,
-									autoClose: 5000,
-									title: `Not Found`,
-									message: `The account is not valid.`,
-									variant: "failed",
-								});
+							notifications.show({
+								id: "account-deletion-success",
+								icon: <IconCheck size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Account Deleted",
+								message: "Your account has been successfully deleted",
+								variant: "success",
+							});
 
-								// signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
-							} else {
-								if (!res.user.match) {
-									notifications.show({
-										id: "password-reset-failed-not-found",
-										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: `Authentication Error`,
-										message: `Incorrect password provided.`,
-										variant: "failed",
-									});
-
-									form.reset();
-								} else {
-									notifications.show({
-										id: "account-deletion-success",
-										icon: <IconCheck size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "Account Deleted",
-										message: "Your account has been successfully deleted",
-										variant: "success",
-									});
-
-									form.reset();
-									// handleSignOut();
-								}
-							}
+							form.reset();
+							await handleSignOut();
 						}
-					});
+					}
+				}
 			} catch (error) {
 				notifications.show({
 					id: "account-deletion-failed",
@@ -121,7 +124,7 @@ export default function Delete({ params }: { params: { userId?: string } }) {
 					required
 					label={"Password"}
 					placeholder="Your Password"
-					description="Leave empty if you didn't set password (i.e. signed in with Google)"
+					description="Leave empty if you didn't set password (i.e. signed in with OAuth such as Google)"
 					{...form.getInputProps("password")}
 				/>
 				<Group justify="end">

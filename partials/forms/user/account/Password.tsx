@@ -16,7 +16,10 @@ import compare from "@/handlers/validators/form/special/compare";
 
 import request from "@/hooks/request";
 
-export default function Password({ params }: { params: { userId?: string } }) {
+import { Session, User } from "next-auth";
+import { signOut } from "next-auth/react";
+
+export default function Password({ data }: { data: Session }) {
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
 
@@ -30,10 +33,10 @@ export default function Password({ params }: { params: { userId?: string } }) {
 		validate: {
 			passwordCurrent: value => password(value, 8, 24),
 			password: (value, values) =>
-				values.passwordCurrent == value
+				value == values.passwordCurrent
 					? "Current and new passwords cannot be the same"
 					: password(value, 8, 24),
-			passwordConfirm: (value, values) => compare.string(values.password, values.passwordConfirm, "Password"),
+			passwordConfirm: (value, values) => compare.string(value, values.password, "Password"),
 		},
 	});
 
@@ -49,8 +52,9 @@ export default function Password({ params }: { params: { userId?: string } }) {
 			if (form.isValid()) {
 				setSending(true);
 
-				await request
-					.post(process.env.NEXT_PUBLIC_API_URL + `/api/${params.userId}/settings/account/password`, {
+				const res = await request.post(
+					process.env.NEXT_PUBLIC_API_URL + `/api/${data.userId}/settings/account/password`,
+					{
 						method: "POST",
 						body: JSON.stringify({
 							passwordCurrent: parse(formValues).passwordCurrent,
@@ -60,55 +64,58 @@ export default function Password({ params }: { params: { userId?: string } }) {
 							"Content-Type": "application/json",
 							Accept: "application/json",
 						},
-					})
-					.then((res: any) => {
-						if (!res) {
+					}
+				);
+
+				if (!res) {
+					notifications.show({
+						id: "password-reset-failed-no-response",
+						icon: <IconX size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: "Server Unavailable",
+						message: `There was no response from the server.`,
+						variant: "failed",
+					});
+				} else {
+					if (!res.user.exists) {
+						notifications.show({
+							id: "password-reset-failed-not-found",
+							icon: <IconX size={16} stroke={1.5} />,
+							autoClose: 5000,
+							title: `Not Found`,
+							message: `The account is not valid.`,
+							variant: "failed",
+						});
+
+						// sign out and redirect to sign in page
+						await signOut({ redirect: false, callbackUrl: "/" }).then(() =>
+							router.replace("/auth/sign-up")
+						);
+					} else {
+						if (!res.user.password.match) {
 							notifications.show({
-								id: "password-reset-failed-no-response",
+								id: "password-reset-failed-unauthorized",
 								icon: <IconX size={16} stroke={1.5} />,
 								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
+								title: `Unauthorized`,
+								message: `You've entered the wrong password.`,
 								variant: "failed",
 							});
 						} else {
-							if (!res.user) {
-								notifications.show({
-									id: "password-reset-failed-not-found",
-									icon: <IconX size={16} stroke={1.5} />,
-									autoClose: 5000,
-									title: `Not Found`,
-									message: `The account is not valid.`,
-									variant: "failed",
-								});
-
-								// signOut({ redirect: false }).then(() => router.replace("/auth/sign-up"));
-							} else {
-								if (!res.user.match) {
-									notifications.show({
-										id: "password-reset-failed-unauthorized",
-										icon: <IconX size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: `Authentication Error`,
-										message: `You've entered the wrong password.`,
-										variant: "failed",
-									});
-								} else {
-									notifications.show({
-										id: "password-reset-success",
-										withCloseButton: false,
-										icon: <IconCheck size={16} stroke={1.5} />,
-										autoClose: 5000,
-										title: "Password Changed",
-										message: `You have successfully cahnged your password.`,
-										variant: "success",
-									});
-								}
-
-								form.reset();
-							}
+							notifications.show({
+								id: "password-reset-success",
+								withCloseButton: false,
+								icon: <IconCheck size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Password Changed",
+								message: `You have successfully cahnged your password.`,
+								variant: "success",
+							});
 						}
-					});
+
+						form.reset();
+					}
+				}
 			}
 		} catch (error) {
 			notifications.show({
@@ -127,7 +134,7 @@ export default function Password({ params }: { params: { userId?: string } }) {
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid>
-				<GridCol span={{ base: 12 }}>
+				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
 					<PasswordInput
 						required
 						label={"Current Password"}
@@ -135,8 +142,8 @@ export default function Password({ params }: { params: { userId?: string } }) {
 						{...form.getInputProps("passwordCurrent")}
 						description={
 							<>
-								If you can't remember, you can{" "}
-								<Anchor inherit component={Link} href="/auth/password/forgot">
+								If you can&apos;t remember, you can{" "}
+								<Anchor underline="always" inherit component={Link} href="/auth/password/forgot">
 									reset your password
 								</Anchor>
 								.

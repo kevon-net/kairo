@@ -5,7 +5,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Divider, NavLink, Stack, Text } from "@mantine/core";
+import { Divider, NavLink, Stack } from "@mantine/core";
 import {
 	IconBellRinging,
 	IconChevronRight,
@@ -18,45 +18,43 @@ import {
 
 import LayoutSection from "@/layouts/Section";
 
-// import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 export default function User() {
-	// const { data: session } = useSession({ required: true });
-
 	const pathname = usePathname();
 
-	// const navLinkItems = [
-	// 	{
-	// 		icon: IconUser,
-	// 		link: `/${session?.user.id}/settings/profile`,
-	// 		label: "Profile Settings",
-	// 	},
-	// 	{
-	// 		icon: IconCoins,
-	// 		link: `/${session?.user.id}/settings/payment`,
-	// 		label: "Payment Details",
-	// 	},
-	// 	{
-	// 		icon: IconMapPin,
-	// 		link: `/${session?.user.id}/settings/addresses`,
-	// 		label: "Shipping Addresses",
-	// 	},
-	// 	{
-	// 		icon: IconSettings,
-	// 		link: `/${session?.user.id}/settings/account`,
-	// 		label: "Account Settings",
-	// 	},
-	// 	{
-	// 		icon: IconBellRinging,
-	// 		link: `/${session?.user.id}/settings/notifications`,
-	// 		label: "Notifications",
-	// 	},
-	// ];
+	const navLinkItems = [
+		{
+			icon: IconUser,
+			link: `/settings/profile`,
+			label: "Profile Settings",
+		},
+		{
+			icon: IconCoins,
+			link: `/settings/payment`,
+			label: "Payment Details",
+		},
+		{
+			icon: IconMapPin,
+			link: `/settings/addresses`,
+			label: "Shipping Addresses",
+		},
+		{
+			icon: IconSettings,
+			link: `/settings/account`,
+			label: "Account Settings",
+		},
+		{
+			icon: IconBellRinging,
+			link: `/settings/notifications`,
+			label: "Notifications",
+		},
+	];
 
 	return (
 		<LayoutSection padded>
 			<Stack>
-				{/* <Stack gap={0}>
+				<Stack gap={0}>
 					{navLinkItems.map(item => (
 						<NavLink
 							key={item.label}
@@ -66,9 +64,10 @@ export default function User() {
 							leftSection={<item.icon size={16} />}
 							rightSection={<IconChevronRight size={16} />}
 							active={item.link == pathname}
+							style={{ borderRadius: "var(--mantine-radius-sm)" }}
 						/>
 					))}
-				</Stack> */}
+				</Stack>
 
 				<Divider />
 
@@ -77,7 +76,8 @@ export default function User() {
 					active
 					color="red.6"
 					leftSection={<IconLogout size={16} />}
-					// onClick={async () => await signOut()}
+					style={{ borderRadius: "var(--mantine-radius-sm)" }}
+					onClick={async () => await signOut()}
 				/>
 			</Stack>
 		</LayoutSection>

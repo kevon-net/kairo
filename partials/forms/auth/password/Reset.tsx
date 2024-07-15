@@ -111,7 +111,9 @@ export default function Reset({ data }: { data: { userId: string; token: string 
 								form.reset();
 
 								// sign out and redirect to sign in page
-								await authSignOut({ redirect: false }).then(async () => await authSignIn());
+								await authSignOut({ redirect: false, callbackUrl: "/" }).then(
+									async () => await authSignIn()
+								);
 							} else {
 								notifications.show({
 									id: "password-reset-failed-unauthorized",

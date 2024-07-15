@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
@@ -8,6 +8,27 @@ import Google from "next-auth/providers/google";
 import request from "./hooks/request";
 
 // const prismaCli = new PrismaClient();
+
+declare module "next-auth" {
+	/**
+	 * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+	 */
+	interface Session {
+		userId: string;
+		token: string;
+
+		user: {
+			// /** The user's id. */
+			// id: string;
+			// /**
+			//  * By default, TypeScript merges new interface properties and overwrites existing ones.
+			//  * In this case, the default session user properties will be overwritten,
+			//  * with the new ones defined above. To keep the default session user properties,
+			//  * you need to add them back into the newly declared interface.
+			//  */
+		} & DefaultSession["user"];
+	}
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	// adapter: PrismaAdapter(prismaCli),
@@ -61,4 +82,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			},
 		}),
 	],
+
+	callbacks: {
+		async jwt({ token, account, profile, user }) {
+			if (account) {
+				token.accessToken = account.access_token;
+				token.id = user.id;
+
+				// create user record if doesn't exist (OAuth sign-in)
+				await request.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-up", {
+					method: "POST",
+					body: JSON.stringify({ email: user.email, password: null }),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
+			}
+
+			return token;
+		},
+
+		async session({ session, token, user }) {
+			// Send properties to the client, like a user id from a provider.
+			session.token = token.accessToken as string;
+			session.userId = token.id as string;
+
+			return session;
+		},
+	},
 });

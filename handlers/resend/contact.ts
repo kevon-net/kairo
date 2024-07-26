@@ -7,7 +7,7 @@ const contact = {
 			firstName: formData.fname,
 			lastName: formData.lname,
 			unsubscribed: false,
-			audienceId: process.env.NEXT_RESEND_AUDIENCE_GENERAL_ID!,
+			audienceId: process.env.NEXT_RESEND_AUDIENCE_ID_GENERAL!,
 		});
 
 		if (!error) {

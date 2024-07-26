@@ -8,13 +8,17 @@ const inquiry = {
 	async general(formData: typeContact) {
 		// switch to 'resend.general' when your domain is configured
 		const { data, error } = await resend.onboarding.emails.send({
-			// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
-			from: `${formData.fname} ${formData.lname} <onboarding@resend.dev>`,
-			to: ["kevon.kibochi@outlook.com"],
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'onboarding@resend.dev' below with the intended sender email
+			 * 'NEXT_EMAIL_INFO' as defined in the '.env' files
+			 */
+			from: `${formData.fname} ${formData.lname} <${"onboarding@resend.dev"}>`,
+			to: [process.env.NEXT_EMAIL_INFO as string],
+			// cc:[]
 			subject: formData.subject,
 			react: TemplateEmailContact(formData),
 			reply_to: formData.email,
-			// cc:[]
 		});
 
 		if (!error) {

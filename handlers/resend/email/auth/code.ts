@@ -5,17 +5,24 @@ import TemplateEmailCodeSignUp from "@/templates/email/code/SignUp";
 import TemplateEmailCodeForgot from "@/templates/email/code/Forgot";
 
 const code = {
-	async signUp(value: { otp: string; email: string }) {
+	async signUp(values: { otp: string; email: string }) {
 		// switch to 'resend.general' when your domain is configured
 		const { data, error } = await resend.onboarding.emails.send({
-			// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
-			from: `${contact.name.app} <onboarding@resend.dev>`,
-			// replace 'devokrann@gmail.com' with user's email after verifying domain
-			to: "devokrann@gmail.com" /** value.email */,
-			subject: `Verify Your Email Address`,
-			react: TemplateEmailCodeSignUp(value.otp),
-			// reply_to: formData.email,
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'onboarding@resend.dev' below with the intended sender email
+			 * 'NEXT_EMAIL_NOREPLY' as defined in the '.env' files
+			 */
+			from: `${contact.name.company} <${"onboarding@resend.dev"}>`,
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'devokrann@gmail.com' below with 'values.email'
+			 */
+			to: ["devokrann@gmail.com"],
 			// cc:[]
+			subject: `Verify Your Email Address`,
+			react: TemplateEmailCodeSignUp(values.otp),
+			// reply_to: formData.email,
 		});
 		if (!error) {
 			return data;
@@ -25,17 +32,24 @@ const code = {
 		}
 	},
 
-	async forgotPassword(value: { otl: string; email: string }) {
+	async forgotPassword(values: { otl: string; email: string }) {
 		// switch to 'resend.general' when your domain is configured
 		const { data, error } = await resend.onboarding.emails.send({
-			// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
-			from: `${contact.name.app} <onboarding@resend.dev>`,
-			// replace 'devokrann@gmail.com' with user's email after verifying domain
-			to: "devokrann@gmail.com" /** value.email */,
-			subject: `Reset Your Password`,
-			react: TemplateEmailCodeForgot(value.otl),
-			// reply_to: formData.email,
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'onboarding@resend.dev' below with the intended sender email
+			 * 'NEXT_EMAIL_NOREPLY' as defined in the '.env' files
+			 */
+			from: `${contact.name.company} <${"onboarding@resend.dev"}>`,
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'devokrann@gmail.com' below with 'values.email'
+			 */
+			to: ["devokrann@gmail.com"],
 			// cc:[]
+			subject: `Reset Your Password`,
+			react: TemplateEmailCodeForgot(values.otl),
+			// reply_to: formData.email,
 		});
 		if (!error) {
 			return data;

@@ -4,17 +4,24 @@ import resend from "@/services/resend";
 import TemplateEmailNofificationChanged from "@/templates/email/notification/Changed";
 
 const notification = {
-	async passwordChanged(email: string) {
+	async passwordChanged(values: { email: string }) {
 		// switch to 'resend.general' when your domain is configured
 		const { data, error } = await resend.onboarding.emails.send({
-			// include & verify domain in dashboard before replacing it with "onboarding@resend.dev"
-			from: `${contact.name.app} <onboarding@resend.dev>`,
-			// replace 'devokrann@gmail.com' with user's email after verifying domain
-			to: "devokrann@gmail.com" /** value.email */,
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'onboarding@resend.dev' below with the intended sender email
+			 * 'NEXT_EMAIL_NOREPLY' as defined in the '.env' files
+			 */
+			from: `${contact.name.company} <${"onboarding@resend.dev"}>`,
+			/**
+			 * add and verify a production domain in resend dashboard
+			 * replace 'devokrann@gmail.com' below with 'values.email'
+			 */
+			to: ["devokrann@gmail.com"],
+			// cc:[]
 			subject: `Password Changed`,
 			react: TemplateEmailNofificationChanged(),
 			// reply_to: formData.email,
-			// cc:[]
 		});
 		if (!error) {
 			return data;

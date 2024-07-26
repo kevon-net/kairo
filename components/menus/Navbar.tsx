@@ -2,8 +2,8 @@
 
 import React from "react";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Menu } from "@mantine/core";
 
@@ -34,7 +34,7 @@ export default function Navbar({ children, subLinks }: { children: React.ReactNo
 			shadow="xs"
 			width={"auto"}
 			trigger="hover"
-			position="bottom-end"
+			// position="bottom-end"
 			openDelay={50}
 			closeDelay={50}
 			classNames={{

@@ -5,15 +5,15 @@ import { Box, Container, Divider, Flex } from "@mantine/core";
 import { typeBody } from "@/types/layout";
 import { widths } from "@/types/mantine";
 
-export default function Body({ children, header, nav, hero, aside, footer }: typeBody) {
+export default function Body({ children, bar, header, nav, hero, aside, footer }: typeBody) {
 	const handleAside = (side: React.ReactNode, width?: widths) => (
 		<Box
 			component="aside"
 			visibleFrom="md"
-			w={width ? { md: `${width.md}%`, lg: `${width.lg}%` } : `${25}%`}
+			w={width ? { md: `${width.md}%`, lg: `${width.lg}%` } : { md: `${33}%`, lg: `${25}%` }}
 			style={{
 				position: "sticky",
-				top: 48,
+				top: 64,
 				maxHeight: "100%",
 			}}
 		>
@@ -34,20 +34,13 @@ export default function Body({ children, header, nav, hero, aside, footer }: typ
 
 	return (
 		<>
+			{bar && bar}
 			{header && header}
 			{nav && nav}
 			{hero && hero}
 			{aside ? (
 				<Container size={"responsive"} component={"article"}>
-					<Flex
-						gap={
-							aside.left?.withBorder || aside.right?.withBorder
-								? aside.gap
-									? aside.gap
-									: "xl"
-								: undefined
-						}
-					>
+					<Flex gap={aside.gap ? aside.gap : "xl"}>
 						{aside.left && handleAside(aside.left.component, aside.left.width)}
 						{aside.left?.withBorder && <Divider orientation="vertical" visibleFrom="md" />}
 						<Box w={{ base: "100%", md: `${widthMain.md}%`, lg: `${widthMain.lg}%` }}>{children}</Box>

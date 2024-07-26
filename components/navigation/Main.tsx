@@ -5,7 +5,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Group } from "@mantine/core";
+import { Anchor, Group } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 
 import MenuNavbar from "../menus/Navbar";
@@ -20,11 +20,18 @@ export default function Main() {
 	return links.navbar.map(link => (
 		<MenuNavbar key={link.link} subLinks={link.subLinks}>
 			{!link.subLinks ? (
-				<Link href={link.link} className={`${classes.link} ${pathname == link.link ? classes.linkActive : ""}`}>
+				<Anchor
+					component={Link}
+					underline="never"
+					href={link.link}
+					className={`${classes.link} ${pathname == link.link ? classes.linkActive : ""}`}
+				>
 					{link.label}
-				</Link>
+				</Anchor>
 			) : (
-				<Link
+				<Anchor
+					component={Link}
+					underline="never"
 					href={link.link}
 					className={`${classes.link} ${
 						pathname == link.link || link.subLinks.find(l => l.link == pathname) ? classes.linkActive : ""
@@ -33,9 +40,9 @@ export default function Main() {
 				>
 					<Group gap={4}>
 						<span>{link.label}</span>
-						<IconChevronDown size={16} stroke={1.5} />
+						<IconChevronDown size={16} stroke={1.5} style={{ marginTop: 2 }} />
 					</Group>
-				</Link>
+				</Anchor>
 			)}
 		</MenuNavbar>
 	));

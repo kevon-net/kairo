@@ -4,8 +4,10 @@ import { Metadata } from "next";
 
 import LayoutBody from "@/layouts/Body";
 
+import contact from "@/data/contact";
+
 export const metadata: Metadata = {
-	title: { default: "Blog", template: "%s - Blog - Next Template" },
+	title: { default: "Blog", template: `%s - Blog - ${contact.name.app}` },
 };
 
 export default function Blog({

@@ -15,32 +15,47 @@ import "@mantine/nprogress/styles.css";
 import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 
-import "@/global.scss";
+import "@/styles/global.scss";
 
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import projectName from "@/theme";
+
+import contact from "@/data/contact";
+
+import { SessionProvider } from "next-auth/react";
+
+import { auth } from "@/auth";
+
+import AffixTheme from "@/components/affixi/Theme";
 
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: { default: "Next Template", template: "%s - Next Template" },
+	title: { default: `${contact.name.app}`, template: `%s - ${contact.name.app}` },
 	description: "App description",
 };
 
-export default async function RootLayout({
+export default async function App({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	// obtain sessioin
+	const session = await auth();
+
 	return (
 		<html lang="en" data-mantine-color-scheme="light">
 			<head>
 				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
 			<body /* className={inter.className} */>
+				<SpeedInsights />
+
 				<MantineProvider
 					theme={projectName}
 					defaultColorScheme="light"
@@ -50,7 +65,12 @@ export default async function RootLayout({
 				>
 					<Notifications limit={3} />
 
-					<ModalsProvider>{children}</ModalsProvider>
+					<ModalsProvider>
+						<SessionProvider session={session}>
+							<AffixTheme />
+							{children}
+						</SessionProvider>
+					</ModalsProvider>
 				</MantineProvider>
 			</body>
 		</html>

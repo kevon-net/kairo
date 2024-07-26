@@ -2,18 +2,18 @@
 
 import React from "react";
 
+import NextImage from "next/image";
 import { usePathname } from "next/navigation";
 
-import { Burger, Drawer, NavLink } from "@mantine/core";
+import { Burger, Button, Drawer, Group, Image, NavLink, Stack } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
-import MediaImage from "@/components/media/Image";
-
-import { nextjs } from "@/assets/icons/tool";
+import brand from "@/assets/images/brand";
 
 import classes from "./Main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
+import contact from "@/data/contact";
 
 export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
@@ -42,6 +42,7 @@ export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } 
 				onClick={() => close()}
 				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
 				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
+				fw={pathname == link.link ? 500 : undefined}
 			/>
 		) : (
 			<NavLink
@@ -52,6 +53,7 @@ export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } 
 				opened={link.subLinks?.find(sl => sl.link == pathname)?.link == pathname ? true : undefined}
 				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
 				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
+				fw={pathname == link.link ? 500 : undefined}
 			>
 				{subLinks}
 			</NavLink>
@@ -75,9 +77,28 @@ export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } 
 					root: classes.root,
 					title: classes.title,
 				}}
-				title={<MediaImage src={nextjs} alt="Logo" width={32} height={32} />}
+				// title={
+				// 	<Group>
+				// 		<Image
+				// 			src={brand.logo.light}
+				// alt={contact.name.app}
+				// 			h={{ base: 24 }}
+				// 			component={NextImage}
+				// 			loading="lazy"
+				// 		/>
+				// 	</Group>
+				// }
 			>
-				{navMobile}
+				<Stack>
+					<Stack gap={0}>{navMobile}</Stack>
+
+					<Stack gap={"xs"} px={"xs"}>
+						<Button size="xs" variant="default">
+							Log In
+						</Button>
+						<Button size="xs">Get in Touch</Button>
+					</Stack>
+				</Stack>
 			</Drawer>
 
 			<Burger opened={opened} onClick={toggle} size={mobile ? "sm" : "sm"} {...restProps} />

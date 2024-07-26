@@ -2,7 +2,10 @@ import React from "react";
 
 import LayoutBody from "@/layouts/Body";
 import NavbarMain from "@/partials/navbars/Main";
-import FooterMain from "@/partials/footer/Main";
+import FooterMain from "@/partials/footers/Main";
+import HeaderMain from "@/partials/headers/Main";
+
+import AffixTop from "@/components/affixi/Top";
 
 export default function Marketing({
 	children, // will be a page or nested layout
@@ -10,7 +13,8 @@ export default function Marketing({
 	children: React.ReactNode;
 }) {
 	return (
-		<LayoutBody nav={<NavbarMain />} footer={<FooterMain />}>
+		<LayoutBody header={<HeaderMain />} nav={<NavbarMain />} footer={<FooterMain />}>
+			<AffixTop />
 			<main>{children}</main>
 		</LayoutBody>
 	);

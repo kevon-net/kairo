@@ -3,13 +3,17 @@ const links = {
 		{ link: "/", label: "Home" },
 		{ link: "/about", label: "About" },
 		{
+			link: "/services",
+			label: "Services",
+			subLinks: [
+				{ link: "/services/1", label: "Service One" },
+				{ link: "/services/2", label: "Service Two" },
+				{ link: "/services/3", label: "Service Three" },
+			],
+		},
+		{
 			link: "/blog",
 			label: "Blog",
-			subLinks: [
-				{ link: "/blog/1", label: "Blog 1" },
-				{ link: "/blog/2", label: "Blog 2" },
-				{ link: "/blog/3", label: "Blog 3" },
-			],
 		},
 		{
 			link: "/contact",

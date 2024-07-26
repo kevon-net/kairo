@@ -2,7 +2,7 @@
 	&[data-variant="default"] {
 		border: 0px solid transparent;
 		border-radius: var(--mantine-radius-sm);
-		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+		background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
 		padding: 0 var(--mantine-spacing-md);
 		font-size: var(--mantine-font-size-xs);
 
@@ -42,8 +42,8 @@
 
 .dropdown {
 	border-radius: var(--mantine-radius-sm);
-	border: 2px solid light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
-	background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-body));
+	border: 2px solid light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
+	background-color: light-dark(var(--mantine-color-pri-0), var(--mantine-color-body));
 }
 
 .option {
@@ -56,6 +56,6 @@
 	}
 
 	&:hover {
-		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+		background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
 	}
 }

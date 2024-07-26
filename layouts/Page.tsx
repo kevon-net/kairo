@@ -14,8 +14,8 @@ export default function Page({
 		<Box
 			component={stacked ? Stack : "article"}
 			w={"100%"}
-			gap={stacked ? (typeof stacked == "boolean" ? 48 : stacked) : undefined}
-			py={padded ? (typeof padded == "boolean" ? 48 : padded) : undefined}
+			gap={stacked ? (typeof stacked == "boolean" ? 64 : stacked) : undefined}
+			py={padded ? (typeof padded == "boolean" ? 64 : padded) : undefined}
 			{...restProps}
 		>
 			{children}

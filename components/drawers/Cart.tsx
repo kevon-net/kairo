@@ -6,8 +6,6 @@ import { ActionIcon, Center, Drawer, Indicator, Skeleton, Stack, Text } from "@m
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconShoppingCart } from "@tabler/icons-react";
 
-import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
-
 import classes from "./Cart.module.scss";
 
 export default function Cart({ items }: { items?: any }) {
@@ -47,35 +45,31 @@ export default function Cart({ items }: { items?: any }) {
 				)}
 			</Drawer>
 
-			<ClerkLoading>
-				<Skeleton height={mobile ? 16 : tablet ? 20 : 20} circle />
-			</ClerkLoading>
+			{/* <Skeleton height={mobile ? 16 : tablet ? 20 : 20} circle /> */}
 
-			<ClerkLoaded>
-				<Indicator
-					disabled={!items}
-					processing={false}
-					size={tablet ? 8 : 10}
-					offset={4}
-					onClick={open}
-					label={
-						items ? (
-							<Text component="span" inherit fw={500} fz={10}>
-								{items.length}
-							</Text>
-						) : undefined
-					}
-					className={classes.indicator}
-				>
-					<Center>
-						<ActionIcon onClick={open} variant="transparent">
-							<Center>
-								<IconShoppingCart size={mobile ? 16 : tablet ? 20 : 20} />
-							</Center>
-						</ActionIcon>
-					</Center>
-				</Indicator>
-			</ClerkLoaded>
+			<Indicator
+				disabled={!items}
+				processing={false}
+				size={tablet ? 8 : 10}
+				offset={4}
+				onClick={open}
+				label={
+					items ? (
+						<Text component="span" inherit fw={500} fz={10}>
+							{items.length}
+						</Text>
+					) : undefined
+				}
+				className={classes.indicator}
+			>
+				<Center>
+					<ActionIcon onClick={open} variant="transparent">
+						<Center>
+							<IconShoppingCart size={mobile ? 16 : tablet ? 20 : 20} />
+						</Center>
+					</ActionIcon>
+				</Center>
+			</Indicator>
 		</>
 	);
 }

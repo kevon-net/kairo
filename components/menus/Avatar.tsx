@@ -33,59 +33,62 @@ import classes from "./Avatar.module.scss";
 
 import initialize from "@/handlers/parsers/string/initialize";
 
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 
 export default function Avatar() {
-	const { isLoaded, isSignedIn, user } = useUser();
+	const session = useSession();
 
 	const mobile = useMediaQuery("(max-width: 48em)");
 
 	const sizeAvatar = mobile ? 28 : 36;
 
+	const user = session.data?.user;
+
 	const menuItems = {
 		app: [
 			{
 				icon: IconDashboard,
-				link: `/${user?.id}/dashboard`,
+				link: `/dashboard`,
 				label: "Overview",
 			},
 			{
 				icon: IconPackage,
-				link: `/${user?.id}/dashboard/orders`,
+				link: `/dashboard/orders`,
 				label: "My Orders",
 			},
 		],
 		user: [
 			{
 				icon: IconUser,
-				link: `/${user?.id}/settings/profile`,
+				link: `/account/settings/profile`,
 				label: "Profile Settings",
 			},
 			{
 				icon: IconCoins,
-				link: `/${user?.id}/settings/payment`,
+				link: `/account/settings/payment`,
 				label: "Payment Details",
 			},
 			{
 				icon: IconMapPin,
-				link: `/${user?.id}/settings/addresses`,
+				link: `/account/settings/addresses`,
 				label: "Shipping Addresses",
 			},
 			{
 				icon: IconSettings,
-				link: `/${user?.id}/settings/account`,
+				link: `/account/settings`,
 				label: "Account Settings",
 			},
 			{
 				icon: IconBellRinging,
-				link: `/${user?.id}/settings/notifications`,
+				link: `/account/settings/notifications`,
 				label: "Notifications",
 			},
 		],
 		danger: [
 			{
 				icon: IconLogout,
-				label: "Log Out",
+				link: `/api/auth/signout`,
+				label: "Sign Out",
 				color: "red",
 			},
 		],
@@ -95,37 +98,48 @@ export default function Avatar() {
 		<Menu position={"bottom-end"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
 			<MenuTarget>
 				{user ? (
-					!user?.imageUrl ? (
+					!user?.image ? (
 						<MantineAvatar
 							size={sizeAvatar}
-							title={user.fullName ? user.fullName : "User"}
+							title={user.name ? user.name : "User"}
 							className={classes.avatar}
 						>
-							{user.fullName ? initialize(user?.fullName) : "FN"}
+							{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
 						</MantineAvatar>
 					) : (
 						<MantineAvatar
-							src={user.imageUrl}
-							alt={user.fullName ? user.fullName : "User"}
+							src={user.image}
+							alt={user.name ? user.name : "User"}
 							size={sizeAvatar}
-							title={user.fullName ? user.fullName : "User"}
+							title={user.name ? user.name : "User"}
 							className={classes.avatar}
 						/>
 					)
 				) : (
-					<div></div>
+					<span></span>
 				)}
-				<div>auth</div>
 			</MenuTarget>
 
 			<MenuDropdown>
 				<Stack gap={"xs"} align="center" p={"sm"}>
-					{!isLoaded ? (
+					{session.status == "loading" ? (
 						<Skeleton height={8} radius="xl" />
 					) : (
-						<Text fz={"sm"} lh={1}>
-							{user?.fullName}
-						</Text>
+						<Stack gap={"xs"}>
+							{user?.name && (
+								<Text fz={"sm"} lh={1} ta={"center"}>
+									{user?.name}
+								</Text>
+							)}
+							<Text fz={"xs"} lh={1} ta={"center"}>
+								({user?.email})
+							</Text>
+
+							{/* test expiry session */}
+							{/* <Text fz={"xs"} lh={1} ta={"center"}>
+								({session.data?.expires})
+							</Text> */}
+						</Stack>
 					)}
 				</Stack>
 
@@ -150,11 +164,15 @@ export default function Avatar() {
 				<MenuDivider />
 
 				{menuItems.danger.map(item => (
-					<SignOutButton key={item.label}>
-						<MenuItem leftSection={<item.icon size={16} />} color={item.color}>
-							{item.label}
-						</MenuItem>
-					</SignOutButton>
+					<MenuItem
+						key={item.label}
+						leftSection={<item.icon size={16} />}
+						component={Link}
+						href={item.link}
+						color={item.color}
+					>
+						{item.label}
+					</MenuItem>
 				))}
 			</MenuDropdown>
 		</Menu>

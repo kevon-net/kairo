@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Body, Container, Head, Heading, Html, Img, Link, Preview, Section, Text } from "@react-email/components";
 
-import constants from "./constants";
+import contact from "@/data/contact";
 
 import { typeContact } from "@/types/form";
 
@@ -17,12 +17,12 @@ export default function Contact(data: typeContact) {
 				<Container style={content}>
 					<Section style={header}>
 						<Container style={container}>
-							<Heading style={{ ...h1, textAlign: "center" }}>{constants.brand.name}</Heading>
+							<Heading style={{ ...h1, textAlign: "center" }}>{contact.name.company}</Heading>
 							{/* <Img
 							src={"https://localhost:300/path/to/image"}
 							width={32}
 							height={32}
-							alt={constants.brand.name}
+							alt={contact.name.company}
 						/> */}
 						</Container>
 					</Section>
@@ -30,7 +30,7 @@ export default function Contact(data: typeContact) {
 					<Section style={main}>
 						<Container style={container}>
 							<Section style={section}>
-								{/* <Heading style={h2}>{constants.brand.name}</Heading> */}
+								{/* <Heading style={h2}>{contact.name.company}</Heading> */}
 								<Text style={text}>
 									Recipient, <br />
 									{data.message} <br />
@@ -52,17 +52,17 @@ export default function Contact(data: typeContact) {
 					<Section style={footer}>
 						<Container style={container}>
 							<Text style={{ ...text, textAlign: "center" }}>
-								© {constants.year}, {constants.brand.name}. All rights reserved. Read our{" "}
+								© {new Date().getFullYear()}, {contact.name.company}. All rights reserved. Read our{" "}
 								<Link href="#" style={link}>
 									Privacy Notice
 								</Link>
 								.
 							</Text>
 							<Text style={{ ...text, textAlign: "center" }}>
-								This message was produced and distributed by {constants.brand.name}, or its affiliates.
+								This message was produced and distributed by {contact.name.company}, or its affiliates.
 							</Text>
 							<Text style={{ ...text, textAlign: "center" }}>
-								{constants.addresses.find(a => a.place == "Main Office")?.label}.
+								{contact.emails.find(e => e.type == "main")?.value}.
 							</Text>
 						</Container>
 					</Section>

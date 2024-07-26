@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { Body, Container, Head, Heading, Html, Img, Link, Preview, Section, Text } from "@react-email/components";
 
-import constants from "../constants";
 import contact from "@/data/contact";
 
 export default function Forgot(otl: string) {
@@ -18,12 +17,12 @@ export default function Forgot(otl: string) {
 				<Container style={content}>
 					<Section style={header}>
 						<Container style={container}>
-							<Heading style={{ ...h1, textAlign: "center" }}>{constants.brand.name}</Heading>
+							<Heading style={{ ...h1, textAlign: "center" }}>{contact.name.company}</Heading>
 							{/* <Img
 							src={"https://localhost:300/path/to/image"}
 							width={32}
 							height={32}
-							alt={constants.brand.name}
+							alt={contact.name.company}
 						/> */}
 						</Container>
 					</Section>
@@ -59,13 +58,13 @@ export default function Forgot(otl: string) {
 					<Section style={footer}>
 						<Container style={container}>
 							<Text style={{ ...text, textAlign: "center" }}>
-								Copyright © {constants.year}, {constants.brand.name}. All rights reserved.
+								Copyright © {new Date().getFullYear()}, {contact.name.company}. All rights reserved.
 							</Text>
 							<Text style={{ ...text, textAlign: "center" }}>
-								This message was produced and distributed by {constants.brand.name}, or its affiliates.
+								This message was produced and distributed by {contact.name.company}, or its affiliates.
 							</Text>
 							<Text style={{ ...text, textAlign: "center" }}>
-								{constants.addresses.find(a => a.place == "Main Office")?.label}.
+								{contact.emails.find(e => e.type == "main")?.value}.
 							</Text>
 						</Container>
 					</Section>

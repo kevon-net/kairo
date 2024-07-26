@@ -96,7 +96,7 @@ export async function POST(req: Request) {
 
 const createOtlValue = async (fields: { id: string; email: string; password: string }) => {
 	// create token
-	const secret = process.env.JWT_SECRET_KEY + fields.password;
+	const secret = process.env.NEXT_JWT_KEY + fields.password;
 	const token = jwt.sign({ email: fields.email, id: fields.id }, secret, {
 		expiresIn: "5m",
 	});

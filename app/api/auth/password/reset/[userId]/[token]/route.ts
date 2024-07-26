@@ -15,8 +15,7 @@ export async function POST(req: Request, { params }: { params: typePasswordReset
 		} else {
 			try {
 				const samplePassword = "@72@^0nH*Nl%&^@y!Kh%mU#wFb&B@cBStl%O9a3QHc#134J65D@rplg35t1J^L@w";
-				const secret =
-					process.env.JWT_SECRET_KEY + (userRecord.password ? userRecord.password : samplePassword);
+				const secret = process.env.NEXT_JWT_KEY + (userRecord.password ? userRecord.password : samplePassword);
 
 				await jwt.verify(params.token, secret);
 
@@ -63,7 +62,7 @@ export async function POST(req: Request, { params }: { params: typePasswordReset
 
 const notify = async (fields: { email: string }) => {
 	// send confirmation email
-	const emailResponse = await notification.passwordChanged(fields.email);
+	const emailResponse = await notification.passwordChanged({ email: fields.email });
 
 	return { email: emailResponse };
 };

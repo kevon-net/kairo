@@ -51,7 +51,7 @@ export default async function Main() {
 				<Group visibleFrom="sm">
 					{!session?.user ? (
 						<ProviderAuthSignIn>
-							<Button size="xs" variant="default">
+							<Button size="xs" variant="light">
 								Log In
 							</Button>
 						</ProviderAuthSignIn>

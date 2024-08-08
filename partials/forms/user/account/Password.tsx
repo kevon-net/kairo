@@ -17,9 +17,11 @@ import compare from "@/handlers/validators/form/special/compare";
 import request from "@/hooks/request";
 
 import { Session, User } from "next-auth";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
-export default function Password({ data }: { data: Session }) {
+export default function Password() {
+	const session = useSession();
+
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
 
@@ -53,7 +55,7 @@ export default function Password({ data }: { data: Session }) {
 				setSending(true);
 
 				const res = await request.post(
-					process.env.NEXT_PUBLIC_API_URL + `/api/${data.userId}/settings/account/password`,
+					process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/password`,
 					{
 						method: "POST",
 						body: JSON.stringify({

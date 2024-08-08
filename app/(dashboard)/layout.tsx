@@ -6,8 +6,12 @@ import FooterMain from "@/partials/footers/Main";
 import HeaderMain from "@/partials/headers/Main";
 
 import AffixTop from "@/components/affixi/Top";
+import { Metadata } from "next";
+import contact from "@/data/contact";
 
-export default function LayoutMarketing({
+export const metadata: Metadata = { title: { default: "Dashboard", template: `%s - Dashboard - ${contact.name.app}` } };
+
+export default function LayoutDashboard({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;

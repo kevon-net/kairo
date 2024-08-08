@@ -6,6 +6,10 @@ import LayoutBody from "@/layouts/Body";
 
 import contact from "@/data/contact";
 
+export interface typeParams {
+	blogId: string;
+}
+
 export const metadata: Metadata = {
 	title: { default: "Blog", template: `%s - Blog - ${contact.name.app}` },
 };

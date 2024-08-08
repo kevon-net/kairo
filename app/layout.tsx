@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
+import { Noto_Sans_Display } from "next/font/google";
 
 import "@mantine/core/styles/global.css";
 import "@mantine/core/styles.css";
@@ -33,7 +33,7 @@ import { auth } from "@/auth";
 
 import AffixTheme from "@/components/affixi/Theme";
 
-// const inter = Inter({ subsets: ["latin"] });
+const noto = Noto_Sans_Display({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: { default: `${contact.name.app}`, template: `%s - ${contact.name.app}` },
@@ -53,9 +53,7 @@ export default async function App({
 			<head>
 				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
-			<body /* className={inter.className} */>
-				<SpeedInsights />
-
+			<body className={noto.className}>
 				<MantineProvider
 					theme={projectName}
 					defaultColorScheme="light"
@@ -63,15 +61,15 @@ export default async function App({
 					withStaticClasses={false}
 					withGlobalClasses={true}
 				>
-					<Notifications limit={3} />
-
 					<ModalsProvider>
-						<SessionProvider session={session}>
-							<AffixTheme />
-							{children}
-						</SessionProvider>
+						<SessionProvider session={session}>{children}</SessionProvider>
 					</ModalsProvider>
+
+					<Notifications limit={3} />
+					<AffixTheme />
 				</MantineProvider>
+
+				<SpeedInsights />
 			</body>
 		</html>
 	);

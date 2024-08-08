@@ -13,7 +13,7 @@ import MenuAvatar from "@/components/menus/Avatar";
 import ProviderAuthSignIn from "@/providers/auth/signIn";
 
 import links from "@/data/links";
-import brand from "@/assets/images/brand";
+import images from "@/assets/images";
 
 import classes from "./Main.module.scss";
 import contact from "@/data/contact";
@@ -31,10 +31,12 @@ export default async function Main() {
 						<Link href={"/"}>
 							<Group>
 								<Image
-									src={brand.logo.light}
+									src={images.brand.logo.light}
 									alt={contact.name.app}
 									h={{ base: 24 }}
 									component={NextImage}
+									width={1920}
+									height={1080}
 									priority
 								/>
 							</Group>

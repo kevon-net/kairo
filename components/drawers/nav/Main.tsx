@@ -8,12 +8,9 @@ import { usePathname } from "next/navigation";
 import { Burger, Button, Drawer, Group, Image, NavLink, Stack } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
-import brand from "@/assets/images/brand";
-
 import classes from "./Main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
-import contact from "@/data/contact";
 
 export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
@@ -84,6 +81,8 @@ export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } 
 				// alt={contact.name.app}
 				// 			h={{ base: 24 }}
 				// 			component={NextImage}
+				// width={1920}
+				// 				height={1080}
 				// 			loading="lazy"
 				// 		/>
 				// 	</Group>

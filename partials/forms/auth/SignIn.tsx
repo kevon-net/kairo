@@ -23,7 +23,7 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
 
-import PartialOAuth from "@/partials/Oauth";
+import AuthProviders from "@/partials/auth/Providers";
 
 import email from "@/handlers/validators/form/special/email";
 
@@ -145,7 +145,7 @@ export default function SignIn() {
 
 				<Divider label="or continue with" />
 
-				<PartialOAuth />
+				<AuthProviders />
 
 				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 					Don&apos;t have an account?{" "}

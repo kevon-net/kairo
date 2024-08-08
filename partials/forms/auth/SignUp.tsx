@@ -26,7 +26,8 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import LayoutSection from "@/layouts/Section";
-import PartialOAuth from "@/partials/Oauth";
+import AuthProviders from "@/partials/auth/Providers";
+import AuthHeader from "@/partials/auth/Header";
 
 import email from "@/handlers/validators/form/special/email";
 import password from "@/handlers/validators/form/special/password";
@@ -386,15 +387,12 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 					<div style={styles}>
 						<LayoutSection padded containerized={"xs"}>
 							<Stack gap={40} px={{ md: 40 }}>
-								<Stack gap={"xs"}>
-									<Title order={2} ta={{ base: "center", md: "start" }}>
-										Create Your Account
-									</Title>
-									<Text ta={{ base: "center", md: "start" }}>
-										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet
-										velit ma.
-									</Text>
-								</Stack>
+								<AuthHeader
+									data={{
+										title: "Create Your Account",
+										desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
+									}}
+								/>
 
 								<Box
 									component="form"
@@ -442,7 +440,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 
 										<Divider label="or continue with" />
 
-										<PartialOAuth />
+										<AuthProviders />
 
 										<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 											Already have an account?{" "}
@@ -471,15 +469,13 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 					<div style={styles}>
 						<LayoutSection padded containerized={"xs"}>
 							<Stack gap={40} px={{ md: 40 }}>
-								<Stack gap={"xs"}>
-									<Title order={2} ta={{ base: "center", md: "start" }}>
-										Verify Your Account
-									</Title>
-									<Text ta={{ base: "center", md: "start" }}>
-										A one-time code has been sent to the provided email ({form.values.email}). Enter
-										the code below to verify.
-									</Text>
-								</Stack>
+								<AuthHeader
+									data={{
+										title: "Verify Your Account",
+										desc: `A one-time code has been sent to the provided email ${form.values.email}. Enter
+										the code below to verify.`,
+									}}
+								/>
 
 								<Box
 									component="form"

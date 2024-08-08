@@ -17,22 +17,24 @@ import capitalize from "@/handlers/parsers/string/capitalize";
 import request from "@/hooks/request";
 
 import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 interface typeAccountDetails {
 	name?: string | null;
 	email?: string | null;
 }
 
-export default function Details({ data }: { data: Session }) {
+export default function Details() {
+	const session = useSession();
+
 	const [submitted, setSubmitted] = useState(false);
 
 	const router = useRouter();
 
 	const form = useForm({
 		initialValues: {
-			name: data.user.name ? data.user.name : "",
-			email: data.user.email,
+			name: session.data?.user.name ? session.data?.user.name : "",
+			email: session.data?.user.email,
 		},
 
 		validate: {
@@ -63,7 +65,7 @@ export default function Details({ data }: { data: Session }) {
 					setSubmitted(true);
 
 					const res = await request.post(
-						process.env.NEXT_PUBLIC_API_URL + `/api/${data.userId}/settings/account/details`,
+						process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/details`,
 						{
 							method: "POST",
 							body: JSON.stringify(parse(formValues)),
@@ -104,14 +106,6 @@ export default function Details({ data }: { data: Session }) {
 								message: "The changes will be applied on next login",
 								variant: "success",
 							});
-
-							// // update session on client
-							// if (session.data) {
-							// 	session.data.user.name = parse(formValues).name;
-							// 	session.data.user.email = parse(formValues).email;
-							// }
-
-							// router.refresh();
 						}
 					}
 				}
@@ -138,7 +132,7 @@ export default function Details({ data }: { data: Session }) {
 						label={"Name"}
 						placeholder="Your Name"
 						{...form.getInputProps("name")}
-						disabled={!data}
+						disabled={!session}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
@@ -152,7 +146,7 @@ export default function Details({ data }: { data: Session }) {
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, sm: 6 }}>
-					<Button type="submit" loading={submitted} mt={"md"} disabled={!data}>
+					<Button type="submit" loading={submitted} mt={"md"} disabled={!session}>
 						{submitted ? "Saving" : "Save"}
 					</Button>
 				</GridCol>

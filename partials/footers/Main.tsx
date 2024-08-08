@@ -22,7 +22,7 @@ import {
 
 import LayoutSection from "@/layouts/Section";
 
-import brand from "@/assets/images/brand";
+import images from "@/assets/images";
 
 import classes from "./Main.module.scss";
 import contact from "@/data/contact";
@@ -78,10 +78,12 @@ export default function Main() {
 					<GridCol span={{ base: 12, md: 4, lg: 3.5 }}>
 						<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"md"}>
 							<Image
-								src={brand.logo.light}
+								src={images.brand.logo.light}
 								alt="next logo"
 								w={{ base: 80 }}
 								component={NextImage}
+								width={1920}
+								height={1080}
 								loading="lazy"
 							/>
 

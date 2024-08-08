@@ -9,10 +9,8 @@ import { IconArrowLeft } from "@tabler/icons-react";
 
 import LayoyutSection from "@/layouts/Section";
 
-import brand from "@/assets/images/brand";
+import images from "@/assets/images";
 import contact from "@/data/contact";
-
-import error404 from "@/assets/images/error/404.svg";
 
 export default function NotFound() {
 	return (
@@ -24,10 +22,12 @@ export default function NotFound() {
 							<Anchor component={Link} href={"/"} visibleFrom="sm">
 								<Group>
 									<Image
-										src={brand.logo.light}
+										src={images.brand.logo.light}
 										alt={contact.name.app}
 										h={{ base: 48 }}
 										component={NextImage}
+										width={1920}
+										height={1080}
 										priority
 									/>
 								</Group>
@@ -62,10 +62,12 @@ export default function NotFound() {
 						<Center>
 							<Group>
 								<Image
-									src={error404}
+									src={images.error.err404}
 									alt={"Not Found"}
 									h={{ base: 120, xs: 160, md: 240, lg: 280 }}
 									component={NextImage}
+									width={1920}
+									height={1080}
 									priority
 								/>
 							</Group>

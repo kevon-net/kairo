@@ -15,13 +15,15 @@ import compare from "@/handlers/validators/form/special/compare";
 
 import request from "@/hooks/request";
 
-import { signOut as authSignOut, signIn as authSignIn } from "next-auth/react";
+import { signOut as authSignOut, signIn as authSignIn, useSession } from "next-auth/react";
+
+import { typeParams } from "@/app/(authentication)/auth/(default)/layout";
 
 interface typeReset {
 	password: string;
 }
 
-export default function Reset({ data }: { data: { userId: string; token: string } }) {
+export default function Reset({ data }: { data: typeParams }) {
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
 

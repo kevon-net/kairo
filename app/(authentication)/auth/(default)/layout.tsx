@@ -3,7 +3,7 @@ import React from "react";
 import NextImage from "next/image";
 import Link from "next/link";
 
-import { Anchor, Center, Grid, GridCol, Group, Image, Stack } from "@mantine/core";
+import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
 import LayoutBody from "@/layouts/Body";
 import LayoutSection from "@/layouts/Section";
@@ -11,7 +11,12 @@ import LayoutSection from "@/layouts/Section";
 import images from "@/assets/images";
 import contact from "@/data/contact";
 
-export default function Notify({
+export interface typeParams {
+	userId: string;
+	token: string;
+}
+
+export default function LayoutDefault({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;
@@ -19,12 +24,6 @@ export default function Notify({
 	return (
 		<LayoutBody>
 			<Grid gutter={0}>
-				<GridCol span={{ base: 12, md: 6 }}>
-					<Center mih={"100vh"} px={{ md: 40 }}>
-						{children}
-					</Center>
-				</GridCol>
-
 				<GridCol span={6} visibleFrom="md">
 					<Center h={"100%"} bg={"var(--mantine-color-pri-light)"}>
 						<LayoutSection margined containerized={"sm"} px={"xl"} pos={"relative"}>
@@ -42,8 +41,24 @@ export default function Notify({
 										/>
 									</Group>
 								</Anchor>
+
+								<Stack gap={"xs"}>
+									<Title order={1} ta={{ base: "center", md: "start" }}>
+										Welcome to Brix!
+									</Title>
+									<Text ta={{ base: "center", md: "start" }} w={{ md: "66%" }}>
+										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet
+										velit ma.
+									</Text>
+								</Stack>
 							</Stack>
 						</LayoutSection>
+					</Center>
+				</GridCol>
+
+				<GridCol span={{ base: 12, md: 6 }}>
+					<Center mih={"100vh"} px={{ md: 40 }}>
+						{children}
 					</Center>
 				</GridCol>
 			</Grid>

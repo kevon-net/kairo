@@ -26,27 +26,27 @@ export default function User() {
 	const navLinkItems = [
 		{
 			icon: IconUser,
-			link: `/settings/profile`,
+			link: `/account/profile`,
 			label: "Profile Settings",
 		},
 		{
 			icon: IconCoins,
-			link: `/settings/payment`,
+			link: `/account/payment`,
 			label: "Payment Details",
 		},
 		{
 			icon: IconMapPin,
-			link: `/settings/addresses`,
+			link: `/account/addresses`,
 			label: "Shipping Addresses",
 		},
 		{
 			icon: IconSettings,
-			link: `/settings/account`,
+			link: `/account/settings`,
 			label: "Account Settings",
 		},
 		{
 			icon: IconBellRinging,
-			link: `/settings/notifications`,
+			link: `/account/notifications`,
 			label: "Notifications",
 		},
 	];

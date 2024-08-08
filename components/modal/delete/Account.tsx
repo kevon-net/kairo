@@ -9,8 +9,6 @@ import { useSession } from "next-auth/react";
 export default function Account() {
 	const [opened, { open, close }] = useDisclosure(false);
 
-	const session = useSession();
-
 	return (
 		<>
 			<Modal opened={opened} onClose={close} centered title="Account Erasure">
@@ -21,7 +19,7 @@ export default function Account() {
 							Proceed with caution. This action is irreversible.
 						</Text>
 					</Text>
-					{session.data && <FormUserAccountDelete data={session.data} />}
+					<FormUserAccountDelete />
 				</Stack>
 			</Modal>
 

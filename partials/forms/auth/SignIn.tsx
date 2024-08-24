@@ -10,9 +10,11 @@ import {
 	Box,
 	Button,
 	Center,
+	Checkbox,
 	Divider,
 	Grid,
 	GridCol,
+	Group,
 	PasswordInput,
 	Stack,
 	Text,
@@ -39,6 +41,7 @@ export default function SignIn() {
 		initialValues: {
 			email: "",
 			password: "",
+			save: false,
 		},
 
 		validate: {
@@ -51,6 +54,7 @@ export default function SignIn() {
 		return {
 			email: rawData.email.trim().toLowerCase(),
 			password: rawData.password.trim(),
+			save: rawData.save,
 		};
 	};
 
@@ -113,7 +117,7 @@ export default function SignIn() {
 						<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 					</GridCol>
 					<GridCol span={{ base: 12, xs: 12 }}>
-						<Stack gap={4} align="end">
+						<Stack gap={"xs"}>
 							<PasswordInput
 								required
 								label={"Password"}
@@ -121,17 +125,26 @@ export default function SignIn() {
 								{...form.getInputProps("password")}
 								w={"100%"}
 							/>
-							<Anchor
-								underline="hover"
-								inherit
-								fz={"xs"}
-								ta={"end"}
-								w={"fit-content"}
-								component={Link}
-								href={"/auth/password/forgot"}
-							>
-								Forgot password
-							</Anchor>
+
+							<Group justify="space-between">
+								<Checkbox
+									label="Remember me"
+									key={form.key("save")}
+									{...form.getInputProps("save", { type: "checkbox" })}
+								/>
+
+								<Anchor
+									underline="hover"
+									inherit
+									fz={"xs"}
+									ta={"end"}
+									w={"fit-content"}
+									component={Link}
+									href={"/auth/password/forgot"}
+								>
+									Forgot password
+								</Anchor>
+							</Group>
 						</Stack>
 					</GridCol>
 					<GridCol span={12} mt={"md"}>

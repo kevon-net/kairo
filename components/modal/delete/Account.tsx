@@ -3,7 +3,7 @@
 import { Modal, Button, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-import FormUserAccountDelete from "@/partials/forms/user/account/Delete";
+import FormUserAccountDelete from "@/partials/forms/user/settings/Delete";
 import { useSession } from "next-auth/react";
 
 export default function Account() {

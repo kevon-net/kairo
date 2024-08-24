@@ -6,8 +6,8 @@ import { Center, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/cor
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import FormUserAccountDetails from "@/partials/forms/user/account/Details";
-import FormUserAccountPassword from "@/partials/forms/user/account/Password";
+import FormUserAccountDetails from "@/partials/forms/user/settings/Details";
+import FormUserAccountPassword from "@/partials/forms/user/settings/Password";
 import ModalDeleteAccount from "@/components/modal/delete/Account";
 
 import { auth } from "@/auth";

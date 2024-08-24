@@ -15,4 +15,5 @@ export interface typeSignUp {
 export interface typeSignIn {
 	email: string;
 	password: string;
+	save: boolean;
 }

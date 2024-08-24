@@ -13,6 +13,7 @@ export default function Section({
 	className,
 	bordered,
 	shadowed,
+	bg,
 	children,
 	...restProps
 }: typeSection & React.ComponentProps<typeof Box & typeof Container>) {
@@ -26,6 +27,7 @@ export default function Section({
 				(bordered ? ` ${classes.border}` : "") +
 				(shadowed ? ` ${classes.shadow}` : "")
 			}
+			bg={bg}
 			{...restProps}
 		>
 			{containerized ? (

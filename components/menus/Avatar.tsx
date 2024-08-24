@@ -42,8 +42,6 @@ export default function Avatar() {
 
 	const sizeAvatar = mobile ? 28 : 36;
 
-	const user = session.data?.user;
-
 	const menuItems = {
 		app: [
 			{
@@ -94,29 +92,28 @@ export default function Avatar() {
 		],
 	};
 
+	// sample user
+	const user = {
+		image: null,
+		name: "Sandra Langevin",
+		email: "sandra.langevin@example.com",
+	};
+
 	return (
-		<Menu position={"bottom-end"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
+		<Menu position={"bottom"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
 			<MenuTarget>
-				{user ? (
-					!user?.image ? (
-						<MantineAvatar
-							size={sizeAvatar}
-							title={user.name ? user.name : "User"}
-							className={classes.avatar}
-						>
-							{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
-						</MantineAvatar>
-					) : (
-						<MantineAvatar
-							src={user.image}
-							alt={user.name ? user.name : "User"}
-							size={sizeAvatar}
-							title={user.name ? user.name : "User"}
-							className={classes.avatar}
-						/>
-					)
+				{!user?.image ? (
+					<MantineAvatar size={sizeAvatar} title={user.name ? user.name : "User"} className={classes.avatar}>
+						{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
+					</MantineAvatar>
 				) : (
-					<span></span>
+					<MantineAvatar
+						src={user.image}
+						alt={user.name ? user.name : "User"}
+						size={sizeAvatar}
+						title={user.name ? user.name : "User"}
+						className={classes.avatar}
+					/>
 				)}
 			</MenuTarget>
 

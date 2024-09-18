@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Box, Container, Group, Title } from "@mantine/core";
 
 import BreadcrumbMain from "@/components/breadcrumbs/Main";
-import crumbify from "@/handlers/parsers/string/crumbify";
+import { crumbify } from "@/handlers/parsers/string";
 
 import classes from "./Route.module.scss";
 

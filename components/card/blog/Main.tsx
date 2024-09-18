@@ -20,18 +20,17 @@ import {
 	Title,
 } from "@mantine/core";
 
-import link from "@/handlers/parsers/string/link";
-
 import classes from "./Main.module.scss";
 
 import { typePost } from "@/types/post";
+import { linkify } from "@/handlers/parsers/string";
 
 export default function Main({ data }: { data: typePost }) {
 	return (
 		<Card className={classes.card} withBorder padding={"lg"}>
 			<Stack gap={"lg"}>
 				<CardSection>
-					<Anchor component={Link} underline="hover" inherit href={`/blog/${link.linkify(data.titleLink)}`}>
+					<Anchor component={Link} underline="hover" inherit href={`/blog/${linkify(data.titleLink)}`}>
 						<Skeleton height={240} radius={0} />
 					</Anchor>
 				</CardSection>
@@ -43,7 +42,7 @@ export default function Main({ data }: { data: typePost }) {
 								component={Link}
 								underline="hover"
 								inherit
-								href={`/blog/${link.linkify(data.titleLink)}`}
+								href={`/blog/${linkify(data.titleLink)}`}
 							>
 								{data.title}
 							</Anchor>

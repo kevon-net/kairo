@@ -1,53 +1,74 @@
 import React from "react";
 
-import { Anchor, Avatar, Flex, Grid, GridCol, Stack, Title } from "@mantine/core";
+import { Anchor, Avatar, Divider, Flex, Grid, GridCol, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormUserProfileDetails from "@/partials/forms/user/profile/Details";
+import FormUserAccountPassword from "@/partials/forms/user/settings/Password";
+import ModalDeleteAccount from "@/components/modal/delete/Account";
 
-import initialize from "@/handlers/parsers/string/initialize";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Metadata } from "next";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = { title: "Profile" };
 
 export default async function Profile() {
 	const session = await auth();
 
-	!session?.user && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	return (
 		<LayoutPage stacked>
 			<LayoutSection>
-				<Stack gap={"xl"}>
+				<Grid>
+					<GridCol span={{ base: 12 }}>
+						<Title order={2} fz={"xl"}>
+							Personal Details
+						</Title>
+					</GridCol>
+
+					<GridCol span={{ base: 12, md: 8, lg: 5.5 }}>
+						<FormUserProfileDetails />
+					</GridCol>
+				</Grid>
+			</LayoutSection>
+
+			<Divider />
+
+			<LayoutSection>
+				<Grid gutter={"xl"}>
+					<GridCol span={{ base: 12, md: 8, lg: 5.5 }}>
+						<Stack gap={"lg"}>
+							<Title order={2} fz={"xl"}>
+								Update Password
+							</Title>
+							<FormUserAccountPassword />
+						</Stack>
+					</GridCol>
+				</Grid>
+			</LayoutSection>
+
+			<Divider />
+
+			<LayoutSection>
+				<Stack gap={"lg"} align="start">
 					<Title order={2} fz={"xl"}>
-						Profile Details
+						Delete Account
 					</Title>
-					<Grid>
-						<GridCol span={{ base: 12, sm: 5, md: 12, lg: 12 }} order={{ base: 1, sm: 2, md: 1 }}>
-							<Flex direction={{ base: "column", md: "row" }} align={"center"} gap={"xl"}>
-								{session?.user.image ? (
-									<Avatar
-										src={session?.user.image}
-										alt={session?.user.name ? session?.user.name : "User"}
-										size={160}
-									/>
-								) : session?.user?.name ? (
-									<Avatar alt={session?.user.name} size={160}>
-										{initialize(session?.user.name)}
-									</Avatar>
-								) : (
-									<Avatar size={160} />
-								)}
-								<Anchor>Edit Picture</Anchor>
-							</Flex>
-						</GridCol>
-						<GridCol span={{ base: 12, sm: 7, md: 12, lg: 7 }} order={{ base: 2, sm: 1, md: 1 }}>
-							<FormUserProfileDetails />
-						</GridCol>
-					</Grid>
+					<Stack gap={"xs"}>
+						<Text>
+							Our deletion process complies with the{" "}
+							<Anchor inherit href="https://gdpr.eu/" target="_blank">
+								GDPR regulations
+							</Anchor>
+							, which requires us to permanently delete user data upon request. As such, deleting your
+							account will permanently remove all data associated with it and therefore be irreversible.
+						</Text>
+					</Stack>
+
+					<ModalDeleteAccount />
 				</Stack>
 			</LayoutSection>
 		</LayoutPage>

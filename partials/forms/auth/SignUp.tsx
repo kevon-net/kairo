@@ -29,16 +29,15 @@ import LayoutSection from "@/layouts/Section";
 import AuthProviders from "@/partials/auth/Providers";
 import AuthHeader from "@/partials/auth/Header";
 
-import email from "@/handlers/validators/form/special/email";
-import password from "@/handlers/validators/form/special/password";
+import email from "@/libraries/validators/special/email";
+import password from "@/libraries/validators/special/password";
 
-import request from "@/hooks/request";
-import compare from "@/handlers/validators/form/special/compare";
-import converter from "@/utilities/converter";
+import compare from "@/libraries/validators/special/compare";
 
 import { typeSignUp } from "@/types/form";
 
 import { signIn as authSignIn } from "next-auth/react";
+import { millToMinSec } from "@/handlers/parsers/number";
 
 export default function SignUp({ userEmail }: { userEmail?: string }) {
 	const router = useRouter();
@@ -107,7 +106,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 				// // test request body
 				// console.log(parse(formValues));
 
-				const res = await request.post(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-up", {
+				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-up", {
 					method: "POST",
 					body: JSON.stringify(parse(formValues)),
 					headers: {
@@ -115,6 +114,8 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 						Accept: "application/json",
 					},
 				});
+
+				const res = await response.json();
 
 				if (!res) {
 					notifications.show(notification.noResponse);
@@ -191,7 +192,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 				// // test request body
 				// console.log(parse2(formValues));
 
-				const res = await request.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify`, {
+				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify`, {
 					method: "POST",
 					body: JSON.stringify(parse2(formValues)),
 					headers: {
@@ -199,6 +200,8 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 						Accept: "application/json",
 					},
 				});
+
+				const res = await response.json();
 
 				if (!res) {
 					notifications.show(notification.noResponse);
@@ -292,7 +295,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			// // test request body
 			// console.log({ email: form.values.email });
 
-			const res = await request.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify/resend`, {
+			const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/auth/verify/resend`, {
 				method: "POST",
 				body: JSON.stringify({ email: form.values.email }),
 				headers: {
@@ -300,6 +303,8 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 					Accept: "application/json",
 				},
 			});
+
+			const res = await response.json();
 
 			if (!res) {
 				notifications.show(notification.noResponse);
@@ -327,7 +332,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 							form2.reset();
 						} else {
 							if (!res.otp.expired) {
-								setTime(converter.millSec(res.otp.expiry));
+								setTime(millToMinSec(res.otp.expiry));
 
 								// // test otp tte response
 								// console.log(res.otp.time);

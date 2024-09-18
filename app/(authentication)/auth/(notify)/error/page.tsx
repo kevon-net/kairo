@@ -7,7 +7,7 @@ import { Button, Flex, Group, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import ProviderAuthSignIn from "@/providers/auth/signIn";
+import AuthSignIn from "@/components/auth/signIn";
 
 import { IconArrowRight } from "@tabler/icons-react";
 
@@ -32,9 +32,9 @@ export default async function SignOut() {
 					</Stack>
 
 					<Group>
-						<ProviderAuthSignIn>
+						<AuthSignIn>
 							<Button>Try Again</Button>
-						</ProviderAuthSignIn>
+						</AuthSignIn>
 						<Button
 							component={Link}
 							href={"/"}

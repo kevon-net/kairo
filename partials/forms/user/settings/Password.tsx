@@ -11,17 +11,12 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import password from "@/handlers/validators/form/special/password";
-import compare from "@/handlers/validators/form/special/compare";
+import password from "@/libraries/validators/special/password";
+import compare from "@/libraries/validators/special/compare";
 
-import request from "@/hooks/request";
-
-import { Session, User } from "next-auth";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 export default function Password() {
-	const session = useSession();
-
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
 
@@ -54,20 +49,19 @@ export default function Password() {
 			if (form.isValid()) {
 				setSending(true);
 
-				const res = await request.post(
-					process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/password`,
-					{
-						method: "POST",
-						body: JSON.stringify({
-							passwordCurrent: parse(formValues).passwordCurrent,
-							passwordNew: parse(formValues).passwordNew,
-						}),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					}
-				);
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/account/settings/password`, {
+					method: "POST",
+					body: JSON.stringify({
+						passwordCurrent: parse(formValues).passwordCurrent,
+						passwordNew: parse(formValues).passwordNew,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
+
+				const res = await response.json();
 
 				if (!res) {
 					notifications.show({

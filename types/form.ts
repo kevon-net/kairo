@@ -1,4 +1,4 @@
-export interface typeContact {
+export interface typeFormContact {
 	fname: string;
 	lname: string;
 	email: string;
@@ -15,5 +15,5 @@ export interface typeSignUp {
 export interface typeSignIn {
 	email: string;
 	password: string;
-	save: boolean;
+	remember: boolean;
 }

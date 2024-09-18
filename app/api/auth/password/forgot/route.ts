@@ -1,4 +1,4 @@
-import code from "@/handlers/resend/email/auth/code";
+import { sendForgotPasswordEmail } from "@/handlers/email";
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 import jwt from "jsonwebtoken";
@@ -16,14 +16,14 @@ export async function POST(req: Request) {
 			// query database for link
 			const otlRecord = await prisma.otl.findUnique({ where: { email } });
 			// handle null password field for oauth sign-up's
-			const samplePassword = "@72@^0nH*Nl%&^@y!Kh%mU#wFb&B@cBStl%O9a3QHc#134J65D@rplg35t1J^L@w";
+			const samplePassword = process.env.NEXT_EXAMPLE_PASSWORD;
 
 			if (!otlRecord) {
 				// create otl value
 				const otlValue = await createOtlValue({
 					id: userRecord.id,
 					email: userRecord.email,
-					password: userRecord.password ? userRecord.password : samplePassword,
+					password: userRecord.password ? userRecord.password : (samplePassword as string),
 				});
 
 				// create otl record
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
 					const otlValueNew = await createOtlValue({
 						id: userRecord.id,
 						email: userRecord.email,
-						password: userRecord.password ? userRecord.password : samplePassword,
+						password: userRecord.password ? userRecord.password : (samplePassword as string),
 					});
 
 					// create new otl record
@@ -108,7 +108,7 @@ const createOtlRecord = async (fields: { email: string; otl: string }) => {
 	// expiry 1 hour
 	const expiry = new Date(Date.now() + 60 * 60 * 1000);
 
-	const otlHash = await hasher.create(fields.otl);
+	const otlHash = await hasher.hash(fields.otl);
 
 	try {
 		otlHash &&
@@ -130,7 +130,7 @@ const createOtlRecord = async (fields: { email: string; otl: string }) => {
 
 const sendMail = async (fields: { otl: string; email: string }) => {
 	// send otl email
-	const emailResponse = await code.forgotPassword({ otl: fields.otl, email: fields.email });
+	const emailResponse = await sendForgotPasswordEmail({ otl: fields.otl, email: fields.email });
 
 	return { email: emailResponse };
 };

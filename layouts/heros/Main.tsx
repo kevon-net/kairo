@@ -7,9 +7,8 @@ import { usePathname } from "next/navigation";
 import PartialHeroHome from "@/partials/heros/Home";
 import PartialHeroRoute from "@/partials/heros/Route";
 
-import crumbify from "@/handlers/parsers/string/crumbify";
-
 import classes from "./Main.module.scss";
+import { crumbify } from "@/handlers/parsers/string";
 
 export default function Route({ title }: { title?: string }) {
 	const pathname = usePathname();

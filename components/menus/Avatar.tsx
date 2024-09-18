@@ -27,11 +27,15 @@ import {
 	IconMapPin,
 	IconBellRinging,
 	IconDashboard,
+	IconHeart,
+	IconStar,
+	IconHelpCircle,
+	IconInfoCircle,
 } from "@tabler/icons-react";
 
 import classes from "./Avatar.module.scss";
 
-import initialize from "@/handlers/parsers/string/initialize";
+import { initialize } from "@/handlers/parsers/string";
 
 import { useSession } from "next-auth/react";
 
@@ -43,75 +47,91 @@ export default function Avatar() {
 	const sizeAvatar = mobile ? 28 : 36;
 
 	const menuItems = {
-		app: [
+		activity: [
 			{
-				icon: IconDashboard,
-				link: `/dashboard`,
-				label: "Overview",
+				icon: IconHeart,
+				link: `/account/wishlist`,
+				label: "My Wishlist",
 			},
 			{
 				icon: IconPackage,
-				link: `/dashboard/orders`,
+				link: `/account/orders`,
 				label: "My Orders",
+			},
+			{
+				icon: IconStar,
+				link: `/account/reviews`,
+				label: "My Reviews",
 			},
 		],
 		user: [
 			{
 				icon: IconUser,
-				link: `/account/settings/profile`,
+				link: `/account/profile`,
 				label: "Profile Settings",
 			},
-			{
-				icon: IconCoins,
-				link: `/account/settings/payment`,
-				label: "Payment Details",
-			},
-			{
-				icon: IconMapPin,
-				link: `/account/settings/addresses`,
-				label: "Shipping Addresses",
-			},
-			{
-				icon: IconSettings,
-				link: `/account/settings`,
-				label: "Account Settings",
-			},
+			// {
+			// 	icon: IconCoins,
+			// 	link: `/account/payment`,
+			// 	label: "Payment Details",
+			// },
+			// {
+			// 	icon: IconMapPin,
+			// 	link: `/account/addresses`,
+			// 	label: "Addresses",
+			// },
 			{
 				icon: IconBellRinging,
-				link: `/account/settings/notifications`,
+				link: `/account/notifications`,
 				label: "Notifications",
+			},
+		],
+		help: [
+			{
+				icon: IconHelpCircle,
+				link: `/help`,
+				label: "Help Center",
+			},
+			{
+				icon: IconInfoCircle,
+				link: `/legal/terms-and-conditions`,
+				label: "Terms and Conditions",
 			},
 		],
 		danger: [
 			{
 				icon: IconLogout,
-				link: `/api/auth/signout`,
+				link: process.env.NEXT_PUBLIC_SIGN_OUT_URL!,
 				label: "Sign Out",
 				color: "red",
 			},
 		],
 	};
 
-	// sample user
-	const user = {
-		image: null,
-		name: "Sandra Langevin",
-		email: "sandra.langevin@example.com",
-	};
-
 	return (
-		<Menu position={"bottom"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
+		<Menu
+			position={"bottom"}
+			withArrow
+			classNames={{ dropdown: classes.dropdown, item: classes.item, divider: classes.divider }}
+			width={mobile ? 200 : 240}
+		>
 			<MenuTarget>
-				{!user?.image ? (
-					<MantineAvatar size={sizeAvatar} title={user.name ? user.name : "User"} className={classes.avatar}>
-						{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
+				{!session.data?.user.image ? (
+					<MantineAvatar
+						size={sizeAvatar}
+						title={session.data?.user.name ? session.data?.user.name : "User"}
+						className={classes.avatar}
+					>
+						{session.data?.user.name
+							? initialize(session.data?.user.name)
+							: session.data?.user.email?.charAt(0).toUpperCase()}
 					</MantineAvatar>
 				) : (
 					<MantineAvatar
-						src={user.image}
-						alt={user.name ? user.name : "User"}
+						src={session.data?.user.image}
+						alt={session.data?.user.name ? session.data?.user.name : "User"}
 						size={sizeAvatar}
-						title={user.name ? user.name : "User"}
+						title={session.data?.user.name ? session.data?.user.name : "User"}
 						className={classes.avatar}
 					/>
 				)}
@@ -122,34 +142,35 @@ export default function Avatar() {
 					{session.status == "loading" ? (
 						<Skeleton height={8} radius="xl" />
 					) : (
-						<Stack gap={"xs"}>
-							{user?.name && (
-								<Text fz={"sm"} lh={1} ta={"center"}>
-									{user?.name}
+						session.data && (
+							<Stack gap={"xs"}>
+								{session.data?.user.name && (
+									<Text fz={"sm"} lh={1} ta={"center"}>
+										{session.data?.user.name}
+									</Text>
+								)}
+								<Text fz={"xs"} lh={1} ta={"center"}>
+									({session.data?.user.email})
 								</Text>
-							)}
-							<Text fz={"xs"} lh={1} ta={"center"}>
-								({user?.email})
-							</Text>
 
-							{/* test expiry session */}
-							{/* <Text fz={"xs"} lh={1} ta={"center"}>
-								({session.data?.expires})
-							</Text> */}
-						</Stack>
+								{/* <Text fz={"xs"} lh={1} ta={"center"}>
+									({session.data?.expires})
+								</Text> */}
+							</Stack>
+						)
 					)}
 				</Stack>
 
-				<MenuDivider />
+				{session.data && <MenuDivider />}
 
-				<MenuLabel>Dashboard</MenuLabel>
-				{menuItems.app.map(item => (
+				{/* <MenuLabel>Activity</MenuLabel>
+				{menuItems.activity.map(item => (
 					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
 						{item.label}
 					</MenuItem>
 				))}
 
-				<MenuDivider />
+				<MenuDivider /> */}
 
 				<MenuLabel>Account</MenuLabel>
 				{menuItems.user.map(item => (
@@ -157,6 +178,15 @@ export default function Avatar() {
 						{item.label}
 					</MenuItem>
 				))}
+
+				{/* <MenuDivider />
+
+				<MenuLabel>Customer Care</MenuLabel>
+				{menuItems.help.map(item => (
+					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
+						{item.label}
+					</MenuItem>
+				))} */}
 
 				<MenuDivider />
 

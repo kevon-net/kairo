@@ -8,14 +8,12 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import text from "@/handlers/validators/form/special/text";
-import email from "@/handlers/validators/form/special/email";
-import phone from "@/handlers/validators/form/special/phone";
-import capitalize from "@/handlers/parsers/string/capitalize";
+import text from "@/libraries/validators/special/text";
+import email from "@/libraries/validators/special/email";
+import phone from "@/libraries/validators/special/phone";
 
-import request from "@/hooks/request";
-
-import { typeContact } from "@/types/form";
+import { typeFormContact } from "@/types/form";
+import { capitalizeWord, capitalizeWords } from "@/handlers/parsers/string";
 
 export default function Contact() {
 	const [submitted, setSubmitted] = useState(false);
@@ -40,52 +38,50 @@ export default function Contact() {
 		},
 	});
 
-	const parse = (rawData: typeContact) => {
+	const parse = (rawData: typeFormContact) => {
 		return {
-			fname: capitalize.word(rawData.fname.trim()),
-			lname: capitalize.word(rawData.lname.trim()),
+			fname: capitalizeWord(rawData.fname.trim()),
+			lname: capitalizeWord(rawData.lname.trim()),
 			email: rawData.email.trim().toLowerCase(),
 			phone: rawData.phone?.trim() ? (rawData.phone.trim().length > 0 ? rawData.phone : null) : null,
-			subject: capitalize.words(rawData.subject.trim()),
+			subject: capitalizeWords(rawData.subject.trim()),
 			message: rawData.message.trim(),
 		};
 	};
 
-	const handleSubmit = async (formValues: typeContact) => {
+	const handleSubmit = async (formValues: typeFormContact) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				await request
-					.post(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						if (!res) {
-							notifications.show({
-								id: "form-contact-failed-no-response",
-								icon: <IconX size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
-								variant: "failed",
-							});
-						} else {
-							notifications.show({
-								id: "form-contact-success",
-								icon: <IconCheck size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Form Submitted",
-								message: "Someone will get back to you within 24 hours",
-								variant: "success",
-							});
-						}
-					});
+				await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				}).then(res => {
+					if (!res) {
+						notifications.show({
+							id: "form-contact-failed-no-response",
+							icon: <IconX size={16} stroke={1.5} />,
+							autoClose: 5000,
+							title: "Server Unavailable",
+							message: `There was no response from the server.`,
+							variant: "failed",
+						});
+					} else {
+						notifications.show({
+							id: "form-contact-success",
+							icon: <IconCheck size={16} stroke={1.5} />,
+							autoClose: 5000,
+							title: "Form Submitted",
+							message: "Someone will get back to you within 24 hours",
+							variant: "success",
+						});
+					}
+				});
 			} catch (error) {
 				notifications.show({
 					id: "form-contact-failed",

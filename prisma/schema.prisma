@@ -8,9 +8,9 @@
 // npx prisma db push -> sync database
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   // previewFeatures = ["postgresqlExtensions"] // enables postgresql extensions
-  previewFeatures = ["driverAdapters"]
+  // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {

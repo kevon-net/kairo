@@ -10,18 +10,13 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
-
-import { Session } from "next-auth";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 interface typeAccountDelete {
 	password: string;
 }
 
 export default function Delete() {
-	const session = useSession();
-
 	const [submitted, setSubmitted] = useState(false);
 
 	const router = useRouter();
@@ -46,14 +41,13 @@ export default function Delete() {
 			try {
 				setSubmitted(true);
 
-				const res = await request.post(
-					process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/delete`,
-					{
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: { "Content-Type": "application/json", Accept: "application/json" },
-					}
-				);
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/account/settings/delete`, {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: { "Content-Type": "application/json", Accept: "application/json" },
+				});
+
+				const res = await response.json();
 
 				if (!res) {
 					notifications.show({

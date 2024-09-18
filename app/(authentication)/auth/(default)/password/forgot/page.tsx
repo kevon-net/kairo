@@ -13,10 +13,16 @@ import AuthHeader from "@/partials/auth/Header";
 
 import images from "@/assets/images";
 import contact from "@/data/contact";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Forgot Password" };
 
 export default async function Forgot() {
+	const session = await auth();
+
+	session && redirect("/");
+
 	return (
 		<LayoutPage>
 			<LayoutSection padded containerized={"xs"}>

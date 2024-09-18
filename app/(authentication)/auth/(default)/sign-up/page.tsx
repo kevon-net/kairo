@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default async function SignUp() {
 	const session = await auth();
 
-	session?.user && redirect("/");
+	session && redirect("/");
 
 	return (
 		<LayoutPage>

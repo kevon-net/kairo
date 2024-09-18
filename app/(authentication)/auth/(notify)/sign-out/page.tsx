@@ -10,7 +10,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import ProviderAuthSignOut from "@/providers/auth/signOut";
+import AuthSignOut from "@/components/auth/signOut";
 
 import { auth } from "@/auth";
 
@@ -36,9 +36,9 @@ export default async function SignOut() {
 					</Stack>
 
 					<Group>
-						<ProviderAuthSignOut>
+						<AuthSignOut>
 							<Button>Sign Out</Button>
-						</ProviderAuthSignOut>
+						</AuthSignOut>
 						<Button
 							component={Link}
 							href={"/"}

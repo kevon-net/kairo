@@ -10,9 +10,8 @@ import { notifications } from "@mantine/notifications";
 
 import { IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
-import email from "@/handlers/validators/form/special/email";
-import converter from "@/utilities/converter";
+import email from "@/libraries/validators/special/email";
+import { millToMinSec } from "@/handlers/parsers/number";
 
 interface typeForgot {
 	email: string;
@@ -50,7 +49,7 @@ export default function Forgot() {
 				// // test request body
 				// console.log(parse(formValues));
 
-				const res = await request.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/password/forgot`, {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/password/forgot`, {
 					method: "POST",
 					body: JSON.stringify(parse(formValues)),
 					headers: {
@@ -58,6 +57,8 @@ export default function Forgot() {
 						Accept: "application/json",
 					},
 				});
+
+				const res = await response.json();
 
 				if (!res) {
 					notifications.show({
@@ -91,7 +92,7 @@ export default function Forgot() {
 							if (!res.user.otl.expired) {
 								if (!res.user.otl.valid) {
 									// reset time
-									setTime(converter.millSec(res.user.otl.expiry));
+									setTime(millToMinSec(res.user.otl.expiry));
 								} else {
 									setTime(undefined);
 									form.reset();

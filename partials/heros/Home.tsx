@@ -7,9 +7,9 @@ import { usePathname } from "next/navigation";
 import { Box, Container, Group, Title } from "@mantine/core";
 
 import BreadcrumbMain from "@/components/breadcrumbs/Main";
-import crumbify from "@/handlers/parsers/string/crumbify";
 
 import classes from "./Home.module.scss";
+import { crumbify } from "@/handlers/parsers/string";
 
 export default function Home({ title }: { title?: string }) {
 	const pathname = usePathname();

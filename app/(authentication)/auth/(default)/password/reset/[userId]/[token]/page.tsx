@@ -1,25 +1,25 @@
 import React from "react";
 
-import NextImage from "next/image";
 import { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Stack } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormAuthPasswordReset from "@/partials/forms/auth/password/Reset";
 import AuthHeader from "@/partials/auth/Header";
 
-import images from "@/assets/images";
-import contact from "@/data/contact";
-
 import { typeParams } from "../../../../layout";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = { title: "Reset Password" };
 
 export default async function Reset({ params }: { params: typeParams }) {
+	const session = await auth();
+
+	session && redirect("/");
+
 	return (
 		<LayoutPage>
 			<LayoutSection padded containerized={"xs"}>

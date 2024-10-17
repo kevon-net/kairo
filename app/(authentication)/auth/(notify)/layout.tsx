@@ -27,7 +27,7 @@ export default function Notify({
 
 				<GridCol span={6} visibleFrom="md">
 					<Center h={"100%"} bg={"var(--mantine-color-pri-light)"}>
-						<LayoutSection margined containerized={"sm"} px={"xl"} pos={"relative"}>
+						<LayoutSection id={"layout-notify"} margined containerized={"sm"} px={"xl"} pos={"relative"}>
 							<Stack gap={64} align="start">
 								<Anchor component={Link} href={"/"}>
 									<Group>

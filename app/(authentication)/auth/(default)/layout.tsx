@@ -26,8 +26,8 @@ export default function LayoutDefault({
 			<Grid gutter={0}>
 				<GridCol span={6} visibleFrom="md">
 					<Center h={"100%"} bg={"var(--mantine-color-pri-light)"}>
-						<LayoutSection margined containerized={"sm"} px={"xl"} pos={"relative"}>
-							<Stack gap={64} align="start">
+						<LayoutSection id={"layout-default"} margined containerized={"sm"} px={"xl"} pos={"relative"}>
+							<Stack gap={64}>
 								<Anchor component={Link} href={"/"}>
 									<Group>
 										<Image
@@ -47,8 +47,7 @@ export default function LayoutDefault({
 										Welcome to Brix!
 									</Title>
 									<Text ta={{ base: "center", md: "start" }} w={{ md: "66%" }}>
-										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet
-										velit ma.
+										{appData.companyOneLiner}
 									</Text>
 								</Stack>
 							</Stack>

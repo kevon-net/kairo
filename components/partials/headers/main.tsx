@@ -9,19 +9,19 @@ import { dataContact, dataSocials } from "@/app/(marketing)/contact/page";
 
 export default function Main() {
 	return (
-		<LayoutSection containerized="responsive" shadowed padded="sm" className={classes.header} visibleFrom="xs">
+		<LayoutSection
+			id="partial-header-main"
+			containerized="responsive"
+			padded="sm"
+			className={classes.header}
+			visibleFrom="xs"
+		>
 			<Group justify="space-between">
 				<Group gap={"lg"}>
 					{dataContact.map(item => (
-						<Group key={item.link} gap={6} c={"pri.0"}>
+						<Group key={item.link} gap={6}>
 							<item.icon size={20} stroke={1.5} style={{ marginTop: 2 }} />
-							<Anchor
-								href={item.link}
-								underline="hover"
-								inherit
-								fz={{ base: "xs", lg: "sm" }}
-								className={classes.link}
-							>
+							<Anchor href={item.link} underline="hover" inherit fz={{ base: "xs", lg: "sm" }}>
 								{item.label}
 							</Anchor>
 						</Group>
@@ -32,7 +32,7 @@ export default function Main() {
 					{dataSocials.map(social => (
 						<Anchor key={social.link} title={social.label} href={social.link}>
 							<Group>
-								<ThemeIcon size={24} color="white" className={classes.icon}>
+								<ThemeIcon size={24}>
 									<social.icon size={16} stroke={2} />
 								</ThemeIcon>
 							</Group>

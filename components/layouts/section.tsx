@@ -15,11 +15,13 @@ export default function Section({
 	shadowed,
 	bg,
 	children,
+	id,
 	...restProps
 }: typeSection & React.ComponentProps<typeof Box & typeof Container>) {
 	return (
 		<Box
 			component={"section"}
+			id={id}
 			py={padded ? (typeof padded == "boolean" ? 64 : padded) : ""}
 			my={margined ? (typeof margined == "boolean" ? 64 : margined) : ""}
 			className={
@@ -31,7 +33,7 @@ export default function Section({
 			{...restProps}
 		>
 			{containerized ? (
-				<Container size={typeof containerized == "boolean" ? "" : containerized}>
+				<Container size={typeof containerized == "boolean" ? undefined : containerized}>
 					<React.Fragment>{children}</React.Fragment>
 				</Container>
 			) : (

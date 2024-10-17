@@ -390,12 +390,12 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			<Transition mounted={!verify} transition="fade" duration={0}>
 				{styles => (
 					<div style={styles}>
-						<LayoutSection padded containerized={"xs"}>
+						<LayoutSection id={"partial-form-auth-signup-create"} padded containerized={"xs"}>
 							<Stack gap={40} px={{ md: 40 }}>
 								<AuthHeader
 									data={{
 										title: "Create Your Account",
-										desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
+										desc: "Join us and start your journey today.",
 									}}
 								/>
 
@@ -472,7 +472,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			<Transition mounted={verify} transition="fade" duration={0}>
 				{styles => (
 					<div style={styles}>
-						<LayoutSection padded containerized={"xs"}>
+						<LayoutSection id={"partial-form-auth-signup-verify"} padded containerized={"xs"}>
 							<Stack gap={40} px={{ md: 40 }}>
 								<AuthHeader
 									data={{

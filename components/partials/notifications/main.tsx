@@ -16,7 +16,12 @@ export default function Main() {
 	return (
 		<Transition transition="slide-down" mounted={visible}>
 			{transitionStyles => (
-				<LayoutSection style={transitionStyles} className={classes.bar} shadowed>
+				<LayoutSection
+					id={"partial-notification-main"}
+					style={transitionStyles}
+					className={classes.bar}
+					shadowed
+				>
 					<Container size={"responsive"} pos={"relative"}>
 						<Group justify="center" w={{ base: "80%", sm: "100%" }}>
 							<Text fz={{ base: "xs", lg: "sm" }}>

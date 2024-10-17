@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Authentication Error" };
 export default async function SignOut() {
 	return (
 		<LayoutPage>
-			<LayoutSection containerized="xs" padded>
+			<LayoutSection id={"page-sign-out"} containerized="xs" padded>
 				<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"xl"}>
 					<Stack gap={"xs"}>
 						<Title ta={{ base: "center", md: "start" }} order={1} fw={"bold"}>
@@ -24,7 +24,7 @@ export default async function SignOut() {
 						</Title>
 
 						<Stack gap={0}>
-							<Text ta={{ base: "center", md: "start" }}>Seems we can’t sign you in.</Text>
+							<Text ta={{ base: "center", md: "start" }}>Seems we can&apos;t sign you in.</Text>
 							<Text ta={{ base: "center", md: "start" }}>
 								Perhaps it&apos;s a temporary issue... Try again later.
 							</Text>

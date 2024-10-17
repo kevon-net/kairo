@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "About" };
 export default async function About() {
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"responsive"}>
+			<LayoutSection id={"page-about"} padded containerized={"responsive"}>
 				About page
 			</LayoutSection>
 		</LayoutPage>

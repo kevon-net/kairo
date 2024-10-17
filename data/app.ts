@@ -1,5 +1,9 @@
+import sample from "./sample";
+
 const companyName = "Brix";
 const appName = companyName;
+const companyOneLiner = sample.text.sentence;
+const companyDescription = sample.text.prose;
 
 export const phones = {
 	main: "(254) 123 456-789",
@@ -42,6 +46,9 @@ export const locations = {
 };
 
 const appData = {
+	companyOneLiner,
+	companyDescription,
+
 	name: { company: companyName, app: appName },
 	phones,
 	emails,

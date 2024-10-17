@@ -22,12 +22,12 @@ export default async function Reset({ params }: { params: typeParams }) {
 
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"xs"}>
+			<LayoutSection id={"page-reset"} padded containerized={"xs"}>
 				<Stack gap={40} px={{ md: 40 }}>
 					<AuthHeader
 						data={{
 							title: "Enter Your New Password",
-							desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
+							desc: "Reset your password and keep your account secure.",
 						}}
 					/>
 

@@ -73,7 +73,7 @@ export default function Main() {
 	];
 
 	return (
-		<LayoutSection pt={56} pb={"lg"} className={classes.footer}>
+		<LayoutSection id={"partial-footer-main"} pt={56} pb={"lg"} className={classes.footer}>
 			<Container size={"responsive"}>
 				<Grid gutter={{ base: "xl", md: "md" }}>
 					<GridCol span={{ base: 12, md: 4, lg: 3.5 }}>
@@ -96,7 +96,7 @@ export default function Main() {
 								{dataSocials.map(social => (
 									<Anchor key={social.link} title={social.label} href={social.link}>
 										<Group>
-											<ThemeIcon size={24} color="white" className={classes.icon}>
+											<ThemeIcon size={24} variant="light">
 												<social.icon size={16} stroke={2} />
 											</ThemeIcon>
 										</Group>
@@ -120,6 +120,7 @@ export default function Main() {
 														component={Link}
 														href={link.link}
 														title={link.label}
+														underline="never"
 														className={classes.link}
 													>
 														{link.label}
@@ -149,11 +150,11 @@ export default function Main() {
 						All Rights Reserved
 					</Text>{" "}
 					|{" "}
-					<Anchor inherit href="#tc" underline="always">
+					<Anchor inherit href="#tc" underline="never" className={classes.link}>
 						Terms and Conditions
 					</Anchor>{" "}
 					|{" "}
-					<Anchor inherit href="#pp" underline="always">
+					<Anchor inherit href="#pp" underline="never" className={classes.link}>
 						Privacy Policy
 					</Anchor>
 				</Text>

@@ -14,7 +14,7 @@ import appData from "@/data/app";
 
 import { Metadata } from "next";
 
-import { Divider, Stack } from "@mantine/core";
+import { Box, Divider, Stack } from "@mantine/core";
 
 export const metadata: Metadata = { title: { default: "Account", template: `%s - Account - ${appData.name.app}` } };
 
@@ -37,11 +37,11 @@ export default function LayoutAccount({
 			}}
 			footer={<FooterMain />}
 		>
-			<LayoutSection component={"main"} padded>
+			<LayoutSection id={"layout-account"} component={"main"} padded>
 				<Stack gap={48}>
-					<LayoutSection hiddenFrom="md">
+					<Box hiddenFrom="md">
 						<NavbarUser />
-					</LayoutSection>
+					</Box>
 
 					<Divider hiddenFrom="md" />
 

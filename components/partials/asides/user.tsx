@@ -93,7 +93,7 @@ export default function User() {
 	};
 
 	return (
-		<LayoutSection padded pos={"sticky"} top={0}>
+		<LayoutSection id={"partial-aside-user"} padded pos={"sticky"} top={0}>
 			<Stack gap={48} align="center">
 				<AvatarAside />
 

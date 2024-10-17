@@ -25,7 +25,10 @@ import { ModalsProvider } from "@mantine/modals";
 // import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import appTheme from "@/styles/theme";
+import appResolver from "@/styles/resolver";
+
 import appData from "@/data/app";
+import { linkify } from "@/handlers/parsers/string";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 
@@ -48,10 +51,9 @@ export default function RootLayout({
 			<body className={noto.className}>
 				<MantineProvider
 					theme={appTheme}
+					cssVariablesResolver={appResolver}
 					defaultColorScheme="light"
-					classNamesPrefix={appData.name.app}
-					withStaticClasses={false}
-					withGlobalClasses={true}
+					classNamesPrefix={linkify(appData.name.app)}
 				>
 					<ModalsProvider>{children}</ModalsProvider>
 

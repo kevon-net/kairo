@@ -25,13 +25,14 @@ import classes from "./main.module.scss";
 import { PostRelations } from "@/types/models/post";
 
 import { linkify } from "@/handlers/parsers/string";
+import { parseDateYmd } from "@/handlers/parsers/date";
 
 export default function Main({ data }: { data: PostRelations }) {
 	return (
 		<Card className={classes.card} withBorder padding={"lg"}>
 			<Stack gap={"lg"}>
 				<CardSection>
-					<Anchor component={Link} underline="hover" inherit href={`/blog/${linkify(data.titleLink)}`}>
+					<Anchor component={Link} underline="hover" inherit href={`/blog/${linkify(data.title)}`}>
 						<Skeleton height={240} radius={0} />
 					</Anchor>
 				</CardSection>
@@ -43,14 +44,13 @@ export default function Main({ data }: { data: PostRelations }) {
 								component={Link}
 								underline="hover"
 								inherit
-								href={`/blog/${linkify(data.titleLink)}`}
+								href={`/blog/${linkify(data.title)}`}
+								c={"inherit"}
 							>
 								{data.title}
 							</Anchor>
 						</Title>
-						<Text className={classes.desc} c={"dark.3"}>
-							{data.desc}
-						</Text>
+						<Text className={classes.desc}>{data.desc}</Text>
 					</Stack>
 
 					<Divider />
@@ -59,7 +59,8 @@ export default function Main({ data }: { data: PostRelations }) {
 						<Badge variant="light" radius={"sm"} tt={"capitalize"}>
 							{data.category}
 						</Badge>
-						<Text fz={"xs"} inherit c={"pri"}>
+
+						<Text fz={"xs"} inherit>
 							{data.date}
 						</Text>
 					</Group>

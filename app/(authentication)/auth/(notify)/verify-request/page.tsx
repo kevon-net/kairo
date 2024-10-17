@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Welcome" };
 export default async function Welcome() {
 	return (
 		<LayoutPage>
-			<LayoutSection containerized="xs" padded>
+			<LayoutSection id={"page-welcome-email"} containerized="xs" padded>
 				<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"xl"}>
 					<Stack gap={"xs"}>
 						<Title ta={{ base: "center", md: "start" }} order={1} fw={"bold"}>

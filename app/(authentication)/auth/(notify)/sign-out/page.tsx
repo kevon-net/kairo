@@ -23,7 +23,7 @@ export default async function SignOut() {
 
 	return (
 		<LayoutPage>
-			<LayoutSection containerized="xs" padded>
+			<LayoutSection id={"page-sign-out-sign-out"} containerized="xs" padded>
 				<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"xl"}>
 					<Stack gap={"xs"}>
 						<Title ta={{ base: "center", md: "start" }} order={1} fw={"bold"}>

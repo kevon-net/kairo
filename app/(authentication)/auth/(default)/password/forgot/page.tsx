@@ -21,12 +21,12 @@ export default async function Forgot() {
 
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"xs"}>
+			<LayoutSection id={"page-forgot"} padded containerized={"xs"}>
 				<Stack gap={40} px={{ md: 40 }}>
 					<AuthHeader
 						data={{
 							title: "Enter Your Email",
-							desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
+							desc: "No worries, we've got your back. Let's recover your account.",
 						}}
 					/>
 

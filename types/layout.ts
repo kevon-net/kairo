@@ -39,4 +39,5 @@ export interface Section {
 	shadowed?: boolean;
 	withClerk?: boolean;
 	children: React.ReactNode;
+	id:string;
 }

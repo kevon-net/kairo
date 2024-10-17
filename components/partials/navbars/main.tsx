@@ -9,13 +9,13 @@ import LayoutSection from "@/components/layouts/section";
 import DrawerNavMain from "@/components/drawers/nav/main";
 import NavigationMain from "@/components/navigation/main";
 import MenuAvatar from "@/components/menus/avatar";
+import ActionIconTheme from "@/components/action-icons/theme";
 
 import AuthSignIn from "@/components/auth/signIn";
 
 import sample from "@/data/sample";
 import images from "@/assets/images";
 
-import classes from "./main.module.scss";
 import appData from "@/data/app";
 
 import { auth } from "@/auth";
@@ -24,7 +24,7 @@ export default async function Main() {
 	const session = await auth();
 
 	return (
-		<LayoutSection containerized="responsive" shadowed padded="lg" className={classes.navbar}>
+		<LayoutSection id={"partial-navbar-main"} containerized="responsive" shadowed padded="lg">
 			<Group justify="space-between">
 				<Group align="end" gap={"lg"}>
 					<Box>
@@ -43,14 +43,14 @@ export default async function Main() {
 						</Link>
 					</Box>
 
-					<Divider orientation="vertical" visibleFrom="sm" color="pri.3" />
+					<Divider orientation="vertical" visibleFrom="sm" />
 
 					<Group component={"nav"} visibleFrom="sm">
 						<NavigationMain />
 					</Group>
 				</Group>
 
-				<Group visibleFrom="sm">
+				<Group visibleFrom="sm" gap={"xs"}>
 					{!session?.user ? (
 						<AuthSignIn>
 							<Button size="xs" variant="light">
@@ -60,15 +60,13 @@ export default async function Main() {
 					) : (
 						<MenuAvatar />
 					)}
+
 					<Button size="xs">Get in Touch</Button>
+
+					<ActionIconTheme />
 				</Group>
 
-				<DrawerNavMain
-					data={sample.links.navbar}
-					hiddenFrom="sm"
-					aria-label="Toggle Navigation"
-					color="light-dark(var(--mantine-color-pri-7),var(--mantine-color-pri-0))"
-				/>
+				<DrawerNavMain data={sample.links.navbar} hiddenFrom="sm" aria-label="Toggle Navigation" color="pri" />
 			</Group>
 		</LayoutSection>
 	);

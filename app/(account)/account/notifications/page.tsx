@@ -19,7 +19,7 @@ export default async function Notifications() {
 
 	return (
 		<LayoutPage stacked>
-			<LayoutSection>
+			<LayoutSection id="page-notifications">
 				<Grid gutter={"xl"}>
 					<GridCol span={{ base: 12 }}>
 						<Stack gap={"xl"}>

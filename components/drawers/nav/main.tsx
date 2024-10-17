@@ -5,8 +5,9 @@ import React from "react";
 import NextImage from "next/image";
 import { usePathname } from "next/navigation";
 
-import { Burger, Button, Drawer, Group, Image, NavLink, Stack } from "@mantine/core";
+import { Burger, Button, Drawer, Group, NavLink, Stack } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import ActionIconTheme from "@/components/action-icons/theme";
 
 import classes from "./main.module.scss";
 
@@ -92,10 +93,17 @@ export default function Main({ data, ...restProps }: { data: typeMenuNavbar[] } 
 					<Stack gap={0}>{navMobile}</Stack>
 
 					<Stack gap={"xs"} px={"xs"}>
-						<Button size="xs" variant="default">
+						<Button size="xs" variant="light">
 							Log In
 						</Button>
-						<Button size="xs">Get in Touch</Button>
+
+						<Group gap={"xs"} grow preventGrowOverflow={false}>
+							<Button size="xs" w={"75%"}>
+								Get in Touch
+							</Button>
+
+							<ActionIconTheme />
+						</Group>
 					</Stack>
 				</Stack>
 			</Drawer>

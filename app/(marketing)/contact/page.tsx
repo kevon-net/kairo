@@ -22,8 +22,6 @@ import TemplateEmailContact from "@/components/templates/email/contact";
 
 import appData from "@/data/app";
 
-import classes from "./Contact.module.scss";
-
 export const metadata: Metadata = { title: "Contact" };
 
 export default async function Contact() {
@@ -33,7 +31,7 @@ export default async function Contact() {
 
 			{/* <LayoutSection padded containerized={"responsive"}>Contact page</LayoutSection> */}
 
-			<LayoutSection padded containerized={"responsive"}>
+			<LayoutSection id={"page-contact"} padded containerized={"responsive"}>
 				<Stack gap={64}>
 					<Stack>
 						<Title order={2} fz={48} fw={"bold"} ta={"center"} lh={1}>
@@ -46,9 +44,9 @@ export default async function Contact() {
 						</Text>
 					</Stack>
 
-					<Grid px={{ lg: 64 }} gutter={{ base: 64, sm: "xl", lg: 64 }}>
+					<Grid gutter={{ base: "xl", lg: 64 }}>
 						<GridCol span={{ base: 12, sm: 6 }} order={{ base: 2, sm: 1 }}>
-							<Card withBorder shadow="xs" padding={"md"}>
+							<Card withBorder shadow="xs" padding={"md"} bg={"transparent"}>
 								<FormContact />
 							</Card>
 						</GridCol>
@@ -71,7 +69,7 @@ export default async function Contact() {
 								>
 									{dataContact.map(item => (
 										<Group key={item.link} w={{ base: "66%", xs: "fit-content" }}>
-											<ThemeIcon size={40} variant="light">
+											<ThemeIcon size={40} variant="transparent">
 												<item.icon size={24} stroke={1.5} style={{ marginTop: 2 }} />
 											</ThemeIcon>
 
@@ -79,14 +77,7 @@ export default async function Contact() {
 												<Text component="span" inherit fz={{ base: "xs", lg: "sm" }}>
 													Contact:
 												</Text>
-												<Anchor
-													href={item.link}
-													underline="hover"
-													inherit
-													fz={{ base: "xs", lg: "sm" }}
-													fw={500}
-													className={classes.link}
-												>
+												<Anchor href={item.link} inherit fz={{ base: "xs", lg: "sm" }} fw={500}>
 													{item.label}
 												</Anchor>
 											</Stack>
@@ -101,7 +92,7 @@ export default async function Contact() {
 										{dataSocials.map(social => (
 											<Anchor key={social.link} title={social.label} href={social.link}>
 												<Group>
-													<ThemeIcon size={24} color="white" className={classes.icon}>
+													<ThemeIcon size={24}>
 														<social.icon size={16} stroke={2} />
 													</ThemeIcon>
 												</Group>

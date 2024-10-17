@@ -5,7 +5,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Menu } from "@mantine/core";
+import { Menu, MenuDropdown, MenuItem, MenuTarget } from "@mantine/core";
 
 import { typeMenuNavbar } from "@/types/components/menu";
 
@@ -17,7 +17,7 @@ export default function Navbar({ children, subLinks }: { children: React.ReactNo
 	const menuItems =
 		subLinks &&
 		subLinks.map(item => (
-			<Menu.Item
+			<MenuItem
 				key={item.link}
 				component={Link}
 				href={item.link}
@@ -26,7 +26,7 @@ export default function Navbar({ children, subLinks }: { children: React.ReactNo
 				className={`${classes.item} ${pathname == item.link ? classes.itemActive : ""}`}
 			>
 				{item.label}
-			</Menu.Item>
+			</MenuItem>
 		));
 
 	return (
@@ -47,8 +47,8 @@ export default function Navbar({ children, subLinks }: { children: React.ReactNo
 				itemSection: classes.itemSection,
 			}}
 		>
-			<Menu.Target>{children}</Menu.Target>
-			{menuItems && <Menu.Dropdown>{menuItems}</Menu.Dropdown>}
+			<MenuTarget>{children}</MenuTarget>
+			{menuItems && <MenuDropdown>{menuItems}</MenuDropdown>}
 		</Menu>
 	);
 }

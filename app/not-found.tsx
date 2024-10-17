@@ -7,14 +7,14 @@ import { Anchor, Center, Grid, GridCol, Group, Stack, Text, Title, Image, Button
 
 import { IconArrowLeft } from "@tabler/icons-react";
 
-import LayoyutSection from "@/components/layouts/section";
+import LayoutSection from "@/components/layouts/section";
 
 import images from "@/assets/images";
 import appData from "@/data/app";
 
 export default function NotFound() {
 	return (
-		<LayoyutSection containerized="responsive">
+		<LayoutSection id={"page-not-found"} containerized="responsive">
 			<Center mih={"100vh"} py={96}>
 				<Grid w={"100%"} gutter={{ base: "xl", sm: "md" }} align="center">
 					<GridCol span={{ base: 12, sm: 5 }} order={{ base: 2, sm: 1 }}>
@@ -75,6 +75,6 @@ export default function NotFound() {
 					</GridCol>
 				</Grid>
 			</Center>
-		</LayoyutSection>
+		</LayoutSection>
 	);
 }

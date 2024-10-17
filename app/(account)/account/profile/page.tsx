@@ -21,7 +21,7 @@ export default async function Profile() {
 
 	return (
 		<LayoutPage stacked>
-			<LayoutSection>
+			<LayoutSection id="page-profile-personal">
 				<Grid>
 					<GridCol span={{ base: 12 }}>
 						<Title order={2} fz={"xl"}>
@@ -37,7 +37,7 @@ export default async function Profile() {
 
 			<Divider />
 
-			<LayoutSection>
+			<LayoutSection id="page-profile-password">
 				<Grid gutter={"xl"}>
 					<GridCol span={{ base: 12, md: 8, lg: 5.5 }}>
 						<Stack gap={"lg"}>
@@ -52,7 +52,7 @@ export default async function Profile() {
 
 			<Divider />
 
-			<LayoutSection>
+			<LayoutSection id="page-profile-delete">
 				<Stack gap={"lg"} align="start">
 					<Title order={2} fz={"xl"}>
 						Delete Account

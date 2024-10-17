@@ -15,7 +15,7 @@ export default function Account() {
 				<Stack>
 					<Text>
 						Deleting your account will permanently remove all data associated with it.{" "}
-						<Text component="span" inherit c="red.6">
+						<Text component="span" inherit c="red">
 							Proceed with caution. This action is irreversible.
 						</Text>
 					</Text>
@@ -23,7 +23,7 @@ export default function Account() {
 				</Stack>
 			</Modal>
 
-			<Button color="red.6" variant="light" onClick={open}>
+			<Button color="red" variant="light" onClick={open}>
 				Delete Account
 			</Button>
 		</>

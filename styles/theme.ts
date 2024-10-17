@@ -1,9 +1,12 @@
 "use client";
 
-import { Container, createTheme, Notification, rem } from "@mantine/core";
+import { Anchor, Card, Container, createTheme, Notification, rem, virtualColor } from "@mantine/core";
+
+import cx from "clsx";
 
 import classesNotification from "./mantine/notification.module.scss";
 import classesContainer from "./mantine/container.module.scss";
+import classesAnchor from "./mantine/anchor.module.scss";
 
 const appTheme = createTheme({
 	focusRing: "auto",
@@ -13,27 +16,46 @@ const appTheme = createTheme({
 	activeClassName: "active",
 
 	colors: {
-		pri: [
-			"#f3f3fe",
-			"#e4e6ed",
-			"#c8cad3",
-			"#a9adb9",
-			"#9093a4",
-			"#808496",
-			"#767c91",
-			"#656a7e",
-			"#585e72",
-			"#4a5167",
+		primaryDark: [
+			"#000000", // Black
+			"#1a1a1a",
+			"#333333",
+			"#666666",
+			"#808080", // Medium Gray
+			"#999999",
+			"#b3b3b3",
+			"#cccccc",
+			"#f2f2f2",
+			"#ffffff", // White
 		],
+
+		primaryLight: [
+			"#ffffff", // White
+			"#cccccc",
+			"#b3b3b3",
+			"#999999",
+			"#808080", // Medium Gray
+			"#666666",
+			"#4d4d4d",
+			"#333333",
+			"#1a1a1a",
+			"#000000", // Black
+		],
+
+		pri: virtualColor({
+			name: "pri",
+			dark: "primaryDark",
+			light: "primaryLight",
+		}),
 	},
 
 	primaryColor: "pri",
 
-	primaryShade: { light: 7, dark: 7 },
+	primaryShade: { light: 9, dark: 9 },
 
 	defaultGradient: {
-		from: "pri",
-		to: "sec",
+		from: "primaryDark",
+		to: "primaryLight",
 		deg: 45,
 	},
 
@@ -97,9 +119,23 @@ const appTheme = createTheme({
 	cursorType: "pointer",
 
 	components: {
+		Anchor: Anchor.extend({ defaultProps: { underline: "never" }, classNames: classesAnchor }),
+
+		Card: Card.extend({
+			defaultProps: {
+				bg: "var(--mantine-color-pri-light)",
+				c: "var(--mantine-color-text)",
+			},
+		}),
+
 		Container: Container.extend({
-			defaultProps: { mx: "auto" },
-			classNames: classesContainer,
+			defaultProps: {
+				mx: "auto",
+			},
+
+			classNames: (_: any, { size }: { size?: any }) => ({
+				root: cx({ [classesContainer.root]: size === "responsive" }),
+			}),
 		}),
 
 		Notification: Notification.extend({ classNames: classesNotification }),

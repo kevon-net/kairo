@@ -124,7 +124,7 @@ export default function Delete() {
 					{...form.getInputProps("password")}
 				/>
 				<Group justify="end">
-					<Button type="submit" color="red.6" variant="light" loading={submitted}>
+					<Button type="submit" color="red" variant="light" loading={submitted}>
 						{submitted ? "Deleting" : "Delete Account"}
 					</Button>
 				</Group>

@@ -1,23 +1,21 @@
 .root {
-	&[data-variant="responsive"] {
-		@include larger-than($mantine-breakpoint-xs) {
-			max-width: 36em;
-		}
+	@include larger-than($mantine-breakpoint-xs) {
+		max-width: var(--mantine-breakpoint-xs);
+	}
 
-		@include larger-than($mantine-breakpoint-sm) {
-			max-width: 48em;
-		}
+	@include larger-than($mantine-breakpoint-sm) {
+		max-width: var(--mantine-breakpoint-sm);
+	}
 
-		@include larger-than($mantine-breakpoint-md) {
-			max-width: 62em;
-		}
+	@include larger-than($mantine-breakpoint-md) {
+		max-width: var(--mantine-breakpoint-md);
+	}
 
-		@include larger-than($mantine-breakpoint-lg) {
-			max-width: 75em;
-		}
+	@include larger-than($mantine-breakpoint-lg) {
+		max-width: var(--mantine-breakpoint-lg);
+	}
 
-		@include larger-than($mantine-breakpoint-xl) {
-			max-width: 88em;
-		}
+	@include larger-than($mantine-breakpoint-xl) {
+		max-width: var(--mantine-breakpoint-xl);
 	}
 }

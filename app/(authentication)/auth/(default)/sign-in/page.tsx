@@ -22,12 +22,12 @@ export default async function SignIn() {
 
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"xs"}>
+			<LayoutSection id={"page-sign-in"} padded containerized={"xs"}>
 				<Stack gap={40} px={{ md: 40 }}>
 					<AuthHeader
 						data={{
 							title: "Welcome Back!",
-							desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
+							desc: "Sign in to access your personalized experience.",
 						}}
 					/>
 

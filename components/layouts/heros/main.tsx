@@ -1,12 +1,12 @@
 import React from "react";
 
-import LayoutSection from "../Section";
+import LayoutSection from "../section";
 
 import PartialHeroRoute from "@/components/partials/heros/route";
 
 export default function Main() {
 	return (
-		<LayoutSection>
+		<LayoutSection id={"layout-hero-main"}>
 			<PartialHeroRoute />
 		</LayoutSection>
 	);

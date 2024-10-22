@@ -1,7 +1,7 @@
 import React from "react";
 
-import LayoutPage from "@/components/layouts/page";
-import LayoutSection from "@/components/layouts/section";
+import LayoutPage from "@/components/layout/page";
+import LayoutSection from "@/components/layout/section";
 
 import { typeParams } from "../layout";
 

@@ -1,33 +1,17 @@
-export enum enumDateType {
-	PAST = "past",
-	FUTURE = "future",
+export enum TimerDirection {
+	UP = "up",
+	DOWN = "down"
 }
 
-export enum enumSort {
+export enum SortOrder {
 	ASCENDING = "ASCENDING",
 	DESCENDING = "DESCENDING",
-	DEFAULT = "DEFAULT",
+	DEFAULT = "DEFAULT"
 }
 
-export enum enumRequest {
+export enum Request {
 	GET = "GET",
 	POST = "POST",
 	PUT = "PUT",
-	DELETE = "DELETE",
-}
-
-export enum enumTableUsers {
-	NAME = "NAME",
-	EMAIL = "EMAIL",
-	ROLE = "ROLE",
-	STATUS = "STATUS",
-	CREATED = "CREATED",
-}
-
-export enum enumTablePosts {
-	TITLE = "TITLE",
-	STATUS = "STATUS",
-	CATEGORY = "CATEGORY",
-	AUTHOR = "AUTHOR",
-	CREATED = "CREATED",
+	DELETE = "DELETE"
 }

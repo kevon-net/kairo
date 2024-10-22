@@ -28,7 +28,7 @@ import appTheme from "@/styles/theme";
 import appResolver from "@/styles/resolver";
 
 import appData from "@/data/app";
-import { linkify } from "@/handlers/parsers/string";
+import { linkify } from "@/utilities/formatters/string";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 

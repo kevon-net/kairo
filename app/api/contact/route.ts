@@ -1,5 +1,5 @@
-import { addEmailContact } from "@/handlers/contact";
-import { sendGeneralInquiryEmail } from "@/handlers/email";
+import { addEmailContact } from "@/libraries/wrappers/email/contact";
+import { sendGeneralInquiryEmail } from "@/libraries/wrappers/email/send";
 
 export async function POST(req: Request) {
 	try {
@@ -10,9 +10,15 @@ export async function POST(req: Request) {
 		// add to audience
 		const contactResponse = await addEmailContact(dataForm);
 
-		return Response.json({ email: emailResponse, contact: contactResponse });
+		return Response.json({
+			email: emailResponse,
+			contact: contactResponse
+		});
 	} catch (error) {
-		console.error("x-> Error sending contact message:", (error as Error).message);
+		console.error(
+			"x-> Error sending contact message:",
+			(error as Error).message
+		);
 		return Response.error();
 	}
 }

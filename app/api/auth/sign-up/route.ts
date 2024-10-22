@@ -1,8 +1,8 @@
-import { addEmailContact } from "@/handlers/contact";
-import { sendSignUpEmail } from "@/handlers/email";
-import { getFourDigitCode } from "@/libraries/generators/code";
-import prisma from "@/services/prisma";
-import { hashValue } from "@/utilities/hasher";
+import { addEmailContact } from "@/libraries/wrappers/email/contact";
+import { sendSignUpEmail } from "@/libraries/wrappers/email/send";
+import { getFourDigitCode } from "@/utilities/generators/otp";
+import prisma from "@/libraries/prisma";
+import { hashValue } from "@/utilities/helpers/hasher";
 
 export async function POST(req: Request) {
 	try {
@@ -19,14 +19,15 @@ export async function POST(req: Request) {
 				return Response.json({
 					user: { exists: false },
 					otp: null,
-					resend: null,
+					resend: null
 				});
 			} else {
 				// create password hash
 				const passwordHash = await hashValue(password);
 
 				// create user record
-				passwordHash && (await createUser({ email, password: passwordHash }));
+				passwordHash &&
+					(await createUser({ email, password: passwordHash }));
 
 				// create otp
 				const otpValue = getFourDigitCode();
@@ -39,14 +40,18 @@ export async function POST(req: Request) {
 					user: { exists: false },
 					otp: { value: otpValue },
 					// send otp email and output result in response body
-					resend: await verify(otpValue, email),
+					resend: await verify(otpValue, email)
 				});
 			}
 		} else {
 			if (!userRecord.verified) {
-				return Response.json({ user: { exists: true, verified: false } });
+				return Response.json({
+					user: { exists: true, verified: false }
+				});
 			} else {
-				return Response.json({ user: { exists: true, verified: true } });
+				return Response.json({
+					user: { exists: true, verified: true }
+				});
 			}
 		}
 	} catch (error) {
@@ -61,11 +66,14 @@ const createUser = async (fields: { email: string; password?: string }) => {
 			data: {
 				email: fields.email,
 				password: fields.password ? fields.password : null,
-				verified: fields.password ? false : true,
-			},
+				verified: fields.password ? false : true
+			}
 		});
 	} catch (error) {
-		console.error("x-> Error creating user record:", (error as Error).message);
+		console.error(
+			"x-> Error creating user record:",
+			(error as Error).message
+		);
 		throw error;
 	}
 };
@@ -76,23 +84,35 @@ const createOtp = async (fields: { email: string; otp: string }) => {
 	try {
 		await prisma.user.update({
 			where: {
-				email: fields.email,
+				email: fields.email
 			},
 			data: {
 				otps: {
-					create: [{ email: fields.email, otp: fields.otp, expiresAt: expiry }],
-				},
-			},
+					create: [
+						{
+							email: fields.email,
+							otp: fields.otp,
+							expiresAt: expiry
+						}
+					]
+				}
+			}
 		});
 	} catch (error) {
-		console.error("x-> Error creating otp record:", (error as Error).message);
+		console.error(
+			"x-> Error creating otp record:",
+			(error as Error).message
+		);
 		throw error;
 	}
 };
 
 const verify = async (otpValue: number, email: string) => {
 	// send otp email
-	const emailResponse = await sendSignUpEmail({ otp: otpValue.toString(), email });
+	const emailResponse = await sendSignUpEmail({
+		otp: otpValue.toString(),
+		email
+	});
 	// add to audience
 	const contactResponse = await addEmailContact({ email });
 

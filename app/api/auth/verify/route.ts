@@ -1,5 +1,5 @@
-import prisma from "@/services/prisma";
-import { compareHashes } from "@/utilities/hasher";
+import prisma from "@/libraries/prisma";
+import { compareHashes } from "@/utilities/helpers/hasher";
 
 export async function POST(req: Request) {
 	try {
@@ -13,20 +13,23 @@ export async function POST(req: Request) {
 		} else {
 			if (!userRecord.verified) {
 				// query database for otp
-				const otpRecord = await prisma.otp.findUnique({ where: { email } });
+				const otpRecord = await prisma.otp.findUnique({
+					where: { email }
+				});
 
 				if (!otpRecord) {
 					return Response.json({
 						user: { exists: true, verified: false },
-						otp: { exists: false },
+						otp: { exists: false }
 					});
 				} else {
-					const matches = otpRecord && (await compareHashes(otp, otpRecord?.otp));
+					const matches =
+						otpRecord && (await compareHashes(otp, otpRecord?.otp));
 
 					if (!matches) {
 						return Response.json({
 							user: { exists: true, verified: false },
-							otp: { exists: true, matches: false },
+							otp: { exists: true, matches: false }
 						});
 					} else {
 						const now = new Date();
@@ -34,14 +37,21 @@ export async function POST(req: Request) {
 
 						if (!expired) {
 							// update user field to verified
-							await prisma.user.update({ where: { email }, data: { verified: true } });
+							await prisma.user.update({
+								where: { email },
+								data: { verified: true }
+							});
 
 							// delete used otp record
 							await prisma.otp.delete({ where: { email } });
 
 							return Response.json({
 								user: { exists: true, verified: false },
-								otp: { exists: true, matches: true, expired: false },
+								otp: {
+									exists: true,
+									matches: true,
+									expired: false
+								}
 							});
 						} else {
 							// delete expired otp record
@@ -49,13 +59,19 @@ export async function POST(req: Request) {
 
 							return Response.json({
 								user: { exists: true, verified: false },
-								otp: { exists: true, matches: true, expired: true },
+								otp: {
+									exists: true,
+									matches: true,
+									expired: true
+								}
 							});
 						}
 					}
 				}
 			} else {
-				return Response.json({ user: { exists: true, verified: true } });
+				return Response.json({
+					user: { exists: true, verified: true }
+				});
 			}
 		}
 	} catch (error) {

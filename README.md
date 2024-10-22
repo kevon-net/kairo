@@ -19,3 +19,9 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+# name conventions
+
+change prop names to 'props' and parameter names to 'params'
+update error statements
+create request objects

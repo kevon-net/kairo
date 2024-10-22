@@ -5,10 +5,10 @@ import { redirect } from "next/navigation";
 
 import { Stack } from "@mantine/core";
 
-import LayoutPage from "@/components/layouts/page";
-import LayoutSection from "@/components/layouts/section";
-import FormAuthPasswordReset from "@/components/partials/forms/auth/password/reset";
-import AuthHeader from "@/components/partials/auth/header";
+import LayoutPage from "@/components/layout/page";
+import LayoutSection from "@/components/layout/section";
+import FormAuthPasswordReset from "@/components/form/auth/password/reset";
+import LayoutHeaderAuth from "@/components/layout/headers/auth";
 
 import { typeParams } from "../../../../layout";
 import { auth } from "@/auth";
@@ -24,10 +24,10 @@ export default async function Reset({ params }: { params: typeParams }) {
 		<LayoutPage>
 			<LayoutSection id={"page-reset"} padded containerized={"xs"}>
 				<Stack gap={40} px={{ md: 40 }}>
-					<AuthHeader
+					<LayoutHeaderAuth
 						data={{
 							title: "Enter Your New Password",
-							desc: "Reset your password and keep your account secure.",
+							desc: "Reset your password and keep your account secure."
 						}}
 					/>
 

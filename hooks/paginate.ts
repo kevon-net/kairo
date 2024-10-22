@@ -1,54 +1,52 @@
-"use client";
+import { useState, useMemo, useEffect } from "react";
 
-import { useEffect, useMemo, useState } from "react";
+interface PageRange {
+	from: number;
+	to: number;
+}
 
-export const usePaginate = (list: any[], divisor: string) => {
-	const [items, setItems] = useState<any[]>([]);
-	const [activePage, setActivePage] = useState(1);
-
-	// Memoize chunkedList so that it recalculates when 'list' or 'divisor' changes
-	const chunkedList = useMemo(() => (list ? chunkUsers(list!, Number(divisor)) : []), [list, divisor]);
-
-	// Memoize page range so that it recalculates when dependencies changes
-	const pageRange = useMemo(() => {
-		if (chunkedList.length > 0) {
-			const lastChunkInView =
-				chunkedList[chunkedList.length - 1].length == items.length &&
-				chunkedList[chunkedList.length - 1].length != Number(divisor);
-
-			return {
-				from: lastChunkInView ? list.length - items.length + 1 : activePage * items.length - items.length + 1,
-				to: lastChunkInView ? list.length : activePage * items.length,
-			};
-		} else {
-			return null;
-		}
-	}, [chunkedList, activePage, list, divisor, items]);
-
-	useEffect(() => {
-		if (list) {
-			if (chunkedList[activePage - 1]) {
-				setItems(chunkedList[activePage - 1].map(item => item));
-			} else {
-				if (activePage > 1) {
-					setActivePage(activePage - 1);
-				} else {
-					setItems([]);
-				}
-			}
-		}
-	}, [list, activePage, divisor, chunkedList]);
-
-	return { items, setItems, activePage, setActivePage, chunkedList, pageRange };
+const chunk = <T>(array: T[], size: number): T[][] => {
+	return array.length ? [array.slice(0, size), ...chunk(array.slice(size), size)] : [];
 };
 
-const chunkUsers = (array: any[], size: number): any[][] => {
-	if (!array.length) {
-		return [];
-	}
+export const usePaginate = <T>(list: T[], pageSize: number) => {
+	const [items, setItems] = useState<T[]>([]);
+	const [activePage, setActivePage] = useState(1);
 
-	const head = array.slice(0, size);
-	const tail = array.slice(size);
+	const chunkedList = useMemo(() => (list ? chunk(list, pageSize) : []), [list, pageSize]);
 
-	return [head, ...chunkUsers(tail, size)];
+	const pageRange = useMemo((): PageRange | null => {
+		if (!chunkedList.length) return null;
+
+		const lastChunkLength = chunkedList[chunkedList.length - 1].length;
+		const isLastChunk = lastChunkLength === items.length && lastChunkLength !== pageSize;
+
+		return {
+			from: isLastChunk ? list.length - items.length + 1 : (activePage - 1) * pageSize + 1,
+			to: isLastChunk ? list.length : activePage * pageSize
+		};
+	}, [chunkedList, activePage, list, pageSize, items]);
+
+	useEffect(() => {
+		if (!list) return;
+
+		const currentPageItems = chunkedList[activePage - 1];
+
+		if (currentPageItems) {
+			setItems(currentPageItems);
+		} else if (activePage > 1) {
+			setActivePage(activePage - 1);
+		} else {
+			setItems([]);
+		}
+	}, [list, activePage, pageSize, chunkedList]);
+
+	return {
+		items,
+		setItems,
+		activePage,
+		setActivePage,
+		chunkedList,
+		pageRange
+	};
 };

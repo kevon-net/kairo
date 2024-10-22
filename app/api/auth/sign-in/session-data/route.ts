@@ -1,17 +1,26 @@
-import prisma from "@/services/prisma";
+import prisma from "@/libraries/prisma";
 import { Device } from "@/types/device";
 import { IpInfo } from "@/types/ipInfo";
 
 export async function POST(req: Request) {
 	try {
-		const { userId, sessionToken, tokenExpiry, device, ...locationData } = await req.json();
+		const { userId, sessionToken, tokenExpiry, device, ...locationData } =
+			await req.json();
 
 		// find current session
-		const currentSession = await prisma.session.findUnique({ where: { sessionToken } });
+		const currentSession = await prisma.session.findUnique({
+			where: { sessionToken }
+		});
 
 		if (!currentSession) {
 			// create session
-			await createSession({ userId, token: sessionToken, tokenExpiry, device, locationData });
+			await createSession({
+				userId,
+				token: sessionToken,
+				tokenExpiry,
+				device,
+				locationData
+			});
 
 			return Response.json({ session: { exists: false } });
 		} else {
@@ -21,7 +30,13 @@ export async function POST(req: Request) {
 			// Compare the current time with the session's expiration time
 			const expired = now > currentSession.expires;
 			if (!expired) {
-				return Response.json({ session: { exists: true, expired: false, data: currentSession } });
+				return Response.json({
+					session: {
+						exists: true,
+						expired: false,
+						data: currentSession
+					}
+				});
 			} else {
 				// delete expired session
 				await prisma.session.delete({ where: { sessionToken } });
@@ -32,14 +47,14 @@ export async function POST(req: Request) {
 					token: sessionToken,
 					tokenExpiry,
 					device,
-					locationData,
+					locationData
 				});
 
 				return Response.json({
 					session: {
 						exists: true,
-						expired: true,
-					},
+						expired: true
+					}
 				});
 			}
 		}
@@ -59,7 +74,7 @@ const createSession = async (fields: {
 	try {
 		await prisma.user.update({
 			where: {
-				id: fields.userId,
+				id: fields.userId
 			},
 			data: {
 				sessions: {
@@ -68,14 +83,17 @@ const createSession = async (fields: {
 							sessionToken: fields.token,
 							// os: fields.device ? fields.device.os : null,
 							// ...fields.locationData,
-							expires: fields.tokenExpiry,
-						},
-					],
-				},
-			},
+							expires: fields.tokenExpiry
+						}
+					]
+				}
+			}
 		});
 	} catch (error) {
-		console.error("x-> Error creating user session record:", (error as Error).message);
+		console.error(
+			"x-> Error creating user session record:",
+			(error as Error).message
+		);
 		throw error;
 	}
 };

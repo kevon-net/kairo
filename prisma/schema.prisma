@@ -37,7 +37,7 @@ enum StatusPost {
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String          @id
   email         String          @unique
   verified      Boolean         @default(false)
   password      String?
@@ -60,7 +60,7 @@ model User {
 }
 
 model Profile {
-  id        String   @id @default(cuid())
+  id        String   @id
   firstName String?  @map(name: "first_name")
   lastName  String?  @map(name: "last_name")
   bio       String?
@@ -86,7 +86,7 @@ model Post {
   allowComments Boolean    @default(true) @map(name: "allow_comments")
   anonymous     Boolean    @default(false)
 
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
@@ -104,7 +104,7 @@ model Post {
 model Category {
   title String
 
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
@@ -117,7 +117,7 @@ model Category {
 model Tag {
   title String
 
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
@@ -134,7 +134,7 @@ model Otp {
   otp       String
   expiresAt DateTime @updatedAt @map(name: "expires_at")
 
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
@@ -149,7 +149,7 @@ model Otl {
   otl       String
   expiresAt DateTime @updatedAt @map(name: "expires_at")
 
-  id        String   @id @default(cuid())
+  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 

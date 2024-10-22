@@ -2,7 +2,18 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import { Anchor, Card, Flex, Grid, GridCol, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import {
+	Anchor,
+	Card,
+	Flex,
+	Grid,
+	GridCol,
+	Group,
+	Stack,
+	Text,
+	ThemeIcon,
+	Title
+} from "@mantine/core";
 
 import {
 	IconBrandFacebook,
@@ -10,17 +21,18 @@ import {
 	IconBrandLinkedin,
 	IconBrandX,
 	IconMail,
-	IconPhone,
+	IconPhone
 } from "@tabler/icons-react";
 
-import LayoutPage from "@/components/layouts/page";
-import LayoutSection from "@/components/layouts/section";
-import FormContact from "@/components/partials/forms/contact";
-import AccordionFaq from "@/components/accordions/faq";
+import LayoutPage from "@/components/layout/page";
+import LayoutSection from "@/components/layout/section";
+import FormContact from "@/components/form/contact";
+import AccordionFaq from "@/components/common/accordions/faq";
 
-import TemplateEmailContact from "@/components/templates/email/contact";
+import TemplateEmailContact from "@/app/email/contact";
 
 import appData from "@/data/app";
+import { iconStrokeWidth } from "@/data/constants";
 
 export const metadata: Metadata = { title: "Contact" };
 
@@ -31,33 +43,61 @@ export default async function Contact() {
 
 			{/* <LayoutSection padded containerized={"responsive"}>Contact page</LayoutSection> */}
 
-			<LayoutSection id={"page-contact"} padded containerized={"responsive"}>
+			<LayoutSection
+				id={"page-contact"}
+				padded
+			>
 				<Stack gap={64}>
 					<Stack>
-						<Title order={2} fz={48} fw={"bold"} ta={"center"} lh={1}>
+						<Title
+							order={2}
+							fz={48}
+							fw={"bold"}
+							ta={"center"}
+							lh={1}
+						>
 							Let Us Know <br />
 							What You Think!
 						</Title>
 						<Text ta={"center"}>
-							Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit
-							aliquam sit nullam.
+							Lorem ipsum dolor sit amet consectetur adipiscing
+							eli mattis sit phasellus mollis sit aliquam sit
+							nullam.
 						</Text>
 					</Stack>
 
 					<Grid gutter={{ base: "xl", lg: 64 }}>
-						<GridCol span={{ base: 12, sm: 6 }} order={{ base: 2, sm: 1 }}>
-							<Card withBorder shadow="xs" padding={"md"} bg={"transparent"}>
+						<GridCol
+							span={{ base: 12, sm: 6 }}
+							order={{ base: 2, sm: 1 }}
+						>
+							<Card
+								withBorder
+								shadow="xs"
+								padding={"md"}
+								bg={"transparent"}
+							>
 								<FormContact />
 							</Card>
 						</GridCol>
-						<GridCol span={{ base: 12, sm: 6 }} order={{ base: 1, sm: 2 }}>
+						<GridCol
+							span={{ base: 12, sm: 6 }}
+							order={{ base: 1, sm: 2 }}
+						>
 							<Stack gap={"xl"}>
 								<Stack gap={"xs"}>
-									<Title order={3} fz={24} fw={"bold"} ta={{ base: "center", sm: "start" }} lh={1}>
+									<Title
+										order={3}
+										fz={24}
+										fw={"bold"}
+										ta={{ base: "center", sm: "start" }}
+										lh={1}
+									>
 										Want to reach out directly?
 									</Title>
 									<Text ta={{ base: "center", sm: "start" }}>
-										Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus
+										Lorem ipsum dolor sit amet consectetur
+										adipiscing eli mattis sit phasellus
 										mollis sit aliquam sit nullam.
 									</Text>
 								</Stack>
@@ -67,17 +107,45 @@ export default async function Contact() {
 									direction={{ base: "column", sm: "row" }}
 									gap={{ base: "md", md: "xl" }}
 								>
-									{dataContact.map(item => (
-										<Group key={item.link} w={{ base: "66%", xs: "fit-content" }}>
-											<ThemeIcon size={40} variant="transparent">
-												<item.icon size={24} stroke={1.5} style={{ marginTop: 2 }} />
+									{dataContact.map((item) => (
+										<Group
+											key={item.link}
+											w={{
+												base: "66%",
+												xs: "fit-content"
+											}}
+										>
+											<ThemeIcon
+												size={40}
+												variant="transparent"
+											>
+												<item.icon
+													size={24}
+													stroke={iconStrokeWidth}
+													style={{ marginTop: 2 }}
+												/>
 											</ThemeIcon>
 
 											<Stack gap={0}>
-												<Text component="span" inherit fz={{ base: "xs", lg: "sm" }}>
+												<Text
+													component="span"
+													inherit
+													fz={{
+														base: "xs",
+														lg: "sm"
+													}}
+												>
 													Contact:
 												</Text>
-												<Anchor href={item.link} inherit fz={{ base: "xs", lg: "sm" }} fw={500}>
+												<Anchor
+													href={item.link}
+													inherit
+													fz={{
+														base: "xs",
+														lg: "sm"
+													}}
+													fw={500}
+												>
 													{item.label}
 												</Anchor>
 											</Stack>
@@ -85,15 +153,28 @@ export default async function Contact() {
 									))}
 								</Flex>
 
-								<Flex align={{ base: "center", sm: "start" }} direction={"column"} gap={"xs"}>
-									<Text ta={{ base: "center", sm: "start" }}>Follow us on social media:</Text>
+								<Flex
+									align={{ base: "center", sm: "start" }}
+									direction={"column"}
+									gap={"xs"}
+								>
+									<Text ta={{ base: "center", sm: "start" }}>
+										Follow us on social media:
+									</Text>
 
 									<Group>
-										{dataSocials.map(social => (
-											<Anchor key={social.link} title={social.label} href={social.link}>
+										{dataSocials.map((social) => (
+											<Anchor
+												key={social.link}
+												title={social.label}
+												href={social.link}
+											>
 												<Group>
 													<ThemeIcon size={24}>
-														<social.icon size={16} stroke={2} />
+														<social.icon
+															size={16}
+															stroke={iconStrokeWidth}
+														/>
 													</ThemeIcon>
 												</Group>
 											</Anchor>
@@ -122,34 +203,34 @@ export const dataContact = [
 	{
 		icon: IconMail,
 		link: `mailto:${email}`,
-		label: email,
+		label: email
 	},
 	{
 		icon: IconPhone,
 		link: `tel:${phone}`,
-		label: phone,
-	},
+		label: phone
+	}
 ];
 
 export const dataSocials = [
 	{
 		icon: IconBrandFacebook,
 		link: facebook.link,
-		label: facebook.platform,
+		label: facebook.platform
 	},
 	{
 		icon: IconBrandX,
 		link: twitter.link,
-		label: twitter.platform,
+		label: twitter.platform
 	},
 	{
 		icon: IconBrandInstagram,
 		link: instagram.link,
-		label: instagram.platform,
+		label: instagram.platform
 	},
 	{
 		icon: IconBrandLinkedin,
 		link: linkedin.link,
-		label: linkedin.platform,
-	},
+		label: linkedin.platform
+	}
 ];

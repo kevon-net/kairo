@@ -1,12 +1,13 @@
 import { auth } from "@/auth";
 import prisma from "@/libraries/prisma";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
+import { NextRequest } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
 	try {
 		const session = await auth();
 
-		const { passwordCurrent, passwordNew } = await req.json();
+		const { passwordCurrent, passwordNew } = await request.json();
 
 		const userRecord = await prisma.user.findUnique({
 			where: { id: session?.user.id }
@@ -15,10 +16,7 @@ export async function POST(req: Request) {
 		if (!userRecord) {
 			return Response.json({ user: { exists: false } });
 		} else {
-			const passwordMatch = await compareHashes(
-				passwordCurrent,
-				userRecord.password
-			);
+			const passwordMatch = await compareHashes(passwordCurrent, userRecord.password);
 
 			if (!passwordMatch) {
 				return Response.json({

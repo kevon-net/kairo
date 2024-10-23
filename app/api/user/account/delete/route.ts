@@ -1,54 +1,46 @@
 import { auth } from "@/auth";
 import prisma from "@/libraries/prisma";
 import { compareHashes } from "@/utilities/helpers/hasher";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
 	try {
 		const session = await auth();
 
-		const { password } = await req.json();
+		if (!session) {
+			return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+		}
 
-		const userRecord = await prisma.user.findUnique({
-			where: { id: session?.user.id }
-		});
+		const { password } = await request.json();
+
+		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id } });
 
 		if (!userRecord) {
-			return Response.json({ user: { exists: false } });
-		} else {
-			if (!userRecord.password) {
-				if (!password) {
-					await handleDelete(session?.user.id!);
+			return NextResponse.json({ error: "User not found" }, { status: 404 });
+		}
 
-					return Response.json({
-						user: { exists: true, password: { match: true } }
-					});
-				} else {
-					return Response.json({
-						user: { exists: true, password: { match: false } }
-					});
-				}
+		if (!userRecord.password) {
+			if (!password) {
+				await handleDelete(session.user.id!);
+
+				return NextResponse.json({ user: { exists: true, password: { match: true } } });
 			} else {
-				const passwordMatch = await compareHashes(
-					password,
-					userRecord.password
-				);
+				return NextResponse.json({ user: { exists: true, password: { match: false } } });
+			}
+		} else {
+			const passwordMatch = await compareHashes(password, userRecord.password);
 
-				if (!passwordMatch) {
-					return Response.json({
-						user: { exists: true, password: { match: false } }
-					});
-				} else {
-					await handleDelete(session?.user.id!);
+			if (!passwordMatch) {
+				return NextResponse.json({ user: { exists: true, password: { match: false } } });
+			} else {
+				await handleDelete(session.user.id!);
 
-					return Response.json({
-						user: { exists: true, password: { match: true } }
-					});
-				}
+				return NextResponse.json({ user: { exists: true, password: { match: true } } });
 			}
 		}
 	} catch (error) {
 		console.error("x-> Error deleting account:", (error as Error).message);
-		return Response.error();
+		return NextResponse.error();
 	}
 }
 

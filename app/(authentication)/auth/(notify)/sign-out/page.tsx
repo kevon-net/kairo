@@ -24,44 +24,25 @@ export default async function SignOut() {
 
 	return (
 		<LayoutPage>
-			<LayoutSection
-				id={"page-sign-out-sign-out"}
-				containerized="xs"
-				padded
-			>
-				<Flex
-					direction={"column"}
-					align={{ base: "center", md: "start" }}
-					gap={"xl"}
-				>
+			<LayoutSection id={"page-sign-out-sign-out"} containerized="xs" padded>
+				<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"xl"}>
 					<Stack gap={"xs"}>
-						<Title
-							ta={{ base: "center", md: "start" }}
-							order={1}
-							fw={"bold"}
-						>
+						<Title ta={{ base: "center", md: "start" }} order={1} fw={"bold"}>
 							Sign Out
 						</Title>
 
 						<Stack gap={0}>
-							<Text ta={{ base: "center", md: "start" }}>
-								Are you sure you want to sign out?
-							</Text>
+							<Text ta={{ base: "center", md: "start" }}>Are you sure you want to sign out?</Text>
 						</Stack>
 					</Stack>
 
 					<Group>
-						<Button onClick={signOut}>Sign Out</Button>
+						<Button onClick={async () => await signOut()}>Sign Out</Button>
 						<Button
 							component={Link}
 							href={"/"}
 							variant="light"
-							rightSection={
-								<IconArrowRight
-									size={16}
-									stroke={iconStrokeWidth}
-								/>
-							}
+							rightSection={<IconArrowRight size={16} stroke={iconStrokeWidth} />}
 						>
 							Go Home
 						</Button>

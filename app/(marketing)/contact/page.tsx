@@ -2,18 +2,7 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import {
-	Anchor,
-	Card,
-	Flex,
-	Grid,
-	GridCol,
-	Group,
-	Stack,
-	Text,
-	ThemeIcon,
-	Title
-} from "@mantine/core";
+import { Anchor, Card, Flex, Grid, GridCol, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 
 import {
 	IconBrandFacebook,
@@ -29,7 +18,7 @@ import LayoutSection from "@/components/layout/section";
 import FormContact from "@/components/form/contact";
 import AccordionFaq from "@/components/common/accordions/faq";
 
-import TemplateEmailContact from "@/app/email/contact";
+import TemplateEmailContact from "@/components/email/contact";
 
 import appData from "@/data/app";
 import { iconStrokeWidth } from "@/data/constants";
@@ -43,61 +32,33 @@ export default async function Contact() {
 
 			{/* <LayoutSection padded containerized={"responsive"}>Contact page</LayoutSection> */}
 
-			<LayoutSection
-				id={"page-contact"}
-				padded
-			>
+			<LayoutSection id={"page-contact"} padded>
 				<Stack gap={64}>
 					<Stack>
-						<Title
-							order={2}
-							fz={48}
-							fw={"bold"}
-							ta={"center"}
-							lh={1}
-						>
+						<Title order={2} fz={48} fw={"bold"} ta={"center"} lh={1}>
 							Let Us Know <br />
 							What You Think!
 						</Title>
 						<Text ta={"center"}>
-							Lorem ipsum dolor sit amet consectetur adipiscing
-							eli mattis sit phasellus mollis sit aliquam sit
-							nullam.
+							Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit
+							aliquam sit nullam.
 						</Text>
 					</Stack>
 
 					<Grid gutter={{ base: "xl", lg: 64 }}>
-						<GridCol
-							span={{ base: 12, sm: 6 }}
-							order={{ base: 2, sm: 1 }}
-						>
-							<Card
-								withBorder
-								shadow="xs"
-								padding={"md"}
-								bg={"transparent"}
-							>
+						<GridCol span={{ base: 12, sm: 6 }} order={{ base: 2, sm: 1 }}>
+							<Card withBorder shadow="xs" padding={"md"} bg={"transparent"}>
 								<FormContact />
 							</Card>
 						</GridCol>
-						<GridCol
-							span={{ base: 12, sm: 6 }}
-							order={{ base: 1, sm: 2 }}
-						>
+						<GridCol span={{ base: 12, sm: 6 }} order={{ base: 1, sm: 2 }}>
 							<Stack gap={"xl"}>
 								<Stack gap={"xs"}>
-									<Title
-										order={3}
-										fz={24}
-										fw={"bold"}
-										ta={{ base: "center", sm: "start" }}
-										lh={1}
-									>
+									<Title order={3} fz={24} fw={"bold"} ta={{ base: "center", sm: "start" }} lh={1}>
 										Want to reach out directly?
 									</Title>
 									<Text ta={{ base: "center", sm: "start" }}>
-										Lorem ipsum dolor sit amet consectetur
-										adipiscing eli mattis sit phasellus
+										Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus
 										mollis sit aliquam sit nullam.
 									</Text>
 								</Stack>
@@ -115,10 +76,7 @@ export default async function Contact() {
 												xs: "fit-content"
 											}}
 										>
-											<ThemeIcon
-												size={40}
-												variant="transparent"
-											>
+											<ThemeIcon size={40} variant="transparent">
 												<item.icon
 													size={24}
 													stroke={iconStrokeWidth}
@@ -153,28 +111,15 @@ export default async function Contact() {
 									))}
 								</Flex>
 
-								<Flex
-									align={{ base: "center", sm: "start" }}
-									direction={"column"}
-									gap={"xs"}
-								>
-									<Text ta={{ base: "center", sm: "start" }}>
-										Follow us on social media:
-									</Text>
+								<Flex align={{ base: "center", sm: "start" }} direction={"column"} gap={"xs"}>
+									<Text ta={{ base: "center", sm: "start" }}>Follow us on social media:</Text>
 
 									<Group>
 										{dataSocials.map((social) => (
-											<Anchor
-												key={social.link}
-												title={social.label}
-												href={social.link}
-											>
+											<Anchor key={social.link} title={social.label} href={social.link}>
 												<Group>
 													<ThemeIcon size={24}>
-														<social.icon
-															size={16}
-															stroke={iconStrokeWidth}
-														/>
+														<social.icon size={16} stroke={iconStrokeWidth} />
 													</ThemeIcon>
 												</Group>
 											</Anchor>

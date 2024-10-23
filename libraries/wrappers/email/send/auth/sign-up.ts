@@ -1,7 +1,7 @@
 import appData from "@/data/app";
 import resend from "@/libraries/resend";
 
-import TemplateEmailCodeSignUp from "@/app/email/code/signUp";
+import TemplateEmailCodeSignUp from "@/components/email/auth/sign-up";
 import { isProduction } from "@/utilities/helpers/environment";
 
 export const emailSendSignUp = async (params: { otp: string; email: string }) => {

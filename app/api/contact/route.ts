@@ -1,24 +1,22 @@
-import { addEmailContact } from "@/libraries/wrappers/email/contact";
-import { sendGeneralInquiryEmail } from "@/libraries/wrappers/email/send";
+import { emailContactCreate } from "@/libraries/wrappers/email/contact";
+import { NextRequest, NextResponse } from "next/server";
+import { emailSendInquiry } from "@/libraries/wrappers/email/send/inquiry";
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
 	try {
-		const dataForm = await req.json();
+		const dataForm = await request.json();
 
-		// send email
-		const emailResponse = await sendGeneralInquiryEmail(dataForm);
-		// add to audience
-		const contactResponse = await addEmailContact(dataForm);
-
-		return Response.json({
-			email: emailResponse,
-			contact: contactResponse
-		});
-	} catch (error) {
-		console.error(
-			"x-> Error sending contact message:",
-			(error as Error).message
+		return NextResponse.json(
+			{
+				// send email
+				email: await emailSendInquiry(dataForm),
+				// add to audience
+				contact: await emailContactCreate(dataForm)
+			},
+			{ status: 200 }
 		);
-		return Response.error();
+	} catch (error) {
+		console.error("---> route handler error (contact):", error);
+		return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 	}
 }

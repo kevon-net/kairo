@@ -25,7 +25,7 @@ export default async function Forgot() {
 				<Stack gap={40} px={{ md: 40 }}>
 					<LayoutHeaderAuth
 						data={{
-							title: "Enter Your Email",
+							title: "Forgot Password?",
 							desc: "No worries, we've got your back. Let's recover your account."
 						}}
 					/>

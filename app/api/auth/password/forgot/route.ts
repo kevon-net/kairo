@@ -1,175 +1,87 @@
-import { sendForgotPasswordEmail } from "@/libraries/wrappers/email/send";
 import prisma from "@/libraries/prisma";
+import { emailSendPasswordForgot } from "@/libraries/wrappers/email/send/auth/password";
+import { OtlType } from "@prisma/client";
+import { generateToken } from "@/utilities/generators/token";
+import { apiUrl } from "@/data/constants";
 import { hashValue } from "@/utilities/helpers/hasher";
-import jwt from "jsonwebtoken";
+import { generateId } from "@/utilities/generators/id";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
 	try {
-		const { email } = await req.json();
+		const { email } = await request.json();
 
 		// query database for user
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (!userRecord) {
-			return Response.json({ user: { exists: false } });
-		} else {
-			// query database for link
-			const otlRecord = await prisma.otl.findUnique({ where: { email } });
-			// handle null password field for oauth sign-up's
-			const samplePassword = process.env.NEXT_EXAMPLE_PASSWORD;
+			return NextResponse.json({ error: "User not found" }, { status: 404 });
+		}
 
-			if (!otlRecord) {
-				// create otl value
-				const otlValue = await createOtlValue({
-					id: userRecord.id,
-					email: userRecord.email,
-					password: userRecord.password
-						? userRecord.password
-						: (samplePassword as string)
-				});
+		// query database for otl
+		const otlRecord = await prisma.otl.findUnique({
+			where: { email_type: { email, type: OtlType.PASSWORD_RESET } }
+		});
 
-				// create otl record
-				await createOtlRecord({
-					email: userRecord.email,
-					otl: otlValue
-				});
+		const now = new Date();
+		const expired = otlRecord?.expiresAt! < now;
 
-				return Response.json({
-					user: {
-						exists: true,
-						otl: {
-							exists: false,
-							value: otlValue,
-							// email new link and show result in response body
-							resend: await sendMail({
-								email: userRecord.email,
-								otl: otlValue
-							})
+		if (otlRecord && !expired) {
+			// get time to expiration
+			const expiry = otlRecord.expiresAt.getTime() - now.getTime();
+
+			return NextResponse.json({ error: "Otp already sent", expiry }, { status: 409 });
+		}
+
+		// delete expired otl record if exists and is expired
+		otlRecord &&
+			expired &&
+			(await prisma.otl.delete({ where: { email_type: { email, type: OtlType.PASSWORD_RESET } } }));
+
+		// create token
+		const token = await generateToken(
+			{
+				id: userRecord.id,
+				email: userRecord.email,
+				password: userRecord.password || process.env.AUTH_SECRET! // handle null password field (oauth)
+			},
+			5
+		);
+
+		// create otl value
+		const otlValue = `${apiUrl}/auth/password/reset/${userRecord.id}/${token}`;
+
+		// create otl hash
+		const otlHash = await hashValue(otlValue);
+
+		// create otl record
+		await prisma.user.update({
+			where: { email: userRecord.email },
+			data: {
+				otls: {
+					create: [
+						{
+							id: generateId(),
+							email: userRecord.email,
+							type: OtlType.PASSWORD_RESET,
+							otl: otlHash!,
+							expiresAt: new Date(Date.now() + 60 * 60 * 1000) // in 1 hour
 						}
-					}
-				});
-			} else {
-				const now = new Date();
-				const expired = otlRecord.expiresAt < now;
-
-				if (!expired) {
-					const expiry =
-						otlRecord.expiresAt.getTime() - now.getTime();
-
-					return Response.json({
-						user: {
-							exists: true,
-							otl: {
-								exists: true,
-								value: otlRecord.otl,
-								expired: false,
-								expiry,
-								valid: expiry > 55 * 60 * 1000
-							}
-						}
-					});
-				} else {
-					// delete expired otl record
-					await prisma.otl.delete({ where: { email } });
-
-					// create new otl value
-					const otlValueNew = await createOtlValue({
-						id: userRecord.id,
-						email: userRecord.email,
-						password: userRecord.password
-							? userRecord.password
-							: (samplePassword as string)
-					});
-
-					// create new otl record
-					await createOtlRecord({
-						email: userRecord.email,
-						otl: otlValueNew
-					});
-
-					return Response.json({
-						user: {
-							exists: true,
-							otl: {
-								exists: true,
-								value: otlValueNew,
-								expired: true,
-								// email new link and show result in response body
-								resend: await sendMail({
-									email: userRecord.email,
-									otl: otlValueNew
-								})
-							}
-						}
-					});
+					]
 				}
 			}
-		}
-	} catch (error) {
-		console.error(
-			"x-> Error emailing password reset link:",
-			(error as Error).message
+		});
+
+		return NextResponse.json(
+			{
+				// email new link and show result in response body
+				resend: await emailSendPasswordForgot({ email: userRecord.email, otl: otlValue }),
+				message: "Otp sent"
+			},
+			{ status: 200 }
 		);
-		return Response.error();
+	} catch (error) {
+		console.error("---> route handler error (password forgot):", error);
+		return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 	}
 }
-
-const createOtlValue = async (fields: {
-	id: string;
-	email: string;
-	password: string;
-}) => {
-	// create token
-	const secret = process.env.NEXT_JWT_KEY + fields.password;
-	const token = jwt.sign({ email: fields.email, id: fields.id }, secret, {
-		expiresIn: "5m"
-	});
-
-	return (
-		process.env.NEXT_PUBLIC_API_URL +
-		`/auth/password/reset/${fields.id}/${token}`
-	);
-};
-
-const createOtlRecord = async (fields: { email: string; otl: string }) => {
-	// expiry 1 hour
-	const expiry = new Date(Date.now() + 60 * 60 * 1000);
-
-	const otlHash = await hashValue(fields.otl);
-
-	try {
-		otlHash &&
-			(await prisma.user.update({
-				where: {
-					email: fields.email
-				},
-				data: {
-					otls: {
-						create: [
-							{
-								email: fields.email,
-								otl: otlHash,
-								expiresAt: expiry
-							}
-						]
-					}
-				}
-			}));
-	} catch (error) {
-		console.error(
-			"x-> Error creating otl record:",
-			(error as Error).message
-		);
-		throw error;
-	}
-};
-
-const sendMail = async (fields: { otl: string; email: string }) => {
-	// send otl email
-	const emailResponse = await sendForgotPasswordEmail({
-		otl: fields.otl,
-		email: fields.email
-	});
-
-	return { email: emailResponse };
-};

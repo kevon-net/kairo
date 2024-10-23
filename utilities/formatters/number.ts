@@ -14,12 +14,12 @@ export const millToMinSec = (milliseconds: number): MinSec | undefined => {
 	}
 };
 
-export const prependZeros = (length: number, value: number): string => {
-	// Convert 'value' to string
-	const bStr = value.toString();
-
-	// Prepend zeros until the length of the string is = 'length'
-	const paddedStr = bStr.padStart(length, "0");
+export const prependZeros = (value: number, length: number): string => {
+	/**
+	 * Convert value to string
+	 * Prepend zeros until the length of the string is = 'length'
+	 */
+	const paddedStr = String(value).padStart(length, "0");
 
 	return paddedStr;
 };

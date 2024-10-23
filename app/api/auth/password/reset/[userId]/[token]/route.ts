@@ -2,102 +2,56 @@ import prisma from "@/libraries/prisma";
 import jwt from "jsonwebtoken";
 
 import { typePasswordReset } from "@/types/apis";
-import { sendPasswordChangedEmail } from "@/libraries/wrappers/email/send";
+import { emailSendPasswordChanged } from "@/libraries/wrappers/email/send/auth/password";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
+import { OtlType } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-	req: Request,
-	{ params }: { params: typePasswordReset }
-) {
+export async function POST(request: NextRequest, { params }: { params: typePasswordReset }) {
 	try {
 		// query database for user
-		const userRecord = await prisma.user.findUnique({
-			where: { id: params.userId }
-		});
+		const userRecord = await prisma.user.findUnique({ where: { id: params.userId } });
 
 		if (!userRecord) {
-			return Response.json({ user: { exists: false } });
-		} else {
-			try {
-				const samplePassword = process.env.NEXT_EXAMPLE_PASSWORD;
-
-				const secret =
-					(process.env.NEXT_JWT_KEY as string) +
-					(userRecord.password
-						? userRecord.password
-						: samplePassword);
-
-				await jwt.verify(params.token, secret);
-
-				try {
-					const { password } = await req.json();
-
-					const matches = await compareHashes(
-						password,
-						userRecord.password
-					);
-
-					if (!matches) {
-						const passwordHash = await hashValue(password);
-
-						// update password field
-						await prisma.user.update({
-							where: { id: params.userId },
-							data: { password: passwordHash }
-						});
-
-						// delete used otl record
-						await prisma.otl.delete({
-							where: { email: userRecord.email }
-						});
-
-						return Response.json({
-							user: {
-								exists: true,
-								password: { matches: false }
-							},
-							token: { valid: true },
-							// send otp email and output result in response body
-							resend: await notify({ email: userRecord.email })
-						});
-					} else {
-						return Response.json({
-							user: { exists: true, password: { matches: true } },
-							token: { valid: true }
-						});
-					}
-				} catch (error) {
-					console.error(
-						`x-> Error updating password record:`,
-						(error as Error).message
-					);
-					return Response.error();
-				}
-			} catch (error) {
-				console.error(
-					`x-> Could not verify token:`,
-					(error as Error).message
-				);
-				return Response.json({
-					user: { exists: true },
-					token: { valid: false }
-				});
-			}
+			return NextResponse.json({ error: "User not found" }, { status: 404 });
 		}
-	} catch (error) {
-		console.error(
-			"x-> Error resetting password:",
-			(error as Error).message
+
+		// verify token
+		try {
+			const secret = process.env.NEXT_JWT_KEY! + (userRecord.password || process.env.AUTH_SECRET!);
+			await jwt.verify(params.token, secret);
+		} catch (error) {
+			console.error(`---> helper function error (verify token):`, error);
+			throw error;
+		}
+
+		const { password } = await request.json();
+
+		const matches = await compareHashes(password, userRecord.password);
+
+		if (matches) {
+			return NextResponse.json({ error: "Password already used" }, { status: 409 });
+		}
+
+		// create hash
+		const passwordHash = await hashValue(password);
+
+		// update password field
+		await prisma.user.update({ where: { id: params.userId }, data: { password: passwordHash } });
+
+		// delete used otl record
+		await prisma.otl.delete({ where: { email_type: { email: userRecord.email, type: OtlType.PASSWORD_RESET } } });
+
+		return NextResponse.json(
+			{
+				// send otp email and output result in response body
+				resend: await emailSendPasswordChanged({ email: userRecord.email }),
+				message: "Password changed"
+			},
+			{ status: 200 }
 		);
-		return Response.error();
+	} catch (error) {
+		console.error("---> route handler error (password reset):", error);
+		return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 	}
 }
-
-const notify = async (fields: { email: string }) => {
-	// send confirmation email
-	const emailResponse = await sendPasswordChangedEmail({
-		email: fields.email
-	});
-
-	return { email: emailResponse };
-};

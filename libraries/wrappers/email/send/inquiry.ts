@@ -1,6 +1,6 @@
 import resend from "@/libraries/resend";
 import { Contact } from "@/types/form";
-import TemplateEmailContact from "@/app/email/contact";
+import TemplateEmailContact from "@/components/email/contact";
 import { isProduction } from "@/utilities/helpers/environment";
 
 export const emailSendInquiry = async (params: Contact) => {

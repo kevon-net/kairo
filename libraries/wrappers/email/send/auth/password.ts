@@ -1,8 +1,8 @@
 import appData from "@/data/app";
 import resend from "@/libraries/resend";
 
-import TemplateEmailCodeForgot from "@/app/email/code/forgot";
-import TemplateEmailNofificationChanged from "@/app/email/notification/changed";
+import TemplateEmailCodeForgot from "@/components/email/auth/password-forgot";
+import TemplateEmailNofificationChanged from "@/components/email/auth/password-changed";
 import { isProduction } from "@/utilities/helpers/environment";
 
 export const emailSendPasswordForgot = async (params: { otl: string; email: string }) => {

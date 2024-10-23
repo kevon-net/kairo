@@ -37,13 +37,18 @@ enum StatusPost {
 }
 
 model User {
-  id            String          @id
-  email         String          @unique
-  verified      Boolean         @default(false)
+  id String @id @default(cuid())
+
+  email         String    @unique
+  verified      Boolean   @default(false)
   password      String?
   name          String?
   image         String?
-  emailVerified DateTime?       @map(name: "email_verified")
+  emailVerified DateTime? @map(name: "email_verified")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
   accounts      Account[]
   sessions      Session[]
   authenticator Authenticator[] // Optional for WebAuthn support
@@ -53,26 +58,27 @@ model User {
   otps          Otp[]
   otls          Otl[]
   profile       Profile?
-  createdAt     DateTime        @default(now()) @map(name: "created_at")
-  updatedAt     DateTime        @updatedAt @map(name: "updated_at")
 
   @@map("users")
 }
 
 model Profile {
-  id        String   @id
-  firstName String?  @map(name: "first_name")
-  lastName  String?  @map(name: "last_name")
+  id String @unique
+
+  firstName String? @map(name: "first_name")
+  lastName  String? @map(name: "last_name")
   bio       String?
   address   String?
   phone     String?
   city      String?
   state     String?
   country   String?
+
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String   @unique @map("user_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
 
   @@map("profiles")
 }
@@ -80,13 +86,14 @@ model Profile {
 // app models
 
 model Post {
+  id String @id @default(cuid())
+
   title         String
   content       String
   status        StatusPost @default(DRAFT)
   allowComments Boolean    @default(true) @map(name: "allow_comments")
   anonymous     Boolean    @default(false)
 
-  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
@@ -96,15 +103,15 @@ model Post {
   categoryId String?   @map("category_id")
   tags       Tag[]
 
-  // @@unique([userId, title])
-  @@unique([title])
+  @@unique([userId, title])
   @@map(name: "posts")
 }
 
 model Category {
+  id String @id @default(cuid())
+
   title String
 
-  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
@@ -115,47 +122,62 @@ model Category {
 }
 
 model Tag {
-  title String
+  id String @id @default(cuid())
 
-  id        String   @id
+  title String @unique
+
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   posts Post[]
 
-  @@unique([title])
   @@map(name: "tags")
 }
 
 // auth models
 
+enum OtpType {
+  EMAIL_CONFIRMATION
+  TWO_FACTOR_AUTHENTICATION
+}
+
 model Otp {
-  email     String   @unique
+  id String @id @default(cuid())
+
+  email     String
+  type      OtpType
   otp       String
   expiresAt DateTime @updatedAt @map(name: "expires_at")
 
-  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique @map("user_id")
 
+  @@unique([email, type])
   @@map(name: "otps")
 }
 
+enum OtlType {
+  PASSWORD_RESET
+}
+
 model Otl {
+  id String @id @default(cuid())
+
   email     String   @unique
+  type      OtlType
   otl       String
   expiresAt DateTime @updatedAt @map(name: "expires_at")
 
-  id        String   @id
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique @map("user_id")
 
+  @@unique([email, type])
   @@map(name: "otls")
 }
 
@@ -164,7 +186,7 @@ model Otl {
 model Account {
   type              String
   provider          String
-  providerAccountId String   @map(name: "provider_account_id")
+  providerAccountId String  @map(name: "provider_account_id")
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -172,10 +194,12 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  createdAt         DateTime @default(now()) @map(name: "created_at")
-  updatedAt         DateTime @updatedAt @map(name: "updated_at")
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String   @unique @map("user_id")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
 
   @@id([provider, providerAccountId])
   @@map("accounts")
@@ -184,10 +208,12 @@ model Account {
 model Session {
   sessionToken String   @unique @map(name: "session_token")
   expires      DateTime
-  createdAt    DateTime @default(now()) @map(name: "created_at")
-  updatedAt    DateTime @updatedAt @map(name: "updated_at")
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String   @unique @map("user_id")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
 
   @@map("sessions")
 }
@@ -196,6 +222,9 @@ model VerificationToken {
   identifier String
   token      String
   expires    DateTime
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@id([identifier, token])
   @@map("verification_tokens")
@@ -210,8 +239,12 @@ model Authenticator {
   credentialDeviceType String  @map(name: "credential_device_type")
   credentialBackedUp   Boolean @map(name: "credential_backed_up")
   transports           String?
-  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId               String  @map(name: "user_id")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map(name: "user_id")
 
   @@id([userId, credentialID])
   @@map("authenticators")

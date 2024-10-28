@@ -8,10 +8,8 @@ export async function POST(request: NextRequest) {
 		const session = await auth();
 
 		if (!session) {
-			return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
-
-		const { password } = await request.json();
 
 		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id } });
 
@@ -19,43 +17,32 @@ export async function POST(request: NextRequest) {
 			return NextResponse.json({ error: "User not found" }, { status: 404 });
 		}
 
-		if (!userRecord.password) {
-			if (!password) {
-				await handleDelete(session.user.id!);
+		const { password } = await request.json();
 
-				return NextResponse.json({ user: { exists: true, password: { match: true } } });
-			} else {
-				return NextResponse.json({ user: { exists: true, password: { match: false } } });
-			}
+		const passwordMatch =
+			(!password.trim() && !userRecord.password) || (await compareHashes(password, userRecord.password));
+
+		if (!passwordMatch) {
+			return NextResponse.json({ error: "Password doesn't match" }, { status: 403 });
 		} else {
-			const passwordMatch = await compareHashes(password, userRecord.password);
+			// delete user and related records
+			await prisma.user.delete({
+				where: { id: session.user.id },
+				include: {
+					profile: true,
+					accounts: true,
+					sessions: true,
+					authenticator: true,
+					otps: true,
+					otls: true,
+					posts: true
+				}
+			});
 
-			if (!passwordMatch) {
-				return NextResponse.json({ user: { exists: true, password: { match: false } } });
-			} else {
-				await handleDelete(session.user.id!);
-
-				return NextResponse.json({ user: { exists: true, password: { match: true } } });
-			}
+			return NextResponse.json({ message: "Account deleted" }, { status: 200 });
 		}
 	} catch (error) {
-		console.error("x-> Error deleting account:", (error as Error).message);
-		return NextResponse.error();
+		console.error("---> route handler error (delete account):", error);
+		return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 	}
 }
-
-const handleDelete = async (id: string) => {
-	// delete user and user-related records
-	await prisma.user.delete({
-		where: { id },
-		include: {
-			profile: true,
-			accounts: true,
-			sessions: true,
-			Authenticator: true,
-			otps: true,
-			otls: true,
-			posts: true
-		}
-	});
-};

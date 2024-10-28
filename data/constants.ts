@@ -16,3 +16,12 @@ export const authUrls = {
 export const iconStrokeWidth = 1.5;
 
 export const transitionDuration = 250;
+
+export const sectionSpacing = 64;
+
+export const passwordRequirements = [
+	{ re: /[0-9]/, label: "number" },
+	{ re: /[a-z]/, label: "lowercase letter" },
+	{ re: /[A-Z]/, label: "uppercase letter" },
+	{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "special symbol" }
+];

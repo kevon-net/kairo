@@ -2,7 +2,7 @@ import { apiUrl } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
 import { SignUp as FormAuthSignUp } from "@/types/form";
 
-export const signUp = async (params: Omit<FormAuthSignUp, "passwordConfirm">) => {
+export const signUp = async (params: Omit<FormAuthSignUp, "password.confirm">) => {
 	try {
 		const request = new Request(`${apiUrl}/auth/sign-up`, {
 			method: EnumRequest.POST,
@@ -11,9 +11,7 @@ export const signUp = async (params: Omit<FormAuthSignUp, "passwordConfirm">) =>
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (sign up):", error);
 	}

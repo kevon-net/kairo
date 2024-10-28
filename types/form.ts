@@ -8,11 +8,11 @@ export interface PasswordForgot {
 }
 
 export interface PasswordReset {
-	password: string;
-	passwordConfirm: string;
+	password: { initial: string; confirm: string };
 }
 
 export interface SignUp extends PasswordReset {
+	name: { first: string; last: string };
 	email: string;
 }
 
@@ -48,7 +48,7 @@ export interface Contact {
 
 export interface Verify {
 	otp: string;
-	email: string;
+	userId: string;
 }
 
 export type FormPostCreate = PostCreate & {

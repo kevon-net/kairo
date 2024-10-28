@@ -1,42 +1,37 @@
 import { auth } from "@/auth";
 import prisma from "@/libraries/prisma";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
 		const session = await auth();
 
-		const { passwordCurrent, passwordNew } = await request.json();
+		if (!session) {
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		}
 
-		const userRecord = await prisma.user.findUnique({
-			where: { id: session?.user.id }
-		});
+		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id } });
 
 		if (!userRecord) {
-			return Response.json({ user: { exists: false } });
+			return NextResponse.json({ error: "User not found" }, { status: 404 });
+		}
+
+		const { passwordCurrent, passwordNew } = await request.json();
+
+		const passwordMatch = await compareHashes(passwordCurrent, userRecord.password);
+
+		if (!passwordMatch) {
+			return NextResponse.json({ error: "Password doesn't match" }, { status: 403 });
 		} else {
-			const passwordMatch = await compareHashes(passwordCurrent, userRecord.password);
+			const passwordHash = await hashValue(passwordNew);
 
-			if (!passwordMatch) {
-				return Response.json({
-					user: { exists: true, password: { match: false } }
-				});
-			} else {
-				const passwordHash = await hashValue(passwordNew);
+			await prisma.user.update({ where: { id: session.user.id }, data: { password: passwordHash } });
 
-				await prisma.user.update({
-					where: { id: session?.user.id },
-					data: { password: passwordHash }
-				});
-
-				return Response.json({
-					user: { exists: true, password: { match: true } }
-				});
-			}
+			return NextResponse.json({ message: "Password changed" }, { status: 200 });
 		}
 	} catch (error) {
-		console.error("x-> Error changing password:", (error as Error).message);
-		return Response.error();
+		console.error("---> route handler error (change password):", error);
+		return NextResponse.json({ error: "Internal server error" }, { status: 500 });
 	}
 }

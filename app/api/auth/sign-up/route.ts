@@ -45,17 +45,19 @@ export async function POST(request: NextRequest) {
 			}
 		});
 
+		console.log(otpValue);
+
 		return NextResponse.json(
-			{
-				// send otp email and output result in response body
-				resend: {
-					// send otp email
-					email: await emailSendSignUp({ otp: otpValue.toString(), email }),
-					// add to audience
-					contact: await emailContactCreate({ email })
-				},
-				message: "Otp sent"
-			},
+			// {
+			// 	// send otp email and output result in response body
+			// 	resend: {
+			// 		// send otp email
+			// 		email: await emailSendSignUp({ otp: otpValue.toString(), email }),
+			// 		// add to audience
+			// 		contact: await emailContactCreate({ email })
+			// 	},
+			// 	message: "Otp sent"
+			// },
 			{ status: 200 }
 		);
 	} catch (error) {

@@ -4,7 +4,7 @@ import { Verify } from "@/types/form";
 
 export const verify = async (params: Verify) => {
 	try {
-		const request = new Request(`${apiUrl}/auth/verify`, {
+		const request = new Request(`${apiUrl}/auth/verify/${params.userId}`, {
 			method: EnumRequest.POST,
 			body: JSON.stringify(params)
 		});
@@ -19,11 +19,10 @@ export const verify = async (params: Verify) => {
 	}
 };
 
-export const verifyResend = async (params: { email: string }) => {
+export const verifyResend = async (params: { userId: string }) => {
 	try {
-		const request = new Request(`${apiUrl}/auth/verify/resend`, {
-			method: EnumRequest.POST,
-			body: JSON.stringify(params)
+		const request = new Request(`${apiUrl}/auth/verify/${params.userId}/resend`, {
+			method: EnumRequest.GET
 		});
 
 		const response = await fetch(request);

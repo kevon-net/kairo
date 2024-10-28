@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import LayoutPage from "@/components/layout/page";
-import FormAuthSignUp from "@/components/form/auth/signUp";
+import FormAuthSignUp from "@/components/form/auth/sign-up";
 import LayoutAuth from "@/components/layout/auth";
 
 import { auth } from "@/auth";

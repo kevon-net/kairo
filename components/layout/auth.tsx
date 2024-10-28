@@ -3,26 +3,36 @@ import React from "react";
 import NextImage from "next/image";
 import Link from "next/link";
 
-import { Anchor, Center, Grid, GridCol, Group, Image, Stack } from "@mantine/core";
+import { Anchor, Box, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
-import LayoutBody from "@/components/layout/body";
 import LayoutSection from "@/components/layout/section";
 
 import images from "@/data/images";
 import appData from "@/data/app";
 import { sectionSpacing } from "@/data/constants";
 
-export default function Notify({
-	children // will be a page or nested layout
+export default function Auth({
+	props,
+	children
 }: {
+	props: { title: string; desc: string };
 	children: React.ReactNode;
 }) {
+	const header = (
+		<Stack gap={"xs"}>
+			<Title order={1} ta={{ base: "center", md: "start" }} fz={{ base: "h2", md: "h1" }}>
+				{props.title}
+			</Title>
+			<Text ta={{ base: "center", md: "start" }}>{props.desc}</Text>
+		</Stack>
+	);
+
 	return (
-		<LayoutBody>
+		<LayoutSection id={"layout-auth"} containerized={false}>
 			<Grid gutter={0} px={{ base: "md", xs: 0 }}>
 				<GridCol span={5.5} visibleFrom="md" bg={"var(--mantine-color-pri-light)"}>
-					<LayoutSection id={"layout-auth-notify-icon"} containerized="xs" pos={"sticky"} top={0}>
-						<Stack gap={"xl"} align="center" justify="center" h={"100vh"} px={{ xs: 32 }}>
+					<LayoutSection id={"layout-auth-heading"} containerized="xs" pos={"sticky"} top={0}>
+						<Stack gap={"xl"} justify="center" h={"100vh"} px={{ xs: 32 }}>
 							<Anchor component={Link} href={"/"}>
 								<Group>
 									<Image
@@ -36,18 +46,22 @@ export default function Notify({
 									/>
 								</Group>
 							</Anchor>
+
+							{header}
 						</Stack>
 					</LayoutSection>
 				</GridCol>
 
 				<GridCol span={{ base: 12, md: 6.5 }}>
-					<LayoutSection id={"layout-auth-notify-text"} containerized="xs">
+					<LayoutSection id={"layout-auth-form"} containerized="xs">
 						<Stack gap={"xl"} justify="center" mih={"100vh"} px={{ xs: 32 }} py={sectionSpacing}>
+							<Box hiddenFrom="md">{header}</Box>
+
 							{children}
 						</Stack>
 					</LayoutSection>
 				</GridCol>
 			</Grid>
-		</LayoutBody>
+		</LayoutSection>
 	);
 }

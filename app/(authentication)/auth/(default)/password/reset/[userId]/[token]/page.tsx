@@ -3,37 +3,30 @@ import React from "react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { Stack } from "@mantine/core";
-
 import LayoutPage from "@/components/layout/page";
-import LayoutSection from "@/components/layout/section";
 import FormAuthPasswordReset from "@/components/form/auth/password/reset";
-import LayoutHeaderAuth from "@/components/layout/headers/auth";
+import LayoutAuth from "@/components/layout/auth";
 
-import { typeParams } from "../../../../layout";
+import { Params } from "../../../../layout";
 import { auth } from "@/auth";
 
 export const metadata: Metadata = { title: "Reset Password" };
 
-export default async function Reset({ params }: { params: typeParams }) {
+export default async function Reset({ params }: { params: Params }) {
 	const session = await auth();
 
 	session && redirect("/");
 
 	return (
 		<LayoutPage>
-			<LayoutSection id={"page-reset"} padded containerized={"xs"}>
-				<Stack gap={40} px={{ md: 40 }}>
-					<LayoutHeaderAuth
-						data={{
-							title: "Enter Your New Password",
-							desc: "Reset your password and keep your account secure."
-						}}
-					/>
-
-					<FormAuthPasswordReset data={params} />
-				</Stack>
-			</LayoutSection>
+			<LayoutAuth
+				props={{
+					title: "Enter Your New Password",
+					desc: "Reset your password and keep your account secure."
+				}}
+			>
+				<FormAuthPasswordReset data={params} />
+			</LayoutAuth>
 		</LayoutPage>
 	);
 }

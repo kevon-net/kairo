@@ -15,7 +15,12 @@ export default function Forgot() {
 			<Stack gap={"xl"}>
 				<Grid>
 					<GridCol span={{ base: 12, sm: 12 }}>
-						<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
+						<TextInput
+							required
+							label={"Email"}
+							placeholder="you@example.com"
+							{...form.getInputProps("email")}
+						/>
 					</GridCol>
 					<GridCol span={{ base: 12 }}>
 						<Center>

@@ -2,22 +2,24 @@
 
 import React from "react";
 
-import { Box, Button, Center, Grid, GridCol, PasswordInput } from "@mantine/core";
+import { Button, Center, Grid, GridCol, PasswordInput } from "@mantine/core";
 
-import { typeParams } from "@/app/(authentication)/auth/(default)/layout";
+import { Params } from "@/app/(authentication)/auth/(default)/layout";
 import { useFormAuthPasswordReset } from "@/hooks/form/auth/password";
+import PopoverPasswordStrength from "@/components/wrapper/popovers/password-strength";
 
-export default function Reset({ data }: { data: typeParams }) {
+export default function Reset({ data }: { data: Params }) {
 	const { form, handleSubmit, sending } = useFormAuthPasswordReset(data);
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
+		<form onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid>
 				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
-					<PasswordInput
+					<PopoverPasswordStrength
 						required
 						label={"New Password"}
-						placeholder="Your New Password"
+						placeholder="********"
+						value={form.values.password}
 						{...form.getInputProps("password")}
 					/>
 				</GridCol>
@@ -25,7 +27,7 @@ export default function Reset({ data }: { data: typeParams }) {
 					<PasswordInput
 						required
 						label={"Confirm New Password"}
-						placeholder="Confirm Your New Password"
+						placeholder="********"
 						{...form.getInputProps("passwordConfirm")}
 					/>
 				</GridCol>
@@ -43,6 +45,6 @@ export default function Reset({ data }: { data: typeParams }) {
 					</Center>
 				</GridCol>
 			</Grid>
-		</Box>
+		</form>
 	);
 }

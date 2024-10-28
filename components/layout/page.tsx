@@ -3,6 +3,7 @@ import React from "react";
 import { Box, Stack } from "@mantine/core";
 
 import { Page as typePage } from "@/types/layout";
+import { sectionSpacing } from "@/data/constants";
 
 export default function Page({
 	children,
@@ -14,8 +15,8 @@ export default function Page({
 		<Box
 			component={stacked ? Stack : "article"}
 			w={"100%"}
-			gap={stacked ? (typeof stacked == "boolean" ? 64 : stacked) : undefined}
-			py={padded ? (typeof padded == "boolean" ? 64 : padded) : undefined}
+			gap={stacked ? (typeof stacked == "boolean" ? sectionSpacing : stacked) : undefined}
+			py={padded ? (typeof padded == "boolean" ? sectionSpacing : padded) : undefined}
 			{...restProps}
 		>
 			{children}

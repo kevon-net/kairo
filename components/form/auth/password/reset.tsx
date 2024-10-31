@@ -20,7 +20,7 @@ export default function Reset({ data }: { data: Params }) {
 						label={"New Password"}
 						placeholder="********"
 						value={form.values.password}
-						{...form.getInputProps("password")}
+						{...form.getInputProps("password.initial")}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
@@ -28,7 +28,7 @@ export default function Reset({ data }: { data: Params }) {
 						required
 						label={"Confirm New Password"}
 						placeholder="********"
-						{...form.getInputProps("passwordConfirm")}
+						{...form.getInputProps("password.confirm")}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12 }}>

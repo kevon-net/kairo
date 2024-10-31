@@ -11,10 +11,9 @@ export const updateProfile = async (params: FormProfile) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (update profile):", error);
+		throw error;
 	}
 };

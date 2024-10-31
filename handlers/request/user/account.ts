@@ -13,11 +13,10 @@ export const deleteAccount = async (params: AccountDelete) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (delete account):", error);
+		throw error;
 	}
 };
 
@@ -30,11 +29,10 @@ export const updateAccountPassword = async (params: AccountPassword) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (update account password):", error);
+		throw error;
 	}
 };
 
@@ -47,10 +45,9 @@ export const updateAccountNotifications = async (params: any) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (update account notifications):", error);
+		throw error;
 	}
 };

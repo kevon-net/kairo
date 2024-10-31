@@ -8,12 +8,13 @@ export async function POST(request: NextRequest) {
 
 		return NextResponse.json(
 			{
+				message: "Inquiry sent successfully",
 				// send email
 				email: await emailSendInquiry(dataForm),
 				// add to audience
-				contact: await emailContactCreate(dataForm)
+				contact: await emailContactCreate(dataForm),
 			},
-			{ status: 200 }
+			{ status: 200, statusText: "Sent" }
 		);
 	} catch (error) {
 		console.error("---> route handler error (contact):", error);

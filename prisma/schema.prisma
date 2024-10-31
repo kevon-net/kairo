@@ -144,7 +144,6 @@ enum OtpType {
 model Otp {
   id String @id @default(cuid())
 
-  email     String
   type      OtpType
   otp       String
   expiresAt DateTime @updatedAt @map(name: "expires_at")
@@ -155,7 +154,7 @@ model Otp {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique @map("user_id")
 
-  @@unique([email, type])
+  @@unique([userId, type])
   @@map(name: "otps")
 }
 
@@ -166,7 +165,6 @@ enum OtlType {
 model Otl {
   id String @id @default(cuid())
 
-  email     String   @unique
   type      OtlType
   otl       String
   expiresAt DateTime @updatedAt @map(name: "expires_at")
@@ -177,7 +175,7 @@ model Otl {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique @map("user_id")
 
-  @@unique([email, type])
+  @@unique([userId, type])
   @@map(name: "otls")
 }
 

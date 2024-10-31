@@ -25,3 +25,7 @@ export const passwordRequirements = [
 	{ re: /[A-Z]/, label: "uppercase letter" },
 	{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "special symbol" }
 ];
+
+export const SALT_ROUNDS = 10;
+
+export const timeout = { redirect: 5000 };

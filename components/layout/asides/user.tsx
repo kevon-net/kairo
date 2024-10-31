@@ -15,11 +15,11 @@ import {
 	IconLogout,
 	IconPackage,
 	IconStar,
-	IconUser
+	IconUser,
 } from "@tabler/icons-react";
 
 import LayoutSection from "@/components/layout/section";
-import AvatarAside from "@/components/common/avatars/aside";
+import AvatarMain from "@/components/common/avatars/main";
 
 import { useSession } from "next-auth/react";
 import { iconStrokeWidth } from "@/data/constants";
@@ -33,24 +33,24 @@ export default function User() {
 			{
 				icon: IconHeart,
 				link: `/account/wishlist`,
-				label: "My Wishlist"
+				label: "My Wishlist",
 			},
 			{
 				icon: IconPackage,
 				link: `/account/orders`,
-				label: "My Orders"
+				label: "My Orders",
 			},
 			{
 				icon: IconStar,
 				link: `/account/reviews`,
-				label: "My Reviews"
-			}
+				label: "My Reviews",
+			},
 		],
 		user: [
 			{
 				icon: IconUser,
 				link: `/account/profile`,
-				label: "Profile Settings"
+				label: "Profile Settings",
 			},
 			// {
 			// 	icon: IconCoins,
@@ -65,56 +65,43 @@ export default function User() {
 			{
 				icon: IconBellRinging,
 				link: `/account/notifications`,
-				label: "Notifications"
-			}
+				label: "Notifications",
+			},
 		],
 		help: [
 			{
 				icon: IconHelpCircle,
 				link: `/help`,
-				label: "Help Center"
+				label: "Help Center",
 			},
 			{
 				icon: IconInfoCircle,
 				link: `/help/terms-and-conditions`,
-				label: "Terms and Conditions"
-			}
+				label: "Terms and Conditions",
+			},
 		],
 		danger: [
 			{
 				icon: IconLogout,
 				link: `/api/auth/signout`,
 				label: "Sign Out",
-				color: "red.6"
-			}
-		]
+				color: "red.6",
+			},
+		],
 	};
 
 	return (
 		<LayoutSection id={"partial-aside-user"} padded pos={"sticky"} top={0}>
 			<Stack gap={48} align="center">
-				<Flex
-					direction={{ base: "column", lg: "row" }}
-					align={"center"}
-					gap={"md"}
-					w={"100%"}
-				>
-					<AvatarAside />
+				<Flex direction={{ base: "column", lg: "row" }} align={"center"} gap={"md"} w={"100%"}>
+					<AvatarMain />
 
 					<Stack gap={0}>
-						<Title
-							order={3}
-							fz={"md"}
-							ta={{ base: "center", lg: "start" }}
-						>
+						<Title order={3} fz={"md"} ta={{ base: "center", lg: "start" }}>
 							{session?.user.name}
 						</Title>
 
-						<Text
-							fz={"xs"}
-							c={"dimmed"}
-							ta={{ base: "center", lg: "start" }}
-						>
+						<Text fz={"xs"} c={"dimmed"} ta={{ base: "center", lg: "start" }}>
 							{session?.user.email}
 						</Text>
 					</Stack>
@@ -133,18 +120,11 @@ export default function User() {
 									component={Link}
 									href={item.link}
 									label={item.label}
-									leftSection={
-										<item.icon
-											size={16}
-											stroke={iconStrokeWidth}
-										/>
-									}
-									rightSection={
-										<IconChevronRight size={16} />
-									}
+									leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
+									rightSection={<IconChevronRight size={16} />}
 									active={item.link == pathname}
 									style={{
-										borderRadius: "var(--mantine-radius-md)"
+										borderRadius: "var(--mantine-radius-md)",
 									}}
 								/>
 							))}
@@ -165,18 +145,11 @@ export default function User() {
 									component={Link}
 									href={item.link}
 									label={item.label}
-									leftSection={
-										<item.icon
-											size={16}
-											stroke={iconStrokeWidth}
-										/>
-									}
-									rightSection={
-										<IconChevronRight size={16} />
-									}
+									leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
+									rightSection={<IconChevronRight size={16} />}
 									active={item.link == pathname}
 									style={{
-										borderRadius: "var(--mantine-radius-md)"
+										borderRadius: "var(--mantine-radius-md)",
 									}}
 								/>
 							))}
@@ -197,18 +170,11 @@ export default function User() {
 									component={Link}
 									href={item.link}
 									label={item.label}
-									leftSection={
-										<item.icon
-											size={16}
-											stroke={iconStrokeWidth}
-										/>
-									}
-									rightSection={
-										<IconChevronRight size={16} />
-									}
+									leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
+									rightSection={<IconChevronRight size={16} />}
 									active={item.link == pathname}
 									style={{
-										borderRadius: "var(--mantine-radius-md)"
+										borderRadius: "var(--mantine-radius-md)",
 									}}
 								/>
 							))}
@@ -225,15 +191,10 @@ export default function User() {
 								href={item.link}
 								label={item.label}
 								color={item.color}
-								leftSection={
-									<item.icon
-										size={16}
-										stroke={iconStrokeWidth}
-									/>
-								}
+								leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
 								rightSection={<IconChevronRight size={16} />}
 								style={{
-									borderRadius: "var(--mantine-radius-md)"
+									borderRadius: "var(--mantine-radius-md)",
 								}}
 								active
 							/>

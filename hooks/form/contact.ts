@@ -1,13 +1,12 @@
-import IconNotificationError from "@/components/common/icons/notification/error";
-import IconNotificationSuccess from "@/components/common/icons/notification/success";
 import { sendInquiry } from "@/handlers/request/contact";
+import { NotificationVariant } from "@/types/enums";
 import { Contact } from "@/types/form";
 import { capitalizeWord, capitalizeWords } from "@/utilities/formatters/string";
+import { showNotification } from "@/utilities/notifications";
 import email from "@/utilities/validators/special/email";
 import phone from "@/utilities/validators/special/phone";
 import text from "@/utilities/validators/special/text";
 import { useForm, UseFormReturnType } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 
 export const useFormContact = () => {
@@ -20,7 +19,7 @@ export const useFormContact = () => {
 			email: "",
 			phone: "",
 			subject: "",
-			message: ""
+			message: "",
 		},
 
 		validate: {
@@ -29,8 +28,8 @@ export const useFormContact = () => {
 			email: (value) => email(value),
 			phone: (value) => value.trim().length > 0 && phone(value),
 			subject: (value) => text(value, 3, 255, true),
-			message: (value) => text(value, 3, 2048, true)
-		}
+			message: (value) => text(value, 3, 2048, true),
+		},
 	});
 
 	const parseValues = () => {
@@ -40,7 +39,7 @@ export const useFormContact = () => {
 			email: form.values.email.trim().toLowerCase(),
 			phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 			subject: capitalizeWords(form.values.subject.trim()),
-			message: form.values.message.trim()
+			message: form.values.message.trim(),
 		};
 	};
 
@@ -49,35 +48,26 @@ export const useFormContact = () => {
 			try {
 				setSubmitted(true);
 
-				const result = await sendInquiry(parseValues());
+				const response = await sendInquiry(parseValues());
 
-				if (!result) {
-					notifications.show({
-						id: "form-contact-failed-no-response",
-						icon: IconNotificationError(),
-						title: "Server Unavailable",
-						message: `There was no response from the server.`,
-						variant: "failed"
-					});
-				} else {
-					notifications.show({
-						id: "form-contact-success",
-						icon: IconNotificationSuccess(),
-						title: "Form Submitted",
-						message: "Someone will get back to you within 24 hours",
-						variant: "success"
-					});
+				if (!response) {
+					throw new Error("No response from server");
 				}
-			} catch (error) {
-				notifications.show({
-					id: "form-contact-failed",
-					icon: IconNotificationError(),
-					title: "Submisstion Failed",
-					message: (error as Error).message,
-					variant: "failed"
-				});
-			} finally {
+
+				const result = await response.json();
+
 				form.reset();
+
+				if (response.ok) {
+					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
+					return;
+				}
+
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+			} catch (error) {
+				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+				return;
+			} finally {
 				setSubmitted(false);
 			}
 		}
@@ -86,6 +76,6 @@ export const useFormContact = () => {
 	return {
 		form,
 		submitted,
-		handleSubmit
+		handleSubmit,
 	};
 };

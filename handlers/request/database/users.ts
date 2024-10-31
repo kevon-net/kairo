@@ -12,11 +12,10 @@ export const getUsers = async () => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (get users):", error);
+		throw error;
 	}
 };
 
@@ -29,11 +28,10 @@ export const updateUsers = async (users: UserGet[], mode: StatusUser) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (update users):", error);
+		throw error;
 	}
 };
 
@@ -46,11 +44,10 @@ export const updateUser = async (user: UserGet, mode: StatusUser) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (update user):", error);
+		throw error;
 	}
 };
 
@@ -63,11 +60,10 @@ export const addUser = async (user: FormUserCreate) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (add user):", error);
+		throw error;
 	}
 };
 
@@ -80,10 +76,9 @@ export const removeUser = async (user: UserGet) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (remove user):", error);
+		throw error;
 	}
 };

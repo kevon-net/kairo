@@ -11,10 +11,9 @@ export const sendInquiry = async (params: Contact) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (send inquiry):", error);
+		throw error;
 	}
 };

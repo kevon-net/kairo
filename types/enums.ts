@@ -15,3 +15,15 @@ export enum Request {
 	PUT = "PUT",
 	DELETE = "DELETE"
 }
+
+export enum HashingAlgorithm {
+	BCRYPT = "bcrypt",
+	SHA256 = "sha256",
+	SHA512 = "sha512"
+}
+
+export enum NotificationVariant {
+	SUCCESS = "success",
+	WARNING = "warning",
+	FAILED = "failed"
+}

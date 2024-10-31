@@ -21,7 +21,6 @@ import {
 } from "@mantine/core";
 
 import AuthProviders from "@/components/common/buttons/auth-providers";
-import PopoverPasswordStrength from "@/components/wrapper/popovers/password-strength";
 
 import { useFormAuthSignIn } from "@/hooks/form/auth/sign-in";
 
@@ -47,7 +46,7 @@ export default function SignIn() {
 
 					<GridCol span={{ base: 12, xs: 12 }}>
 						<Stack gap={"xs"}>
-							<PopoverPasswordStrength
+							<PasswordInput
 								required
 								label="Password"
 								placeholder="********"

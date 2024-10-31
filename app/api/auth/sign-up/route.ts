@@ -9,59 +9,69 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
 	try {
-		const { email, password } = await request.json();
+		const { name, email, password } = await request.json();
 
 		// query database for user
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (userRecord) {
-			return NextResponse.json({ error: "User already exists", verified: userRecord.verified }, { status: 409 });
+			return NextResponse.json(
+				{ error: "Already signed up", user: { id: userRecord.id, verified: userRecord.verified } },
+				{ status: 409, statusText: "User Exists" }
+			);
 		}
-
-		// create user record
-		await prisma.user.create({ data: { id: generateId(), email, password: (await hashValue(password)) || null } });
 
 		// create otp
 		const otpValue = generateOtpCode();
 
 		// create otp hash
-		const otpHash = await hashValue(String(otpValue));
+		const otpHash = await hashValue(otpValue);
 
-		// create otp record
-		await prisma.user.update({
-			where: { email },
+		// create user id
+		const userId = generateId();
+
+		// create user record
+		await prisma.user.create({
 			data: {
+				id: userId,
+				name: `${name.first} ${name.last}`,
+				email,
+				password: (await hashValue(password.initial)) || null,
+				verified: false,
+
+				// create user profile record
+				profile: { create: { id: generateId(), firstName: name.first, lastName: name.last } },
+
+				// create user otp record
 				otps: {
 					create: [
 						{
 							id: generateId(),
 							type: OtpType.EMAIL_CONFIRMATION,
-							email: email,
 							otp: otpHash!,
-							expiresAt: new Date(Date.now() + 60 * 60 * 1000) // 1 hour
-						}
-					]
-				}
-			}
+							expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+						},
+					],
+				},
+			},
 		});
 
-		console.log(otpValue);
-
 		return NextResponse.json(
-			// {
-			// 	// send otp email and output result in response body
-			// 	resend: {
-			// 		// send otp email
-			// 		email: await emailSendSignUp({ otp: otpValue.toString(), email }),
-			// 		// add to audience
-			// 		contact: await emailContactCreate({ email })
-			// 	},
-			// 	message: "Otp sent"
-			// },
-			{ status: 200 }
+			{
+				user: { id: userId, email },
+				message: "Your account has been created",
+				// send otp email and output result in response body
+				resend: {
+					// send otp email
+					email: await emailSendSignUp({ otp: otpValue.toString(), email }),
+					// add to audience
+					contact: await emailContactCreate({ email }),
+				},
+			},
+			{ status: 200, statusText: `Welcome, ${name.first}` }
 		);
 	} catch (error) {
 		console.error("---> route handler error (sign up):", error);
-		return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+		return NextResponse.json({ error: "Something went wrong on our end" }, { status: 500 });
 	}
 }

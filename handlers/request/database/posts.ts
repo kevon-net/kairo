@@ -11,11 +11,10 @@ export const getPosts = async () => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (get posts):", error);
+		throw error;
 	}
 };
 
@@ -28,11 +27,10 @@ export const removePosts = async (posts: PostGet[]) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (remove posts):", error);
+		throw error;
 	}
 };
 
@@ -45,11 +43,10 @@ export const addPost = async (post: FormPostCreate) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (add post):", error);
+		throw error;
 	}
 };
 
@@ -62,10 +59,9 @@ export const removePost = async (post: PostGet) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (remove post):", error);
+		throw error;
 	}
 };

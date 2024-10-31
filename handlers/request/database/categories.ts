@@ -10,11 +10,10 @@ export const getCategories = async () => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (get categories):", error);
+		throw error;
 	}
 };
 
@@ -27,11 +26,10 @@ export const addCategory = async (category: CategoryCreate) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (add category):", error);
+		throw error;
 	}
 };
 
@@ -44,10 +42,9 @@ export const removeCategory = async (category: CategoryGet) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (remove category):", error);
+		throw error;
 	}
 };

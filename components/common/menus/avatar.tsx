@@ -4,17 +4,7 @@ import React from "react";
 
 import Link from "next/link";
 
-import {
-	Menu,
-	MenuDivider,
-	MenuDropdown,
-	MenuItem,
-	MenuLabel,
-	MenuTarget,
-	Text,
-	Stack,
-	Skeleton
-} from "@mantine/core";
+import { Menu, MenuDivider, MenuDropdown, MenuItem, MenuLabel, MenuTarget, Text, Stack, Skeleton } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 import {
@@ -25,24 +15,26 @@ import {
 	IconHeart,
 	IconStar,
 	IconHelpCircle,
-	IconInfoCircle
+	IconInfoCircle,
 } from "@tabler/icons-react";
 
 import { useSession } from "next-auth/react";
 
-import AvatarAside from "../avatars/aside";
+import AvatarMain from "../avatars/main";
+
+import classes from "./avatar.module.scss";
 
 export default function Avatar() {
 	const { data: session, status } = useSession();
 	const userName = session?.user.name;
 
 	const mobile = useMediaQuery("(max-width: 48em)");
-	const sizeAvatar = mobile ? 28 : 36;
-
 	return (
-		<Menu position={"bottom"} withArrow width={mobile ? 200 : 240}>
+		<Menu position={"bottom"} withArrow width={mobile ? 200 : 240} trigger="click-hover" classNames={classes}>
 			<MenuTarget>
-				<AvatarAside size={sizeAvatar} />
+				<div>
+					<AvatarMain size={40} />
+				</div>
 			</MenuTarget>
 
 			<MenuDropdown>
@@ -82,12 +74,7 @@ export default function Avatar() {
 
 				<MenuLabel>Account</MenuLabel>
 				{menuItems.user.map((item) => (
-					<MenuItem
-						key={item.label}
-						leftSection={<item.icon size={16} />}
-						component={Link}
-						href={item.link}
-					>
+					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
 						{item.label}
 					</MenuItem>
 				))}
@@ -124,24 +111,24 @@ const menuItems = {
 		{
 			icon: IconHeart,
 			link: `/account/wishlist`,
-			label: "My Wishlist"
+			label: "My Wishlist",
 		},
 		{
 			icon: IconPackage,
 			link: `/account/orders`,
-			label: "My Orders"
+			label: "My Orders",
 		},
 		{
 			icon: IconStar,
 			link: `/account/reviews`,
-			label: "My Reviews"
-		}
+			label: "My Reviews",
+		},
 	],
 	user: [
 		{
 			icon: IconUser,
 			link: `/account/profile`,
-			label: "Profile Settings"
+			label: "Profile Settings",
 		},
 		// {
 		// 	icon: IconCoins,
@@ -156,27 +143,27 @@ const menuItems = {
 		{
 			icon: IconBellRinging,
 			link: `/account/notifications`,
-			label: "Notifications"
-		}
+			label: "Notifications",
+		},
 	],
 	help: [
 		{
 			icon: IconHelpCircle,
 			link: `/help`,
-			label: "Help Center"
+			label: "Help Center",
 		},
 		{
 			icon: IconInfoCircle,
 			link: `/legal/terms-and-conditions`,
-			label: "Terms and Conditions"
-		}
+			label: "Terms and Conditions",
+		},
 	],
 	danger: [
 		{
 			icon: IconLogout,
-			link: process.env.NEXT_PUBLIC_SIGN_OUT_URL!,
+			link: process.env.NEXT_PUBLIC_URL_SIGN_OUT!,
 			label: "Sign Out",
-			color: "red"
-		}
-	]
+			color: "red",
+		},
+	],
 };

@@ -1,7 +1,5 @@
-import IconNotificationError from "@/components/common/icons/notification/error";
-import IconNotificationSuccess from "@/components/common/icons/notification/success";
-import { signIn as handleSignIn } from "@/handlers/event/sign-in";
 import { signUp as handleSignUp } from "@/handlers/request/auth/sign-up";
+import { signIn as authSignIn } from "next-auth/react";
 import { SignUp as FormAuthSignUp } from "@/types/form";
 import { capitalizeWords } from "@/utilities/formatters/string";
 import compare from "@/utilities/validators/special/compare";
@@ -9,44 +7,49 @@ import email from "@/utilities/validators/special/email";
 import password from "@/utilities/validators/special/password";
 import text from "@/utilities/validators/special/text";
 import { useForm, UseFormReturnType } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { timeout } from "@/data/constants";
+import { showNotification } from "@/utilities/notifications";
+import { NotificationVariant } from "@/types/enums";
 
 export const useFormAuthSignUp = () => {
+	const router = useRouter();
+
 	const [submitted, setSubmitted] = useState(false);
 
 	const form: UseFormReturnType<FormAuthSignUp> = useForm({
 		initialValues: {
 			name: { first: "", last: "" },
 			email: "",
-			password: { initial: "", confirm: "" }
+			password: { initial: "", confirm: "" },
 		},
 
 		validate: {
 			name: {
 				first: (value) => text(value.trim(), 2, 24),
-				last: (value) => text(value.trim(), 2, 24)
+				last: (value) => text(value.trim(), 2, 24),
 			},
 			email: (value) => email(value.trim()),
 			password: {
 				initial: (value) => password(value.trim(), 8, 24),
-				confirm: (value, values) => compare.string(values.password.initial, value, "Password")
-			}
-		}
+				confirm: (value, values) => compare.string(values.password.initial, value, "Password"),
+			},
+		},
 	});
 
 	const parseValues = () => {
 		return {
 			name: {
 				first: capitalizeWords(form.values.name.first.trim()),
-				last: capitalizeWords(form.values.name.last.trim())
+				last: capitalizeWords(form.values.name.last.trim()),
 			},
 			email: form.values.email.trim().toLowerCase(),
 			password: {
-				initial: form.values.password.initial.trim(),
-				confirm: form.values.password.confirm.trim()
+				initial: form.values.password.initial,
+				confirm: form.values.password.confirm,
 			},
-			verified: false
+			verified: false,
 		};
 	};
 
@@ -61,42 +64,37 @@ export const useFormAuthSignUp = () => {
 					throw new Error("No response from server");
 				}
 
-				console.log(response);
-
 				const result = await response.json();
 
-				if (!response.ok) {
-					notifications.show({
-						id: "sign-up-failed",
-						icon: IconNotificationError(),
-						title: `${response.statusText} (${response.status})`,
-						message: result.error,
-						variant: "failed"
-					});
-				} else {
-					// if (result.user.exists == false) {
-					// 	setSubmitted(false);
-					// 	switchContext();
-					// } else {
-					// 	if (result.user.verified == false) {
-					// 		switchContext();
-					// 	} else {
-					// 		// redirect to sign in
-					// 		form.reset();
-					// 		await handleSignIn();
-					// 	}
-					// }
-				}
-			} catch (error) {
-				notifications.show({
-					id: "sign-up-failed",
-					icon: IconNotificationError(),
-					title: "Sign Up Failed",
-					message: (error as Error).message,
-					variant: "failed"
-				});
+				form.reset();
 
-				// form.reset();
+				if (response.ok) {
+					// redirect to verification page
+					router.push(`/auth/verify/${result.user.id}`);
+					return;
+				}
+
+				if (response.statusText === "User Exists") {
+					setTimeout(async () => {
+						// check if user is verified
+						if (result.user.verified) {
+							// redirect to sign in
+							await authSignIn();
+						}
+
+						// redirect to verification page
+						router.push(`/auth/verify/${result.user.id}`);
+					}, timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.WARNING }, response, result);
+					return;
+				}
+
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+				return;
+			} catch (error) {
+				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+				return;
 			} finally {
 				setSubmitted(false);
 			}

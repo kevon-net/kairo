@@ -26,7 +26,7 @@ export default function PasswordStrength({ value, ...restProps }: { value: strin
 		<Popover opened={opened} position="bottom-start" width="target" styles={{ dropdown: { minWidth: 280 } }}>
 			<PopoverTarget>
 				<div onFocusCapture={() => setOpened(true)} onBlurCapture={() => setOpened(false)}>
-					<PasswordInput {...restProps} />
+					<PasswordInput value={value} {...restProps} />
 				</div>
 			</PopoverTarget>
 

@@ -7,9 +7,9 @@ import { isProduction } from "@/utilities/helpers/environment";
 
 export const emailSendPasswordForgot = async (params: { otl: string; email: string }) => {
 	const { data, error } = await resend.general.emails.send({
-		from: `${appData.name.app} <"${
+		from: `${appData.name.app} <${
 			isProduction() ? process.env.NEXT_EMAIL_NOREPLY! : process.env.NEXT_RESEND_EMAIL!
-		}">`,
+		}>`,
 		to: [isProduction() ? params.email : process.env.NEXT_EMAIL_NOREPLY!],
 		subject: "Reset Your Password",
 		react: TemplateEmailCodeForgot(params.otl),
@@ -26,9 +26,9 @@ export const emailSendPasswordForgot = async (params: { otl: string; email: stri
 
 export const emailSendPasswordChanged = async (params: { email: string }) => {
 	const { data, error } = await resend.general.emails.send({
-		from: `${appData.name.app} <"${
+		from: `${appData.name.app} <${
 			isProduction() ? process.env.NEXT_EMAIL_NOREPLY! : process.env.NEXT_RESEND_EMAIL!
-		}">`,
+		}>`,
 		to: [isProduction() ? params.email : process.env.NEXT_EMAIL_NOREPLY!],
 		subject: `Password Changed`,
 		react: TemplateEmailNofificationChanged(),

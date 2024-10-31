@@ -6,9 +6,9 @@ import { isProduction } from "@/utilities/helpers/environment";
 
 export const emailSendSignUp = async (params: { otp: string; email: string }) => {
 	const { data, error } = await resend.general.emails.send({
-		from: `${appData.name.app} <"${
+		from: `${appData.name.app} <${
 			isProduction() ? process.env.NEXT_EMAIL_NOREPLY! : process.env.NEXT_RESEND_EMAIL!
-		}">`,
+		}>`,
 		to: [isProduction() ? params.email : process.env.NEXT_EMAIL_NOREPLY!],
 		subject: `Verify Your Email Address`,
 		react: TemplateEmailCodeSignUp(params.otp),

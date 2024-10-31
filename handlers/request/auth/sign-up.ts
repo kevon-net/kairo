@@ -14,5 +14,6 @@ export const signUp = async (params: Omit<FormAuthSignUp, "password.confirm">) =
 		return response;
 	} catch (error) {
 		console.error("---> handler error - (sign up):", error);
+		throw error;
 	}
 };

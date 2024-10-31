@@ -10,11 +10,10 @@ export const getTags = async () => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (get tags):", error);
+		throw error;
 	}
 };
 
@@ -27,11 +26,10 @@ export const removeTags = async (tags: TagGet) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (remove tags):", error);
+		throw error;
 	}
 };
 
@@ -44,11 +42,10 @@ export const addTag = async (tag: TagCreate) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (add tag):", error);
+		throw error;
 	}
 };
 
@@ -61,10 +58,9 @@ export const removeTag = async (tag: TagGet) => {
 
 		const response = await fetch(request);
 
-		const res = await response.json();
-
-		return res;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (remove tag):", error);
+		throw error;
 	}
 };

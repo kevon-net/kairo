@@ -10,11 +10,10 @@ export const passwordForgot = async (params: { email: string }) => {
 
 		const response = await fetch(request);
 
-		const result = await response.json();
-
-		return result;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (password forgot):", error);
+		throw error;
 	}
 };
 
@@ -27,10 +26,9 @@ export const passwordReset = async (params: { password: string }, urlParams: { u
 
 		const response = await fetch(request);
 
-		const result = await response.json();
-
-		return result;
+		return response;
 	} catch (error) {
 		console.error("---> handler error - (password reset):", error);
+		throw error;
 	}
 };

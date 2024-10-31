@@ -4,31 +4,20 @@ import React from "react";
 
 import { usePathname } from "next/navigation";
 
-import {
-	Burger,
-	BurgerProps,
-	Button,
-	Drawer,
-	Group,
-	NavLink,
-	Stack
-} from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { Burger, Button, Drawer, Group, NavLink, Stack } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import ActionIconTheme from "@/components/common/buttons/theme";
+import LayoutBrand from "@/components/layout/brand";
 
 import classes from "./main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
+import { useSession } from "next-auth/react";
 
-export default function Main({
-	props,
-	hiddenFrom = "sm"
-}: {
-	props: typeMenuNavbar[];
-	hiddenFrom?: BurgerProps["hiddenFrom"];
-}) {
+export default function Main({ props }: { props: typeMenuNavbar[] }) {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const pathname = usePathname();
+	const { data: session } = useSession();
 
 	const navMobile = props.map((link) => {
 		const subLinks =
@@ -51,16 +40,8 @@ export default function Main({
 				active={pathname == link.link}
 				onClick={close}
 				fw={pathname == link.link ? 500 : undefined}
-				leftSection={
-					link.leftSection ? (
-						<link.leftSection size={14} />
-					) : undefined
-				}
-				rightSection={
-					link.rightSection ? (
-						<link.rightSection size={14} />
-					) : undefined
-				}
+				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
+				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
 			/>
 		) : (
 			<NavLink
@@ -69,24 +50,13 @@ export default function Main({
 				label={link.label}
 				active={pathname == link.link}
 				fw={pathname == link.link ? 500 : undefined}
-				onClick={close}
 				opened={
-					pathname == link.link ||
-					link.subLinks?.find((sl) => sl.link == pathname)?.link ==
-						pathname
+					pathname == link.link || link.subLinks?.find((sl) => sl.link == pathname)?.link == pathname
 						? true
 						: undefined
 				}
-				leftSection={
-					link.leftSection ? (
-						<link.leftSection size={14} />
-					) : undefined
-				}
-				rightSection={
-					link.rightSection ? (
-						<link.rightSection size={14} />
-					) : undefined
-				}
+				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
+				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
 			>
 				{subLinks}
 			</NavLink>
@@ -102,16 +72,23 @@ export default function Main({
 				size={"200"}
 				classNames={{
 					body: classes.body,
-					header: classes.header
+					header: classes.header,
 				}}
+				title={
+					<Group>
+						<LayoutBrand />
+					</Group>
+				}
 			>
 				<Stack>
 					<Stack gap={0}>{navMobile}</Stack>
 
 					<Stack gap={"xs"} px={"xs"}>
-						<Button size="xs" variant="light">
-							Log In
-						</Button>
+						{!session && (
+							<Button size="xs" variant="light">
+								Log In
+							</Button>
+						)}
 
 						<Group gap={"xs"} grow preventGrowOverflow={false}>
 							<Button size="xs" w={"75%"}>
@@ -124,14 +101,7 @@ export default function Main({
 				</Stack>
 			</Drawer>
 
-			<Burger
-				opened={opened}
-				onClick={toggle}
-				size={"sm"}
-				aria-label="Toggle Navigation"
-				color="pri"
-				hiddenFrom={hiddenFrom}
-			/>
+			<Burger opened={opened} onClick={toggle} size={"sm"} aria-label="Toggle Navigation" color="pri" />
 		</>
 	);
 }

@@ -2,7 +2,7 @@
 
 import { alpha, CSSVariablesResolver } from "@mantine/core";
 
-const appResolver: CSSVariablesResolver = theme => ({
+const appResolver: CSSVariablesResolver = (theme) => ({
 	variables: {},
 
 	light: {
@@ -15,6 +15,8 @@ const appResolver: CSSVariablesResolver = theme => ({
 
 		"--mantine-color-anchor": `${theme.colors.pri[4]}`,
 		"--mantine-color-default-border": `${theme.colors.pri[4]}`,
+
+		"--menu-item-hover": `var(--mantine-color-pri-light)`,
 
 		"--mantine-shadow-xs": `0 0.0625rem 0.1875rem ${alpha(theme.colors.pri[9], 0.05)}, 0 0.0625rem 0.125rem ${alpha(
 			theme.colors.pri[9],
@@ -32,6 +34,8 @@ const appResolver: CSSVariablesResolver = theme => ({
 
 		"--mantine-color-anchor": `${theme.colors.pri[4]}`,
 		"--mantine-color-default-border": `${theme.colors.pri[4]}`,
+
+		"--menu-item-hover": `var(--mantine-color-pri-light)`,
 
 		"--mantine-shadow-xs": `0 0.0625rem 0.1875rem ${alpha(theme.colors.pri[9], 0.05)}, 0 0.0625rem 0.125rem ${alpha(
 			theme.colors.pri[9],

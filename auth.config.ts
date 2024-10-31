@@ -3,6 +3,7 @@ import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { AdapterUser } from "next-auth/adapters";
+import { signIn as handleSignIn } from "./handlers/request/auth/sign-in";
 
 declare module "next-auth" {
 	/**
@@ -43,7 +44,7 @@ export default {
 		signIn: "/auth/sign-in",
 		signOut: "/auth/sign-out",
 		error: "/auth/error", // Error code passed in query string as ?error=
-		verifyRequest: "/auth/verify-request", // (used for check email message)
+		verifyRequest: "/auth/verify-request" // (used for check email message)
 		// newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
 	},
 
@@ -55,49 +56,37 @@ export default {
 			credentials: {
 				email: {},
 				password: {},
-				rememberMe: {},
+				rememberMe: {}
 			},
-			authorize: async credentials => {
-				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-in", {
-					method: "POST",
-					body: JSON.stringify(credentials),
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-					},
-				});
+			authorize: async (credentials) => {
+				const response = await handleSignIn(credentials);
+
+				const result = await response.json();
 
 				if (!response.ok) {
-					return { error: response.statusText };
-				} else {
-					const result = await response.json();
-
-					if (!result.user.exists) {
-						return { error: "User not found" };
-					} else {
-						if (!result.user.password.matches) {
-							return { error: "Incorrect password" };
-						} else {
-							return { ...result.user.data, rememberMe: credentials.rememberMe };
-						}
-					}
+					return { id: result.user ? result.user.id : "no-id", error: response.statusText };
 				}
-			},
-		}),
+
+				return { ...credentials, ...result.user };
+			}
+		})
 	],
 
 	callbacks: {
 		async signIn({ user, account, profile, email, credentials }) {
 			// Check if the authorize function returned an error
-			if (!user?.error) {
-				// create session record if doesn't exist
+			if (user.error) {
+				const error = encodeURIComponent(user.error);
+				const userId = encodeURIComponent(user.id!);
 
-				// Return true to allow the sign-in process to continue
-				return true;
-			} else {
-				// Throw an error with the custom error message
-				throw new Error(user.error);
+				// Redirect to auth error with custom error message and user ID as query parameters
+				return `/auth/error?error=${error}${user.error == "Not Verified" ? `: ${userId}` : ""}`;
 			}
+
+			// create session record if doesn't exist
+
+			// Return true to allow the sign-in process to continue
+			return true;
 		},
 
 		async jwt({ token, account, profile, user, session, trigger }) {
@@ -144,6 +133,6 @@ export default {
 			session.user.id = token.id as string;
 
 			return session;
-		},
-	},
+		}
+	}
 } satisfies NextAuthConfig;

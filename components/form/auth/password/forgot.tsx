@@ -41,12 +41,9 @@ export default function Forgot() {
 					<Box style={{ transition: "0.25s all ease" }} opacity={requested ? "0" : "1"}>
 						<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>
 							<Text c={"dimmed"} inherit>
-								To prevent our system from abuse, we limit the number of times a user can request a
-								password reset link.
-							</Text>
-							<Text c={"dimmed"} inherit>
-								You can request a new link in{" "}
-								<Text component="span" inherit c={"pri"} fw={500}>
+								To prevent our system from abuse, we limit the number of times a user can reset their
+								password. You can request a new link in{" "}
+								<Text component="span" inherit fw={"bold"}>
 									{time?.minutes} minutes
 								</Text>
 								.

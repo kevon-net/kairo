@@ -127,7 +127,7 @@ const menuItems = {
 	user: [
 		{
 			icon: IconUser,
-			link: `/account/profile`,
+			link: `/profile`,
 			label: "Profile Settings",
 		},
 		// {

@@ -11,12 +11,21 @@ export default function Profile() {
 	return (
 		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid>
-				<GridCol span={{ base: 12 }}>
+				<GridCol span={{ base: 12, sm: 6 }}>
 					<TextInput
 						required
-						label={"Name"}
-						placeholder="Your Name"
-						{...form.getInputProps("name")}
+						label={"First Name"}
+						placeholder="First Name"
+						{...form.getInputProps("name.first")}
+						disabled={!session}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, sm: 6 }}>
+					<TextInput
+						required
+						label={"Last Name"}
+						placeholder="Last Name"
+						{...form.getInputProps("name.last")}
 						disabled={!session}
 					/>
 				</GridCol>

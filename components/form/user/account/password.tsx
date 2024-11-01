@@ -18,7 +18,7 @@ export default function Password() {
 						required
 						label={"Current Password"}
 						placeholder="Your Current Password"
-						{...form.getInputProps("passwordCurrent")}
+						{...form.getInputProps("current")}
 						description={
 							<>
 								If you can&apos;t remember, you can{" "}
@@ -35,7 +35,7 @@ export default function Password() {
 						required
 						label={"New Password"}
 						placeholder="Your New Password"
-						{...form.getInputProps("password")}
+						{...form.getInputProps("password.initial")}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
@@ -43,7 +43,7 @@ export default function Password() {
 						required
 						label={"Confirm New Password"}
 						placeholder="Confirm Your New Password"
-						{...form.getInputProps("passwordConfirm")}
+						{...form.getInputProps("password.confirm")}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 6 }}>

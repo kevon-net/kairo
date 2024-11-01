@@ -1,6 +1,6 @@
-import IconNotificationError from "@/components/common/icons/notification/error";
-import IconNotificationSuccess from "@/components/common/icons/notification/success";
+import IconNotification from "@/components/common/icons/notification";
 import { updateAccountNotifications } from "@/handlers/request/user/account";
+import { NotificationVariant } from "@/types/enums";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
@@ -10,8 +10,8 @@ export const useFormUserAccountNotifications = () => {
 
 	const form: UseFormReturnType<any> = useForm({
 		initialValues: {
-			settings: ""
-		}
+			settings: "",
+		},
 	});
 
 	const handleSubmit = async () => {
@@ -19,24 +19,26 @@ export const useFormUserAccountNotifications = () => {
 			if (form.isValid()) {
 				setSending(true);
 
-				const result = await updateAccountNotifications(form.values);
+				const response = await updateAccountNotifications(form.values);
+
+				const result = await response.json();
 
 				if (!result) {
 					notifications.show({
 						id: "notifications-update-failed-no-response",
-						icon: IconNotificationError(),
+						icon: IconNotification({ variant: NotificationVariant.FAILED }),
 						title: "Server Unavailable",
 						message: `There was no response from the server.`,
-						variant: "failed"
+						variant: "failed",
 					});
 				} else {
 					notifications.show({
 						id: "notifications-update-success",
 						withCloseButton: false,
-						icon: IconNotificationSuccess(),
+						icon: IconNotification({ variant: NotificationVariant.SUCCESS }),
 						title: "Password Changed",
 						message: `You have successfully cahnged your password.`,
-						variant: "success"
+						variant: "success",
 					});
 
 					form.reset();
@@ -45,10 +47,10 @@ export const useFormUserAccountNotifications = () => {
 		} catch (error) {
 			notifications.show({
 				id: "notifications-update-failed",
-				icon: IconNotificationError(),
+				icon: IconNotification({ variant: NotificationVariant.FAILED }),
 				title: `Send Failed`,
 				message: (error as Error).message,
-				variant: "failed"
+				variant: "failed",
 			});
 		} finally {
 			setSending(false);
@@ -58,6 +60,6 @@ export const useFormUserAccountNotifications = () => {
 	return {
 		form,
 		sending,
-		handleSubmit
+		handleSubmit,
 	};
 };

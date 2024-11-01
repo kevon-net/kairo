@@ -23,7 +23,7 @@ export interface SignIn {
 }
 
 export interface Profile {
-	name: string;
+	name: { first: string; last: string };
 	email: string;
 	phone: string;
 }
@@ -33,8 +33,7 @@ export interface AccountDelete {
 }
 
 export interface AccountPassword {
-	passwordCurrent: string;
-	passwordNew: string;
+	password: { current: string; new: string };
 }
 
 export interface Contact {

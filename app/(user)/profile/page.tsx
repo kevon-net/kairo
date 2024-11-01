@@ -29,7 +29,7 @@ export default async function Profile() {
 						</Title>
 					</GridCol>
 
-					<GridCol span={{ base: 12, md: 8, lg: 5.5 }}>
+					<GridCol span={{ base: 12, md: 8, lg: 6 }}>
 						<FormUserProfile />
 					</GridCol>
 				</Grid>
@@ -39,7 +39,7 @@ export default async function Profile() {
 
 			<LayoutSection id="page-profile-password">
 				<Grid gutter={"xl"}>
-					<GridCol span={{ base: 12, md: 8, lg: 5.5 }}>
+					<GridCol span={{ base: 12, md: 8, lg: 6 }}>
 						<Stack gap={"lg"}>
 							<Title order={2} fz={"xl"}>
 								Update Password

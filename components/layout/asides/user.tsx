@@ -93,7 +93,13 @@ export default function User() {
 	return (
 		<LayoutSection id={"partial-aside-user"} padded pos={"sticky"} top={0}>
 			<Stack gap={48} align="center">
-				<Flex direction={{ base: "column", lg: "row" }} align={"center"} gap={"md"} w={"100%"}>
+				<Flex
+					direction={{ base: "column", lg: "row" }}
+					align={"center"}
+					justify={"center"}
+					gap={"md"}
+					w={"100%"}
+				>
 					<AvatarMain />
 
 					<Stack gap={0}>
@@ -108,7 +114,7 @@ export default function User() {
 				</Flex>
 
 				<Stack w={"100%"}>
-					<Stack gap={"xs"}>
+					{/* <Stack gap={"xs"}>
 						<Title order={3} fz={"md"} ml={{ md: "sm" }}>
 							Activity
 						</Title>
@@ -131,7 +137,7 @@ export default function User() {
 						</Stack>
 					</Stack>
 
-					<Divider />
+					<Divider /> */}
 
 					<Stack gap={"xs"}>
 						<Title order={3} fz={"md"} ml={{ md: "sm" }}>
@@ -158,7 +164,7 @@ export default function User() {
 
 					<Divider />
 
-					<Stack gap={"xs"}>
+					{/* <Stack gap={"xs"}>
 						<Title order={3} fz={"md"} ml={{ md: "sm" }}>
 							Customer Care
 						</Title>
@@ -181,7 +187,7 @@ export default function User() {
 						</Stack>
 					</Stack>
 
-					<Divider />
+					<Divider /> */}
 
 					<Stack gap={4}>
 						{navLinkItems.danger.map((item) => (

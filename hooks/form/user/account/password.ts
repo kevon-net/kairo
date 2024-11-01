@@ -1,40 +1,37 @@
-import IconNotificationError from "@/components/common/icons/notification/error";
-import IconNotificationSuccess from "@/components/common/icons/notification/success";
 import { useForm, UseFormReturnType } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { signOut as handleSignOut } from "@/handlers/event/sign-out";
 import password from "@/utilities/validators/special/password";
 import compare from "@/utilities/validators/special/compare";
 import { AccountPassword, PasswordReset } from "@/types/form";
 import { updateAccountPassword } from "@/handlers/request/user/account";
-import { authUrls } from "@/data/constants";
+import { timeout } from "@/data/constants";
+import { NotificationVariant } from "@/types/enums";
+import { showNotification } from "@/utilities/notifications";
+import { signIn as authSignIn } from "next-auth/react";
 
 export const useFormUserAccountPassword = () => {
 	const [sending, setSending] = useState(false);
 
-	const form: UseFormReturnType<PasswordReset & { passwordCurrent: string }> = useForm({
+	const form: UseFormReturnType<PasswordReset & { current: string }> = useForm({
 		initialValues: {
-			password: "",
-			passwordConfirm: "",
-
-			passwordCurrent: ""
+			password: { initial: "", confirm: "" },
+			current: "",
 		},
 
 		validate: {
-			passwordCurrent: (value) => password(value, 8, 24),
-			password: (value, values) =>
-				value == values.passwordCurrent
-					? "Current and new passwords cannot be the same"
-					: password(value, 8, 24),
-			passwordConfirm: (value, values) => compare.string(value, values.password, "Password")
-		}
+			password: {
+				initial: (value, values) =>
+					value == values.current ? "Current and new passwords cannot be the same" : password(value, 8, 24),
+				confirm: (value, values) => compare.string(value, values.password.initial, "Password"),
+			},
+			current: (value) => password(value, 8, 24),
+		},
 	});
 
 	const parseValues = (): AccountPassword => {
 		return {
-			passwordCurrent: form.values.passwordCurrent,
-			passwordNew: form.values.password
+			password: { current: form.values.current, new: form.values.password.initial },
 		};
 	};
 
@@ -43,60 +40,41 @@ export const useFormUserAccountPassword = () => {
 			if (form.isValid()) {
 				setSending(true);
 
-				const result = await updateAccountPassword(parseValues());
+				const response = await updateAccountPassword(parseValues());
 
-				if (!result) {
-					notifications.show({
-						id: "password-update-failed-no-response",
-						icon: IconNotificationError(),
-						title: "Server Unavailable",
-						message: `There was no response from the server.`,
-						variant: "failed"
-					});
-				} else {
-					if (!result.user.exists) {
-						notifications.show({
-							id: "password-update-failed-not-found",
-							icon: IconNotificationError(),
-							title: `Not Found`,
-							message: `The account is not valid.`,
-							variant: "failed"
-						});
+				if (!response) throw new Error("No response from server");
 
-						// sign out and redirect to sign in page
-						await handleSignOut({ redirectUrl: authUrls.signIn });
-					} else {
-						if (!result.user.password.match) {
-							notifications.show({
-								id: "password-update-failed-unauthorized",
-								icon: IconNotificationError(),
-								title: `Unauthorized`,
-								message: `You've entered the wrong password.`,
-								variant: "failed"
-							});
-						} else {
-							notifications.show({
-								id: "password-update-success",
-								withCloseButton: false,
-								icon: IconNotificationSuccess(),
-								title: "Password Changed",
-								message: `You have successfully cahnged your password.`,
-								variant: "success"
-							});
-						}
+				const result = await response.json();
 
-						form.reset();
-					}
+				form.reset();
+
+				if (response.ok) {
+					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
+					return;
 				}
+
+				if (response.status === 401) {
+					// redirect to sign in
+					setTimeout(async () => await authSignIn(), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.WARNING }, response, result);
+					return;
+				}
+
+				if (response.status === 404) {
+					// sign out and redirect to home page
+					setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.FAILED }, response, result);
+					return;
+				}
+
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+				return;
 			}
 		} catch (error) {
-			notifications.show({
-				id: "password-update-failed",
-				icon: IconNotificationError(),
-				title: `Send Failed`,
-				message: (error as Error).message,
-				variant: "failed"
-			});
+			showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+			return;
 		} finally {
 			setSending(false);
 		}
@@ -105,6 +83,6 @@ export const useFormUserAccountPassword = () => {
 	return {
 		form,
 		sending,
-		handleSubmit
+		handleSubmit,
 	};
 };

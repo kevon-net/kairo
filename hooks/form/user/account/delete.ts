@@ -1,87 +1,60 @@
-import IconNotificationError from "@/components/common/icons/notification/error";
-import IconNotificationSuccess from "@/components/common/icons/notification/success";
 import { useForm, UseFormReturnType } from "@mantine/form";
-import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { deleteAccount } from "@/handlers/request/user/account";
 import { signOut as handleSignOut } from "@/handlers/event/sign-out";
 import { AccountDelete } from "@/types/form";
+import { NotificationVariant } from "@/types/enums";
+import { signIn as authSignIn } from "next-auth/react";
+import { showNotification } from "@/utilities/notifications";
+import { timeout } from "@/data/constants";
 
 export const useFormUserAccountDelete = () => {
 	const [submitted, setSubmitted] = useState(false);
 
-	const form: UseFormReturnType<AccountDelete> = useForm({
-		initialValues: {
-			password: ""
-		}
-	});
-
-	const parseValues = () => {
-		return {
-			password: form.values.password
-		};
-	};
+	const form: UseFormReturnType<AccountDelete> = useForm({ initialValues: { password: "" } });
 
 	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				const result = await deleteAccount(parseValues());
+				const response = await deleteAccount({ password: form.values.password });
 
-				if (!result) {
-					notifications.show({
-						id: "account-deletion-failed-no-response",
-						icon: IconNotificationError(),
-						title: "Server Unavailable",
-						message: `There was no response from the server.`,
-						variant: "failed"
-					});
-				} else {
-					if (!result.user.exists) {
-						notifications.show({
-							id: "password-reset-failed-not-found",
-							icon: IconNotificationError(),
-							title: `Not Found`,
-							message: `The account is not valid.`,
-							variant: "failed"
-						});
+				if (!response) throw new Error("No response from server");
 
-						form.reset();
-						await handleSignOut({ redirectUrl: "/" });
-					} else {
-						if (!result.user.password.match) {
-							notifications.show({
-								id: "password-reset-failed-not-found",
-								icon: IconNotificationError(),
-								title: `Authentication Error`,
-								message: `Incorrect password provided.`,
-								variant: "failed"
-							});
+				const result = await response.json();
 
-							form.reset();
-						} else {
-							notifications.show({
-								id: "account-deletion-success",
-								icon: IconNotificationSuccess(),
-								title: "Account Deleted",
-								message: "Your account has been successfully deleted",
-								variant: "success"
-							});
+				form.reset();
 
-							form.reset();
-							await handleSignOut({ redirectUrl: "/" });
-						}
-					}
+				if (response.ok) {
+					// sign out and redirect to home page
+					setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
+					return;
 				}
+
+				if (response.status === 401) {
+					// redirect to sign in
+					setTimeout(async () => await authSignIn(), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.WARNING }, response, result);
+					return;
+				}
+
+				if (response.status === 404) {
+					// sign out and redirect to home page
+					setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.WARNING }, response, result);
+					return;
+				}
+
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+				return;
 			} catch (error) {
-				notifications.show({
-					id: "account-deletion-failed",
-					icon: IconNotificationError(),
-					title: "Submisstion Failed",
-					message: (error as Error).message,
-					variant: "failed"
-				});
+				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+				return;
 			} finally {
 				setSubmitted(false);
 			}
@@ -91,6 +64,6 @@ export const useFormUserAccountDelete = () => {
 	return {
 		form,
 		submitted,
-		handleSubmit
+		handleSubmit,
 	};
 };

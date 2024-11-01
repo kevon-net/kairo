@@ -60,9 +60,7 @@ export const useFormAuthSignUp = () => {
 
 				const response = await handleSignUp(parseValues());
 
-				if (!response) {
-					throw new Error("No response from server");
-				}
+				if (!response) throw new Error("No response from server");
 
 				const result = await response.json();
 

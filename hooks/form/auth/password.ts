@@ -36,9 +36,7 @@ export const useFormAuthPasswordForgot = () => {
 
 				const response = await passwordForgot(parseValues());
 
-				if (!response) {
-					throw new Error("No response from server");
-				}
+				if (!response) throw new Error("No response from server");
 
 				const result = await response.json();
 
@@ -106,9 +104,7 @@ export const useFormAuthPasswordReset = (params: { userId: string; token: string
 
 				const response = await passwordReset({ password: parseValues().password.initial }, params);
 
-				if (!response) {
-					throw new Error("No response from server");
-				}
+				if (!response) throw new Error("No response from server");
 
 				const result = await response.json();
 

@@ -21,7 +21,7 @@ export const crumbify = (url: string) => {
 			item.length < 24 &&
 				crumbs.push({
 					link: currentLink,
-					label: `${capitalizeWords(item.replaceAll("-", " "))}`
+					label: `${capitalizeWords(item.replaceAll("-", " "))}`,
 				});
 		});
 
@@ -38,3 +38,22 @@ export const linkify = (string: string) =>
 		.replace(/^-|-$/g, ""); // Remove leading and trailing dashes
 
 export const unlinkify = (string: string) => capitalizeWords(string.replaceAll("-", " "));
+
+export const segmentFullName = (fullName: string): { first: string; last: string } => {
+	// Trim whitespace
+	const trimedName = fullName.trim();
+
+	if (!trimedName) return { first: "", last: "" };
+
+	// Split the name by spaces
+	const nameParts = trimedName.split(/\s+/);
+
+	// Handle cases with a single name
+	if (nameParts.length === 1) return { first: nameParts[0], last: "" };
+
+	// Combine everything except the last part as first name
+	const firstName = nameParts.slice(0, -1).join(" ");
+	const lastName = nameParts[nameParts.length - 1];
+
+	return { first: firstName, last: lastName };
+};

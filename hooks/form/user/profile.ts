@@ -5,11 +5,13 @@ import { useForm, UseFormReturnType } from "@mantine/form";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Profile as FormProfile } from "@/types/form";
-import { capitalizeWords } from "@/utilities/formatters/string";
-import IconNotificationError from "@/components/common/icons/notification/error";
-import IconNotificationSuccess from "@/components/common/icons/notification/success";
-import { notifications } from "@mantine/notifications";
+import { capitalizeWords, segmentFullName } from "@/utilities/formatters/string";
 import { updateProfile } from "@/handlers/request/user/profile";
+import { NotificationVariant } from "@/types/enums";
+import { signIn as authSignIn } from "next-auth/react";
+import { showNotification } from "@/utilities/notifications";
+import { signOut as handleSignOut } from "@/handlers/event/sign-out";
+import { timeout } from "@/data/constants";
 
 export const useFormUserProfile = () => {
 	const { data: session, update } = useSession();
@@ -18,23 +20,36 @@ export const useFormUserProfile = () => {
 
 	const form: UseFormReturnType<FormProfile> = useForm({
 		initialValues: {
-			name: session?.user?.name ? session?.user?.name : "",
+			name: session?.user?.name
+				? {
+						first: segmentFullName(session?.user?.name).first,
+						last: segmentFullName(session?.user?.name).last,
+				  }
+				: { first: "", last: "" },
 			email: session?.user?.email ? session?.user?.email : "",
-			phone: ""
+			phone: "",
 		},
 
 		validate: {
-			name: (value) => (value && value?.trim().length > 0 ? text(value, 2, 255) : "Please fill out this field."),
+			name: {
+				first: (value) =>
+					value && value?.trim().length > 0 ? text(value, 2, 255) : "Please fill out this field.",
+				last: (value) =>
+					value && value?.trim().length > 0 ? text(value, 2, 255) : "Please fill out this field.",
+			},
 			email: (value) => value && email(value),
-			phone: (value) => value.trim().length > 0 && phone(value)
-		}
+			phone: (value) => value.trim().length > 0 && phone(value),
+		},
 	});
 
 	const parseValues = () => {
 		return {
-			name: form.values.name && capitalizeWords(form.values.name),
-			email: form.values.email && form.values.email.trim().toLowerCase(),
-			phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : ""
+			name: {
+				first: capitalizeWords(form.values.name.first),
+				last: capitalizeWords(form.values.name.last),
+			},
+			email: form.values.email.trim().toLowerCase(),
+			phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 		};
 	};
 
@@ -42,69 +57,57 @@ export const useFormUserProfile = () => {
 		if (form.isValid()) {
 			try {
 				if (!form.isDirty()) {
-					notifications.show({
-						id: "form-contact-failed-no-update",
-						icon: IconNotificationError(),
-						title: "Failed",
-						message: "No form fields have been updated",
-						variant: "failed"
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Nothing Updated",
+						desc: "Update at least one form field",
 					});
-				} else {
-					setSubmitted(true);
-
-					const result = await updateProfile(parseValues());
-
-					if (!result) {
-						notifications.show({
-							id: "profile-update-failed-no-response",
-							icon: IconNotificationError(),
-							title: "Server Unavailable",
-							message: `There was no response from the server.`,
-							variant: "failed"
-						});
-
-						form.reset();
-					} else {
-						if (!result.user.exists) {
-							notifications.show({
-								id: "profile-update-failed-no-user",
-								icon: IconNotificationError(),
-								title: "Unauthorized",
-								message: `You're not allowed to perform this action.`,
-								variant: "failed"
-							});
-
-							form.reset();
-						} else {
-							// Update the session data on the client-side
-							await update({
-								...session,
-								user: {
-									...session?.user,
-									name: parseValues().name
-								}
-							});
-
-							notifications.show({
-								id: "profile-update-success",
-								icon: IconNotificationSuccess(),
-								title: "Profile Updated",
-								message: "Your profile details are up to date.",
-								variant: "success"
-							});
-						}
-					}
+					return;
 				}
-			} catch (error) {
-				notifications.show({
-					id: "profile-update-failed",
-					icon: IconNotificationError(),
-					title: "Submisstion Failed",
-					message: (error as Error).message,
-					variant: "failed"
-				});
+
+				setSubmitted(true);
+
+				const response = await updateProfile(parseValues());
+
+				if (!response) throw new Error("No response from server");
+
+				const result = await response.json();
 
 				form.reset();
+
+				if (response.ok) {
+					// Update the session data on the client-side
+					await update({
+						...session,
+						user: { ...session?.user, name: `${parseValues().name.first} ${parseValues().name.last}` },
+					});
+
+					// refresh the page
+					window.location.reload();
+					return;
+				}
+
+				if (response.status === 401) {
+					// redirect to sign in
+					setTimeout(async () => await authSignIn(), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.WARNING }, response, result);
+					return;
+				}
+
+				if (response.status === 404) {
+					// sign out and redirect to home page
+					setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.FAILED }, response, result);
+					return;
+				}
+
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+				return;
+			} catch (error) {
+				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+				return;
 			} finally {
 				setSubmitted(false);
 			}
@@ -115,6 +118,6 @@ export const useFormUserProfile = () => {
 		form,
 		submitted,
 		handleSubmit,
-		session
+		session,
 	};
 };

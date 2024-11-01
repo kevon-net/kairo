@@ -35,9 +35,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 
 				const response = await handleVerify(parseValues());
 
-				if (!response) {
-					throw new Error("No response from server");
-				}
+				if (!response) throw new Error("No response from server");
 
 				const result = await response.json();
 
@@ -85,9 +83,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 
 			const response = await handleVerifyResend({ userId: params.userId });
 
-			if (!response) {
-				throw new Error("No response from server");
-			}
+			if (!response) throw new Error("No response from server");
 
 			const result = await response.json();
 

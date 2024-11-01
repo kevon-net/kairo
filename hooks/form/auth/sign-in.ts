@@ -47,9 +47,7 @@ export const useFormAuthSignIn = () => {
 					callbackUrl: getCallbackUrlParameter(),
 				});
 
-				if (!result) {
-					throw new Error("No response from server");
-				}
+				if (!result) throw new Error("No response from server");
 
 				form.reset();
 

@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 				// send otp email and output result in response body
 				resend: {
 					// send otp email
-					email: await emailSendSignUp({ otp: otpValue.toString(), email }),
+					email: await emailSendSignUp(otpValue.toString(), email),
 					// add to audience
 					contact: await contactCreateGeneral({ name: `${name.first} ${name.last}`, email }),
 				},

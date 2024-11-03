@@ -5,11 +5,10 @@ import { Body, Container, Head, Heading, Html, Img, Link, Preview, Section, Text
 import appData from "@/data/app";
 
 import LayoutEmail from "@/components/layout/email";
-import { Contact as typeContact } from "@/types/form";
 
-export default function Contact(data: typeContact) {
+export default function Contact(data: { name: string; subject: string }) {
 	return (
-		<LayoutEmail props={{ message: data.message }}>
+		<LayoutEmail props={{ message: data.subject }}>
 			<Container style={content}>
 				<Section style={header}>
 					<Container style={container}>
@@ -29,10 +28,10 @@ export default function Contact(data: typeContact) {
 							{/* <Heading style={h2}>{appData.name.company}</Heading> */}
 							<Text style={text}>
 								Recipient, <br />
-								{data.message} <br />
+								{data.subject} <br />
 								<br />
 								Regards, <br />
-								{data.fname} {data.lname}
+								{data.name}
 							</Text>
 						</Section>
 
@@ -71,29 +70,29 @@ const sampleData = {
 	email: "jane@example.com",
 	phone: null,
 	subject: "Test Subject",
-	message: "This is some text."
+	message: "This is some text.",
 };
 
 const content = {
 	maxWidth: "640px",
 	margin: "0 auto",
-	overflow: "hidden"
+	overflow: "hidden",
 };
 
 const headerFooter = {
 	backgroundColor: "orange",
-	padding: "20px 0"
+	padding: "20px 0",
 };
 
 const header = {
 	...headerFooter,
 	display: "flex",
 	alignItems: "center",
-	justifyContent: "center"
+	justifyContent: "center",
 };
 
 const footer = {
-	...headerFooter
+	...headerFooter,
 };
 
 const main = {
@@ -101,31 +100,31 @@ const main = {
 };
 
 const section = {
-	margin: "20px 0"
+	margin: "20px 0",
 };
 
 const container = {
 	minWidth: "100%",
-	padding: "0 20px"
+	padding: "0 20px",
 };
 
 const h1 = {
 	fontSize: "24px",
-	fontWeight: "bolder"
+	fontWeight: "bolder",
 };
 
 const h2 = {
 	fontSize: "20px",
-	fontWeight: "bold"
+	fontWeight: "bold",
 };
 
 const text = {
 	margin: 0,
-	fontSize: "12px"
+	fontSize: "12px",
 };
 
 const link = {
 	margin: 0,
 	fontWeight: "bold",
-	color: "red"
+	color: "red",
 };

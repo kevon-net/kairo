@@ -2,7 +2,7 @@ import prisma from "@/libraries/prisma";
 import jwt from "jsonwebtoken";
 
 import { typePasswordReset } from "@/types/apis";
-import { emailSendPasswordChanged } from "@/libraries/wrappers/email/send/auth/password";
+import { emailCreatePasswordChanged } from "@/libraries/wrappers/email/send/auth/password";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
 import { OtlType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest, { params }: { params: typePassw
 			{
 				message: "Password updated successfully",
 				// send otp email and output result in response body
-				resend: await emailSendPasswordChanged({ email: userRecord.email }),
+				resend: await emailCreatePasswordChanged(userRecord.email),
 			},
 			{ status: 200, statusText: "Password Changed" }
 		);

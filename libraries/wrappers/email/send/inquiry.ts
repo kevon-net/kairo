@@ -3,7 +3,11 @@ import TemplateEmailContact from "@/components/email/contact";
 import { isProduction } from "@/utilities/helpers/environment";
 import { EmailInquiry } from "@/types/email";
 
-export const emailCreateInquiry = async (options: EmailInquiry) => {
+export const emailCreateInquiry = async (options: {
+	from: EmailInquiry["from"];
+	to: EmailInquiry["to"];
+	subject: EmailInquiry["subject"];
+}) => {
 	// switch to 'resend.general' when your domain is configured
 	const { data, error } = await resend.general.emails.send({
 		from: `${options.from.name} <${
@@ -11,8 +15,8 @@ export const emailCreateInquiry = async (options: EmailInquiry) => {
 		}>`,
 		to: [process.env.NEXT_EMAIL_INFO!],
 		subject: options.subject,
-		react: TemplateEmailContact(options),
-		replyTo: options.from.email,
+		react: TemplateEmailContact({ name: options.from.name, subject: options.subject }),
+		replyTo: options.to,
 	});
 
 	if (!error) {

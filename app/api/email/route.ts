@@ -7,7 +7,10 @@ export async function POST(request: NextRequest) {
 		const email: EmailInquiry = await request.json();
 
 		return NextResponse.json(
-			{ email: await emailCreateInquiry(email), message: "Email sent successfully" },
+			{
+				email: await emailCreateInquiry({ from: email.from, to: email.to, subject: email.subject }),
+				message: "Email sent successfully",
+			},
 			{ status: 200, statusText: "Email Sent" }
 		);
 	} catch (error) {

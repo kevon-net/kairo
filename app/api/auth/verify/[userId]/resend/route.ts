@@ -64,7 +64,7 @@ export async function GET(request: NextRequest, { params }: { params: { userId: 
 				{
 					message: "A new OTP has been sent",
 					// send otp email
-					resend: await emailSendSignUp({ otp: otpValue.toString(), email: userRecord.email }),
+					resend: await emailSendSignUp(otpValue.toString(), userRecord.email),
 				},
 				{ status: 200, statusText: "OTP Sent" }
 			);

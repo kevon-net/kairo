@@ -4,10 +4,10 @@ import { EmailInquiry } from "@/types/email";
 
 export async function POST(request: NextRequest) {
 	try {
-		const contact: EmailInquiry["from"] = await request.json();
+		const contact: EmailInquiry = await request.json();
 
 		return NextResponse.json(
-			{ contact: await contactCreateGeneral(contact), message: "Contact created successfully" },
+			{ contact: await contactCreateGeneral(contact.from), message: "Contact created successfully" },
 			{ status: 200, statusText: "Contact Created" }
 		);
 	} catch (error) {

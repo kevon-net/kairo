@@ -79,14 +79,14 @@ export default function Avatar() {
 					</MenuItem>
 				))}
 
-				{/* <MenuDivider />
+				<MenuDivider />
 
 				<MenuLabel>Customer Care</MenuLabel>
-				{menuItems.help.map(item => (
+				{menuItems.help.map((item) => (
 					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
 						{item.label}
 					</MenuItem>
-				))} */}
+				))}
 
 				<MenuDivider />
 
@@ -127,7 +127,7 @@ const menuItems = {
 	user: [
 		{
 			icon: IconUser,
-			link: `/profile`,
+			link: `/account/profile`,
 			label: "Profile Settings",
 		},
 		// {

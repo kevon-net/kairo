@@ -1,6 +1,6 @@
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
-import { deleteAccount } from "@/handlers/request/user/account";
+import { accountDelete } from "@/handlers/request/database/account";
 import { signOut as handleSignOut } from "@/handlers/event/sign-out";
 import { AccountDelete } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
@@ -18,7 +18,7 @@ export const useFormUserAccountDelete = () => {
 			try {
 				setSubmitted(true);
 
-				const response = await deleteAccount({ password: form.values.password });
+				const response = await accountDelete({ password: form.values.password });
 
 				if (!response) throw new Error("No response from server");
 

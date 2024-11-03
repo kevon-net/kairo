@@ -4,8 +4,9 @@ import React from "react";
 
 import { Box, Button, Divider, Grid, GridCol, Stack, Switch, Text, Title } from "@mantine/core";
 
+import { useFormUserAccountNotifications } from "@/hooks/form/account/notifications";
+
 import classes from "./notifications.module.scss";
-import { useFormUserAccountNotifications } from "@/hooks/form/user/account/notifications";
 
 export default function Notifications() {
 	const { form, sending, handleSubmit } = useFormUserAccountNotifications();
@@ -38,12 +39,12 @@ export default function Notifications() {
 							<Switch
 								classNames={{
 									body: classes.body,
-									labelWrapper: classes.labelWrapper
+									labelWrapper: classes.labelWrapper,
 								}}
 								labelPosition="left"
 								label={getLabel({
 									title: "Weekly Notification",
-									desc: "Various versions have evolved over the years, sometimes by accident, sometimes on purpose."
+									desc: "Various versions have evolved over the years, sometimes by accident, sometimes on purpose.",
 								})}
 							/>
 						</GridCol>
@@ -51,12 +52,12 @@ export default function Notifications() {
 							<Switch
 								classNames={{
 									body: classes.body,
-									labelWrapper: classes.labelWrapper
+									labelWrapper: classes.labelWrapper,
 								}}
 								labelPosition="left"
 								label={getLabel({
 									title: "Account Summary",
-									desc: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis eguris eu sollicitudin massa."
+									desc: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis eguris eu sollicitudin massa.",
 								})}
 							/>
 						</GridCol>
@@ -79,11 +80,11 @@ export default function Notifications() {
 							<Switch
 								classNames={{
 									body: classes.body,
-									labelWrapper: classes.labelWrapper
+									labelWrapper: classes.labelWrapper,
 								}}
 								labelPosition="left"
 								label={getLabel({
-									title: "Text messages"
+									title: "Text messages",
 								})}
 							/>
 						</GridCol>
@@ -91,12 +92,12 @@ export default function Notifications() {
 							<Switch
 								classNames={{
 									body: classes.body,
-									labelWrapper: classes.labelWrapper
+									labelWrapper: classes.labelWrapper,
 								}}
 								labelPosition="left"
 								label={getLabel({
 									title: "Call before checkout",
-									desc: "We'll only call if there are pending changes."
+									desc: "We'll only call if there are pending changes.",
 								})}
 							/>
 						</GridCol>

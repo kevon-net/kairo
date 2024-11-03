@@ -17,12 +17,13 @@ export default function Providers() {
 const providers = [
 	{
 		image: images.icons.google,
-		provider: "google"
-	}
+		provider: "google",
+	},
 ];
 
 const getButton = (image: string, provider: string) => (
 	<Button
+		key={provider}
 		fullWidth
 		variant="light"
 		onClick={() => signInWithProvider(provider)}

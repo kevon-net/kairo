@@ -10,9 +10,9 @@ import { Grid, GridCol, NavLink, Stack } from "@mantine/core";
 import { IconBellRinging, IconSettings } from "@tabler/icons-react";
 import { IconCoins, IconMapPin, IconUser } from "@tabler/icons-react";
 
-import classes from "./user.module.scss";
+import classes from "./account.module.scss";
 
-export default function User() {
+export default function Account() {
 	// const { data: session } = useSession({ required: true });
 
 	const pathname = usePathname();

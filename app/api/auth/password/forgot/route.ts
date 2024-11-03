@@ -11,19 +11,16 @@ export async function POST(request: NextRequest) {
 	try {
 		const { email } = await request.json();
 
-		// query database for user
 		const userRecord = await prisma.user.findUnique({ where: { email } });
 
 		if (!userRecord) {
 			return NextResponse.json({ error: "User not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		// check if user is verified
 		if (!userRecord.verified) {
 			return NextResponse.json({ error: "User not verified" }, { status: 403, statusText: "Not Veried" });
 		}
 
-		// query database for otl
 		const otlRecord = await prisma.otl.findUnique({
 			where: { userId_type: { userId: userRecord.id, type: OtlType.PASSWORD_RESET } },
 		});
@@ -32,7 +29,6 @@ export async function POST(request: NextRequest) {
 		const expired = otlRecord?.expiresAt! < now;
 
 		if (otlRecord && !expired) {
-			// get time to expiration
 			const expiry = otlRecord.expiresAt.getTime() - now.getTime();
 
 			return NextResponse.json(
@@ -41,30 +37,25 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// delete expired otl record if exists and is expired
 		otlRecord &&
 			expired &&
 			(await prisma.otl.delete({
 				where: { userId_type: { userId: userRecord.id, type: OtlType.PASSWORD_RESET } },
 			}));
 
-		// create token
 		const token = await generateToken(
 			{
 				id: userRecord.id,
 				email: userRecord.email,
-				password: userRecord.password || process.env.AUTH_SECRET!, // handle null password field (oauth)
+				password: userRecord.password || process.env.AUTH_SECRET!,
 			},
 			5
 		);
 
-		// create otl value
 		const otlValue = `${baseUrl}/auth/password/reset/${userRecord.id}/${token}`;
 
-		// create otl hash
 		const otlHash = await hashValue(otlValue);
 
-		// create otl record
 		await prisma.user.update({
 			where: { email: userRecord.email },
 			data: {
@@ -74,7 +65,7 @@ export async function POST(request: NextRequest) {
 							id: generateId(),
 							type: OtlType.PASSWORD_RESET,
 							otl: otlHash!,
-							expiresAt: new Date(Date.now() + 60 * 60 * 1000), // in 1 hour
+							expiresAt: new Date(Date.now() + 60 * 60 * 1000),
 						},
 					],
 				},
@@ -84,7 +75,6 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json(
 			{
 				message: "An OTL has been sent",
-				// email new link and show result in response body
 				resend: await emailSendPasswordForgot({ email: userRecord.email, otl: otlValue }),
 			},
 			{ status: 200, statusText: "OTL Sent" }

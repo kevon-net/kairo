@@ -4,9 +4,9 @@ import LayoutBody from "@/components/layout/body";
 import NavbarMain from "@/components/layout/navbars/main";
 import FooterMain from "@/components/layout/footers/main";
 import HeaderMain from "@/components/layout/headers/main";
-import AsideUser from "@/components/layout/asides/user";
+import AsideAccount from "@/components/layout/asides/account";
 import LayoutSection from "@/components/layout/section";
-import NavbarUser from "@/components/layout/navbars/user";
+import NavbarAccount from "@/components/layout/navbars/account";
 
 import AffixTop from "@/components/common/affixi/top";
 
@@ -18,13 +18,13 @@ import { Box, Divider, Stack } from "@mantine/core";
 
 export const metadata: Metadata = {
 	title: {
-		default: "User",
-		template: `%s - User - ${appData.name.app}`
-	}
+		default: "Account",
+		template: `%s - Account - ${appData.name.app}`,
+	},
 };
 
-export default function LayoutUser({
-	children // will be a page or nested layout
+export default function LayoutAccount({
+	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;
 }) {
@@ -35,17 +35,17 @@ export default function LayoutUser({
 			aside={{
 				gap: 48,
 				left: {
-					component: <AsideUser />,
+					component: <AsideAccount />,
 					width: { md: 30, lg: 22.5 },
-					withBorder: true
-				}
+					withBorder: true,
+				},
 			}}
 			footer={<FooterMain />}
 		>
-			<LayoutSection id={"layout-user"} component={"main"} padded>
+			<LayoutSection id={"layout-account"} component={"main"} padded>
 				<Stack gap={48}>
 					<Box hiddenFrom="md">
-						<NavbarUser />
+						<NavbarAccount />
 					</Box>
 
 					<Divider hiddenFrom="md" />

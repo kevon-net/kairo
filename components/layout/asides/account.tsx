@@ -12,6 +12,7 @@ import {
 	IconHeart,
 	IconHelpCircle,
 	IconInfoCircle,
+	IconLock,
 	IconLogout,
 	IconPackage,
 	IconStar,
@@ -24,7 +25,7 @@ import AvatarMain from "@/components/common/avatars/main";
 import { useSession } from "next-auth/react";
 import { iconStrokeWidth } from "@/data/constants";
 
-export default function User() {
+export default function Account() {
 	const pathname = usePathname();
 	const { data: session } = useSession();
 
@@ -46,11 +47,16 @@ export default function User() {
 				label: "My Reviews",
 			},
 		],
-		user: [
+		account: [
 			{
 				icon: IconUser,
 				link: `/account/profile`,
 				label: "Profile Settings",
+			},
+			{
+				icon: IconLock,
+				link: `/account/security`,
+				label: "Account Security",
 			},
 			// {
 			// 	icon: IconCoins,
@@ -68,7 +74,7 @@ export default function User() {
 				label: "Notifications",
 			},
 		],
-		help: [
+		support: [
 			{
 				icon: IconHelpCircle,
 				link: `/help`,
@@ -145,7 +151,7 @@ export default function User() {
 						</Title>
 
 						<Stack gap={4}>
-							{navLinkItems.user.map((item) => (
+							{navLinkItems.account.map((item) => (
 								<NavLink
 									key={item.label}
 									component={Link}
@@ -164,13 +170,13 @@ export default function User() {
 
 					<Divider />
 
-					{/* <Stack gap={"xs"}>
+					<Stack gap={"xs"}>
 						<Title order={3} fz={"md"} ml={{ md: "sm" }}>
-							Customer Care
+							Support
 						</Title>
 
 						<Stack gap={4}>
-							{navLinkItems.help.map((item) => (
+							{navLinkItems.support.map((item) => (
 								<NavLink
 									key={item.label}
 									component={Link}
@@ -187,7 +193,7 @@ export default function User() {
 						</Stack>
 					</Stack>
 
-					<Divider /> */}
+					<Divider />
 
 					<Stack gap={4}>
 						{navLinkItems.danger.map((item) => (

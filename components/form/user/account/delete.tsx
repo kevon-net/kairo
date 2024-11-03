@@ -3,7 +3,7 @@
 import React from "react";
 
 import { Box, Button, Group, PasswordInput, Stack } from "@mantine/core";
-import { useFormUserAccountDelete } from "@/hooks/form/user/account/delete";
+import { useFormUserAccountDelete } from "@/hooks/form/account/delete";
 
 export default function Delete() {
 	const { form, submitted, handleSubmit } = useFormUserAccountDelete();

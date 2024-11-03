@@ -3,7 +3,7 @@
 import React from "react";
 
 import { Box, Button, Grid, GridCol, TextInput } from "@mantine/core";
-import { useFormUserProfile } from "@/hooks/form/user/profile";
+import { useFormUserProfile } from "@/hooks/form/account/profile";
 
 export default function Profile() {
 	const { form, submitted, handleSubmit, session } = useFormUserProfile();

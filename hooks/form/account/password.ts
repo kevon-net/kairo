@@ -4,19 +4,20 @@ import { signOut as handleSignOut } from "@/handlers/event/sign-out";
 import password from "@/utilities/validators/special/password";
 import compare from "@/utilities/validators/special/compare";
 import { AccountPassword, PasswordReset } from "@/types/form";
-import { updateAccountPassword } from "@/handlers/request/user/account";
+import { updateAccountPassword } from "@/handlers/request/database/account";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { signIn as authSignIn } from "next-auth/react";
 
-export const useFormUserAccountPassword = () => {
+export const useFormUserAccountPassword = (params: { withCredentials: boolean }) => {
 	const [sending, setSending] = useState(false);
 
-	const form: UseFormReturnType<PasswordReset & { current: string }> = useForm({
+	const form: UseFormReturnType<PasswordReset & { current: string; withPassword: boolean }> = useForm({
 		initialValues: {
 			password: { initial: "", confirm: "" },
 			current: "",
+			withPassword: params.withCredentials,
 		},
 
 		validate: {

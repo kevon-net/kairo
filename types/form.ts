@@ -36,15 +36,6 @@ export interface AccountPassword {
 	password: { current: string; new: string };
 }
 
-export interface Contact {
-	fname: string;
-	lname: string;
-	email: string;
-	phone: string;
-	subject: string;
-	message: string;
-}
-
 export interface Verify {
 	otp: string;
 	userId: string;

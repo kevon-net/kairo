@@ -1,5 +1,5 @@
 import IconNotification from "@/components/common/icons/notification";
-import { updateAccountNotifications } from "@/handlers/request/user/account";
+import { updateAccountNotifications } from "@/handlers/request/database/notifications";
 import { NotificationVariant } from "@/types/enums";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { notifications } from "@mantine/notifications";

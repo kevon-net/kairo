@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Profile as FormProfile } from "@/types/form";
 import { capitalizeWords, segmentFullName } from "@/utilities/formatters/string";
-import { updateProfile } from "@/handlers/request/user/profile";
+import { profileUpdate } from "@/handlers/request/database/profile";
 import { NotificationVariant } from "@/types/enums";
 import { signIn as authSignIn } from "next-auth/react";
 import { showNotification } from "@/utilities/notifications";
@@ -44,10 +44,8 @@ export const useFormUserProfile = () => {
 
 	const parseValues = () => {
 		return {
-			name: {
-				first: capitalizeWords(form.values.name.first),
-				last: capitalizeWords(form.values.name.last),
-			},
+			firstName: capitalizeWords(form.values.name.first),
+			lastName: capitalizeWords(form.values.name.last),
 			email: form.values.email.trim().toLowerCase(),
 			phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 		};
@@ -67,7 +65,7 @@ export const useFormUserProfile = () => {
 
 				setSubmitted(true);
 
-				const response = await updateProfile(parseValues());
+				const response = await profileUpdate(parseValues());
 
 				if (!response) throw new Error("No response from server");
 
@@ -79,7 +77,7 @@ export const useFormUserProfile = () => {
 					// Update the session data on the client-side
 					await update({
 						...session,
-						user: { ...session?.user, name: `${parseValues().name.first} ${parseValues().name.last}` },
+						user: { ...session?.user, name: `${parseValues().firstName} ${parseValues().lastName}` },
 					});
 
 					// refresh the page

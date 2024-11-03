@@ -4,6 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { AdapterUser } from "next-auth/adapters";
 import { signIn as handleSignIn } from "./handlers/request/auth/sign-in";
+import { profileCreate } from "./handlers/request/database/profile";
+import { generateId } from "./utilities/generators/id";
 
 declare module "next-auth" {
 	/**
@@ -30,6 +32,7 @@ declare module "next-auth" {
 		// User signin error
 		error?: string;
 		rememberMe?: string;
+		password: string | null;
 	}
 
 	/**
@@ -44,7 +47,7 @@ export default {
 		signIn: "/auth/sign-in",
 		signOut: "/auth/sign-out",
 		error: "/auth/error", // Error code passed in query string as ?error=
-		verifyRequest: "/auth/verify-request" // (used for check email message)
+		verifyRequest: "/auth/verify-request", // (used for check email message)
 		// newUser: "/auth/new-user", // New users will be directed here on first sign in (leave the property out if not of interest)
 	},
 
@@ -56,7 +59,7 @@ export default {
 			credentials: {
 				email: {},
 				password: {},
-				rememberMe: {}
+				rememberMe: {},
 			},
 			authorize: async (credentials) => {
 				const response = await handleSignIn(credentials);
@@ -68,8 +71,8 @@ export default {
 				}
 
 				return { ...credentials, ...result.user };
-			}
-		})
+			},
+		}),
 	],
 
 	callbacks: {
@@ -83,7 +86,13 @@ export default {
 				return `/auth/error?error=${error}${user.error == "Not Verified" ? `: ${userId}` : ""}`;
 			}
 
-			// create session record if doesn't exist
+			// if user used password, attach to user object (this will be updated in the database)
+			user.password = credentials?.password ? "true" : null;
+
+			// create new profile if doesn't exist
+			await profileCreate({ user });
+
+			// create new session record
 
 			// Return true to allow the sign-in process to continue
 			return true;
@@ -106,6 +115,9 @@ export default {
 
 			if (trigger === "signIn") {
 				token.rememberMe = user.rememberMe == "true" ? true : false;
+
+				// attach user password signin to token
+				token.password = user.password ? "true" : "false";
 			}
 
 			if (token.rememberMe == true) {
@@ -113,9 +125,6 @@ export default {
 			} else {
 				token.exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60; // 1 day
 			}
-
-			// // remaining time in days
-			// console.log(Math.floor(token.exp - Date.now() / 1000) / 60 / 60 / 24);
 
 			return token;
 		},
@@ -131,8 +140,9 @@ export default {
 			// Send properties to the client, like a user id from a provider.
 			session.token = token.accessToken as string;
 			session.user.id = token.id as string;
+			session.user.password = token.password as string;
 
 			return session;
-		}
-	}
+		},
+	},
 } satisfies NextAuthConfig;

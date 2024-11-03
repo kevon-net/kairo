@@ -17,19 +17,19 @@ export const emails = {
 export const socials = {
 	twitter: {
 		platform: `Twitter`,
-		link: "#",
+		link: "#twitter",
 	},
 	facebook: {
 		platform: `Facebook`,
-		link: "#",
+		link: "#facebook",
 	},
 	instagram: {
 		platform: `Instagram`,
-		link: "#",
+		link: "#instagram",
 	},
 	linkedin: {
 		platform: `LinkedIn`,
-		link: "#",
+		link: "#linkedin",
 	},
 };
 
@@ -41,7 +41,7 @@ export const hours = {
 export const locations = {
 	main: {
 		location: "410 Terry Ave. North, Seattle, WA 98109",
-		pin: "#",
+		pin: "#pin",
 	},
 };
 

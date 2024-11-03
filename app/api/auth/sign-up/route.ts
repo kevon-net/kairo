@@ -1,4 +1,4 @@
-import { emailContactCreate } from "@/libraries/wrappers/email/contact";
+import { contactCreateGeneral } from "@/libraries/wrappers/email/contact";
 import { generateOtpCode } from "@/utilities/generators/otp";
 import prisma from "@/libraries/prisma";
 import { hashValue } from "@/utilities/helpers/hasher";
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
 					// send otp email
 					email: await emailSendSignUp({ otp: otpValue.toString(), email }),
 					// add to audience
-					contact: await emailContactCreate({ email }),
+					contact: await contactCreateGeneral({ name: `${name.first} ${name.last}`, email }),
 				},
 			},
 			{ status: 200, statusText: `Welcome, ${name.first}` }

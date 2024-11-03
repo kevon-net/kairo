@@ -1,24 +1,24 @@
 import resend from "@/libraries/resend";
-import { Contact } from "@/types/form";
 import TemplateEmailContact from "@/components/email/contact";
 import { isProduction } from "@/utilities/helpers/environment";
+import { EmailInquiry } from "@/types/email";
 
-export const emailSendInquiry = async (params: Contact) => {
+export const emailCreateInquiry = async (options: EmailInquiry) => {
 	// switch to 'resend.general' when your domain is configured
 	const { data, error } = await resend.general.emails.send({
-		from: `${params.fname} ${params.lname} <${
+		from: `${options.from.name} <${
 			isProduction() ? process.env.NEXT_EMAIL_INFO! : process.env.NEXT_RESEND_EMAIL!
 		}>`,
 		to: [process.env.NEXT_EMAIL_INFO!],
-		subject: params.subject,
-		react: TemplateEmailContact(params),
-		replyTo: params.email
+		subject: options.subject,
+		react: TemplateEmailContact(options),
+		replyTo: options.from.email,
 	});
 
 	if (!error) {
 		return data;
 	} else {
-		console.error("---> wrapper error - (email send inquiry):", error);
+		console.error("---> wrapper error - (create (send) email inquiry):", error);
 		throw error;
 	}
 };

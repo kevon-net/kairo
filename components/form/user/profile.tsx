@@ -30,16 +30,6 @@ export default function Profile() {
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12 }}>
-					<TextInput
-						required
-						label={"Email"}
-						placeholder="Your Email"
-						{...form.getInputProps("email")}
-						disabled
-						description="You cannot change your email address"
-					/>
-				</GridCol>
-				<GridCol span={{ base: 12 }}>
 					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
 				</GridCol>
 				<GridCol span={{ base: 6 }}>

@@ -14,7 +14,7 @@ import LayoutBrand from "../brand";
 
 import sample from "@/data/sample";
 
-import { signIn } from "@/handlers/event/sign-in";
+import { signIn } from "@/handlers/event/auth";
 import { useSession } from "next-auth/react";
 import links from "@/data/links";
 import classes from "./main.module.scss";

@@ -7,7 +7,7 @@ import { useState } from "react";
 import { authUrls, timeout } from "@/data/constants";
 import password from "@/utilities/validators/special/password";
 import compare from "@/utilities/validators/special/compare";
-import { signOut as handleSignOut } from "@/handlers/event/sign-out";
+import { signOut as handleSignOut } from "@/handlers/event/auth";
 import { PasswordForgot as FormAuthPasswordForgot, PasswordReset as FormAuthPasswordReset } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";

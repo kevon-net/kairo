@@ -17,7 +17,7 @@ import {
 	PasswordInput,
 	Stack,
 	Text,
-	TextInput
+	TextInput,
 } from "@mantine/core";
 
 import AuthProviders from "@/components/common/buttons/auth-providers";
@@ -64,7 +64,7 @@ export default function SignIn() {
 								size="xs"
 								key={form.key("remember")}
 								{...form.getInputProps("remember", {
-									type: "checkbox"
+									type: "checkbox",
 								})}
 							/>
 

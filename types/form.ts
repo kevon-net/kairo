@@ -24,7 +24,6 @@ export interface SignIn {
 
 export interface Profile {
 	name: { first: string; last: string };
-	email: string;
 	phone: string;
 }
 

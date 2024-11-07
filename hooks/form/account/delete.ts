@@ -1,7 +1,7 @@
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
 import { accountDelete } from "@/handlers/request/database/account";
-import { signOut as handleSignOut } from "@/handlers/event/sign-out";
+import { signOut as handleSignOut } from "@/handlers/event/auth";
 import { AccountDelete } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
 import { signIn as authSignIn } from "next-auth/react";

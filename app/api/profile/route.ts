@@ -1,15 +1,13 @@
 import prisma from "@/libraries/prisma";
-import { generateId } from "@/utilities/generators/id";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { ProfileCreate, ProfileUpdate } from "@/types/models/profile";
 
 export async function POST(request: NextRequest) {
 	try {
-		const { profile, options }: { profile: ProfileCreate; options: { user: { id: string } } } =
-			await request.json();
+		const profile: Omit<ProfileCreate, "user"> & { userId: string } = await request.json();
 
-		const userRecord = await prisma.user.findUnique({ where: { id: options.user.id }, include: { profile: true } });
+		const userRecord = await prisma.user.findUnique({ where: { id: profile.userId }, include: { profile: true } });
 
 		if (userRecord?.profile) {
 			return NextResponse.json(
@@ -18,10 +16,10 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		await prisma.profile.create({ data: { ...profile, id: generateId() } });
+		const createProfile = await prisma.profile.create({ data: profile });
 
 		return NextResponse.json(
-			{ error: "Profile created successfully" },
+			{ error: "Profile created successfully", profile: createProfile },
 			{ status: 200, statusText: "Profile Created" }
 		);
 	} catch (error) {
@@ -38,13 +36,9 @@ export async function PUT(request: NextRequest) {
 			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
 		}
 
-		const { profile, options }: { profile: ProfileUpdate; options: { user: { id: string } } } =
-			await request.json();
+		const profile: ProfileUpdate = await request.json();
 
-		const userRecord = await prisma.user.findUnique({
-			where: { id: options.user.id },
-			include: { profile: true },
-		});
+		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id }, include: { profile: true } });
 
 		if (!userRecord?.profile) {
 			return NextResponse.json({ error: "Profile not found" }, { status: 404, statusText: "Not Found" });

@@ -20,11 +20,14 @@ export const userCreate = async (user: UserCreate) => {
 	}
 };
 
-export const userUpdate = async (user: UserUpdate) => {
+export const userUpdate = async (
+	user: UserUpdate,
+	options: { name?: boolean; password?: { update?: { new: string }; forgot?: "update" } }
+) => {
 	try {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.PUT,
-			body: JSON.stringify(user),
+			body: JSON.stringify({ user, options }),
 		});
 
 		const response = await fetch(request);

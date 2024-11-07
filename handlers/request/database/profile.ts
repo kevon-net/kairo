@@ -4,7 +4,7 @@ import { ProfileCreate, ProfileUpdate } from "@/types/models/profile";
 
 const baseRequestUrl = `${apiUrl}/profile`;
 
-export const profileCreate = async (profile: ProfileCreate) => {
+export const profileCreate = async (profile: Omit<ProfileCreate, "user"> & { userId: string }) => {
 	try {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.POST,

@@ -10,8 +10,10 @@ export const apiUrl = `${baseUrl}/api`;
 export const authUrls = {
 	signIn: `${apiUrl}/auth/signin`,
 	signOut: `${apiUrl}/auth/signout`,
-	verify: `${apiUrl}/auth/verify-request`
+	verify: `${apiUrl}/auth/verify-request`,
 };
+
+export const geoDataUrl = `${process.env.NEXT_PUBLIC_IP_INFO_URL}?token=${process.env.NEXT_PUBLIC_IP_INFO_TOKEN}`;
 
 export const iconStrokeWidth = 1.5;
 
@@ -23,9 +25,14 @@ export const passwordRequirements = [
 	{ re: /[0-9]/, label: "number" },
 	{ re: /[a-z]/, label: "lowercase letter" },
 	{ re: /[A-Z]/, label: "uppercase letter" },
-	{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "special symbol" }
+	{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "special symbol" },
 ];
 
 export const SALT_ROUNDS = 10;
 
 export const timeout = { redirect: 5000 };
+
+export const cookieName = {
+	deviceInfo: "device-info",
+	tokenJti: "authjs.session-jti",
+};

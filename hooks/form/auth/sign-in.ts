@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
+import { setDeviceInfo } from "@/utilities/helpers/cookies";
+import { getDeviceInfo } from "@/services/api/device-info";
 
 export const useFormAuthSignIn = () => {
 	const router = useRouter();
@@ -40,6 +42,10 @@ export const useFormAuthSignIn = () => {
 			try {
 				setSubmitted(true);
 
+				// create cookie with device info
+				const deviceInfo = await getDeviceInfo();
+				setDeviceInfo(JSON.stringify(deviceInfo));
+
 				// handle user sign in
 				const result = await signIn("credentials", {
 					...parseValues(),
@@ -57,7 +63,7 @@ export const useFormAuthSignIn = () => {
 					return;
 				}
 
-				if (result.error == "Not Found" || result.error == "Unauthorized") {
+				if (result.error == "User not found" || result.error == "Invalid username/password") {
 					showNotification({
 						variant: NotificationVariant.FAILED,
 						title: "Authentication Error",
@@ -66,7 +72,7 @@ export const useFormAuthSignIn = () => {
 					return;
 				}
 
-				if (result.error.includes("Not Verified")) {
+				if (result.error.includes("User not Verified")) {
 					const userId = result.error.split(": ")[1];
 
 					// redirect to verification page

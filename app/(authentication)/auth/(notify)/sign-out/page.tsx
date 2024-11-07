@@ -13,13 +13,14 @@ import LayoutSection from "@/components/layout/section";
 import { auth } from "@/auth";
 import ButtonSignOut from "@/components/common/buttons/sign-out";
 import { iconStrokeWidth } from "@/data/constants";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Sign Out" };
 
 export default async function SignOut() {
 	const session = await auth();
 
-	// !session && redirect("/");
+	!session && redirect("/");
 
 	return (
 		<LayoutPage>

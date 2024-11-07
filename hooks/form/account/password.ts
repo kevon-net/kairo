@@ -1,17 +1,22 @@
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
-import { signOut as handleSignOut } from "@/handlers/event/sign-out";
+import { signOut as handleSignOut } from "@/handlers/event/auth";
 import password from "@/utilities/validators/special/password";
 import compare from "@/utilities/validators/special/compare";
 import { AccountPassword, PasswordReset } from "@/types/form";
-import { updateAccountPassword } from "@/handlers/request/database/account";
+import { userUpdate } from "@/handlers/request/database/user";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
-import { signIn as authSignIn } from "next-auth/react";
+import { signIn as authSignIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export const useFormUserAccountPassword = (params: { withCredentials: boolean }) => {
+	const router = useRouter();
+
 	const [sending, setSending] = useState(false);
+
+	const { data: session, update } = useSession();
 
 	const form: UseFormReturnType<PasswordReset & { current: string; withPassword: boolean }> = useForm({
 		initialValues: {
@@ -21,18 +26,23 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 		},
 
 		validate: {
+			current: (value) => params.withCredentials && password(value, 8, 24),
 			password: {
 				initial: (value, values) =>
 					value == values.current ? "Current and new passwords cannot be the same" : password(value, 8, 24),
 				confirm: (value, values) => compare.string(value, values.password.initial, "Password"),
 			},
-			current: (value) => password(value, 8, 24),
 		},
 	});
 
-	const parseValues = (): AccountPassword => {
+	if (!session) {
+		router.replace("/");
+	}
+
+	const parseValues = () => {
 		return {
-			password: { current: form.values.current, new: form.values.password.initial },
+			current: form.values.current,
+			new: form.values.password.initial,
 		};
 	};
 
@@ -41,7 +51,10 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 			if (form.isValid()) {
 				setSending(true);
 
-				const response = await updateAccountPassword(parseValues());
+				const response = await userUpdate(
+					{ password: parseValues().current },
+					{ password: { update: { new: parseValues().new } } }
+				);
 
 				if (!response) throw new Error("No response from server");
 
@@ -50,6 +63,15 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 				form.reset();
 
 				if (response.ok) {
+					if (!params.withCredentials) {
+						await update({ ...session, withPassword: true });
+
+						// refresh the page
+						window.location.reload();
+
+						return;
+					}
+
 					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;
 				}

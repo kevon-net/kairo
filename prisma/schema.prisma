@@ -39,12 +39,12 @@ enum StatusPost {
 model User {
   id String @id @default(cuid())
 
-  email         String    @unique
-  verified      Boolean   @default(false)
+  email         String   @unique
+  verified      Boolean  @default(false)
   password      String?
-  name          String?
+  name          String
   image         String?
-  emailVerified DateTime? @map(name: "email_verified")
+  emailVerified Boolean? @map(name: "email_verified")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
@@ -206,12 +206,18 @@ model Account {
 model Session {
   sessionToken String   @unique @map(name: "session_token")
   expires      DateTime
+  ip           String?
+  city         String?
+  region       String?
+  country      String?
+  loc          String?
+  timezone     String?
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @map("user_id")
+  userId String @map("user_id")
 
   @@map("sessions")
 }

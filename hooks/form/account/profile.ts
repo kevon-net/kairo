@@ -1,4 +1,3 @@
-import email from "@/utilities/validators/special/email";
 import phone from "@/utilities/validators/special/phone";
 import text from "@/utilities/validators/special/text";
 import { useForm, UseFormReturnType } from "@mantine/form";
@@ -10,7 +9,7 @@ import { profileUpdate } from "@/handlers/request/database/profile";
 import { NotificationVariant } from "@/types/enums";
 import { signIn as authSignIn } from "next-auth/react";
 import { showNotification } from "@/utilities/notifications";
-import { signOut as handleSignOut } from "@/handlers/event/sign-out";
+import { signOut as handleSignOut } from "@/handlers/event/auth";
 import { timeout } from "@/data/constants";
 
 export const useFormUserProfile = () => {
@@ -26,7 +25,6 @@ export const useFormUserProfile = () => {
 						last: segmentFullName(session?.user?.name).last,
 				  }
 				: { first: "", last: "" },
-			email: session?.user?.email ? session?.user?.email : "",
 			phone: "",
 		},
 
@@ -37,7 +35,6 @@ export const useFormUserProfile = () => {
 				last: (value) =>
 					value && value?.trim().length > 0 ? text(value, 2, 255) : "Please fill out this field.",
 			},
-			email: (value) => value && email(value),
 			phone: (value) => value.trim().length > 0 && phone(value),
 		},
 	});
@@ -46,7 +43,6 @@ export const useFormUserProfile = () => {
 		return {
 			firstName: capitalizeWords(form.values.name.first),
 			lastName: capitalizeWords(form.values.name.last),
-			email: form.values.email.trim().toLowerCase(),
 			phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 		};
 	};

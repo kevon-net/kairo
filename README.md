@@ -1,6 +1,6 @@
-This is a [Next.js](https://nextjs.org/) and [Mantine](https://mantine.dev/) template bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Getting Started
 
-## Getting Started
+This is a [Next.js](https://nextjs.org/) and [Mantine](https://mantine.dev/) template bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, install dependencies:
 
@@ -19,9 +19,3 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-# name conventions
-
-change prop names to 'props' and parameter names to 'params'
-update error statements
-create request objects

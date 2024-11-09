@@ -1,0 +1,37 @@
+.dropdown {
+	background-color: var(--mantine-color-body);
+	border-color: var(--mantine-color-default-border);
+}
+
+.arrow {
+}
+
+.divider {
+}
+
+.label {
+}
+
+.item {
+	transition: 0.25s all ease;
+
+	@include hover {
+		background-color: var(--mantine-color-pri-light);
+	}
+}
+
+.itemActive {
+	font-weight: 500;
+	background-color: var(--mantine-color-pri-light);
+
+	@include hover {
+		background-color: var(--mantine-color-body);
+	}
+}
+
+.itemLabel {
+	color: light-dark(var(--mantine-color-anchor));
+}
+
+.itemSection {
+}

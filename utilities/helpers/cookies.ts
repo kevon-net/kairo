@@ -2,7 +2,7 @@ import { cookieName } from "@/data/constants";
 
 export const getSessionJti = (): string | undefined => {
 	const cookies = document.cookie.split("; ");
-	const cookie = cookies.find((row) => row.startsWith("authjs.session-jti="));
+	const cookie = cookies.find((row) => row.startsWith(`${cookieName.sessionJti}=`));
 
 	return cookie?.split("=")[1];
 };

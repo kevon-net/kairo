@@ -4,14 +4,14 @@ import { signIn as authSignIn } from "next-auth/react";
 import { signOut as authSignOut } from "next-auth/react";
 import { sessionDelete } from "../request/database/session";
 import { getSessionJti, setDeviceInfo } from "@/utilities/helpers/cookies";
-import { getDeviceInfo } from "@/services/api/device-info";
+import { getGeoData } from "@/services/api/geo";
 
 export const signIn = async () => await authSignIn();
 
-export const signInWithProvider = async (provider: string) => {
+export const signInWithProvider = async (provider: string, os: string) => {
 	// create cookie with device info
-	const deviceInfo = await getDeviceInfo();
-	setDeviceInfo(JSON.stringify(deviceInfo));
+	const geoData = await getGeoData();
+	setDeviceInfo(JSON.stringify({ ...geoData, os }));
 
 	await authSignIn(provider, { redirect: false, callbackUrl: "/" });
 };

@@ -34,5 +34,6 @@ export const timeout = { redirect: 5000 };
 
 export const cookieName = {
 	deviceInfo: "device-info",
-	tokenJti: "authjs.session-jti",
+	sessionJti: "authjs.session-jti",
+	sessionToken: "authjs.session-token",
 };

@@ -162,6 +162,7 @@ export default {
 									loc: deviceInfo?.loc,
 									region: deviceInfo?.region,
 									timezone: deviceInfo?.timezone,
+									os: deviceInfo?.os,
 								},
 							},
 						},
@@ -177,6 +178,7 @@ export default {
 							loc: deviceInfo?.loc,
 							region: deviceInfo?.region,
 							timezone: deviceInfo?.timezone,
+							os: deviceInfo?.os,
 							userId: userRecord.id,
 						},
 					});
@@ -198,7 +200,7 @@ export default {
 				token.withPassword = user.password || userRecord?.password ? true : false;
 				token.jti = id;
 
-				cookies().set(cookieName.tokenJti, id, {
+				cookies().set(cookieName.sessionJti, id, {
 					expires: expiry,
 					httpOnly: false,
 					sameSite: "lax",
@@ -208,7 +210,7 @@ export default {
 				return token;
 			}
 
-			const sessionJti = cookies().get(cookieName.tokenJti);
+			const sessionJti = cookies().get(cookieName.sessionJti);
 
 			if (sessionJti) {
 				token.jti = sessionJti.value;

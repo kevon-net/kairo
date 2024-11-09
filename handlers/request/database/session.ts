@@ -1,13 +1,58 @@
 import { Request as EnumRequest } from "@/types/enums";
 import { apiUrl } from "@/data/constants";
-import { SessionCreate, SessionGet, SessionUpdate } from "@/types/models/session";
+import { SessionCreate, SessionUpdate } from "@/types/models/session";
+import { authenticateHeaders } from "@/libraries/wrappers/request";
 
-const baseRequestUrl = `${apiUrl}/session`;
+const baseRequestUrl = `${apiUrl}/sessions`;
+const headers: HeadersInit = {
+	"Content-Type": "application/json",
+	Accept: "application/json",
+};
+
+export const sessionsGet = async () => {
+	try {
+		const request = new Request(`${apiUrl}/sessions`, {
+			method: EnumRequest.GET,
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
+		});
+
+		const response = await fetch(request);
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.error("---> handler error - (get sessions):", error);
+		throw error;
+	}
+};
+
+export const sessionGet = async (sessionToken: string) => {
+	try {
+		const request = new Request(`${apiUrl}/sessions/${sessionToken}`, {
+			method: EnumRequest.GET,
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
+		});
+
+		const response = await fetch(request);
+
+		const result = await response.json();
+
+		return result;
+	} catch (error) {
+		console.error("---> handler error - (get session):", error);
+		throw error;
+	}
+};
 
 export const sessionCreate = async (session: Omit<SessionCreate, "user"> & { userId: string }) => {
 	try {
-		const request = new Request(baseRequestUrl, {
+		const request = new Request(`${baseRequestUrl}/create`, {
 			method: EnumRequest.POST,
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
 			body: JSON.stringify(session),
 		});
 
@@ -22,8 +67,10 @@ export const sessionCreate = async (session: Omit<SessionCreate, "user"> & { use
 
 export const sessionUpdate = async (session: SessionUpdate) => {
 	try {
-		const request = new Request(baseRequestUrl, {
+		const request = new Request(`${baseRequestUrl}/${session.sessionToken}`, {
 			method: EnumRequest.PUT,
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
 			body: JSON.stringify(session),
 		});
 
@@ -36,11 +83,12 @@ export const sessionUpdate = async (session: SessionUpdate) => {
 	}
 };
 
-export const sessionDelete = async (token: string) => {
+export const sessionDelete = async (sessionToken: string) => {
 	try {
-		const request = new Request(baseRequestUrl, {
+		const request = new Request(`${baseRequestUrl}/${sessionToken}`, {
 			method: EnumRequest.DELETE,
-			body: JSON.stringify(token),
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
 		});
 
 		const response = await fetch(request);

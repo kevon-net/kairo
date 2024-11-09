@@ -12,6 +12,9 @@ import { redirect } from "next/navigation";
 import { Metadata } from "next";
 import { auth } from "@/auth";
 import appData from "@/data/app";
+import { sessionsGet } from "@/handlers/request/database/session";
+import CardSession from "@/components/common/cards/session";
+import { SessionGet } from "@/types/models/session";
 
 export const metadata: Metadata = { title: "Security" };
 
@@ -19,6 +22,8 @@ export default async function Security() {
 	const session = await auth();
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
+	const sessions: { sessions?: SessionGet[] } = await sessionsGet();
 
 	return (
 		<LayoutPage stacked>
@@ -50,7 +55,13 @@ export default async function Security() {
 
 					<Text>A list of all devices signed in to your {appData.name.app} account.</Text>
 
-					<Text>list of devices</Text>
+					<Grid>
+						{sessions.sessions?.map((session) => (
+							<GridCol key={session.sessionToken} span={{ base: 12, sm: 6, xl: 4 }}>
+								<CardSession props={session} />
+							</GridCol>
+						))}
+					</Grid>
 				</Stack>
 			</LayoutSection>
 

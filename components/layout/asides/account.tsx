@@ -29,75 +29,8 @@ export default function Account() {
 	const pathname = usePathname();
 	const { data: session } = useSession();
 
-	const navLinkItems = {
-		activity: [
-			{
-				icon: IconHeart,
-				link: `/account/wishlist`,
-				label: "My Wishlist",
-			},
-			{
-				icon: IconPackage,
-				link: `/account/orders`,
-				label: "My Orders",
-			},
-			{
-				icon: IconStar,
-				link: `/account/reviews`,
-				label: "My Reviews",
-			},
-		],
-		account: [
-			{
-				icon: IconUser,
-				link: `/account/profile`,
-				label: "Profile Settings",
-			},
-			{
-				icon: IconLock,
-				link: `/account/security`,
-				label: "Account Security",
-			},
-			// {
-			// 	icon: IconCoins,
-			// 	link: `/account/payment`,
-			// 	label: "Payment Details",
-			// },
-			// {
-			// 	icon: IconMapPin,
-			// 	link: `/account/addresses`,
-			// 	label: "Addresses",
-			// },
-			{
-				icon: IconBellRinging,
-				link: `/account/notifications`,
-				label: "Notifications",
-			},
-		],
-		support: [
-			{
-				icon: IconHelpCircle,
-				link: `/help`,
-				label: "Help Center",
-			},
-			{
-				icon: IconInfoCircle,
-				link: `/help/terms-and-conditions`,
-				label: "Terms and Conditions",
-			},
-		],
-		danger: [
-			{
-				icon: IconLogout,
-				link: `/api/auth/signout`,
-				label: "Sign Out",
-				color: "red.6",
-			},
-		],
-	};
-
 	return (
-		<LayoutSection id={"partial-aside-user"} padded pos={"sticky"} top={0}>
+		<LayoutSection containerized={false} id={"partial-aside-user"} padded pos={"sticky"} top={0}>
 			<Stack gap={48} align="center">
 				<Flex
 					direction={{ base: "column", lg: "row" }}
@@ -217,3 +150,70 @@ export default function Account() {
 		</LayoutSection>
 	);
 }
+
+export const navLinkItems = {
+	activity: [
+		{
+			icon: IconHeart,
+			link: `/account/wishlist`,
+			label: "My Wishlist",
+		},
+		{
+			icon: IconPackage,
+			link: `/account/orders`,
+			label: "My Orders",
+		},
+		{
+			icon: IconStar,
+			link: `/account/reviews`,
+			label: "My Reviews",
+		},
+	],
+	account: [
+		{
+			icon: IconUser,
+			link: `/account/profile`,
+			label: "Profile Settings",
+		},
+		{
+			icon: IconLock,
+			link: `/account/security`,
+			label: "Account Security",
+		},
+		// {
+		// 	icon: IconCoins,
+		// 	link: `/account/payment`,
+		// 	label: "Payment Details",
+		// },
+		// {
+		// 	icon: IconMapPin,
+		// 	link: `/account/addresses`,
+		// 	label: "Addresses",
+		// },
+		{
+			icon: IconBellRinging,
+			link: `/account/notifications`,
+			label: "Notifications",
+		},
+	],
+	support: [
+		{
+			icon: IconHelpCircle,
+			link: `/help`,
+			label: "Help Center",
+		},
+		{
+			icon: IconInfoCircle,
+			link: `/help/terms-and-conditions`,
+			label: "Terms and Conditions",
+		},
+	],
+	danger: [
+		{
+			icon: IconLogout,
+			link: `/api/auth/signout`,
+			label: "Sign Out",
+			color: "red.6",
+		},
+	],
+};

@@ -9,10 +9,12 @@ import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
 import { setDeviceInfo } from "@/utilities/helpers/cookies";
-import { getDeviceInfo } from "@/services/api/device-info";
+import { getGeoData } from "@/services/api/geo";
+import { useOs } from "@mantine/hooks";
 
 export const useFormAuthSignIn = () => {
 	const router = useRouter();
+	const os = useOs();
 
 	const [submitted, setSubmitted] = useState(false);
 
@@ -43,8 +45,8 @@ export const useFormAuthSignIn = () => {
 				setSubmitted(true);
 
 				// create cookie with device info
-				const deviceInfo = await getDeviceInfo();
-				setDeviceInfo(JSON.stringify(deviceInfo));
+				const geoData = await getGeoData();
+				setDeviceInfo(JSON.stringify({ ...geoData, os }));
 
 				// handle user sign in
 				const result = await signIn("credentials", {

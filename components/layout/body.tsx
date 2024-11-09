@@ -4,6 +4,7 @@ import { Box, Divider, Flex } from "@mantine/core";
 
 import { Body as typeBody } from "@/types/layout";
 import { Widths } from "@/types/mantine";
+import LayoutSection from "./section";
 
 export default function Body({ children, bar, header, nav, hero, aside, footer }: typeBody) {
 	const handleAside = (side: React.ReactNode, width?: Widths) => (
@@ -34,7 +35,7 @@ export default function Body({ children, bar, header, nav, hero, aside, footer }
 			{nav && nav}
 			{hero && hero}
 			{aside ? (
-				<Box component={"article"} px={"md"}>
+				<LayoutSection component={"article"} id="layout-body-section">
 					<Flex gap={aside.gap ? aside.gap : "xl"}>
 						{aside.left && handleAside(aside.left.component, aside.left.width)}
 						{aside.left?.withBorder && <Divider orientation="vertical" visibleFrom="md" />}
@@ -42,7 +43,7 @@ export default function Body({ children, bar, header, nav, hero, aside, footer }
 						{aside.right?.withBorder && <Divider orientation="vertical" visibleFrom="md" />}
 						{aside.right && handleAside(aside.right.component, aside.right.width)}
 					</Flex>
-				</Box>
+				</LayoutSection>
 			) : (
 				children
 			)}

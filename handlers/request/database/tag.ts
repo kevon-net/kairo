@@ -1,13 +1,20 @@
 import { apiUrl } from "@/data/constants";
+import { authenticateHeaders } from "@/libraries/wrappers/request";
 import { Request as EnumRequest } from "@/types/enums";
 import { TagCreate, TagGet } from "@/types/models/tag";
 
 const baseRequestUrl = `${apiUrl}/tag`;
+const headers = {
+	"Content-Type": "application/json",
+	Accept: "application/json",
+};
 
 export const tagCreate = async (tag: TagCreate) => {
 	try {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.POST,
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
 			body: JSON.stringify(tag),
 		});
 
@@ -24,6 +31,8 @@ export const tagDelete = async (tag: TagGet) => {
 	try {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.DELETE,
+			credentials: "include",
+			headers: await authenticateHeaders(headers),
 			body: JSON.stringify(tag),
 		});
 

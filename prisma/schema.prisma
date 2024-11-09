@@ -203,8 +203,13 @@ model Account {
   @@map("accounts")
 }
 
+enum StatusSession {
+  ACTIVE
+  INACTIVE
+}
+
 model Session {
-  sessionToken String   @unique @map(name: "session_token")
+  sessionToken String        @unique @map(name: "session_token")
   expires      DateTime
   ip           String?
   city         String?
@@ -212,6 +217,8 @@ model Session {
   country      String?
   loc          String?
   timezone     String?
+  os           String?
+  status       StatusSession @default(ACTIVE)
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")

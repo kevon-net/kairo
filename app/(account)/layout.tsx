@@ -42,7 +42,7 @@ export default function LayoutAccount({
 			}}
 			footer={<FooterMain />}
 		>
-			<LayoutSection id={"layout-account"} component={"main"} padded>
+			<LayoutSection containerized={false} id={"layout-account"} component={"main"} padded>
 				<Stack gap={48}>
 					<Box hiddenFrom="md">
 						<NavbarAccount />

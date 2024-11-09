@@ -9,9 +9,11 @@ import { Button, Group, Image, Stack } from "@mantine/core";
 import { signInWithProvider } from "@/handlers/event/auth";
 import images from "@/data/images";
 import { capitalizeWords } from "@/utilities/formatters/string";
+import { useOs } from "@mantine/hooks";
 
 export default function Providers() {
 	const [loading, setLoading] = useState(false);
+	const os = useOs();
 
 	const getButton = (image: string, provider: string) => (
 		<Button
@@ -20,7 +22,7 @@ export default function Providers() {
 			variant="light"
 			onClick={async () => {
 				setLoading(true);
-				await signInWithProvider(provider);
+				await signInWithProvider(provider, os);
 			}}
 			loading={loading}
 			leftSection={

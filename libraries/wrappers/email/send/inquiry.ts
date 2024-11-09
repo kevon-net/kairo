@@ -7,6 +7,7 @@ export const emailCreateInquiry = async (options: {
 	from: EmailInquiry["from"];
 	to: EmailInquiry["to"];
 	subject: EmailInquiry["subject"];
+	message: string;
 }) => {
 	// switch to 'resend.general' when your domain is configured
 	const { data, error } = await resend.general.emails.send({
@@ -15,7 +16,7 @@ export const emailCreateInquiry = async (options: {
 		}>`,
 		to: [process.env.NEXT_EMAIL_INFO!],
 		subject: options.subject,
-		react: TemplateEmailContact({ name: options.from.name, subject: options.subject }),
+		react: TemplateEmailContact({ name: options.from.name, message: options.message }),
 		replyTo: options.to,
 	});
 

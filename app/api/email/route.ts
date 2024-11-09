@@ -4,11 +4,16 @@ import { EmailInquiry } from "@/types/email";
 
 export async function POST(request: NextRequest) {
 	try {
-		const email: EmailInquiry = await request.json();
+		const email: EmailInquiry & { message: string } = await request.json();
 
 		return NextResponse.json(
 			{
-				email: await emailCreateInquiry({ from: email.from, to: email.to, subject: email.subject }),
+				email: await emailCreateInquiry({
+					from: email.from,
+					to: email.to,
+					subject: email.subject,
+					message: email.message,
+				}),
 				message: "Email sent successfully",
 			},
 			{ status: 200, statusText: "Email Sent" }

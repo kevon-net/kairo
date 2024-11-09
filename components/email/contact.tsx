@@ -6,9 +6,9 @@ import appData from "@/data/app";
 
 import LayoutEmail from "@/components/layout/email";
 
-export default function Contact(data: { name: string; subject: string }) {
+export default function Contact(data: { name: string; message: string }) {
 	return (
-		<LayoutEmail props={{ message: data.subject }}>
+		<LayoutEmail props={{ message: data.message }}>
 			<Container style={content}>
 				<Section style={header}>
 					<Container style={container}>
@@ -28,7 +28,7 @@ export default function Contact(data: { name: string; subject: string }) {
 							{/* <Heading style={h2}>{appData.name.company}</Heading> */}
 							<Text style={text}>
 								Recipient, <br />
-								{data.subject} <br />
+								{data.message} <br />
 								<br />
 								Regards, <br />
 								{data.name}

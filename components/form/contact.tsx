@@ -3,10 +3,10 @@
 import React from "react";
 
 import { Box, Button, Center, Grid, GridCol, TextInput, Textarea } from "@mantine/core";
-import { useFormContact } from "@/hooks/form/contact";
+import { useFormEmailInquiry } from "@/hooks/form/email/inquiry";
 
 export default function Contact() {
-	const { form, submitted, handleSubmit } = useFormContact();
+	const { form, submitted, handleSubmit } = useFormEmailInquiry();
 
 	return (
 		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
@@ -14,21 +14,18 @@ export default function Contact() {
 				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput
 						required
-						label={"Frist Name"}
+						label={"First Name"}
 						placeholder="Your First Name"
-						{...form.getInputProps("fname")}
+						{...form.getInputProps("from.name")}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput
 						required
-						label={"Last Name"}
-						placeholder="Your Last Name"
-						{...form.getInputProps("lname")}
+						label={"Email"}
+						placeholder="Your Email"
+						{...form.getInputProps("from.email")}
 					/>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
-					<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
 					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
@@ -36,7 +33,7 @@ export default function Contact() {
 				<GridCol span={12}>
 					<TextInput
 						required
-						label="Inquiry"
+						label="Subject"
 						placeholder="What are you inquiring about?"
 						{...form.getInputProps("subject")}
 					/>

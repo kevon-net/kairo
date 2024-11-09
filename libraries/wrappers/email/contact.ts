@@ -2,7 +2,7 @@ import resend from "@/libraries/resend";
 import { EmailInquiry } from "@/types/email";
 import { segmentFullName } from "@/utilities/formatters/string";
 
-export const contactCreateGeneral = async (from: EmailInquiry["from"]) => {
+export const contactCreate = async (from: EmailInquiry["from"]) => {
 	const { data, error } = await resend.general.contacts.create({
 		email: from.email,
 		firstName: segmentFullName(from.name).first,

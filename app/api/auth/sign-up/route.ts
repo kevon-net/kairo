@@ -4,8 +4,8 @@ import prisma from "@/libraries/prisma";
 import { hashValue } from "@/utilities/helpers/hasher";
 import { emailSendSignUp } from "@/libraries/wrappers/email/send/auth/sign-up";
 import { generateId } from "@/utilities/generators/id";
-import { OtpType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { SubType, Type } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -34,39 +34,42 @@ export async function POST(request: NextRequest) {
 		await prisma.user.create({
 			data: {
 				id: userId,
-				name: `${name.first} ${name.last}`,
 				email,
 				password: (await hashValue(password.initial)) || null,
-				verified: false,
 
 				// create user profile record
-				profile: { create: { id: generateId(), firstName: name.first, lastName: name.last } },
+				profile: { create: { id: generateId(), name } },
 
 				// create user otp record
-				otps: {
-					create: [
-						{
-							id: generateId(),
-							type: OtpType.EMAIL_CONFIRMATION,
-							otp: otpHash!,
-							expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
-						},
-					],
-				},
+				tokens: !otpHash
+					? undefined
+					: {
+							create: [
+								{
+									id: generateId(),
+									type: Type.OTP,
+									subType: SubType.CONFIRM_EMAIL,
+									token: otpHash,
+									expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+								},
+							],
+					  },
 			},
 		});
+
+		console.log(otpValue);
 
 		return NextResponse.json(
 			{
 				user: { id: userId, email },
 				message: "Your account has been created",
-				// send otp email and output result in response body
-				resend: {
-					// send otp email
-					email: await emailSendSignUp(otpValue.toString(), email),
-					// add to audience
-					contact: await contactCreate({ name: `${name.first} ${name.last}`, email }),
-				},
+				// // send otp email and output result in response body
+				// resend: {
+				// 	// send otp email
+				// 	email: await emailSendSignUp(otpValue.toString(), email),
+				// 	// add to audience
+				// 	contact: await contactCreate({ name: `${name.first} ${name.last}`, email }),
+				// },
 			},
 			{ status: 200, statusText: `Welcome, ${name.first}` }
 		);

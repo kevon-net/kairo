@@ -21,12 +21,10 @@ export default function Route({ props }: { props: { title?: string } }) {
 	return (
 		<LayoutSection id={"layout-hero-route"} className={classes.hero}>
 			<Stack align="center" justify="space-between">
-				<BreadcrumbMain data={segments} />
+				<BreadcrumbMain props={segments} />
 
 				<Title order={1} fw={500} fz={24}>
-					{props.title
-						? props.title
-						: segments[segments.length - 1].label}
+					{props.title ? props.title : segments[segments.length - 1].label}
 				</Title>
 			</Stack>
 		</LayoutSection>

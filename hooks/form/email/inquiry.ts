@@ -1,4 +1,4 @@
-import { emailCreate } from "@/handlers/request/email/email";
+import { emailCreate } from "@/handlers/requests/email/email";
 import { EmailInquiry } from "@/types/email";
 import { NotificationVariant } from "@/types/enums";
 import { capitalizeWords, segmentFullName } from "@/utilities/formatters/string";

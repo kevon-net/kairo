@@ -13,13 +13,13 @@ import {
 	PasswordInput,
 	Stack,
 	Text,
-	TextInput
+	TextInput,
 } from "@mantine/core";
 
 import AuthProviders from "@/components/common/buttons/auth-providers";
 import PopoverPasswordStrength from "@/components/wrapper/popovers/password-strength";
+import { SignIn as FragmentSignIn } from "@/components/common/fragments/auth";
 
-import { signIn as authSignIn } from "next-auth/react";
 import { useFormAuthSignUp } from "@/hooks/form/auth/sign-up";
 
 export default function SignUp() {
@@ -85,7 +85,7 @@ export default function SignUp() {
 								w={{
 									base: "100%",
 									xs: "50%",
-									md: "100%"
+									md: "100%",
 								}}
 								type="submit"
 								loading={submitted}
@@ -98,17 +98,11 @@ export default function SignUp() {
 
 				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 					Already have an account?{" "}
-					<Anchor
-						inherit
-						fw={500}
-						underline="hover"
-						onClick={async (e) => {
-							e.preventDefault();
-							await authSignIn();
-						}}
-					>
-						Sign In
-					</Anchor>
+					<FragmentSignIn>
+						<Anchor inherit fw={500} underline="hover">
+							Sign In
+						</Anchor>
+					</FragmentSignIn>
 				</Text>
 			</Stack>
 		</form>

@@ -1,20 +1,15 @@
 import { Request as EnumRequest } from "@/types/enums";
-import { apiUrl } from "@/data/constants";
+import { apiUrl, headers } from "@/data/constants";
 import { ProfileCreate, ProfileUpdate } from "@/types/models/profile";
-import { authenticateHeaders } from "@/libraries/wrappers/request";
 
 const baseRequestUrl = `${apiUrl}/profile`;
-const headers = {
-	"Content-Type": "application/json",
-	Accept: "application/json",
-};
 
 export const profileCreate = async (profile: Omit<ProfileCreate, "user"> & { userId: string }) => {
 	try {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.POST,
 			credentials: "include",
-			headers: await authenticateHeaders(headers),
+			headers: headers.withBody,
 			body: JSON.stringify(profile),
 		});
 
@@ -32,7 +27,7 @@ export const profileUpdate = async (profile: ProfileUpdate) => {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.PUT,
 			credentials: "include",
-			headers: await authenticateHeaders(headers),
+			headers: headers.withBody,
 			body: JSON.stringify(profile),
 		});
 

@@ -1,12 +1,17 @@
-import { apiUrl } from "@/data/constants";
+import { apiUrl, headers } from "@/data/constants";
 import { Credentials } from "@/types/auth";
 import { Request as EnumRequest } from "@/types/enums";
+import { Provider } from "@prisma/client";
 
-export const signIn = async (credentials: Credentials) => {
+export const signIn = async (options: { provider?: Provider; credentials?: Credentials }) => {
 	try {
 		const request = new Request(`${apiUrl}/auth/sign-in`, {
 			method: EnumRequest.POST,
-			body: JSON.stringify(credentials)
+			body: JSON.stringify({
+				provider: options.provider || Provider.CREDENTIALS,
+				credentials: options.credentials,
+			}),
+			headers: headers.withBody,
 		});
 
 		const response = await fetch(request);

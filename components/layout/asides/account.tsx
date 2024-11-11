@@ -3,7 +3,6 @@
 import React from "react";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import { Divider, Flex, NavLink, Stack, Text, Title } from "@mantine/core";
 import {
@@ -22,12 +21,11 @@ import {
 import LayoutSection from "@/components/layout/section";
 import AvatarMain from "@/components/common/avatars/main";
 
-import { useSession } from "next-auth/react";
 import { iconStrokeWidth } from "@/data/constants";
+import { useSession } from "@/hooks/session";
 
 export default function Account() {
-	const pathname = usePathname();
-	const { data: session } = useSession();
+	const { session, pathname } = useSession();
 
 	return (
 		<LayoutSection containerized={false} id={"partial-aside-user"} padded pos={"sticky"} top={0}>
@@ -41,15 +39,17 @@ export default function Account() {
 				>
 					<AvatarMain />
 
-					<Stack gap={0}>
-						<Title order={3} fz={"md"} ta={{ base: "center", lg: "start" }}>
-							{session?.user.name}
-						</Title>
+					{session && (
+						<Stack gap={0}>
+							<Title order={3} fz={"md"} ta={{ base: "center", lg: "start" }}>
+								{session.user.name}
+							</Title>
 
-						<Text fz={"xs"} c={"dimmed"} ta={{ base: "center", lg: "start" }}>
-							{session?.user.email}
-						</Text>
-					</Stack>
+							<Text fz={"xs"} c={"dimmed"} ta={{ base: "center", lg: "start" }}>
+								{session.user.email}
+							</Text>
+						</Stack>
+					)}
 				</Flex>
 
 				<Stack w={"100%"}>

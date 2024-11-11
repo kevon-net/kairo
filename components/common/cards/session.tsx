@@ -3,12 +3,12 @@
 import { SessionGet } from "@/types/models/session";
 import { capitalizeWord } from "@/utilities/formatters/string";
 import { Badge, Card, Group, Stack, Text, Title } from "@mantine/core";
-import { useSession } from "next-auth/react";
 import React from "react";
 import ModalDeleteSession from "../modals/delete/session";
+import { useSession } from "@/hooks/session";
 
 export default function Session({ props }: { props: SessionGet }) {
-	const { data: session } = useSession();
+	const { session } = useSession();
 
 	return (
 		<Card>
@@ -19,7 +19,7 @@ export default function Session({ props }: { props: SessionGet }) {
 							{capitalizeWord(props.os!)} Device
 						</Title>
 
-						{session?.sessionToken == props.sessionToken && (
+						{session?.id == props.id && (
 							<Badge size="sm" variant="light" color="blue">
 								current
 							</Badge>

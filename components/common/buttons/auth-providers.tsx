@@ -6,7 +6,6 @@ import NextImage from "next/image";
 
 import { Button, Group, Image, Stack } from "@mantine/core";
 
-import { signInWithProvider } from "@/handlers/event/auth";
 import images from "@/data/images";
 import { capitalizeWords } from "@/utilities/formatters/string";
 import { useOs } from "@mantine/hooks";
@@ -21,8 +20,8 @@ export default function Providers() {
 			fullWidth
 			variant="light"
 			onClick={async () => {
-				setLoading(true);
-				await signInWithProvider(provider, os);
+				// setLoading(true);
+				// await signIn({ provider }, os);
 			}}
 			loading={loading}
 			leftSection={

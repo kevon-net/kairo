@@ -1,7 +1,7 @@
 import prisma from "@/libraries/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { ProfileCreate, ProfileUpdate } from "@/types/models/profile";
+import { getSession } from "@/utilities/helpers/session";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
 	try {
-		const session = await auth();
+		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
 		}
 
 		const profile: ProfileUpdate = await request.json();
@@ -44,14 +44,10 @@ export async function PUT(request: NextRequest) {
 			return NextResponse.json({ error: "Profile not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		const fullName = `${profile.firstName} ${profile.lastName}`;
+		await prisma.profile.update({ where: { userId: session.user.id }, data: profile });
 
-		await prisma.user.update({
-			where: { id: session.user.id },
-			data: { name: fullName, profile: { update: profile } },
-		});
-
-		session.user.name = fullName;
+		// // update session on server
+		// session.user.name = profile.name;
 
 		return NextResponse.json(
 			{ message: "Your profile has been updated" },

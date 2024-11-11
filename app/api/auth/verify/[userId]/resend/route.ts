@@ -2,9 +2,9 @@ import { emailSendSignUp } from "@/libraries/wrappers/email/send/auth/sign-up";
 import { generateOtpCode } from "@/utilities/generators/otp";
 import prisma from "@/libraries/prisma";
 import { hashValue } from "@/utilities/helpers/hasher";
-import { OtpType } from "@prisma/client";
 import { generateId } from "@/utilities/generators/id";
 import { NextRequest, NextResponse } from "next/server";
+import { SubType, Type } from "@prisma/client";
 
 export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
 	try {
@@ -23,8 +23,8 @@ export async function GET(request: NextRequest, { params }: { params: { userId: 
 		}
 
 		// query database for otp
-		const otpRecord = await prisma.otp.findUnique({
-			where: { userId_type: { userId: params.userId, type: OtpType.EMAIL_CONFIRMATION } },
+		const otpRecord = await prisma.token.findUnique({
+			where: { type_subType_userId: { type: Type.OTP, subType: SubType.CONFIRM_EMAIL, userId: params.userId } },
 		});
 
 		// create otp
@@ -39,20 +39,23 @@ export async function GET(request: NextRequest, { params }: { params: { userId: 
 		if (!otpRecord || expired) {
 			// delete otp record if expired
 			expired &&
-				(await prisma.otp.delete({
-					where: { userId_type: { userId: params.userId, type: OtpType.EMAIL_CONFIRMATION } },
+				(await prisma.token.delete({
+					where: {
+						type_subType_userId: { type: Type.OTP, subType: SubType.CONFIRM_EMAIL, userId: params.userId },
+					},
 				}));
 
 			// create new otp record
 			await prisma.user.update({
 				where: { id: params.userId },
 				data: {
-					otps: {
+					tokens: {
 						create: [
 							{
 								id: generateId(),
-								type: OtpType.EMAIL_CONFIRMATION,
-								otp: otpHash!,
+								type: Type.OTP,
+								subType: SubType.CONFIRM_EMAIL,
+								token: otpHash!,
 								expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
 							},
 						],

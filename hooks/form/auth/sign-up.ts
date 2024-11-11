@@ -1,5 +1,4 @@
-import { signUp as handleSignUp } from "@/handlers/request/auth/sign-up";
-import { signIn as authSignIn } from "next-auth/react";
+import { signUp as handleSignUp } from "@/handlers/requests/auth/sign-up";
 import { SignUp as FormAuthSignUp } from "@/types/form";
 import { capitalizeWords } from "@/utilities/formatters/string";
 import compare from "@/utilities/validators/special/compare";
@@ -18,7 +17,7 @@ export const useFormAuthSignUp = () => {
 
 	const [submitted, setSubmitted] = useState(false);
 
-	const form: UseFormReturnType<FormAuthSignUp> = useForm({
+	const form = useForm({
 		initialValues: {
 			name: { first: "", last: "" },
 			email: "",
@@ -40,10 +39,7 @@ export const useFormAuthSignUp = () => {
 
 	const parseValues = () => {
 		return {
-			name: {
-				first: capitalizeWords(form.values.name.first.trim()),
-				last: capitalizeWords(form.values.name.last.trim()),
-			},
+			name: `${capitalizeWords(form.values.name.first.trim())} ${capitalizeWords(form.values.name.last.trim())}`,
 			email: form.values.email.trim().toLowerCase(),
 			password: {
 				initial: form.values.password.initial,
@@ -76,8 +72,8 @@ export const useFormAuthSignUp = () => {
 					setTimeout(async () => {
 						// check if user is verified
 						if (result.user.verified) {
-							// redirect to sign in
-							await authSignIn();
+							// // redirect to sign in
+							// await authSignIn();
 						}
 
 						// redirect to verification page

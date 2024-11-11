@@ -1,5 +1,5 @@
 import { TimerDirection } from "@/types/enums";
-import { getTimeElapsed, getTimeRemaining } from "@/utilities/helpers/date";
+import { getTimeElapsed, getTimeRemaining } from "@/utilities/helpers/time";
 import { useEffect, useState } from "react";
 
 /**

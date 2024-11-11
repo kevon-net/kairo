@@ -1,13 +1,13 @@
 import prisma from "@/libraries/prisma";
+import { getSession } from "@/utilities/helpers/session";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 
 export async function GET(request: NextRequest) {
 	try {
-		const session = await auth();
+		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
 		}
 
 		const sessionRecords = await prisma.session.findMany({ where: { userId: session.user.id } });

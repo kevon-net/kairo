@@ -1,10 +1,8 @@
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
-import { accountDelete } from "@/handlers/request/database/account";
-import { signOut as handleSignOut } from "@/handlers/event/auth";
+import { accountDelete } from "@/handlers/requests/database/account";
 import { AccountDelete } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
-import { signIn as authSignIn } from "next-auth/react";
 import { showNotification } from "@/utilities/notifications";
 import { timeout } from "@/data/constants";
 
@@ -27,24 +25,24 @@ export const useFormUserAccountDelete = () => {
 				form.reset();
 
 				if (response.ok) {
-					// sign out and redirect to home page
-					setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+					// // sign out and redirect to home page
+					// setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;
 				}
 
 				if (response.status === 401) {
-					// redirect to sign in
-					setTimeout(async () => await authSignIn(), timeout.redirect);
+					// // redirect to sign in
+					// setTimeout(async () => await authSignIn(), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.WARNING }, response, result);
 					return;
 				}
 
 				if (response.status === 404) {
-					// sign out and redirect to home page
-					setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+					// // sign out and redirect to home page
+					// setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.WARNING }, response, result);
 					return;

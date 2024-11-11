@@ -1,6 +1,6 @@
 import prisma from "@/libraries/prisma";
 import { compareHashes } from "@/utilities/helpers/hasher";
-import { OtpType } from "@prisma/client";
+import { SubType, Type } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest, { params }: { params: { userId: string } }) {
@@ -22,11 +22,11 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
 		}
 
 		// query database for otp
-		const otpRecord = await prisma.otp.findUnique({
-			where: { userId_type: { userId: params.userId, type: OtpType.EMAIL_CONFIRMATION } },
+		const otpRecord = await prisma.token.findUnique({
+			where: { type_subType_userId: { userId: params.userId, type: Type.OTP, subType: SubType.CONFIRM_EMAIL } },
 		});
 
-		const match = otpRecord && (await compareHashes(otp, otpRecord?.otp));
+		const match = otpRecord && (await compareHashes(otp, otpRecord?.token));
 
 		if (!match) {
 			return NextResponse.json({ error: "OTP doesn't match" }, { status: 401, statusText: "Invalid OTP" });
@@ -38,8 +38,10 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
 		if (!otpRecord || expired) {
 			// delete otp record if expired
 			expired &&
-				(await prisma.otp.delete({
-					where: { userId_type: { userId: params.userId, type: OtpType.EMAIL_CONFIRMATION } },
+				(await prisma.token.delete({
+					where: {
+						type_subType_userId: { userId: params.userId, type: Type.OTP, subType: SubType.CONFIRM_EMAIL },
+					},
 				}));
 
 			return NextResponse.json(
@@ -52,8 +54,8 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
 		await prisma.user.update({ where: { id: params.userId }, data: { verified: true } });
 
 		// delete used otp record
-		await prisma.otp.delete({
-			where: { userId_type: { userId: params.userId, type: OtpType.EMAIL_CONFIRMATION } },
+		await prisma.token.delete({
+			where: { type_subType_userId: { userId: params.userId, type: Type.OTP, subType: SubType.CONFIRM_EMAIL } },
 		});
 
 		return NextResponse.json({ message: "You can now sign in" }, { status: 200, statusText: "Account Verified" });

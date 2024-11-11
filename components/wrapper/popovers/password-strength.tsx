@@ -7,15 +7,15 @@ import {
 	Stack,
 	PopoverTarget,
 	PopoverDropdown,
-	PasswordInputProps
+	PasswordInputProps,
 } from "@mantine/core";
-import { getStrength } from "@/utilities/helpers/password";
+import { getPasswordStrength } from "@/utilities/helpers/string";
 import { passwordRequirements } from "@/data/constants";
 
 export default function PasswordStrength({ value, ...restProps }: { value: string } & PasswordInputProps) {
 	const [opened, setOpened] = useState(false);
 
-	const strength = getStrength(value, passwordRequirements);
+	const strength = getPasswordStrength(value, passwordRequirements);
 	const color = strength > 80 ? "teal" : strength > 50 ? "yellow" : "red";
 
 	const requirementList = passwordRequirements.map((requirement, index) => (

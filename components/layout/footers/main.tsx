@@ -17,7 +17,7 @@ import {
 	GridCol,
 	ListItem,
 	Stack,
-	ThemeIcon
+	ThemeIcon,
 } from "@mantine/core";
 
 import LayoutSection from "@/components/layout/section";
@@ -30,64 +30,12 @@ import { dataSocials } from "@/app/(marketing)/contact/page";
 import { iconStrokeWidth } from "@/data/constants";
 
 export default function Main() {
-	const linkSets = [
-		{
-			title: "About Us",
-			links: [
-				{ label: "Mission", link: "#Mission" },
-				{ label: "Our Team", link: "#Team" },
-				{ label: "Awards", link: "#Awards" },
-				{ label: "Testimonials", link: "#Testimonials" },
-				{ label: "Privacy Policy", link: "#Policy" }
-			]
-		},
-		{
-			title: "Services",
-			links: [
-				{ label: "Web Design", link: "#Design" },
-				{ label: "Web Development", link: "#Development" },
-				{ label: "Mobile Design", link: "#Mobile" },
-				{ label: "UI/UX Design", link: "#UX" },
-				{ label: "Branding Design", link: "#Branding" }
-			]
-		},
-		{
-			title: "Portfolio",
-			links: [
-				{ label: "Corporate Websites", link: "#Corporate" },
-				{ label: "E-commerce", link: "#commerce" },
-				{ label: "Mobile Apps", link: "#Apps" },
-				{ label: "Landing Pages", link: "#Landing" },
-				{ label: "UI/UX Projects", link: "#Projects" }
-			]
-		},
-		{
-			title: "Contact Us",
-			links: [
-				{ label: "Information", link: "#Information" },
-				{ label: "Request a Quote", link: "#Quote" },
-				{ label: "Consultation", link: "#Consultation" },
-				{ label: "Help Center", link: "#Help" },
-				{ label: "T's and C's", link: "#Terms" }
-			]
-		}
-	];
-
 	return (
-		<LayoutSection
-			id={"partial-footer-main"}
-			pt={56}
-			pb={"lg"}
-			className={classes.footer}
-		>
+		<LayoutSection id={"partial-footer-main"} pt={56} pb={"lg"} className={classes.footer}>
 			<Container size={"responsive"}>
 				<Grid gutter={{ base: "xl", md: "md" }}>
 					<GridCol span={{ base: 12, md: 4, lg: 3.5 }}>
-						<Flex
-							direction={"column"}
-							align={{ base: "center", md: "start" }}
-							gap={"md"}
-						>
+						<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"md"}>
 							<Image
 								src={images.brand.logo.light}
 								alt="next logo"
@@ -98,30 +46,16 @@ export default function Main() {
 								loading="lazy"
 							/>
 
-							<Text
-								className="textResponsive"
-								ta={{ base: "center", md: "start" }}
-							>
-								Lorem ipsum dolor sit amet consectetur
-								adipiscing elit aliquam mauris sed ma
+							<Text className="textResponsive" ta={{ base: "center", md: "start" }}>
+								Lorem ipsum dolor sit amet consectetur adipiscing elit aliquam mauris sed ma
 							</Text>
 
 							<Group>
 								{dataSocials.map((social) => (
-									<Anchor
-										key={social.link}
-										title={social.label}
-										href={social.link}
-									>
+									<Anchor key={social.link} title={social.label} href={social.link}>
 										<Group>
-											<ThemeIcon
-												size={24}
-												variant="light"
-											>
-												<social.icon
-													size={16}
-													stroke={iconStrokeWidth}
-												/>
+											<ThemeIcon size={24} variant="light">
+												<social.icon size={16} stroke={iconStrokeWidth} />
 											</ThemeIcon>
 										</Group>
 									</Anchor>
@@ -129,30 +63,17 @@ export default function Main() {
 							</Group>
 						</Flex>
 					</GridCol>
-					<GridCol
-						span={{ base: 12, md: 8, lg: 8.5 }}
-						visibleFrom="sm"
-					>
+					<GridCol span={{ base: 12, md: 8, lg: 8.5 }} visibleFrom="sm">
 						<Grid gutter={{ base: "xl", md: "md" }}>
 							{linkSets.map((linkSet) => (
-								<GridCol
-									key={linkSet.title}
-									span={{ base: 6, xs: 4, sm: 3 }}
-								>
-									<Flex
-										direction={"column"}
-										align={{ base: "center", md: "end" }}
-										gap={"xs"}
-									>
+								<GridCol key={linkSet.title} span={{ base: 6, xs: 4, sm: 3 }}>
+									<Flex direction={"column"} align={{ base: "center", md: "end" }} gap={"xs"}>
 										<Title order={4} fw={"bold"}>
 											{linkSet.title}
 										</Title>
 										<List listStyleType="none">
 											{linkSet.links.map((link) => (
-												<ListItem
-													key={link.link}
-													className={classes.listItem}
-												>
+												<ListItem key={link.link} className={classes.listItem}>
 													<Anchor
 														component={Link}
 														href={link.link}
@@ -173,18 +94,13 @@ export default function Main() {
 			</Container>
 
 			<Container size={"responsive"} px={"xl"}>
-				<Divider
-					mt={56}
-					mb={"lg"}
-					color="var(--mantine-color-default-border)"
-				/>
+				<Divider mt={56} mb={"lg"} color="var(--mantine-color-default-border)" />
 			</Container>
 
 			<Container size={"responsive"}>
 				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
 					<Text component="span" inherit>
-						Copyright © {new Date().getFullYear()}{" "}
-						{appData.name.app}
+						Copyright © {new Date().getFullYear()} {appData.name.app}
 					</Text>{" "}
 					|{" "}
 					<Text component="span" inherit>
@@ -203,3 +119,46 @@ export default function Main() {
 		</LayoutSection>
 	);
 }
+
+const linkSets = [
+	{
+		title: "About Us",
+		links: [
+			{ label: "Mission", link: "#Mission" },
+			{ label: "Our Team", link: "#Team" },
+			{ label: "Awards", link: "#Awards" },
+			{ label: "Testimonials", link: "#Testimonials" },
+			{ label: "Privacy Policy", link: "#Policy" },
+		],
+	},
+	{
+		title: "Services",
+		links: [
+			{ label: "Web Design", link: "#Design" },
+			{ label: "Web Development", link: "#Development" },
+			{ label: "Mobile Design", link: "#Mobile" },
+			{ label: "UI/UX Design", link: "#UX" },
+			{ label: "Branding Design", link: "#Branding" },
+		],
+	},
+	{
+		title: "Portfolio",
+		links: [
+			{ label: "Corporate Websites", link: "#Corporate" },
+			{ label: "E-commerce", link: "#commerce" },
+			{ label: "Mobile Apps", link: "#Apps" },
+			{ label: "Landing Pages", link: "#Landing" },
+			{ label: "UI/UX Projects", link: "#Projects" },
+		],
+	},
+	{
+		title: "Contact Us",
+		links: [
+			{ label: "Information", link: "#Information" },
+			{ label: "Request a Quote", link: "#Quote" },
+			{ label: "Consultation", link: "#Consultation" },
+			{ label: "Help Center", link: "#Help" },
+			{ label: "T's and C's", link: "#Terms" },
+		],
+	},
+];

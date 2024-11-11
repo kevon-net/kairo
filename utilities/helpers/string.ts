@@ -1,4 +1,4 @@
-export const getStrength = (password: string, requirements: { re: RegExp; label: string }[]) => {
+export const getPasswordStrength = (password: string, requirements: { re: RegExp; label: string }[]) => {
 	let multiplier = password.length >= 8 ? 0 : 1;
 
 	requirements.forEach((requirement) => {

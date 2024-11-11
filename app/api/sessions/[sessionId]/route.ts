@@ -1,27 +1,21 @@
 import prisma from "@/libraries/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
-import { SessionCreate, SessionUpdate } from "@/types/models/session";
+import { SessionCreate } from "@/types/models/session";
 import { cookies } from "next/headers";
 import { cookieName } from "@/data/constants";
-import { StatusSession } from "@prisma/client";
+import { Status } from "@prisma/client";
+import { Session } from "@/types/auth";
 
-export async function GET(request: NextRequest, { params }: { params: { sessionToken: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {
-		const session = await auth();
-
-		if (!session) {
-			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
-		}
-
-		const sessionRecord = await prisma.session.findUnique({ where: { sessionToken: params.sessionToken } });
+		const sessionRecord = await prisma.session.findUnique({ where: { id: params.sessionId } });
 
 		if (!sessionRecord) {
 			return NextResponse.json({ error: "Session not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		if (sessionRecord.status == StatusSession.INACTIVE) {
-			// await prisma.session.delete({ where: { sessionToken: params.sessionToken } });
+		if (sessionRecord.status == Status.INACTIVE) {
+			await prisma.session.delete({ where: { id: params.sessionId } });
 
 			return NextResponse.json(
 				{ error: "Session is no longer active" },
@@ -43,7 +37,7 @@ export async function POST(request: NextRequest) {
 	try {
 		const session: Omit<SessionCreate, "user"> & { userId: string } = await request.json();
 
-		const sessionRecord = await prisma.session.findUnique({ where: { sessionToken: session.sessionToken } });
+		const sessionRecord = await prisma.session.findUnique({ where: { id: session.id } });
 
 		if (sessionRecord) {
 			return NextResponse.json(
@@ -64,17 +58,45 @@ export async function POST(request: NextRequest) {
 	}
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { sessionToken: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {
-		const sessionBody: SessionUpdate = await request.json();
+		const body: { session: Session; options: { create: boolean } } = await request.json();
 
-		const sessionRecord = await prisma.session.findUnique({ where: { sessionToken: params.sessionToken } });
+		const result = await prisma.$transaction(async () => {
+			const deleteExpiredSessions = await prisma.session.deleteMany({
+				where: { userId: body.session.user.id, expiresAt: { lt: new Date(Date.now()) } },
+			});
 
-		if (!sessionRecord) {
+			const sessionRecord = await prisma.session.findUnique({ where: { id: params.sessionId } });
+
+			return { deleteExpiredSessions, sessionRecord };
+		});
+
+		if (!result.sessionRecord) {
+			if (body.options.create) {
+				await prisma.session.create({
+					data: {
+						id: body.session.id,
+						expiresAt: body.session.expires,
+						ip: body.session.ip,
+						city: body.session.city,
+						country: body.session.country,
+						loc: body.session.loc,
+						os: body.session.os,
+						userId: body.session.user.id,
+					},
+				});
+
+				return NextResponse.json(
+					{ error: "New session created" },
+					{ status: 200, statusText: "Session Created" }
+				);
+			}
+
 			return NextResponse.json({ error: "Session not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		await prisma.session.update({ where: { sessionToken: params.sessionToken }, data: sessionBody });
+		await prisma.session.update({ where: { id: params.sessionId }, data: { expiresAt: body.session.expires } });
 
 		return NextResponse.json(
 			{ message: "Your session has been updated" },
@@ -86,23 +108,17 @@ export async function PUT(request: NextRequest, { params }: { params: { sessionT
 	}
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { sessionToken: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {
-		const session = await auth();
-
-		if (!session) {
-			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
-		}
-
-		const sessionRecord = await prisma.session.findUnique({ where: { sessionToken: params.sessionToken } });
+		const sessionRecord = await prisma.session.findUnique({ where: { id: params.sessionId } });
 
 		if (!sessionRecord) {
 			return NextResponse.json({ error: "Session not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		await prisma.session.delete({ where: { sessionToken: params.sessionToken } });
+		await prisma.session.delete({ where: { id: params.sessionId } });
 
-		cookies().delete(cookieName.sessionJti);
+		cookies().delete(cookieName.session);
 
 		return NextResponse.json(
 			{ message: "Your session has been deleted" },

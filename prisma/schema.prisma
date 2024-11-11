@@ -19,244 +19,199 @@ datasource db {
   // directUrl = env("NEXT_DIRECT_URL") // uses a direct connection
 }
 
-enum UserRole {
+// enums
+
+enum Role {
   USER
-  ADMINISTRATOR
-  DEVELOPER
+  ADMIN
+  DEV
 }
 
-enum StatusUser {
+enum Status {
   ACTIVE
   INACTIVE
-}
-
-enum StatusPost {
   DRAFT
   PUBLISHED
-  INACTIVE
 }
 
-model User {
-  id String @id @default(cuid())
+enum Type {
+  JWT
+  OTP
+}
 
-  email         String   @unique
-  verified      Boolean  @default(false)
-  password      String?
-  name          String
-  image         String?
-  emailVerified Boolean? @map(name: "email_verified")
+enum SubType {
+  // JWT
+  PASSWORD_RESET
+  SSO
+
+  // OTP
+  CONFIRM_EMAIL
+  TWO_FACTOR_AUTH
+}
+
+enum Provider {
+  CREDENTIALS
+  GOOGLE
+}
+
+// models
+
+// auth models
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String?
+  verified Boolean @default(false)
+
+  role    Role     @default(USER)
+  status  Status   @default(ACTIVE)
+  profile Profile?
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
-  accounts      Account[]
-  sessions      Session[]
-  authenticator Authenticator[] // Optional for WebAuthn support
-  role          UserRole        @default(USER)
-  status        StatusUser      @default(ACTIVE)
-  posts         Post[]
-  otps          Otp[]
-  otls          Otl[]
-  profile       Profile?
+  accounts  Account[]
+  sessions  Session[]
+  tokens    Token[]
+  addresses Address[]
+  posts     Post[]
 
   @@map("users")
 }
 
-model Profile {
-  id String @unique
+model Account {
+  id                String   @id @default(cuid())
+  refreshToken      String?  @map(name: "refresh_token")
+  accessToken       String?  @map(name: "access_token")
+  providerName      Provider @map(name: "provider_name")
+  providerAccountId String   @map(name: "provider_account_id")
+  expiresAt         DateTime @map(name: "expires_at")
 
-  firstName String? @map(name: "first_name")
-  lastName  String? @map(name: "last_name")
-  bio       String?
-  address   String?
-  phone     String?
-  city      String?
-  state     String?
-  country   String?
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@unique([providerName, providerAccountId])
+  @@map("accounts")
+}
+
+model Token {
+  id        String   @id @default(cuid())
+  token     String
+  type      Type
+  subType   SubType  @map(name: "sub_type")
+  expiresAt DateTime @map(name: "expires_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@unique([type, subType, userId])
+  @@map(name: "tokens")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  ip        String
+  os        String?
+  city      String?
+  country   String?
+  loc       String?
+  status    Status   @default(ACTIVE)
+  expiresAt DateTime @map(name: "expires_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@map("sessions")
+}
+
+// non-auth models
+
+model Profile {
+  id     String  @id @default(cuid())
+  name   String?
+  bio    String?
+  avatar String?
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique @map("user_id")
 
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
   @@map("profiles")
 }
 
-// app models
+model Address {
+  id       String  @id @default(cuid())
+  title    String?
+  phone    String?
+  province String?
+  state    String?
+  city     String
+  country  String
 
-model Post {
-  id String @id @default(cuid())
-
-  title         String
-  content       String
-  status        StatusPost @default(DRAFT)
-  allowComments Boolean    @default(true) @map(name: "allow_comments")
-  anonymous     Boolean    @default(false)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
 
+  @@map("addresses")
+}
+
+model Post {
+  id            String  @id @default(cuid())
+  title         String
+  content       String
+  status        Status  @default(DRAFT)
+  allowComments Boolean @default(true) @map(name: "allow_comments")
+  anonymous     Boolean @default(false)
+
   user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?   @unique @map("user_id")
+  userId     String?   @map("user_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   categoryId String?   @map("category_id")
   tags       Tag[]
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   @@unique([userId, title])
   @@map(name: "posts")
 }
 
 model Category {
-  id String @id @default(cuid())
-
+  id    String @id @default(cuid())
   title String
+
+  posts Post[]
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  posts Post[]
 
   @@unique([title])
   @@map(name: "categories")
 }
 
 model Tag {
-  id String @id @default(cuid())
-
-  title String @unique
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  id    String @id @default(cuid())
+  title String
 
   posts Post[]
 
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@unique([title])
   @@map(name: "tags")
-}
-
-// auth models
-
-enum OtpType {
-  EMAIL_CONFIRMATION
-  TWO_FACTOR_AUTHENTICATION
-}
-
-model Otp {
-  id String @id @default(cuid())
-
-  type      OtpType
-  otp       String
-  expiresAt DateTime @updatedAt @map(name: "expires_at")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @map("user_id")
-
-  @@unique([userId, type])
-  @@map(name: "otps")
-}
-
-enum OtlType {
-  PASSWORD_RESET
-}
-
-model Otl {
-  id String @id @default(cuid())
-
-  type      OtlType
-  otl       String
-  expiresAt DateTime @updatedAt @map(name: "expires_at")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @map("user_id")
-
-  @@unique([userId, type])
-  @@map(name: "otls")
-}
-
-// auth.js models
-
-model Account {
-  type              String
-  provider          String
-  providerAccountId String  @map(name: "provider_account_id")
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @map("user_id")
-
-  @@id([provider, providerAccountId])
-  @@map("accounts")
-}
-
-enum StatusSession {
-  ACTIVE
-  INACTIVE
-}
-
-model Session {
-  sessionToken String        @unique @map(name: "session_token")
-  expires      DateTime
-  ip           String?
-  city         String?
-  region       String?
-  country      String?
-  loc          String?
-  timezone     String?
-  os           String?
-  status       StatusSession @default(ACTIVE)
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-
-  @@map("sessions")
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  @@id([identifier, token])
-  @@map("verification_tokens")
-}
-
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique @map(name: "credential_id")
-  providerAccountId    String  @map(name: "provider_account_id")
-  credentialPublicKey  String  @map(name: "credential_public_key")
-  counter              Int
-  credentialDeviceType String  @map(name: "credential_device_type")
-  credentialBackedUp   Boolean @map(name: "credential_backed_up")
-  transports           String?
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map(name: "user_id")
-
-  @@id([userId, credentialID])
-  @@map("authenticators")
 }

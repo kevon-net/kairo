@@ -2,19 +2,18 @@ import prisma from "@/libraries/prisma";
 import { segmentFullName } from "@/utilities/formatters/string";
 import { generateId } from "@/utilities/generators/id";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
 import { UserCreate, UserGet, UserUpdate } from "@/types/models/user";
-import { OtlType } from "@prisma/client";
-import { generateToken } from "@/utilities/generators/token";
 import { baseUrl } from "@/data/constants";
 import { emailCreatePasswordForgot } from "@/libraries/wrappers/email/send/auth/password";
+import { getSession } from "@/utilities/helpers/session";
+import { SubType, Type } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
 	try {
 		const user: UserCreate = await request.json();
 
-		const userRecord = await prisma.user.findUnique({ where: { email: user.email } });
+		const userRecord = await prisma.user.findUnique({ where: { email: user.email }, include: { profile: true } });
 
 		if (userRecord) {
 			return NextResponse.json(
@@ -23,22 +22,7 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const createUser = await prisma.user.create({
-			data: {
-				id: generateId(),
-				name: user.name,
-				email: user.email,
-				profile: !user.name
-					? undefined
-					: {
-							create: {
-								id: generateId(),
-								firstName: segmentFullName(user.name).first,
-								lastName: segmentFullName(user.name).last,
-							},
-					  },
-			},
-		});
+		const createUser = await prisma.user.create({ data: { id: generateId(), ...user } });
 
 		return NextResponse.json(
 			{ error: "User created successfully", user: createUser },
@@ -52,19 +36,19 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
 	try {
-		const session = await auth();
-
-		if (!session) {
-			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
-		}
-
 		const {
 			user,
 			options,
 		}: {
 			user: UserUpdate;
-			options: { name?: boolean; password?: { update?: { new: string }; forgot?: "update" } };
+			options: { password?: { update?: { newPassword: string }; forgot?: "update" } };
 		} = await request.json();
+
+		const session = await getSession();
+
+		if (!session) {
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+		}
 
 		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id } });
 
@@ -74,26 +58,6 @@ export async function PUT(request: NextRequest) {
 
 		if (!userRecord.verified) {
 			return NextResponse.json({ error: "User not verified" }, { status: 403, statusText: "Not Veried" });
-		}
-
-		if (options.name) {
-			await prisma.user.update({
-				where: { id: session.user.id },
-				data: {
-					name: user.name,
-					profile: {
-						update: {
-							firstName: segmentFullName(user.name as string).first,
-							lastName: segmentFullName(user.name as string).last,
-						},
-					},
-				},
-			});
-
-			return NextResponse.json(
-				{ message: "User name has been updated" },
-				{ status: 200, statusText: "User Updated" }
-			);
 		}
 
 		if (options.password?.update) {
@@ -108,9 +72,10 @@ export async function PUT(request: NextRequest) {
 				);
 			}
 
-			session.withPassword = true;
+			// // get signin method boolean
+			// session.withPassword = true;
 
-			const passwordHash = await hashValue(options.password.update.new);
+			const passwordHash = await hashValue(options.password.update.newPassword);
 
 			await prisma.user.update({ where: { id: session.user.id }, data: { password: passwordHash } });
 
@@ -121,8 +86,10 @@ export async function PUT(request: NextRequest) {
 		}
 
 		if (options.password?.forgot) {
-			const otlRecord = await prisma.otl.findUnique({
-				where: { userId_type: { userId: userRecord.id, type: OtlType.PASSWORD_RESET } },
+			const otlRecord = await prisma.token.findUnique({
+				where: {
+					type_subType_userId: { type: Type.JWT, subType: SubType.PASSWORD_RESET, userId: userRecord.id },
+				},
 			});
 
 			const now = new Date();
@@ -139,43 +106,45 @@ export async function PUT(request: NextRequest) {
 
 			otlRecord &&
 				expired &&
-				(await prisma.otl.delete({
-					where: { userId_type: { userId: userRecord.id, type: OtlType.PASSWORD_RESET } },
+				(await prisma.token.delete({
+					where: {
+						type_subType_userId: { type: Type.JWT, subType: SubType.PASSWORD_RESET, userId: userRecord.id },
+					},
 				}));
 
-			const token = await generateToken(
-				{
-					id: userRecord.id,
-					email: userRecord.email,
-					password: userRecord.password || process.env.AUTH_SECRET!,
-				},
-				5
-			);
+			// const token = await generateToken(
+			// 	{
+			// 		id: userRecord.id,
+			// 		email: userRecord.email,
+			// 		password: userRecord.password || process.env.AUTH_SECRET!,
+			// 	},
+			// 	5
+			// );
 
-			const otlValue = `${baseUrl}/auth/password/reset/${userRecord.id}/${token}`;
+			// const otlValue = `${baseUrl}/auth/password/reset/${userRecord.id}/${token}`;
 
-			const otlHash = await hashValue(otlValue);
+			// const otlHash = await hashValue(otlValue);
 
-			await prisma.user.update({
-				where: { email: userRecord.email },
-				data: {
-					otls: {
-						create: [
-							{
-								id: generateId(),
-								type: OtlType.PASSWORD_RESET,
-								otl: otlHash!,
-								expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-							},
-						],
-					},
-				},
-			});
+			// await prisma.user.update({
+			// 	where: { email: userRecord.email },
+			// 	data: {
+			// 		otls: {
+			// 			create: [
+			// 				{
+			// 					id: generateId(),
+			// 					type: OtlType.PASSWORD_RESET,
+			// 					otl: otlHash!,
+			// 					expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+			// 				},
+			// 			],
+			// 		},
+			// 	},
+			// });
 
 			return NextResponse.json(
 				{
 					message: "An OTL has been sent",
-					resend: await emailCreatePasswordForgot(otlValue, userRecord.email),
+					// resend: await emailCreatePasswordForgot(otlValue, userRecord.email),
 				},
 				{ status: 200, statusText: "OTL Sent" }
 			);
@@ -195,10 +164,10 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
 	try {
-		const session = await auth();
+		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "You must be signed in" }, { status: 401, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
 		}
 
 		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id } });

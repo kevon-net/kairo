@@ -1,5 +1,5 @@
 import IconNotification from "@/components/common/icons/notification";
-import { updateAccountNotifications } from "@/handlers/request/database/notifications";
+// import { updateAccountNotifications } from "@/handlers/request/database/notifications";
 import { NotificationVariant } from "@/types/enums";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
@@ -19,30 +19,30 @@ export const useFormUserAccountNotifications = () => {
 			if (form.isValid()) {
 				setSending(true);
 
-				const response = await updateAccountNotifications(form.values);
+				// const response = await updateAccountNotifications(form.values);
 
-				const result = await response.json();
+				// const result = await response.json();
 
-				if (!result) {
-					notifications.show({
-						id: "notifications-update-failed-no-response",
-						icon: IconNotification({ variant: NotificationVariant.FAILED }),
-						title: "Server Unavailable",
-						message: `There was no response from the server.`,
-						variant: "failed",
-					});
-				} else {
-					notifications.show({
-						id: "notifications-update-success",
-						withCloseButton: false,
-						icon: IconNotification({ variant: NotificationVariant.SUCCESS }),
-						title: "Password Changed",
-						message: `You have successfully cahnged your password.`,
-						variant: "success",
-					});
+				// if (!result) {
+				// 	notifications.show({
+				// 		id: "notifications-update-failed-no-response",
+				// 		icon: IconNotification({ variant: NotificationVariant.FAILED }),
+				// 		title: "Server Unavailable",
+				// 		message: `There was no response from the server.`,
+				// 		variant: "failed",
+				// 	});
+				// } else {
+				// 	notifications.show({
+				// 		id: "notifications-update-success",
+				// 		withCloseButton: false,
+				// 		icon: IconNotification({ variant: NotificationVariant.SUCCESS }),
+				// 		title: "Password Changed",
+				// 		message: `You have successfully cahnged your password.`,
+				// 		variant: "success",
+				// 	});
 
-					form.reset();
-				}
+				// 	form.reset();
+				// }
 			}
 		} catch (error) {
 			notifications.show({

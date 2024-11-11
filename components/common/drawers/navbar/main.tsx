@@ -2,22 +2,20 @@
 
 import React from "react";
 
-import { usePathname } from "next/navigation";
-
 import { Burger, Button, Drawer, Group, NavLink, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import ActionIconTheme from "@/components/common/buttons/theme";
 import LayoutBrand from "@/components/layout/brand";
+import { SignIn as FragmentSignIn } from "../../fragments/auth";
 
 import classes from "./main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/hooks/session";
 
 export default function Main({ props }: { props: typeMenuNavbar[] }) {
 	const [opened, { toggle, close }] = useDisclosure(false);
-	const pathname = usePathname();
-	const { data: session } = useSession();
+	const { session, pathname } = useSession();
 
 	const navMobile = props.map((link) => {
 		const subLinks =
@@ -85,9 +83,11 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 
 					<Stack gap={"xs"} px={"xs"}>
 						{!session && (
-							<Button size="xs" variant="light">
-								Log In
-							</Button>
+							<FragmentSignIn>
+								<Button size="xs" variant="light">
+									Log In
+								</Button>
+							</FragmentSignIn>
 						)}
 
 						<Group gap={"xs"} grow preventGrowOverflow={false}>

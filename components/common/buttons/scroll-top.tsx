@@ -1,3 +1,5 @@
+"use client";
+
 import { iconStrokeWidth } from "@/data/constants";
 import { ActionIcon } from "@mantine/core";
 import { IconArrowUp } from "@tabler/icons-react";

@@ -11,21 +11,18 @@ import DrawerNavbarMain from "@/components/common/drawers/navbar/main";
 import MenuAvatar from "@/components/common/menus/avatar";
 import MenuNavbar from "@/components/common/menus/navbar";
 import LayoutBrand from "../brand";
+import { SignIn as FragmentSignIn } from "@/components/common/fragments/auth";
 
 import sample from "@/data/sample";
 
-import { signIn } from "@/handlers/event/auth";
-import { useSession } from "next-auth/react";
 import links from "@/data/links";
 import classes from "./main.module.scss";
-import { usePathname } from "next/navigation";
 import { IconChevronDown } from "@tabler/icons-react";
 import { iconStrokeWidth } from "@/data/constants";
+import { useSession } from "@/hooks/session";
 
 export default function Main() {
-	const { data: session } = useSession();
-
-	const pathname = usePathname();
+	const { session, pathname } = useSession();
 
 	const navLinks = links.navbar.map((link) => (
 		<MenuNavbar key={link.link} subLinks={link.subLinks}>
@@ -69,10 +66,12 @@ export default function Main() {
 				</Group>
 
 				<Group visibleFrom="sm" gap={"xs"}>
-					{!session?.user ? (
-						<Button size="xs" variant="light" onClick={signIn}>
-							Log In
-						</Button>
+					{!session ? (
+						<FragmentSignIn>
+							<Button size="xs" variant="light">
+								Log In
+							</Button>
+						</FragmentSignIn>
 					) : (
 						<MenuAvatar />
 					)}

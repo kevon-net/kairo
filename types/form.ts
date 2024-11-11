@@ -12,14 +12,8 @@ export interface PasswordReset {
 }
 
 export interface SignUp extends PasswordReset {
-	name: { first: string; last: string };
+	name: string;
 	email: string;
-}
-
-export interface SignIn {
-	email: string;
-	password: string;
-	remember: false;
 }
 
 export interface Profile {

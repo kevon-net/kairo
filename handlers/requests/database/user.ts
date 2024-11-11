@@ -1,20 +1,15 @@
-import { apiUrl } from "@/data/constants";
-import { authenticateHeaders } from "@/libraries/wrappers/request";
+import { apiUrl, headers } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
 import { UserCreate, UserGet, UserUpdate } from "@/types/models/user";
 
 const baseRequestUrl = `${apiUrl}/user`;
-const headers = {
-	"Content-Type": "application/json",
-	Accept: "application/json",
-};
 
 export const userCreate = async (user: UserCreate) => {
 	try {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.POST,
 			credentials: "include",
-			headers: await authenticateHeaders(headers),
+			headers: headers.withBody,
 			body: JSON.stringify(user),
 		});
 
@@ -35,7 +30,7 @@ export const userUpdate = async (
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.PUT,
 			credentials: "include",
-			headers: await authenticateHeaders(headers),
+			headers: headers.withBody,
 			body: JSON.stringify({ user, options }),
 		});
 
@@ -53,7 +48,7 @@ export const userDelete = async (user: UserGet) => {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.DELETE,
 			credentials: "include",
-			headers: await authenticateHeaders(headers),
+			headers: headers.withBody,
 			body: JSON.stringify(user),
 		});
 

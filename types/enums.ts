@@ -1,29 +1,33 @@
 export enum TimerDirection {
 	UP = "up",
-	DOWN = "down"
+	DOWN = "down",
 }
 
 export enum SortOrder {
 	ASCENDING = "ASCENDING",
 	DESCENDING = "DESCENDING",
-	DEFAULT = "DEFAULT"
+	DEFAULT = "DEFAULT",
 }
 
 export enum Request {
 	GET = "GET",
 	POST = "POST",
 	PUT = "PUT",
-	DELETE = "DELETE"
+	DELETE = "DELETE",
 }
 
 export enum HashingAlgorithm {
 	BCRYPT = "bcrypt",
 	SHA256 = "sha256",
-	SHA512 = "sha512"
+	SHA512 = "sha512",
+}
+
+export enum JwtAlgorithm {
+	HS256 = "HS256",
 }
 
 export enum NotificationVariant {
 	SUCCESS = "success",
 	WARNING = "warning",
-	FAILED = "failed"
+	FAILED = "failed",
 }

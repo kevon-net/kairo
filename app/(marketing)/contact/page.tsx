@@ -10,15 +10,13 @@ import {
 	IconBrandLinkedin,
 	IconBrandX,
 	IconMail,
-	IconPhone
+	IconPhone,
 } from "@tabler/icons-react";
 
 import LayoutPage from "@/components/layout/page";
 import LayoutSection from "@/components/layout/section";
 import FormContact from "@/components/form/contact";
 import AccordionFaq from "@/components/common/accordions/faq";
-
-import TemplateEmailContact from "@/components/email/contact";
 
 import appData from "@/data/app";
 import { iconStrokeWidth } from "@/data/constants";
@@ -28,10 +26,6 @@ export const metadata: Metadata = { title: "Contact" };
 export default async function Contact() {
 	return (
 		<LayoutPage>
-			{/* <TemplateEmailContact /> */}
-
-			{/* <LayoutSection padded containerized={"responsive"}>Contact page</LayoutSection> */}
-
 			<LayoutSection id={"page-contact"} padded>
 				<Stack gap={64}>
 					<Stack>
@@ -73,7 +67,7 @@ export default async function Contact() {
 											key={item.link}
 											w={{
 												base: "66%",
-												xs: "fit-content"
+												xs: "fit-content",
 											}}
 										>
 											<ThemeIcon size={40} variant="transparent">
@@ -90,7 +84,7 @@ export default async function Contact() {
 													inherit
 													fz={{
 														base: "xs",
-														lg: "sm"
+														lg: "sm",
 													}}
 												>
 													Contact:
@@ -100,7 +94,7 @@ export default async function Contact() {
 													inherit
 													fz={{
 														base: "xs",
-														lg: "sm"
+														lg: "sm",
 													}}
 													fw={500}
 												>
@@ -148,34 +142,34 @@ export const dataContact = [
 	{
 		icon: IconMail,
 		link: `mailto:${email}`,
-		label: email
+		label: email,
 	},
 	{
 		icon: IconPhone,
 		link: `tel:${phone}`,
-		label: phone
-	}
+		label: phone,
+	},
 ];
 
 export const dataSocials = [
 	{
 		icon: IconBrandFacebook,
 		link: facebook.link,
-		label: facebook.platform
+		label: facebook.platform,
 	},
 	{
 		icon: IconBrandX,
 		link: twitter.link,
-		label: twitter.platform
+		label: twitter.platform,
 	},
 	{
 		icon: IconBrandInstagram,
 		link: instagram.link,
-		label: instagram.platform
+		label: instagram.platform,
 	},
 	{
 		icon: IconBrandLinkedin,
 		link: linkedin.link,
-		label: linkedin.platform
-	}
+		label: linkedin.platform,
+	},
 ];

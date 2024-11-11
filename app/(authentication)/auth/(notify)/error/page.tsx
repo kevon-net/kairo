@@ -7,7 +7,7 @@ import { Button, Flex, Group, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/components/layout/page";
 import LayoutSection from "@/components/layout/section";
-import ButtonSignIn from "@/components/common/buttons/sign-in";
+import { SignIn as FragmentSignIn } from "@/components/common/fragments/auth";
 
 import { IconArrowRight } from "@tabler/icons-react";
 import { iconStrokeWidth } from "@/data/constants";
@@ -33,7 +33,9 @@ export default async function AuthenticationError() {
 					</Stack>
 
 					<Group>
-						<ButtonSignIn>Try Again</ButtonSignIn>
+						<FragmentSignIn>
+							<Button>Try Again</Button>
+						</FragmentSignIn>
 
 						<Button
 							component={Link}

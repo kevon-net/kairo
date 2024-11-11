@@ -25,10 +25,12 @@ export const useFormUserProfile = () => {
 		},
 	});
 
+	if (!session) return;
+
 	const parseValues = () => {
 		return {
 			name: `${form.values.name}`,
-			phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
+			// phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 		};
 	};
 

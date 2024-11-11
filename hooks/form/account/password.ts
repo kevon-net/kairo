@@ -44,10 +44,7 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 			if (form.isValid()) {
 				setSending(true);
 
-				const response = await userUpdate(
-					{ password: parseValues().current },
-					{ password: { update: { new: parseValues().new } } }
-				);
+				const response = await userUpdate({ password: parseValues().new }, { password: parseValues().current });
 
 				if (!response) throw new Error("No response from server");
 

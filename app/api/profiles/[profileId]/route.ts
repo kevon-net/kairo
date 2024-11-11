@@ -5,11 +5,17 @@ import { getSession } from "@/utilities/helpers/session";
 
 export async function POST(request: NextRequest) {
 	try {
-		const profile: Omit<ProfileCreate, "user"> & { userId: string } = await request.json();
+		const session = await getSession();
 
-		const userRecord = await prisma.user.findUnique({ where: { id: profile.userId }, include: { profile: true } });
+		if (!session) {
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+		}
 
-		if (userRecord?.profile) {
+		const profile: ProfileCreate = await request.json();
+
+		const profileRecord = await prisma.profile.findUnique({ where: { userId: session.user.id } });
+
+		if (profileRecord) {
 			return NextResponse.json(
 				{ error: "Profile already exists" },
 				{ status: 409, statusText: "Already Exists" }
@@ -28,7 +34,7 @@ export async function POST(request: NextRequest) {
 	}
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(request: NextRequest, { params }: { params: { profileId: string } }) {
 	try {
 		const session = await getSession();
 
@@ -36,15 +42,15 @@ export async function PUT(request: NextRequest) {
 			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
 		}
 
-		const profile: ProfileUpdate = await request.json();
+		const profileRecord = await prisma.profile.findUnique({ where: { id: params.profileId } });
 
-		const userRecord = await prisma.user.findUnique({ where: { id: session.user.id }, include: { profile: true } });
-
-		if (!userRecord?.profile) {
+		if (!profileRecord) {
 			return NextResponse.json({ error: "Profile not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		await prisma.profile.update({ where: { userId: session.user.id }, data: profile });
+		const profile: ProfileUpdate = await request.json();
+
+		await prisma.profile.update({ where: { id: params.profileId }, data: profile });
 
 		// // update session on server
 		// session.user.name = profile.name;

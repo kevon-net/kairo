@@ -1,13 +1,12 @@
 import { Request as EnumRequest } from "@/types/enums";
 import { apiUrl, headers } from "@/data/constants";
-import { SessionCreate } from "@/types/models/session";
-import { Session } from "@/types/auth";
+import { SessionCreate, SessionUpdate } from "@/types/models/session";
 
 const baseRequestUrl = `${apiUrl}/sessions`;
 
 export const sessionsGet = async () => {
 	try {
-		const request = new Request(`${apiUrl}/sessions`, {
+		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.GET,
 			credentials: "include",
 			headers: headers.withoutBody,
@@ -26,7 +25,7 @@ export const sessionsGet = async () => {
 
 export const sessionGet = async (sessionToken: string) => {
 	try {
-		const request = new Request(`${apiUrl}/sessions/${sessionToken}`, {
+		const request = new Request(`${baseRequestUrl}/${sessionToken}`, {
 			method: EnumRequest.GET,
 			credentials: "include",
 			headers: headers.withoutBody,
@@ -43,7 +42,7 @@ export const sessionGet = async (sessionToken: string) => {
 	}
 };
 
-export const sessionCreate = async (session: Omit<SessionCreate, "user"> & { userId: string }) => {
+export const sessionCreate = async (session: SessionCreate) => {
 	try {
 		const request = new Request(`${baseRequestUrl}/create`, {
 			method: EnumRequest.POST,
@@ -61,7 +60,7 @@ export const sessionCreate = async (session: Omit<SessionCreate, "user"> & { use
 	}
 };
 
-export const sessionUpdate = async (session: Session, options: { create: boolean }) => {
+export const sessionUpdate = async (session: SessionUpdate, options?: { create?: boolean }) => {
 	try {
 		const request = new Request(`${baseRequestUrl}/${session.id}`, {
 			method: EnumRequest.PUT,
@@ -79,9 +78,9 @@ export const sessionUpdate = async (session: Session, options: { create: boolean
 	}
 };
 
-export const sessionDelete = async (sessionToken: string) => {
+export const sessionDelete = async (sessionId: string) => {
 	try {
-		const request = new Request(`${baseRequestUrl}/${sessionToken}`, {
+		const request = new Request(`${baseRequestUrl}/${sessionId}`, {
 			method: EnumRequest.DELETE,
 			credentials: "include",
 			headers: headers.withoutBody,

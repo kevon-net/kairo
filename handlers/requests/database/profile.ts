@@ -2,11 +2,11 @@ import { Request as EnumRequest } from "@/types/enums";
 import { apiUrl, headers } from "@/data/constants";
 import { ProfileCreate, ProfileUpdate } from "@/types/models/profile";
 
-const baseRequestUrl = `${apiUrl}/profile`;
+const baseRequestUrl = `${apiUrl}/profiles`;
 
-export const profileCreate = async (profile: Omit<ProfileCreate, "user"> & { userId: string }) => {
+export const profileCreate = async (profile: ProfileCreate) => {
 	try {
-		const request = new Request(baseRequestUrl, {
+		const request = new Request(`${baseRequestUrl}/create`, {
 			method: EnumRequest.POST,
 			credentials: "include",
 			headers: headers.withBody,
@@ -24,7 +24,7 @@ export const profileCreate = async (profile: Omit<ProfileCreate, "user"> & { use
 
 export const profileUpdate = async (profile: ProfileUpdate) => {
 	try {
-		const request = new Request(baseRequestUrl, {
+		const request = new Request(`${baseRequestUrl}/${profile.id}`, {
 			method: EnumRequest.PUT,
 			credentials: "include",
 			headers: headers.withBody,

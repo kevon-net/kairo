@@ -1,10 +1,11 @@
 import prisma from "@/libraries/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { SessionCreate } from "@/types/models/session";
+import { SessionCreate, SessionUpdate } from "@/types/models/session";
 import { cookies } from "next/headers";
 import { cookieName } from "@/data/constants";
 import { Status } from "@prisma/client";
 import { Session } from "@/types/auth";
+import { getSession } from "@/utilities/helpers/session";
 
 export async function GET(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {
@@ -18,8 +19,8 @@ export async function GET(request: NextRequest, { params }: { params: { sessionI
 			await prisma.session.delete({ where: { id: params.sessionId } });
 
 			return NextResponse.json(
-				{ error: "Session is no longer active" },
-				{ status: 401, statusText: "Session Deactivated" }
+				{ error: "The session was deactivated" },
+				{ status: 401, statusText: "Session Inactive" }
 			);
 		}
 
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest, { params }: { params: { sessionI
 
 export async function POST(request: NextRequest) {
 	try {
-		const session: Omit<SessionCreate, "user"> & { userId: string } = await request.json();
+		const session: SessionCreate = await request.json();
 
 		const sessionRecord = await prisma.session.findUnique({ where: { id: session.id } });
 
@@ -60,11 +61,17 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {
-		const body: { session: Session; options: { create: boolean } } = await request.json();
+		const session = await getSession();
+
+		if (!session) {
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+		}
+
+		const body: { session: SessionUpdate; options?: { create?: boolean } } = await request.json();
 
 		const result = await prisma.$transaction(async () => {
 			const deleteExpiredSessions = await prisma.session.deleteMany({
-				where: { userId: body.session.user.id, expiresAt: { lt: new Date(Date.now()) } },
+				where: { userId: session.user.id, expiresAt: { lt: new Date(Date.now()) } },
 			});
 
 			const sessionRecord = await prisma.session.findUnique({ where: { id: params.sessionId } });
@@ -73,17 +80,17 @@ export async function PUT(request: NextRequest, { params }: { params: { sessionI
 		});
 
 		if (!result.sessionRecord) {
-			if (body.options.create) {
+			if (body.options?.create == true) {
 				await prisma.session.create({
 					data: {
-						id: body.session.id,
-						expiresAt: body.session.expires,
-						ip: body.session.ip,
-						city: body.session.city,
-						country: body.session.country,
-						loc: body.session.loc,
-						os: body.session.os,
-						userId: body.session.user.id,
+						id: body.session.id as string,
+						expiresAt: body.session.expiresAt as Date,
+						ip: body.session.ip as string,
+						city: body.session.city as string,
+						country: body.session.country as string,
+						loc: body.session.loc as string,
+						os: body.session.os as string,
+						userId: session.user.id,
 					},
 				});
 
@@ -96,7 +103,7 @@ export async function PUT(request: NextRequest, { params }: { params: { sessionI
 			return NextResponse.json({ error: "Session not found" }, { status: 404, statusText: "Not Found" });
 		}
 
-		await prisma.session.update({ where: { id: params.sessionId }, data: { expiresAt: body.session.expires } });
+		await prisma.session.update({ where: { id: params.sessionId }, data: body.session });
 
 		return NextResponse.json(
 			{ message: "Your session has been updated" },

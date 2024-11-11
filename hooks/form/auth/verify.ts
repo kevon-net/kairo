@@ -3,13 +3,15 @@ import { millToMinSec, MinSec } from "@/utilities/formatters/number";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
 import { verify as handleVerify, verifyResend as handleVerifyResend } from "@/handlers/requests/auth/verify";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
+import { setRedirectUrl } from "@/utilities/helpers/url";
 
 export const useFormAuthVerify = (params: { userId: string }) => {
 	const router = useRouter();
+	const pathname = usePathname();
 
 	const [submitted, setSubmitted] = useState(false);
 	const [requested, setRequested] = useState(false);
@@ -42,8 +44,8 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 				form.reset();
 
 				if (response.ok) {
-					// // redirect to sign in page
-					// setTimeout(async () => await authSignIn(), timeout.redirect);
+					// redirect to sign in
+					setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;
@@ -58,8 +60,8 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 				}
 
 				if (response.statusText === "Already Verified") {
-					// // redirect to sign in page
-					// setTimeout(async () => await authSignIn(), timeout.redirect);
+					// redirect to sign in
+					setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.WARNING }, response, result);
 					return;
@@ -113,8 +115,8 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 			}
 
 			if (response.statusText === "Already Verified") {
-				// // redirect to sign in page
-				// setTimeout(async () => await authSignIn(), timeout.redirect);
+				// redirect to sign in
+				setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
 
 				showNotification({ variant: NotificationVariant.WARNING }, response, result);
 				return;

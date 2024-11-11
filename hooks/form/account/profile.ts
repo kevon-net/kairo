@@ -6,10 +6,15 @@ import { profileUpdate } from "@/handlers/requests/database/profile";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { timeout } from "@/data/constants";
-import { useSession } from "@/hooks/auth";
+import { useSession, useSignOut } from "@/hooks/auth";
+import { useRouter } from "next/navigation";
+import { setRedirectUrl } from "@/utilities/helpers/url";
 
 export const useFormUserProfile = () => {
-	const { session, updateSession } = useSession();
+	const router = useRouter();
+
+	const { session, updateSession, pathname } = useSession();
+	const signOut = useSignOut();
 
 	const [submitted, setSubmitted] = useState(false);
 
@@ -69,16 +74,16 @@ export const useFormUserProfile = () => {
 				}
 
 				if (response.status === 401) {
-					// // redirect to sign in
-					// setTimeout(async () => await authSignIn(), timeout.redirect);
+					// redirect to sign in
+					setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.WARNING }, response, result);
 					return;
 				}
 
 				if (response.status === 404) {
-					// // sign out and redirect to home page
-					// setTimeout(async () => await handleSignOut({ redirectUrl: "/" }), timeout.redirect);
+					// sign out
+					setTimeout(async () => await signOut(), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.FAILED }, response, result);
 					return;

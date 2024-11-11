@@ -6,14 +6,16 @@ import email from "@/utilities/validators/special/email";
 import password from "@/utilities/validators/special/password";
 import text from "@/utilities/validators/special/text";
 import { useForm, UseFormReturnType } from "@mantine/form";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
+import { setRedirectUrl } from "@/utilities/helpers/url";
 
 export const useFormAuthSignUp = () => {
 	const router = useRouter();
+	const pathname = usePathname();
 
 	const [submitted, setSubmitted] = useState(false);
 
@@ -70,10 +72,9 @@ export const useFormAuthSignUp = () => {
 
 				if (response.statusText === "User Exists") {
 					setTimeout(async () => {
-						// check if user is verified
 						if (result.user.verified) {
-							// // redirect to sign in
-							// await authSignIn();
+							// redirect to sign in
+							setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
 						}
 
 						// redirect to verification page

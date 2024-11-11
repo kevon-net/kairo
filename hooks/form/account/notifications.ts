@@ -20,29 +20,7 @@ export const useFormUserAccountNotifications = () => {
 				setSending(true);
 
 				// const response = await updateAccountNotifications(form.values);
-
 				// const result = await response.json();
-
-				// if (!result) {
-				// 	notifications.show({
-				// 		id: "notifications-update-failed-no-response",
-				// 		icon: IconNotification({ variant: NotificationVariant.FAILED }),
-				// 		title: "Server Unavailable",
-				// 		message: `There was no response from the server.`,
-				// 		variant: "failed",
-				// 	});
-				// } else {
-				// 	notifications.show({
-				// 		id: "notifications-update-success",
-				// 		withCloseButton: false,
-				// 		icon: IconNotification({ variant: NotificationVariant.SUCCESS }),
-				// 		title: "Password Changed",
-				// 		message: `You have successfully cahnged your password.`,
-				// 		variant: "success",
-				// 	});
-
-				// 	form.reset();
-				// }
 			}
 		} catch (error) {
 			notifications.show({

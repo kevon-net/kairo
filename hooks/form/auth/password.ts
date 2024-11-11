@@ -10,6 +10,7 @@ import compare from "@/utilities/validators/special/compare";
 import { PasswordForgot as FormAuthPasswordForgot, PasswordReset as FormAuthPasswordReset } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
+import { useSignOut } from "@/hooks/auth";
 
 export const useFormAuthPasswordForgot = () => {
 	const [sending, setSending] = useState(false);
@@ -79,6 +80,8 @@ export const useFormAuthPasswordForgot = () => {
 };
 
 export const useFormAuthPasswordReset = (params: { userId: string; token: string }) => {
+	const signOut = useSignOut();
+
 	const [sending, setSending] = useState(false);
 
 	const form: UseFormReturnType<FormAuthPasswordReset> = useForm({
@@ -110,8 +113,8 @@ export const useFormAuthPasswordReset = (params: { userId: string; token: string
 				form.reset();
 
 				if (response.ok) {
-					// // sign out and redirect to sign in page
-					// setTimeout(async () => await handleSignOut({ redirectUrl: authUrls.signIn }), timeout.redirect);
+					// sign out
+					setTimeout(async () => await signOut(), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;

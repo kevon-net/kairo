@@ -61,17 +61,11 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {
-		const session = await getSession();
-
-		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
-		}
-
-		const body: { session: SessionUpdate; options?: { create?: boolean } } = await request.json();
+		const body: { session: SessionUpdate; options?: { create: boolean; userId: string } } = await request.json();
 
 		const result = await prisma.$transaction(async () => {
 			const deleteExpiredSessions = await prisma.session.deleteMany({
-				where: { userId: session.user.id, expiresAt: { lt: new Date(Date.now()) } },
+				where: { userId: body.options?.userId, expiresAt: { lt: new Date(Date.now()) } },
 			});
 
 			const sessionRecord = await prisma.session.findUnique({ where: { id: params.sessionId } });
@@ -80,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: { params: { sessionI
 		});
 
 		if (!result.sessionRecord) {
-			if (body.options?.create == true) {
+			if (body.options?.create) {
 				await prisma.session.create({
 					data: {
 						id: body.session.id as string,
@@ -90,7 +84,7 @@ export async function PUT(request: NextRequest, { params }: { params: { sessionI
 						country: body.session.country as string,
 						loc: body.session.loc as string,
 						os: body.session.os as string,
-						userId: session.user.id,
+						userId: body.options.userId,
 					},
 				});
 

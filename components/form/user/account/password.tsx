@@ -25,6 +25,8 @@ export default function Password() {
 		</Stack>
 	);
 
+	const keepOn = session?.user.withPassword == true;
+
 	return (
 		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid>
@@ -40,8 +42,9 @@ export default function Password() {
 							desc: "Set a permanent password to login to your account.",
 						})}
 						key={form.key("credentials")}
-						{...form.getInputProps("credentials")}
+						{...form.getInputProps(keepOn ? "" : "credentials")}
 						defaultChecked={session?.user.withPassword}
+						checked={keepOn ? true : undefined}
 					/>
 				</GridCol>
 

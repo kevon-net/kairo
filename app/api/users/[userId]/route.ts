@@ -5,6 +5,10 @@ import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
 import { UserCreate, UserUpdate } from "@/types/models/user";
 import { getSession } from "@/libraries/auth";
 import { SubType, Type } from "@prisma/client";
+import { encrypt } from "@/utilities/helpers/token";
+import { getExpiry } from "@/utilities/helpers/time";
+import { cookies } from "next/headers";
+import { cookieName } from "@/data/constants";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -56,8 +60,7 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 
 		if (options?.password) {
 			const passwordMatch =
-				(!options.password && !userRecord.password) ||
-				(await compareHashes(options.password, userRecord.password));
+				options.password == "null" || (await compareHashes(options.password, userRecord.password));
 
 			if (!passwordMatch) {
 				return NextResponse.json(
@@ -66,7 +69,8 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 				);
 			}
 
-			const passwordSame = await compareHashes(options.password, userRecord.password);
+			const passwordSame =
+				options.password != "null" && (await compareHashes(user.password as string, userRecord.password));
 
 			if (passwordSame) {
 				return NextResponse.json(
@@ -86,8 +90,15 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 			// 	);
 			// }
 
-			// // update session on server
-			// session.withPassword = true;
+			if (!session.user.withPassword) {
+				// update session on server
+				const sessionToken = await encrypt(
+					{ ...session, user: { ...session.user, withPassword: true } },
+					getExpiry(session.user.remember).sec
+				);
+
+				cookies().set(cookieName.session, sessionToken, { expires: new Date(session.expires), httpOnly: true });
+			}
 
 			await prisma.user.update({
 				where: { id: params.userId },

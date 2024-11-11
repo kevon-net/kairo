@@ -9,7 +9,7 @@ import { timeout } from "@/data/constants";
 import { useSession, useSignOut } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
-import { segmentFullName } from "@/utilities/formatters/string";
+import { capitalizeWords, segmentFullName } from "@/utilities/formatters/string";
 
 export const useFormUserProfile = () => {
 	const router = useRouter();
@@ -39,11 +39,9 @@ export const useFormUserProfile = () => {
 		},
 	});
 
-	if (!session) return;
-
 	const parseValues = () => {
 		return {
-			name: `${form.values.name.first.trim()} ${form.values.name.last.trim()}`,
+			name: capitalizeWords(`${form.values.name.first.trim()} ${form.values.name.last.trim()}`),
 			// phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 		};
 	};
@@ -62,7 +60,7 @@ export const useFormUserProfile = () => {
 
 				setSubmitted(true);
 
-				const response = await profileUpdate(parseValues());
+				const response = await profileUpdate({ ...parseValues(), id: session?.user.id });
 
 				if (!response) throw new Error("No response from server");
 
@@ -71,14 +69,14 @@ export const useFormUserProfile = () => {
 				form.reset();
 
 				if (response.ok) {
-					// // Update the session data on the client-side
-					// await updateSession({
-					// 	...session,
-					// 	user: { ...session?.user, name: `${parseValues().firstName} ${parseValues().lastName}` },
-					// });
+					if (session) {
+						// Update the session data on the client-side
+						updateSession({ ...session, user: { ...session.user, ...parseValues() } });
 
-					// refresh the page
-					window.location.reload();
+						// refresh the page
+						window.location.reload();
+					}
+
 					return;
 				}
 

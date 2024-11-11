@@ -60,7 +60,7 @@ export const sessionCreate = async (session: SessionCreate) => {
 	}
 };
 
-export const sessionUpdate = async (session: SessionUpdate, options?: { create?: boolean }) => {
+export const sessionUpdate = async (session: SessionUpdate, options: { create?: boolean; userId: string }) => {
 	try {
 		const request = new Request(`${baseRequestUrl}/${session.id}`, {
 			method: EnumRequest.PUT,

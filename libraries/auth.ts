@@ -8,7 +8,7 @@ import { getExpiry } from "../utilities/helpers/time";
 import { sessionUpdate } from "@/handlers/requests/database/session";
 import { Credentials, Session } from "@/types/auth";
 import { SessionGet } from "@/types/models/session";
-import { UserGet, UserRelations } from "@/types/models/user";
+import { UserGet } from "@/types/models/user";
 import { Provider } from "@prisma/client";
 import { ProfileGet } from "@/types/models/profile";
 
@@ -85,7 +85,19 @@ export const updateSession = async (session: string, response: NextResponse) => 
 	const expiryDifference = expires.getTime() - expiresFormer.getTime();
 
 	if (expiryDifference > expiry / 2) {
-		await sessionUpdate({ id: parsed.id, expiresAt: parsed.expires }, { create: true });
+		await sessionUpdate(
+			{
+				id: parsed.id,
+				ip: parsed.ip,
+				os: parsed.os,
+				city: parsed.city,
+				country: parsed.country,
+				loc: parsed.loc,
+				status: parsed.status,
+				expiresAt: parsed.expires,
+			},
+			{ create: true, userId: parsed.user.id }
+		);
 	}
 
 	return response;

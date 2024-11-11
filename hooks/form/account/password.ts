@@ -41,8 +41,8 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 				setSending(true);
 
 				const response = await userUpdate(
-					{ password: form.values.password.initial.trim() },
-					{ password: form.values.current.trim() }
+					{ password: form.values.password.initial.trim(), id: session?.user.id },
+					{ password: session?.user.withPassword ? form.values.current.trim() : "null" }
 				);
 
 				if (!response) throw new Error("No response from server");
@@ -51,10 +51,10 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 
 				form.reset();
 
-				if (response.ok) {
-					if (!params.credentials) {
-						// // update the session data on the client-side
-						// await updateSession({ ...session, withPassword: true });
+				if (response.ok && session) {
+					if (!session.user.withPassword) {
+						// update the session data on the client-side
+						updateSession({ ...session, user: { ...session.user, withPassword: true } });
 
 						// refresh the page
 						window.location.reload();
@@ -62,7 +62,6 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 						return;
 					}
 
-					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;
 				}
 

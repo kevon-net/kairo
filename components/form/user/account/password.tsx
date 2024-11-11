@@ -14,9 +14,7 @@ import { useSession } from "@/hooks/auth";
 export default function Password() {
 	const { session } = useSession();
 
-	const { form, sending, handleSubmit } = useFormUserAccountPassword({
-		withCredentials: session?.user.withPassword!,
-	});
+	const { form, sending, handleSubmit } = useFormUserAccountPassword({ credentials: session?.user.withPassword! });
 
 	const getLabel = ({ title, desc }: { title: string; desc?: string }) => (
 		<Stack gap={0}>
@@ -41,13 +39,13 @@ export default function Password() {
 							title: "Use Password",
 							desc: "Set a permanent password to login to your account.",
 						})}
-						key={form.key("withPassword")}
-						{...form.getInputProps("withPassword")}
+						key={form.key("credentials")}
+						{...form.getInputProps("credentials")}
 						defaultChecked={session?.user.withPassword}
 					/>
 				</GridCol>
 
-				{form.values.withPassword && (
+				{form.values.credentials && (
 					<>
 						{session?.user.withPassword && (
 							<GridCol span={{ base: 12, sm: 6, md: 12 }}>

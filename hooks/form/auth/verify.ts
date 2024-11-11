@@ -1,6 +1,5 @@
-import { Verify as FormAuthVerify } from "@/types/form";
 import { millToMinSec, MinSec } from "@/utilities/formatters/number";
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { verify as handleVerify, verifyResend as handleVerifyResend } from "@/handlers/requests/auth/verify";
 import { usePathname, useRouter } from "next/navigation";
@@ -17,12 +16,9 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 	const [requested, setRequested] = useState(false);
 	const [time, setTime] = useState<MinSec | null>(null);
 
-	const form: UseFormReturnType<Omit<FormAuthVerify, "userId">> = useForm({
+	const form = useForm({
 		initialValues: { otp: "" },
-
-		validate: {
-			otp: (value) => value.length != 6 && true,
-		},
+		validate: { otp: (value) => value.length != 6 && true },
 	});
 
 	const parseValues = () => {

@@ -1,8 +1,7 @@
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { useState } from "react";
 import password from "@/utilities/validators/special/password";
 import compare from "@/utilities/validators/special/compare";
-import { PasswordReset } from "@/types/form";
 import { userUpdate } from "@/handlers/requests/database/user";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
@@ -11,7 +10,7 @@ import { useSession, useSignOut } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
 
-export const useFormUserAccountPassword = (params: { withCredentials: boolean }) => {
+export const useFormUserAccountPassword = (params: { credentials: boolean }) => {
 	const router = useRouter();
 
 	const { session, updateSession, pathname } = useSession();
@@ -19,15 +18,15 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 
 	const [sending, setSending] = useState(false);
 
-	const form: UseFormReturnType<PasswordReset & { current: string; withPassword: boolean }> = useForm({
+	const form = useForm({
 		initialValues: {
-			password: { initial: "", confirm: "" },
 			current: "",
-			withPassword: params.withCredentials,
+			password: { initial: "", confirm: "" },
+			credentials: params.credentials,
 		},
 
 		validate: {
-			current: (value) => params.withCredentials && password(value, 8, 24),
+			current: (value) => params.credentials && password(value, 8, 24),
 			password: {
 				initial: (value, values) =>
 					value == values.current ? "Current and new passwords cannot be the same" : password(value, 8, 24),
@@ -36,19 +35,15 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 		},
 	});
 
-	const parseValues = () => {
-		return {
-			current: form.values.current,
-			new: form.values.password.initial,
-		};
-	};
-
 	const handleSubmit = async () => {
 		try {
 			if (form.isValid()) {
 				setSending(true);
 
-				const response = await userUpdate({ password: parseValues().new }, { password: parseValues().current });
+				const response = await userUpdate(
+					{ password: form.values.password.initial.trim() },
+					{ password: form.values.current.trim() }
+				);
 
 				if (!response) throw new Error("No response from server");
 
@@ -57,7 +52,7 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 				form.reset();
 
 				if (response.ok) {
-					if (!params.withCredentials) {
+					if (!params.credentials) {
 						// // update the session data on the client-side
 						// await updateSession({ ...session, withPassword: true });
 

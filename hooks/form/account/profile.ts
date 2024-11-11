@@ -9,6 +9,7 @@ import { timeout } from "@/data/constants";
 import { useSession, useSignOut } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
+import { segmentFullName } from "@/utilities/formatters/string";
 
 export const useFormUserProfile = () => {
 	const router = useRouter();
@@ -18,14 +19,22 @@ export const useFormUserProfile = () => {
 
 	const [submitted, setSubmitted] = useState(false);
 
+	const name = session?.user.name;
+
 	const form = useForm({
 		initialValues: {
-			name: session?.user?.name || "",
+			name: {
+				first: !name ? "" : segmentFullName(name).first,
+				last: !name ? "" : segmentFullName(name).last,
+			},
 			phone: "",
 		},
 
 		validate: {
-			name: (value) => (value && value?.trim().length > 0 ? text(value, 2, 255) : "Please fill out this field."),
+			name: {
+				first: (value) => (value?.trim().length > 0 ? text(value, 2, 48) : "Please fill out this field."),
+				last: (value) => (value?.trim().length > 0 ? text(value, 2, 48) : "Please fill out this field."),
+			},
 			phone: (value) => value.trim().length > 0 && phone(value),
 		},
 	});
@@ -34,7 +43,7 @@ export const useFormUserProfile = () => {
 
 	const parseValues = () => {
 		return {
-			name: `${form.values.name}`,
+			name: `${form.values.name.first.trim()} ${form.values.name.last.trim()}`,
 			// phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
 		};
 	};

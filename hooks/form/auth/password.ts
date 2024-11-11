@@ -7,7 +7,7 @@ import { useState } from "react";
 import { authUrls, timeout } from "@/data/constants";
 import password from "@/utilities/validators/special/password";
 import compare from "@/utilities/validators/special/compare";
-import { PasswordForgot as FormAuthPasswordForgot, PasswordReset as FormAuthPasswordReset } from "@/types/form";
+import { PasswordReset as FormAuthPasswordReset } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { useSignOut } from "@/hooks/auth";
@@ -17,14 +17,10 @@ export const useFormAuthPasswordForgot = () => {
 	const [requested, setRequested] = useState(false);
 	const [time, setTime] = useState<MinSec | null>(null);
 
-	const form: UseFormReturnType<FormAuthPasswordForgot> = useForm({
+	const form = useForm({
 		initialValues: { email: "" },
 		validate: { email: (value) => email(value) },
 	});
-
-	const parseValues = () => {
-		return { email: form.values.email.trim().toLowerCase() };
-	};
 
 	const router = useRouter();
 
@@ -34,7 +30,7 @@ export const useFormAuthPasswordForgot = () => {
 				setSending(true);
 				setRequested(true);
 
-				const response = await passwordForgot(parseValues());
+				const response = await passwordForgot({ email: form.values.email.trim().toLowerCase() });
 
 				if (!response) throw new Error("No response from server");
 

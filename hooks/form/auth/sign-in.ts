@@ -1,13 +1,12 @@
 import { getRedirectUrl } from "@/utilities/helpers/url";
 import email from "@/utilities/validators/special/email";
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
 import { useOs } from "@mantine/hooks";
-import { Credentials } from "@/types/auth";
 import { signIn } from "@/handlers/events/auth";
 import { Provider } from "@prisma/client";
 
@@ -17,12 +16,8 @@ export const useFormAuthSignIn = () => {
 
 	const [submitted, setSubmitted] = useState(false);
 
-	const form: UseFormReturnType<Credentials & { remember: false }> = useForm({
-		initialValues: {
-			email: "",
-			password: "",
-			remember: false,
-		},
+	const form = useForm({
+		initialValues: { email: "", password: "", remember: false },
 
 		validate: {
 			email: (value) => email(value.trim()),

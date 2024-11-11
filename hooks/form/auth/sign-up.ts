@@ -1,11 +1,10 @@
 import { signUp as handleSignUp } from "@/handlers/requests/auth/sign-up";
-import { SignUp as FormAuthSignUp } from "@/types/form";
 import { capitalizeWords } from "@/utilities/formatters/string";
 import compare from "@/utilities/validators/special/compare";
 import email from "@/utilities/validators/special/email";
 import password from "@/utilities/validators/special/password";
 import text from "@/utilities/validators/special/text";
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { timeout } from "@/data/constants";
@@ -21,17 +20,17 @@ export const useFormAuthSignUp = () => {
 
 	const form = useForm({
 		initialValues: {
-			name: { first: "", last: "" },
 			email: "",
+			name: { first: "", last: "" },
 			password: { initial: "", confirm: "" },
 		},
 
 		validate: {
+			email: (value) => email(value.trim()),
 			name: {
 				first: (value) => text(value.trim(), 2, 24),
 				last: (value) => text(value.trim(), 2, 24),
 			},
-			email: (value) => email(value.trim()),
 			password: {
 				initial: (value) => password(value.trim(), 8, 24),
 				confirm: (value, values) => compare.string(values.password.initial, value, "Password"),
@@ -43,11 +42,7 @@ export const useFormAuthSignUp = () => {
 		return {
 			name: `${capitalizeWords(form.values.name.first.trim())} ${capitalizeWords(form.values.name.last.trim())}`,
 			email: form.values.email.trim().toLowerCase(),
-			password: {
-				initial: form.values.password.initial,
-				confirm: form.values.password.confirm,
-			},
-			verified: false,
+			password: { initial: form.values.password.initial.trim(), confirm: form.values.password.confirm.trim() },
 		};
 	};
 

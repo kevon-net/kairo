@@ -14,7 +14,9 @@ import { useSession } from "@/hooks/session";
 export default function Password() {
 	const { session } = useSession();
 
-	// const { form, sending, handleSubmit } = useFormUserAccountPassword({ withCredentials: session?.withPassword! });
+	const { form, sending, handleSubmit } = useFormUserAccountPassword({
+		withCredentials: session?.user.withPassword!,
+	});
 
 	const getLabel = ({ title, desc }: { title: string; desc?: string }) => (
 		<Stack gap={0}>
@@ -26,11 +28,7 @@ export default function Password() {
 	);
 
 	return (
-		<Box
-			component="form"
-			// onSubmit={form.onSubmit(handleSubmit)}
-			noValidate
-		>
+		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid>
 				<GridCol span={{ base: 12 }}>
 					<Switch
@@ -43,59 +41,64 @@ export default function Password() {
 							title: "Use Password",
 							desc: "Set a permanent password to login to your account.",
 						})}
-						// key={form.key("withPassword")}
-						// {...form.getInputProps("withPassword")}
-						// defaultChecked={session?.withPassword}
+						key={form.key("withPassword")}
+						{...form.getInputProps("withPassword")}
+						defaultChecked={session?.user.withPassword}
 					/>
 				</GridCol>
 
-				{/* {form.values.withPassword && ( */}
-				<>
-					{/* {session?.withPassword && ( */}
-					<GridCol span={{ base: 12, sm: 6, md: 12 }}>
-						<PasswordInput
-							required
-							label={"Current Password"}
-							placeholder="Your Current Password"
-							// {...form.getInputProps("current")}
-							description={
-								<>
-									If you can&apos;t remember, you can{" "}
-									<Anchor underline="always" inherit component={Link} href="/auth/password/forgot">
-										reset your password
-									</Anchor>
-									.
-								</>
-							}
-						/>
-					</GridCol>
-					{/* )}  */}
+				{form.values.withPassword && (
+					<>
+						{session?.user.withPassword && (
+							<GridCol span={{ base: 12, sm: 6, md: 12 }}>
+								<PasswordInput
+									required
+									label={"Current Password"}
+									placeholder="Your Current Password"
+									{...form.getInputProps("current")}
+									description={
+										<>
+											If you can&apos;t remember, you can{" "}
+											<Anchor
+												underline="always"
+												inherit
+												component={Link}
+												href="/auth/password/forgot"
+											>
+												reset your password
+											</Anchor>
+											.
+										</>
+									}
+								/>
+							</GridCol>
+						)}
 
-					<GridCol span={{ base: 12, sm: 6, md: 12 }}>
-						<PasswordInput
-							required
-							label={"New Password"}
-							placeholder="Your New Password"
-							// {...form.getInputProps("password.initial")}
-						/>
-					</GridCol>
+						<GridCol span={{ base: 12, sm: 6, md: 12 }}>
+							<PasswordInput
+								required
+								label={"New Password"}
+								placeholder="Your New Password"
+								{...form.getInputProps("password.initial")}
+							/>
+						</GridCol>
 
-					<GridCol span={{ base: 12, sm: 6, md: 12 }}>
-						<PasswordInput
-							required
-							label={"Confirm New Password"}
-							placeholder="Confirm Your New Password"
-							// {...form.getInputProps("password.confirm")}
-						/>
-					</GridCol>
+						<GridCol span={{ base: 12, sm: 6, md: 12 }}>
+							<PasswordInput
+								required
+								label={"Confirm New Password"}
+								placeholder="Confirm Your New Password"
+								{...form.getInputProps("password.confirm")}
+							/>
+						</GridCol>
 
-					{/* <GridCol span={{ base: 6 }}>
+						<GridCol span={{ base: 6 }}>
 							<Button type="submit" color="pri" loading={sending} mt={"md"}>
 								{sending ? "Updating" : "Update"}
 							</Button>
-						</GridCol> */}
-				</>
-				{/* )}  */}
+						</GridCol>
+					</>
+				)}
 			</Grid>
 		</Box>
 	);

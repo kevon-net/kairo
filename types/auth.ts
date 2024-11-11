@@ -23,6 +23,7 @@ export interface Session {
 		name: string;
 		image: string | null;
 		remember: boolean;
+		withPassword: boolean;
 	};
 	expires: Date;
 	iat: number;

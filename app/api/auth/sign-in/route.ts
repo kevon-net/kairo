@@ -87,6 +87,7 @@ export async function POST(request: NextRequest) {
 					name: userRecord.profile?.name,
 					image: userRecord.profile?.avatar,
 					remember: credentials.remember,
+					withPassword: provider === Provider.CREDENTIALS,
 				},
 				expires,
 			},

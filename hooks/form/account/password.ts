@@ -30,8 +30,6 @@ export const useFormUserAccountPassword = (params: { withCredentials: boolean })
 		},
 	});
 
-	if (!session) return;
-
 	const parseValues = () => {
 		return {
 			current: form.values.current,

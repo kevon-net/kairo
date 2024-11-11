@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import LayoutPage from "@/components/layout/page";
 import FormAuthSignIn from "@/components/form/auth/sign-in";
 import LayoutAuth from "@/components/layout/auth";
-import { getSession } from "@/utilities/helpers/session";
+import { getSession } from "@/libraries/auth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Sign In" };

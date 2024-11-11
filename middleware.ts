@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookieName } from "./data/constants";
-import { updateSession } from "./utilities/helpers/session";
+import { updateSession } from "./libraries/auth";
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
 	if (session) {
 		const response = NextResponse.next();
-		return await updateSession(session, response);;
+		return await updateSession(session, response);
 	}
 
 	return NextResponse.next();

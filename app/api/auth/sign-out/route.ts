@@ -1,8 +1,6 @@
 import prisma from "@/libraries/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { cookieName } from "@/data/constants";
-import { getSession } from "@/utilities/helpers/session";
+import { getSession, signOut } from "@/libraries/auth";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -22,8 +20,7 @@ export async function POST(request: NextRequest) {
 			return { sessionDelete, sessionsDeleteExpired };
 		});
 
-		// remove session from cookies
-		cookies().delete(cookieName.session);
+		await signOut();
 
 		return NextResponse.json(
 			{ message: "User signed out", sessions: sessionsDelete },

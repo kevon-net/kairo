@@ -4,10 +4,10 @@ import { generateId } from "@/utilities/generators/id";
 import { Provider } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { Credentials } from "@/types/auth";
-import { encrypt } from "@/utilities/helpers/token";
 import { cookies } from "next/headers";
 import { cookieName } from "@/data/constants";
 import { getExpiry } from "@/utilities/helpers/time";
+import { signIn } from "@/libraries/auth";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -63,42 +63,7 @@ export async function POST(request: NextRequest) {
 			},
 		});
 
-		const {
-			userId: userIdCreateSession,
-			createdAt: createdAtCreateSession,
-			updatedAt: updatedAtCreateSession,
-			expiresAt: expiresAtCreateSession,
-			...restCreateSession
-		} = createSession;
-
-		const {
-			password: passwordUserRecord,
-			createdAt: createdAtUserRecord,
-			updatedAt: updatedAtUserRecord,
-			profile: profileUserRecord,
-			...restUserRecord
-		} = userRecord;
-
-		const session = await encrypt(
-			{
-				...restCreateSession,
-				user: {
-					...restUserRecord,
-					name: userRecord.profile?.name,
-					image: userRecord.profile?.avatar,
-					remember: credentials.remember,
-					withPassword: provider === Provider.CREDENTIALS,
-				},
-				expires,
-			},
-			getExpiry(credentials.remember).sec
-		);
-
-		// save session in cookie
-		cookies().set(cookieName.session, session, {
-			expires,
-			httpOnly: true,
-		});
+		await signIn(provider, createSession, userRecord, credentials);
 
 		return NextResponse.json(
 			{ message: "User authenticated successfully", user: userRecord },

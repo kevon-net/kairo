@@ -31,7 +31,7 @@ import appData from "@/data/app";
 import { linkify } from "@/utilities/formatters/string";
 
 import SessionProvider from "@/components/providers/session";
-import { getSession } from "@/utilities/helpers/session";
+import { getSession } from "@/libraries/auth";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 

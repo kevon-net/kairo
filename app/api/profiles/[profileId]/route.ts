@@ -1,7 +1,7 @@
 import prisma from "@/libraries/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { ProfileCreate, ProfileUpdate } from "@/types/models/profile";
-import { getSession } from "@/utilities/helpers/session";
+import { getSession } from "@/libraries/auth";
 
 export async function POST(request: NextRequest) {
 	try {

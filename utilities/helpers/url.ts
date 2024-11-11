@@ -1,9 +1,9 @@
 import { authUrls, baseUrl, name } from "@/data/constants";
 
-export const setRedirectUrl = (currentUrl?: string, redirectUrl?: string, pathname?: string) => {
-	const current = currentUrl || authUrls.signIn;
+export const setRedirectUrl = (pathname?: string, targetUrl?: string, redirectUrl?: string) => {
+	const target = targetUrl || authUrls.signIn;
 	const redirect = redirectUrl || `${baseUrl}${pathname || "/"}`;
-	return `${current}?${name.urlParam.redirect}=${encodeURIComponent(redirect)}`;
+	return `${target}?${name.urlParam.redirect}=${encodeURIComponent(redirect)}`;
 };
 
 export const getRedirectUrl = () => {

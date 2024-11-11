@@ -21,7 +21,7 @@ import {
 import LayoutSection from "@/components/layout/section";
 import AvatarMain from "@/components/common/avatars/main";
 
-import { iconStrokeWidth } from "@/data/constants";
+import { authUrls, iconStrokeWidth } from "@/data/constants";
 import { useSession } from "@/hooks/session";
 
 export default function Account() {
@@ -211,7 +211,7 @@ export const navLinkItems = {
 	danger: [
 		{
 			icon: IconLogout,
-			link: `/api/auth/signout`,
+			link: authUrls.signOut,
 			label: "Sign Out",
 			color: "red.6",
 		},

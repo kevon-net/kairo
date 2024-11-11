@@ -3,7 +3,7 @@ import { generateId } from "@/utilities/generators/id";
 import { NextRequest, NextResponse } from "next/server";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
 import { UserCreate, UserUpdate } from "@/types/models/user";
-import { getSession } from "@/utilities/helpers/session";
+import { getSession } from "@/libraries/auth";
 import { SubType, Type } from "@prisma/client";
 
 export async function POST(request: NextRequest) {

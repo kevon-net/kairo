@@ -64,7 +64,7 @@ export async function PUT(request: NextRequest, { params }: { params: { sessionI
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		const body: { session: SessionUpdate; options?: { create?: boolean } } = await request.json();

@@ -1,11 +1,13 @@
-import { apiUrl } from "@/data/constants";
+import { apiUrl, headers } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
 
 export const passwordForgot = async (params: { email: string }) => {
 	try {
 		const request = new Request(`${apiUrl}/auth/password/forgot`, {
 			method: EnumRequest.POST,
-			body: JSON.stringify(params)
+			credentials: "include",
+			headers: headers.withBody,
+			body: JSON.stringify(params),
 		});
 
 		const response = await fetch(request);
@@ -21,7 +23,9 @@ export const passwordReset = async (params: { password: string }, urlParams: { u
 	try {
 		const request = new Request(`${apiUrl}/auth/password/reset/${urlParams.userId}/${urlParams.token}`, {
 			method: EnumRequest.POST,
-			body: JSON.stringify(params)
+			credentials: "include",
+			headers: headers.withBody,
+			body: JSON.stringify(params),
 		});
 
 		const response = await fetch(request);

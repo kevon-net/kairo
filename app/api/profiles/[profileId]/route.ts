@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		const profile: ProfileCreate = await request.json();
@@ -39,7 +39,7 @@ export async function PUT(request: NextRequest, { params }: { params: { profileI
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		const profileRecord = await prisma.profile.findUnique({ where: { id: params.profileId } });

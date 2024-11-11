@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		const sessionRecords = await prisma.session.findMany({ where: { userId: session.user.id } });

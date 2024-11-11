@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		const userRecord = await prisma.user.findUnique({
@@ -126,7 +126,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { userI
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 404, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		const userRecord = await prisma.user.findUnique({ where: { id: params.userId } });

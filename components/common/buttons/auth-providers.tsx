@@ -9,19 +9,21 @@ import { Button, Group, Image, Stack } from "@mantine/core";
 import images from "@/data/images";
 import { capitalizeWords } from "@/utilities/formatters/string";
 import { useOs } from "@mantine/hooks";
+import { signIn } from "@/handlers/events/auth";
+import { Provider } from "@prisma/client";
 
 export default function Providers() {
 	const [loading, setLoading] = useState(false);
 	const os = useOs();
 
-	const getButton = (image: string, provider: string) => (
+	const getButton = (image: string, provider: Provider) => (
 		<Button
 			key={provider}
 			fullWidth
 			variant="light"
 			onClick={async () => {
-				// setLoading(true);
-				// await signIn({ provider }, os);
+				setLoading(true);
+				await signIn(provider, undefined, { os });
 			}}
 			loading={loading}
 			leftSection={
@@ -48,6 +50,6 @@ export default function Providers() {
 const providers = [
 	{
 		image: images.icons.google,
-		provider: "google",
+		provider: Provider.GOOGLE,
 	},
 ];

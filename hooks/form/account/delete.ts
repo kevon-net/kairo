@@ -5,7 +5,7 @@ import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { timeout } from "@/data/constants";
 import { userDelete } from "@/handlers/requests/database/user";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export const useFormUserAccountDelete = () => {
 	const [submitted, setSubmitted] = useState(false);

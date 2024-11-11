@@ -19,7 +19,7 @@ import links from "@/data/links";
 import classes from "./main.module.scss";
 import { IconChevronDown } from "@tabler/icons-react";
 import { iconStrokeWidth } from "@/data/constants";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export default function Main() {
 	const { session, pathname } = useSession();

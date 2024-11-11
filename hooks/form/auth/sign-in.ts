@@ -3,14 +3,13 @@ import email from "@/utilities/validators/special/email";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { cookieName, timeout } from "@/data/constants";
+import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
-import { getGeoData } from "@/services/api/geo";
 import { useOs } from "@mantine/hooks";
-import { signIn } from "@/handlers/requests/auth/sign-in";
 import { Credentials } from "@/types/auth";
-import { setCookie } from "@/utilities/helpers/cookie";
+import { signIn } from "@/handlers/events/auth";
+import { Provider } from "@prisma/client";
 
 export const useFormAuthSignIn = () => {
 	const router = useRouter();
@@ -44,11 +43,7 @@ export const useFormAuthSignIn = () => {
 			try {
 				setSubmitted(true);
 
-				// create cookie with device info
-				const geoData = await getGeoData();
-				setCookie(cookieName.device.geo, { ...geoData, os }, { expiryInSeconds: 30 });
-
-				const response = await signIn({ credentials: parseValues() });
+				const response = await signIn(Provider.CREDENTIALS, parseValues(), { os });
 				const result = await response.json();
 
 				if (!result) throw new Error("No response from server");

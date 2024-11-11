@@ -11,7 +11,7 @@ import { SignIn as FragmentSignIn } from "../../fragments/auth";
 import classes from "./main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export default function Main({ props }: { props: typeMenuNavbar[] }) {
 	const [opened, { toggle, close }] = useDisclosure(false);

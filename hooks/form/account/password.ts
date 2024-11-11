@@ -7,7 +7,7 @@ import { userUpdate } from "@/handlers/requests/database/user";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export const useFormUserAccountPassword = (params: { withCredentials: boolean }) => {
 	const [sending, setSending] = useState(false);

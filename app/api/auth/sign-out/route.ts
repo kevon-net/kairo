@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
 		const session = await getSession();
 
 		if (!session) {
-			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
+			return NextResponse.json({ error: "Already signed out" }, { status: 401, statusText: "Unauthorized" });
 		}
 
 		// remove sessions from db
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 			{ status: 200, statusText: "Signed Out" }
 		);
 	} catch (error) {
-		console.error("---> route handler error (sign up):", error);
+		console.error("---> route handler error (sign out):", error);
 		return NextResponse.json({ error: "Something went wrong on our end" }, { status: 500 });
 	}
 }

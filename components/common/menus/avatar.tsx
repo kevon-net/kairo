@@ -11,7 +11,7 @@ import AvatarMain from "../avatars/main";
 
 import classes from "./avatar.module.scss";
 import { navLinkItems } from "@/components/layout/asides/account";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 import { getRegionalDate } from "@/utilities/formatters/date";
 
 export default function Avatar() {

@@ -22,7 +22,7 @@ import LayoutSection from "@/components/layout/section";
 import AvatarMain from "@/components/common/avatars/main";
 
 import { authUrls, iconStrokeWidth } from "@/data/constants";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export default function Account() {
 	const { session, pathname } = useSession();

@@ -6,7 +6,7 @@ import { profileUpdate } from "@/handlers/requests/database/profile";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { timeout } from "@/data/constants";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export const useFormUserProfile = () => {
 	const { session, updateSession } = useSession();

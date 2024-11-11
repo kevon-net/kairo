@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 import { initialize } from "@/utilities/formatters/string";
 import { Avatar, MantineStyleProps } from "@mantine/core";
 import React from "react";

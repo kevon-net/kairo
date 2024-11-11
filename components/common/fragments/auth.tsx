@@ -4,6 +4,7 @@ import React from "react";
 
 import { usePathname, useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
+import { useSignOut } from "@/hooks/auth";
 
 export function SignIn({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
@@ -13,5 +14,7 @@ export function SignIn({ children }: { children: React.ReactNode }) {
 }
 
 export function SignOut({ children }: { children: React.ReactNode }) {
-	return <div onClick={() => {}}>{children}</div>;
+	const signOut = useSignOut();
+
+	return <span onClick={signOut}>{children}</span>;
 }

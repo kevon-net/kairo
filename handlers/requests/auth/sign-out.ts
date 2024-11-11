@@ -1,9 +1,9 @@
-import { apiUrl, headers } from "@/data/constants";
+import { apiUrl, baseUrl, headers } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
 
 export const signOut = async () => {
 	try {
-		const request = new Request(`${apiUrl}/auth/sign-in`, {
+		const request = new Request(`${apiUrl}/auth/sign-out`, {
 			method: EnumRequest.POST,
 			credentials: "include",
 			headers: headers.withoutBody,
@@ -13,7 +13,7 @@ export const signOut = async () => {
 
 		return response;
 	} catch (error) {
-		console.error("---> handler error - (sign in):", error);
+		console.error("---> handler error - (sign out):", error);
 		throw error;
 	}
 };

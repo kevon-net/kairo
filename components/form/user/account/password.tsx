@@ -9,7 +9,7 @@ import { Anchor, Box, Button, Grid, GridCol, PasswordInput, Stack, Switch, Text,
 import { useFormUserAccountPassword } from "@/hooks/form/account/password";
 
 import classes from "./notifications.module.scss";
-import { useSession } from "@/hooks/session";
+import { useSession } from "@/hooks/auth";
 
 export default function Password() {
 	const { session } = useSession();

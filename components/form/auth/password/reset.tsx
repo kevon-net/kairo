@@ -4,12 +4,11 @@ import React from "react";
 
 import { Button, Center, Grid, GridCol, PasswordInput } from "@mantine/core";
 
-import { Params } from "@/app/(authentication)/auth/(default)/layout";
 import { useFormAuthPasswordReset } from "@/hooks/form/auth/password";
 import PopoverPasswordStrength from "@/components/wrapper/popovers/password-strength";
 
-export default function Reset({ data }: { data: Params }) {
-	const { form, handleSubmit, sending } = useFormAuthPasswordReset(data);
+export default function Reset() {
+	const { form, handleSubmit, sending } = useFormAuthPasswordReset();
 
 	return (
 		<form onSubmit={form.onSubmit(handleSubmit)} noValidate>

@@ -42,7 +42,7 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 
 				const response = await userUpdate(
 					{ password: form.values.password.initial.trim(), id: session?.user.id },
-					{ password: session?.user.withPassword ? form.values.current.trim() : "null" }
+					{ password: session?.user.withPassword ? form.values.current.trim() : "update" }
 				);
 
 				if (!response) throw new Error("No response from server");

@@ -70,24 +70,24 @@ export default function PasswordForgot(otl: string) {
 const content = {
 	maxWidth: "640px",
 	margin: "0 auto",
-	overflow: "hidden"
+	overflow: "hidden",
 };
 
 const headerFooter = {
 	backgroundColor: "#e4e6ed",
-	padding: "20px 0"
+	padding: "20px 0",
 };
 
 const header = {
 	...headerFooter,
 	display: "flex",
 	alignItems: "center",
-	justifyContent: "center"
+	justifyContent: "center",
 };
 
 const footer = {
 	backgroundColor: "#e4e6ed",
-	padding: "20px 0"
+	padding: "20px 0",
 };
 
 const main = {
@@ -95,31 +95,31 @@ const main = {
 };
 
 const section = {
-	margin: "20px 0"
+	margin: "20px 0",
 };
 
 const container = {
 	minWidth: "100%",
-	padding: "0 20px"
+	padding: "0 20px",
 };
 
 const h1 = {
 	fontSize: "24px",
-	fontWeight: "bolder"
+	fontWeight: "bolder",
 };
 
 const h2 = {
 	fontSize: "20px",
-	fontWeight: "bold"
+	fontWeight: "bold",
 };
 
 const text = {
 	margin: 0,
-	fontSize: "12px"
+	fontSize: "12px",
 };
 
 const link = {
 	margin: 0,
 	fontWeight: "bold",
-	color: "red"
+	color: "red",
 };

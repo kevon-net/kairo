@@ -22,7 +22,7 @@ export const userCreate = async (user: UserCreate) => {
 	}
 };
 
-export const userUpdate = async (user: UserUpdate, options?: { password?: string }) => {
+export const userUpdate = async (user: UserUpdate, options?: { password?: string; token?: string }) => {
 	try {
 		const request = new Request(`${baseRequestUrl}/${user.id}`, {
 			method: EnumRequest.PUT,

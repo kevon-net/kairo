@@ -1,7 +1,10 @@
+import { baseUrl } from "@/data/constants";
 import prisma from "@/libraries/prisma";
 
-import { emailCreatePasswordChanged } from "@/libraries/wrappers/email/send/auth/password";
+import { emailCreatePasswordForgot } from "@/libraries/wrappers/email/send/auth/password";
+import { generateId } from "@/utilities/generators/id";
 import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
+import { encrypt } from "@/utilities/helpers/token";
 import { SubType, Type } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -30,46 +33,44 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		userRecord.tokens[0] &&
-			expired &&
-			(await prisma.token.delete({
+		const expiry = new Date(Date.now() + 5 * 60 * 1000);
+
+		const id = generateId();
+
+		const token = await encrypt({ id, userId: userRecord.id }, 5 * 60);
+
+		const tokens = await prisma.$transaction(async () => {
+			const deleteExpired = await prisma.token.deleteMany({
 				where: {
-					type_subType_userId: { type: Type.JWT, subType: SubType.PASSWORD_RESET, userId: userRecord.id },
+					type: Type.JWT,
+					subType: SubType.PASSWORD_RESET,
+					userId: userRecord.id,
+					expiresAt: { lt: now },
 				},
-			}));
+			});
 
-		// const token = await generateToken(
-		// 	{
-		// 		id: userRecord.id,
-		// 		email: userRecord.email,
-		// 		password: userRecord.password || process.env.AUTH_SECRET!,
-		// 	},
-		// 	5
-		// );
+			const createNew = await prisma.token.create({
+				data: {
+					id,
+					type: Type.JWT,
+					subType: SubType.PASSWORD_RESET,
+					token: token,
+					expiresAt: expiry,
+					userId: userRecord.id,
+				},
+			});
 
-		// const otlValue = `${baseUrl}/auth/password/reset/${userRecord.id}/${token}`;
+			return { deleteExpired, createNew };
+		});
 
-		// const otlHash = await hashValue(otlValue);
+		const otlValue = `${baseUrl}/auth/password/reset?token=${token}`;
 
-		// await prisma.user.update({
-		// 	where: { email: userRecord.email },
-		// 	data: {
-		// 		otls: {
-		// 			create: [
-		// 				{
-		// 					id: generateId(),
-		// 					type: OtlType.PASSWORD_RESET,
-		// 					otl: otlHash!,
-		// 					expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-		// 				},
-		// 			],
-		// 		},
-		// 	},
-		// });
+		console.log("otlValue", otlValue);
 
 		return NextResponse.json(
 			{
 				message: "An OTL has been sent",
+				token: tokens.createNew,
 				// resend: await emailCreatePasswordForgot(otlValue, userRecord.email),
 			},
 			{ status: 200, statusText: "OTL Sent" }

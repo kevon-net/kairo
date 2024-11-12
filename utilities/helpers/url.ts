@@ -6,10 +6,10 @@ export const setRedirectUrl = (pathname?: string, targetUrl?: string, redirectUr
 	return `${target}?${name.urlParam.redirect}=${encodeURIComponent(redirect)}`;
 };
 
-export const getRedirectUrl = () => {
+export const getUrlParam = (urlParamName?: string) => {
 	if (typeof window !== "undefined") {
 		const urlParams = new URLSearchParams(window.location.search);
-		return urlParams.get(name.urlParam.redirect) || "/";
+		return urlParams.get(urlParamName || name.urlParam.redirect) || "/";
 	}
 
 	return "/";

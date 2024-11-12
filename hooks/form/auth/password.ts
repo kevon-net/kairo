@@ -1,4 +1,4 @@
-import { passwordForgot, passwordReset } from "@/handlers/requests/auth/password";
+import { passwordForgot } from "@/handlers/requests/auth/password";
 import { millToMinSec, MinSec } from "@/utilities/formatters/number";
 import email from "@/utilities/validators/special/email";
 import { useForm, UseFormReturnType } from "@mantine/form";
@@ -10,7 +10,9 @@ import compare from "@/utilities/validators/special/compare";
 import { PasswordReset as FormAuthPasswordReset } from "@/types/form";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
-import { useSignOut } from "@/hooks/auth";
+import { userUpdate } from "@/handlers/requests/database/user";
+import { getUrlParam, setRedirectUrl } from "@/utilities/helpers/url";
+import { decrypt } from "@/utilities/helpers/token";
 
 export const useFormAuthPasswordForgot = () => {
 	const [sending, setSending] = useState(false);
@@ -30,7 +32,7 @@ export const useFormAuthPasswordForgot = () => {
 				setSending(true);
 				setRequested(true);
 
-				const response = await passwordForgot({ email: form.values.email.trim().toLowerCase() });
+				const response = await passwordForgot(form.values.email.trim().toLowerCase());
 
 				if (!response) throw new Error("No response from server");
 
@@ -54,9 +56,11 @@ export const useFormAuthPasswordForgot = () => {
 
 				setTime(null);
 
-				if (response.status === 403 || response.status === 404) {
+				if (response.status === 404) {
 					// redirect to notification page
-					router.push(authUrls.verifyRequest);
+					setTimeout(() => router.replace("/"), timeout.redirect);
+
+					showNotification({ variant: NotificationVariant.WARNING }, response, result);
 					return;
 				}
 
@@ -75,9 +79,8 @@ export const useFormAuthPasswordForgot = () => {
 	return { form, handleSubmit, sending, requested, time };
 };
 
-export const useFormAuthPasswordReset = (params: { userId: string; token: string }) => {
-	const signOut = useSignOut();
-
+export const useFormAuthPasswordReset = () => {
+	const router = useRouter();
 	const [sending, setSending] = useState(false);
 
 	const form: UseFormReturnType<FormAuthPasswordReset> = useForm({
@@ -85,22 +88,25 @@ export const useFormAuthPasswordReset = (params: { userId: string; token: string
 
 		validate: {
 			password: {
-				initial: (value) => password(value, 8, 24),
+				initial: (value) => password(value.trim(), 8, 24),
 				confirm: (value, values) => compare.string(value, values.password.initial, "Password"),
 			},
 		},
 	});
-
-	const parseValues = () => {
-		return { password: form.values.password };
-	};
 
 	const handleSubmit = async () => {
 		try {
 			if (form.isValid()) {
 				setSending(true);
 
-				const response = await passwordReset({ password: parseValues().password.initial }, params);
+				const parsed = await decrypt(getUrlParam("token")).catch((e) => {
+					throw new Error("Link is broken, expired or already used");
+				});
+
+				const response = await userUpdate(
+					{ password: form.values.password.initial.trim(), id: parsed.userId },
+					{ password: "reset", token: getUrlParam("token") }
+				);
 
 				if (!response) throw new Error("No response from server");
 
@@ -109,8 +115,8 @@ export const useFormAuthPasswordReset = (params: { userId: string; token: string
 				form.reset();
 
 				if (response.ok) {
-					// sign out
-					setTimeout(async () => await signOut(), timeout.redirect);
+					// redirect to sign in
+					setTimeout(async () => router.push(setRedirectUrl()), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;

@@ -5,7 +5,7 @@ import { compareHashes, hashValue } from "@/utilities/helpers/hasher";
 import { UserCreate, UserUpdate } from "@/types/models/user";
 import { getSession } from "@/libraries/auth";
 import { SubType, Type } from "@prisma/client";
-import { encrypt } from "@/utilities/helpers/token";
+import { decrypt, encrypt } from "@/utilities/helpers/token";
 import { getExpiry } from "@/utilities/helpers/time";
 import { cookies } from "next/headers";
 import { cookieName } from "@/data/constants";
@@ -39,7 +39,10 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 	try {
 		const session = await getSession();
 
-		if (!session) {
+		const { user, options }: { user: UserUpdate; options?: { password?: string; token?: string } } =
+			await request.json();
+
+		if (!session && !options?.token) {
 			return NextResponse.json({ error: "Sign in to continue" }, { status: 401, statusText: "Unauthorized" });
 		}
 
@@ -56,11 +59,28 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 			return NextResponse.json({ error: "User not verified" }, { status: 403, statusText: "Not Veried" });
 		}
 
-		const { user, options }: { user: UserUpdate; options?: { password?: string } } = await request.json();
+		let parsed: any;
 
 		if (options?.password) {
+			if (options.token) {
+				// verify token
+				try {
+					parsed = await decrypt(options.token);
+					const tokenExists = await prisma.token.findUnique({ where: { id: parsed.id } });
+
+					if (!tokenExists) throw new Error("Not Found");
+				} catch (error) {
+					return NextResponse.json(
+						{ error: "Link is broken, expired or already used" },
+						{ status: 403, statusText: "Invalid Link" }
+					);
+				}
+			}
+
 			const passwordMatch =
-				options.password == "null" || (await compareHashes(options.password, userRecord.password));
+				options.password == "update" ||
+				options.password == "reset" ||
+				(await compareHashes(options.password, userRecord.password));
 
 			if (!passwordMatch) {
 				return NextResponse.json(
@@ -70,7 +90,7 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 			}
 
 			const passwordSame =
-				options.password != "null" && (await compareHashes(user.password as string, userRecord.password));
+				options.password != "update" && (await compareHashes(user.password as string, userRecord.password));
 
 			if (passwordSame) {
 				return NextResponse.json(
@@ -79,40 +99,38 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 				);
 			}
 
-			// // verify token
-			// try {
-			// 	const secret = process.env.NEXT_JWT_KEY! + (userRecord.password || process.env.AUTH_SECRET!);
-			// 	await jwt.verify(params.token, secret);
-			// } catch (error) {
-			// 	return NextResponse.json(
-			// 		{ error: "Link is broken, expired or already used" },
-			// 		{ status: 403, statusText: "Invalid Link" }
-			// 	);
-			// }
-
-			if (!session.user.withPassword) {
+			if (!session?.user.withPassword && !options.token) {
 				// update session on server
 				const sessionToken = await encrypt(
-					{ ...session, user: { ...session.user, withPassword: true } },
-					getExpiry(session.user.remember).sec
+					{ ...session, user: { ...session?.user, withPassword: true } },
+					getExpiry(session?.user.remember).sec
 				);
 
-				cookies().set(cookieName.session, sessionToken, { expires: new Date(session.expires), httpOnly: true });
-			}
-
-			await prisma.user.update({
-				where: { id: params.userId },
-				data: { password: await hashValue(user.password as string) },
-			});
-
-			// delete used otl record if exists
-			if (userRecord.tokens.length > 0) {
-				await prisma.token.delete({
-					where: {
-						type_subType_userId: { type: Type.JWT, subType: SubType.PASSWORD_RESET, userId: params.userId },
-					},
+				cookies().set(cookieName.session, sessionToken, {
+					expires: new Date(session?.expires!),
+					httpOnly: true,
 				});
 			}
+
+			await prisma.$transaction(async () => {
+				if (userRecord.tokens.length > 0) {
+					await prisma.token.deleteMany({
+						where: {
+							type: Type.JWT,
+							subType: SubType.PASSWORD_RESET,
+							userId: userRecord.id,
+							expiresAt: { lt: new Date() },
+						},
+					});
+				}
+
+				await prisma.token.delete({ where: { id: parsed.id } });
+
+				await prisma.user.update({
+					where: { id: params.userId },
+					data: { password: await hashValue(user.password as string) },
+				});
+			});
 
 			return NextResponse.json(
 				{ message: "Password changed successfully" },

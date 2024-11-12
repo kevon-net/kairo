@@ -1,3 +1,5 @@
+"use server";
+
 import { key } from "@/data/constants";
 import { JwtAlgorithm } from "@/types/enums";
 import { SignJWT, jwtVerify } from "jose";

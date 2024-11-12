@@ -1,4 +1,4 @@
-import { getRedirectUrl } from "@/utilities/helpers/url";
+import { getUrlParam } from "@/utilities/helpers/url";
 import email from "@/utilities/validators/special/email";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
@@ -47,7 +47,7 @@ export const useFormAuthSignIn = () => {
 
 				if (!result.error) {
 					// apply redirect url
-					window.location.replace(getRedirectUrl());
+					window.location.replace(getUrlParam());
 					return;
 				}
 

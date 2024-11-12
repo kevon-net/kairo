@@ -1,11 +1,12 @@
 import { contactCreate } from "@/libraries/wrappers/email/contact";
+import { emailSendSignUp } from "@/libraries/wrappers/email/send/auth/sign-up";
 import { generateOtpCode } from "@/utilities/generators/otp";
 import prisma from "@/libraries/prisma";
 import { hashValue } from "@/utilities/helpers/hasher";
-import { emailSendSignUp } from "@/libraries/wrappers/email/send/auth/sign-up";
 import { generateId } from "@/utilities/generators/id";
 import { NextRequest, NextResponse } from "next/server";
 import { SubType, Type } from "@prisma/client";
+import { encrypt } from "@/utilities/helpers/token";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -21,48 +22,55 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// create otp
-		const otpValue = generateOtpCode();
+		const userId = generateId();
+		const tokenId = generateId();
 
-		// create otp hash
+		const otpValue = generateOtpCode();
 		const otpHash = await hashValue(otpValue);
 
-		// create user id
-		const userId = generateId();
+		const token = await encrypt({ id: tokenId, otp: otpHash, userId }, 60 * 60);
 
-		// create user record
-		await prisma.user.create({
-			data: {
-				id: userId,
-				email,
-				password: (await hashValue(password.initial)) || null,
+		const transactions = await prisma.$transaction(async () => {
+			const createUser = await prisma.user.create({
+				data: {
+					id: userId,
+					email,
+					password: (await hashValue(password.initial)) || null,
 
-				// create user profile record
-				profile: { create: { id: generateId(), name } },
+					profile: { create: { id: generateId(), name } },
+				},
+			});
 
-				// create user otp record
-				tokens: !otpHash
-					? undefined
-					: {
-							create: [
-								{
-									id: generateId(),
-									type: Type.OTP,
-									subType: SubType.CONFIRM_EMAIL,
-									token: otpHash,
-									expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
-								},
-							],
-					  },
-			},
+			await prisma.token.deleteMany({
+				where: {
+					type: Type.JWT,
+					subType: SubType.CONFIRM_EMAIL,
+					userId,
+					expiresAt: { lt: new Date() },
+				},
+			});
+
+			await prisma.token.create({
+				data: {
+					id: tokenId,
+					type: Type.JWT,
+					subType: SubType.CONFIRM_EMAIL,
+					token: token,
+					expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+					userId,
+				},
+			});
+
+			return { createUser };
 		});
 
 		console.log(otpValue);
 
 		return NextResponse.json(
 			{
-				user: { id: userId, email },
 				message: "Your account has been created",
+				user: { id: transactions.createUser.id },
+				token,
 				// // send otp email and output result in response body
 				// resend: {
 				// 	// send otp email
@@ -71,7 +79,7 @@ export async function POST(request: NextRequest) {
 				// 	contact: await contactCreate({ name: `${name.first} ${name.last}`, email }),
 				// },
 			},
-			{ status: 200, statusText: `Welcome, ${name.first}` }
+			{ status: 200, statusText: `Account Created` }
 		);
 	} catch (error) {
 		console.error("---> route handler error (sign up):", error);

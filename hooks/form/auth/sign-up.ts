@@ -61,19 +61,20 @@ export const useFormAuthSignUp = () => {
 
 				if (response.ok) {
 					// redirect to verification page
-					router.push(`/auth/verify/${result.user.id}`);
+					router.push(`/auth/verify?token=${result.token}&userId=${result.user.id}`);
 					return;
 				}
 
 				if (response.statusText === "User Exists") {
 					setTimeout(async () => {
-						if (result.user.verified) {
-							// redirect to sign in
-							setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
+						if (!result.user.verified) {
+							// redirect to verification page
+							router.push(`/auth/verify?token=${result.token}&userId=${result.user.id}`);
+							return;
 						}
 
-						// redirect to verification page
-						router.push(`/auth/verify/${result.user.id}`);
+						// redirect to sign in
+						setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
 					}, timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.WARNING }, response, result);

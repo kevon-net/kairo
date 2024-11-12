@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
 		const id = generateId();
 
-		const token = await encrypt({ id, userId: userRecord.id }, 5 * 60);
+		const token = await encrypt({ id, userId: userRecord.id }, 60 * 60);
 
 		const tokens = await prisma.$transaction(async () => {
 			const deleteExpired = await prisma.token.deleteMany({

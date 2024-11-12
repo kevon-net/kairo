@@ -6,9 +6,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
-import { setRedirectUrl } from "@/utilities/helpers/url";
+import { getUrlParam, setRedirectUrl } from "@/utilities/helpers/url";
 
-export const useFormAuthVerify = (params: { userId: string }) => {
+export const useFormAuthVerify = () => {
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -22,7 +22,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 	});
 
 	const parseValues = () => {
-		return { otp: form.values.otp, userId: params.userId };
+		return { otp: form.values.otp.trim(), token: getUrlParam("token") };
 	};
 
 	const handleSubmit = async () => {
@@ -49,7 +49,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 
 				if (response.status === 404) {
 					// redirect to home page
-					setTimeout(() => router.push("/"), timeout.redirect);
+					setTimeout(() => router.replace("/"), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.FAILED }, response, result);
 					return;
@@ -57,7 +57,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 
 				if (response.statusText === "Already Verified") {
 					// redirect to sign in
-					setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
+					setTimeout(async () => router.replace(setRedirectUrl(pathname)), timeout.redirect);
 
 					showNotification({ variant: NotificationVariant.WARNING }, response, result);
 					return;
@@ -78,7 +78,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 		try {
 			setRequested(true);
 
-			const response = await handleVerifyResend({ userId: params.userId });
+			const response = await handleVerifyResend(parseValues().token, getUrlParam("userId"));
 
 			if (!response) throw new Error("No response from server");
 
@@ -88,6 +88,12 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 
 			if (response.ok) {
 				setTime(null);
+
+				// redirect to new verification page
+				setTimeout(
+					() => window.location.replace(`/auth/verify?token=${result.token}&userId=${result.user.id}`),
+					timeout.redirect
+				);
 
 				showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 				return;
@@ -112,7 +118,7 @@ export const useFormAuthVerify = (params: { userId: string }) => {
 
 			if (response.statusText === "Already Verified") {
 				// redirect to sign in
-				setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
+				setTimeout(async () => router.replace(setRedirectUrl(pathname)), timeout.redirect);
 
 				showNotification({ variant: NotificationVariant.WARNING }, response, result);
 				return;

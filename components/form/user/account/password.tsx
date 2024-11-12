@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Anchor, Box, Button, Grid, GridCol, PasswordInput, Stack, Switch, Text, Title } from "@mantine/core";
 
 import { useFormUserAccountPassword } from "@/hooks/form/account/password";
+import PopoverPasswordStrength from "@/components/wrapper/popovers/password-strength";
 
 import classes from "./notifications.module.scss";
 import { useSession } from "@/hooks/auth";
@@ -76,10 +77,11 @@ export default function Password() {
 						)}
 
 						<GridCol span={{ base: 12, sm: 6, md: 12 }}>
-							<PasswordInput
+							<PopoverPasswordStrength
 								required
 								label={"New Password"}
 								placeholder="Your New Password"
+								value={form.values.password.initial}
 								{...form.getInputProps("password.initial")}
 							/>
 						</GridCol>

@@ -63,7 +63,6 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 
 		if (options?.password) {
 			if (options.token) {
-				// verify token
 				try {
 					parsed = await decrypt(options.token);
 					const tokenExists = await prisma.token.findUnique({ where: { id: parsed.id } });
@@ -113,7 +112,14 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 			}
 
 			await prisma.$transaction(async () => {
+				await prisma.user.update({
+					where: { id: params.userId },
+					data: { password: await hashValue(user.password as string) },
+				});
+
 				if (userRecord.tokens.length > 0) {
+					await prisma.token.delete({ where: { id: parsed.id } });
+
 					await prisma.token.deleteMany({
 						where: {
 							type: Type.JWT,
@@ -123,13 +129,6 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 						},
 					});
 				}
-
-				await prisma.token.delete({ where: { id: parsed.id } });
-
-				await prisma.user.update({
-					where: { id: params.userId },
-					data: { password: await hashValue(user.password as string) },
-				});
 			});
 
 			return NextResponse.json(

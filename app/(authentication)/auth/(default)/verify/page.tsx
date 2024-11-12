@@ -6,11 +6,9 @@ import LayoutPage from "@/components/layout/page";
 import FormAuthVerify from "@/components/form/auth/verify";
 import LayoutAuth from "@/components/layout/auth";
 
-import { Params } from "../../layout";
-
 export const metadata: Metadata = { title: "Verify" };
 
-export default async function Verify({ params }: { params: Params }) {
+export default async function Verify() {
 	return (
 		<LayoutPage>
 			<LayoutAuth
@@ -19,7 +17,7 @@ export default async function Verify({ params }: { params: Params }) {
 					desc: `A one-time code has been sent to the provided email. Enter the code to verify.`,
 				}}
 			>
-				<FormAuthVerify props={{ userId: params.userId }} />
+				<FormAuthVerify />
 			</LayoutAuth>
 		</LayoutPage>
 	);

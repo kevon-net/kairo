@@ -5,10 +5,8 @@ import React from "react";
 import { Box, Button, Grid, GridCol, PinInput, Stack, Text, Transition } from "@mantine/core";
 import { useFormAuthVerify } from "@/hooks/form/auth/verify";
 
-export default function Verify({ props }: { props: { userId: string } }) {
-	const { form, handleSubmit, handleRequest, submitted, requested, time } = useFormAuthVerify({
-		userId: props.userId,
-	});
+export default function Verify() {
+	const { form, handleSubmit, handleRequest, submitted, requested, time } = useFormAuthVerify();
 
 	return (
 		<form onSubmit={form.onSubmit(handleSubmit)} noValidate>

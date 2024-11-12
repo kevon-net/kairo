@@ -1,14 +1,13 @@
 import { apiUrl, headers } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
-import { Verify } from "@/types/form";
 
-export const verify = async (params: Verify) => {
+export const verify = async (params: { otp: string; token: string }) => {
 	try {
-		const request = new Request(`${apiUrl}/auth/verify/${params.userId}`, {
+		const request = new Request(`${apiUrl}/auth/verify`, {
 			method: EnumRequest.POST,
 			credentials: "include",
 			headers: headers.withBody,
-			body: JSON.stringify(params.otp),
+			body: JSON.stringify(params),
 		});
 
 		const response = await fetch(request);
@@ -20,12 +19,13 @@ export const verify = async (params: Verify) => {
 	}
 };
 
-export const verifyResend = async (params: { userId: string }) => {
+export const verifyResend = async (token: string, userId: string) => {
 	try {
-		const request = new Request(`${apiUrl}/auth/verify/${params.userId}/resend`, {
-			method: EnumRequest.GET,
+		const request = new Request(`${apiUrl}/auth/verify/resend/${userId}`, {
+			method: EnumRequest.POST,
 			credentials: "include",
-			headers: headers.withoutBody,
+			headers: headers.withBody,
+			body: JSON.stringify(token),
 		});
 
 		const response = await fetch(request);

@@ -14,7 +14,7 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 	const router = useRouter();
 
 	const { session, updateSession, pathname } = useSession();
-	const signOut = useSignOut();
+	const { signOut } = useSignOut();
 
 	const [sending, setSending] = useState(false);
 

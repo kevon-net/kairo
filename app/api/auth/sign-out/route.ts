@@ -11,19 +11,26 @@ export async function POST(request: NextRequest) {
 		}
 
 		// remove sessions from db
-		const sessionsDelete = await prisma.$transaction(async () => {
-			const sessionDelete = await prisma.session.delete({ where: { id: session.id } });
-			const sessionsDeleteExpired = await prisma.session.deleteMany({
+		const transactions = await prisma.$transaction(async () => {
+			const sessionRecord = await prisma.session.findUnique({ where: { id: session.id } });
+
+			let deleteSession;
+
+			if (sessionRecord) {
+				deleteSession = await prisma.session.delete({ where: { id: session.id } });
+			}
+
+			const deleteSessions = await prisma.session.deleteMany({
 				where: { userId: session.user.id, expiresAt: { lt: new Date(Date.now()) } },
 			});
 
-			return { sessionDelete, sessionsDeleteExpired };
+			return { deleteSession, deleteSessions };
 		});
 
 		await signOut();
 
 		return NextResponse.json(
-			{ message: "User signed out", sessions: sessionsDelete },
+			{ message: "User signed out", sessions: transactions.deleteSession },
 			{ status: 200, statusText: "Signed Out" }
 		);
 	} catch (error) {

@@ -11,7 +11,7 @@ import { setRedirectUrl } from "@/utilities/helpers/url";
 export const useFormUserAccountDelete = () => {
 	const [submitted, setSubmitted] = useState(false);
 	const { session, pathname } = useSession();
-	const signOut = useSignOut();
+	const { signOut } = useSignOut();
 
 	const router = useRouter();
 

@@ -15,7 +15,7 @@ export const useFormUserProfile = () => {
 	const router = useRouter();
 
 	const { session, updateSession, pathname } = useSession();
-	const signOut = useSignOut();
+	const { signOut } = useSignOut();
 
 	const [submitted, setSubmitted] = useState(false);
 

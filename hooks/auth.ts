@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SessionContext } from "@/contexts/session";
 import { usePathname } from "next/navigation";
 import { signOut } from "@/handlers/events/auth";
@@ -19,8 +19,12 @@ export const useSession = () => {
 };
 
 export const useSignOut = () => {
+	const [submitted, setSubmitted] = useState(false);
+
 	const handleSignOut = async () => {
 		try {
+			setSubmitted(true);
+
 			const response = await signOut();
 			const result = await response.json();
 
@@ -29,6 +33,7 @@ export const useSignOut = () => {
 			if (!result.error) {
 				// redirect to home page
 				window.location.replace("/");
+				return;
 			}
 
 			if (response.status == 401) {
@@ -40,8 +45,10 @@ export const useSignOut = () => {
 		} catch (error) {
 			showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
 			return null;
+		} finally {
+			setSubmitted(false);
 		}
 	};
 
-	return handleSignOut;
+	return { signOut: handleSignOut, loading: submitted };
 };

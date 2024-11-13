@@ -23,7 +23,7 @@ const appTheme = createTheme({
 			"#b3b3b3",
 			"#cccccc",
 			"#f2f2f2",
-			"#ffffff" // White
+			"#ffffff", // White
 		],
 
 		primaryLight: [
@@ -36,24 +36,26 @@ const appTheme = createTheme({
 			"#4d4d4d",
 			"#333333",
 			"#1a1a1a",
-			"#000000" // Black
+			"#000000", // Black
 		],
 
 		pri: virtualColor({
 			name: "pri",
 			dark: "primaryDark",
-			light: "primaryLight"
-		})
+			light: "primaryLight",
+		}),
 	},
 
 	primaryColor: "pri",
+
+	defaultRadius: "sm",
 
 	primaryShade: { light: 9, dark: 9 },
 
 	defaultGradient: {
 		from: "primaryDark",
 		to: "primaryLight",
-		deg: 45
+		deg: 45,
 	},
 
 	cursorType: "pointer",
@@ -64,22 +66,22 @@ const appTheme = createTheme({
 		Card: Card.extend({
 			defaultProps: {
 				bg: "var(--mantine-color-pri-light)",
-				c: "var(--mantine-color-text)"
-			}
+				c: "var(--mantine-color-text)",
+			},
 		}),
 
 		Container: Container.extend({
 			defaultProps: {
-				mx: "auto"
+				mx: "auto",
 			},
 
 			classNames: (_: any, { size }: { size?: any }) => ({
-				root: cx({ [classesContainer.root]: size === "responsive" })
-			})
+				root: cx({ [classesContainer.root]: size === "responsive" }),
+			}),
 		}),
 
-		Notification: Notification.extend({ classNames: classesNotification })
-	}
+		Notification: Notification.extend({ classNames: classesNotification }),
+	},
 });
 
 export default appTheme;

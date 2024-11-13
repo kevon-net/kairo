@@ -51,14 +51,14 @@ export default function Avatar() {
 
 				{session && <MenuDivider />}
 
-				<MenuLabel>Activity</MenuLabel>
+				{/* <MenuLabel>Activity</MenuLabel>
 				{navLinkItems.activity.map((item) => (
 					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
 						{item.label}
 					</MenuItem>
 				))}
 
-				<MenuDivider />
+				<MenuDivider /> */}
 
 				<MenuLabel>Account</MenuLabel>
 				{navLinkItems.account.map((item) => (

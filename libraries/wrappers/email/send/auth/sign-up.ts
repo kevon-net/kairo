@@ -4,6 +4,7 @@ import resend from "@/libraries/resend";
 import TemplateEmailCodeSignUp from "@/components/email/auth/sign-up";
 import { isProduction } from "@/utilities/helpers/environment";
 import { EmailInquiry } from "@/types/email";
+import { render } from "@react-email/render";
 
 export const emailSendSignUp = async (otp: string, options: EmailInquiry["to"]) => {
 	const { data, error } = await resend.general.emails.send({
@@ -12,7 +13,7 @@ export const emailSendSignUp = async (otp: string, options: EmailInquiry["to"]) 
 		}>`,
 		to: [isProduction() ? options : process.env.NEXT_EMAIL_NOREPLY!],
 		subject: `Verify Your Email Address`,
-		react: TemplateEmailCodeSignUp(otp),
+		html: await render(TemplateEmailCodeSignUp({ otp })),
 		replyTo: process.env.NEXT_EMAIL_NOREPLY!,
 	});
 	if (!error) {

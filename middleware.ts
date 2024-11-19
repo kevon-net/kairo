@@ -9,8 +9,6 @@ export async function middleware(request: NextRequest) {
 	if (session) {
 		const isAuthRoute = routes.auth.some((route) => request.nextUrl.pathname.startsWith(route));
 
-		console.log(request.nextUrl.pathname);
-
 		if (isAuthRoute) {
 			return NextResponse.redirect(new URL(baseUrl, request.url));
 		}

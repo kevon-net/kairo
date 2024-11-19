@@ -33,7 +33,7 @@ export const useFormEmailInquiry = () => {
 				name: capitalizeWords(form.values.from.name.trim()),
 				email: form.values.from.email.trim().toLowerCase(),
 			},
-			subject: capitalizeWords(form.values.subject.trim()),
+			subject: form.values.subject.trim(),
 			phone: form.values.phone.trim(),
 			message: form.values.message.trim(),
 		};

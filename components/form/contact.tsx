@@ -12,23 +12,18 @@ export default function Contact() {
 		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid pb={"md"}>
 				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
-					<TextInput
-						required
-						label={"First Name"}
-						placeholder="Your First Name"
-						{...form.getInputProps("from.name")}
-					/>
+					<TextInput required label={"Name"} placeholder="Your Name" {...form.getInputProps("from.name")} />
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
+				</GridCol>
+				<GridCol span={{ base: 12 }}>
 					<TextInput
 						required
 						label={"Email"}
 						placeholder="Your Email"
 						{...form.getInputProps("from.email")}
 					/>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
-					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
 				</GridCol>
 				<GridCol span={12}>
 					<TextInput

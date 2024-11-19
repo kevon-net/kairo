@@ -4,8 +4,6 @@ import { SessionCreate, SessionUpdate } from "@/types/models/session";
 import { cookies } from "next/headers";
 import { cookieName } from "@/data/constants";
 import { Status } from "@prisma/client";
-import { Session } from "@/types/auth";
-import { getSession } from "@/libraries/auth";
 
 export async function GET(request: NextRequest, { params }: { params: { sessionId: string } }) {
 	try {

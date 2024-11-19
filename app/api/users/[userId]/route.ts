@@ -99,7 +99,6 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 			}
 
 			if (!session?.user.withPassword && !options.token) {
-				// update session on server
 				const sessionToken = await encrypt(
 					{ ...session, user: { ...session?.user, withPassword: true } },
 					getExpiry(session?.user.remember).sec

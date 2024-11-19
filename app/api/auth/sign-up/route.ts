@@ -64,20 +64,15 @@ export async function POST(request: NextRequest) {
 			return { createUser };
 		});
 
-		console.log(otpValue);
-
 		return NextResponse.json(
 			{
 				message: "Your account has been created",
 				user: { id: transactions.createUser.id },
 				token,
-				// // send otp email and output result in response body
-				// resend: {
-				// 	// send otp email
-				// 	email: await emailSendSignUp(otpValue.toString(), email),
-				// 	// add to audience
-				// 	contact: await contactCreate({ name: `${name.first} ${name.last}`, email }),
-				// },
+				resend: {
+					email: await emailSendSignUp(otpValue.toString(), email),
+					contact: await contactCreate({ name: `${name.first} ${name.last}`, email }),
+				},
 			},
 			{ status: 200, statusText: `Account Created` }
 		);

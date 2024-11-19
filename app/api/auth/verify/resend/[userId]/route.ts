@@ -1,4 +1,4 @@
-import { emailSendSignUp } from "@/libraries/wrappers/email/send/auth/sign-up";
+import { emailCreateSignUp } from "@/libraries/wrappers/email/send/auth/sign-up";
 import { generateOtpCode } from "@/utilities/generators/otp";
 import prisma from "@/libraries/prisma";
 import { hashValue } from "@/utilities/helpers/hasher";
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
 					message: "A new OTP has been sent",
 					user: { id: userRecord.id },
 					token,
-					resend: await emailSendSignUp(otpValue.toString(), userRecord.email),
+					resend: await emailCreateSignUp(otpValue.toString(), userRecord.email),
 				},
 				{ status: 200, statusText: "OTP Sent" }
 			);

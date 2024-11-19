@@ -16,8 +16,8 @@ export default function Reset() {
 				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
 					<PopoverPasswordStrength
 						required
-						label={"New Password"}
-						placeholder="********"
+						aria-label={"New Password"}
+						placeholder="New Password"
 						value={form.values.password}
 						{...form.getInputProps("password.initial")}
 					/>
@@ -25,23 +25,15 @@ export default function Reset() {
 				<GridCol span={{ base: 12, sm: 6, md: 12 }}>
 					<PasswordInput
 						required
-						label={"Confirm New Password"}
-						placeholder="********"
+						aria-label={"Confirm New Password"}
+						placeholder="Confirm New Password"
 						{...form.getInputProps("password.confirm")}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12 }}>
-					<Center>
-						<Button
-							w={{ base: "100%", xs: "50%", md: "100%" }}
-							type="submit"
-							color="pri"
-							loading={sending}
-							mt={"md"}
-						>
-							{sending ? "Resetting" : "Reset"}
-						</Button>
-					</Center>
+					<Button fullWidth type="submit" color="pri" loading={sending}>
+						{sending ? "Resetting" : "Reset"}
+					</Button>
 				</GridCol>
 			</Grid>
 		</form>

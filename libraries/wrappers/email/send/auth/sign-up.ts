@@ -6,7 +6,7 @@ import { isProduction } from "@/utilities/helpers/environment";
 import { EmailInquiry } from "@/types/email";
 import { render } from "@react-email/render";
 
-export const emailSendSignUp = async (otp: string, options: EmailInquiry["to"]) => {
+export const emailCreateSignUp = async (otp: string, options: EmailInquiry["to"]) => {
 	const { data, error } = await resend.general.emails.send({
 		from: `${appData.name.app} <${
 			isProduction() ? process.env.NEXT_EMAIL_NOREPLY! : process.env.NEXT_RESEND_EMAIL!

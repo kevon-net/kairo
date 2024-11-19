@@ -33,8 +33,6 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const expiry = new Date(Date.now() + 5 * 60 * 1000);
-
 		const id = generateId();
 
 		const token = await encrypt({ id, userId: userRecord.id }, 60 * 60);
@@ -55,7 +53,7 @@ export async function POST(request: NextRequest) {
 					type: Type.JWT,
 					subType: SubType.PASSWORD_RESET,
 					token: token,
-					expiresAt: expiry,
+					expiresAt: new Date(Date.now() + 60 * 60 * 1000),
 					userId: userRecord.id,
 				},
 			});

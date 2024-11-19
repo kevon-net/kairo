@@ -10,6 +10,8 @@ export async function POST(request: NextRequest) {
 
 		let parsed: any;
 
+		const userRecord = await prisma.user.findUnique({ where: { id: parsed.userId }, include: { tokens: true } });
+
 		try {
 			parsed = await decrypt(token);
 			const tokenRecord = await prisma.token.findUnique({ where: { id: parsed.id } });
@@ -23,8 +25,6 @@ export async function POST(request: NextRequest) {
 				{ status: 409, statusText: "Invalid OTP" }
 			);
 		}
-
-		const userRecord = await prisma.user.findUnique({ where: { id: parsed.userId }, include: { tokens: true } });
 
 		if (!userRecord) {
 			return NextResponse.json({ error: "Action not allowed" }, { status: 404, statusText: "Not Found" });

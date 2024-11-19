@@ -78,7 +78,8 @@ export const useFormAuthSignIn = () => {
 					return;
 				}
 
-				throw new Error("An unexpected error occured");
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+				return;
 			} catch (error) {
 				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
 				return;

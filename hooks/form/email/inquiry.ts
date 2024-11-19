@@ -60,6 +60,7 @@ export const useFormEmailInquiry = () => {
 				}
 
 				showNotification({ variant: NotificationVariant.FAILED }, response, result);
+				return;
 			} catch (error) {
 				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
 				return;

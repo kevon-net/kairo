@@ -9,6 +9,7 @@ import { decrypt, encrypt } from "@/utilities/helpers/token";
 import { getExpiry } from "@/utilities/helpers/time";
 import { cookies } from "next/headers";
 import { cookieName } from "@/data/constants";
+import { emailCreatePasswordChanged } from "@/libraries/wrappers/email/send/auth/password";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -131,7 +132,10 @@ export async function PUT(request: NextRequest, { params }: { params: { userId: 
 			});
 
 			return NextResponse.json(
-				{ message: "Password changed successfully" },
+				{
+					message: "Password changed successfully",
+					resend: await emailCreatePasswordChanged(userRecord.email),
+				},
 				{ status: 200, statusText: "Password Changed" }
 			);
 		}

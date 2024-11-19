@@ -15,25 +15,12 @@ export default function Forgot() {
 			<Stack gap={"xl"}>
 				<Grid>
 					<GridCol span={{ base: 12, sm: 12 }}>
-						<TextInput
-							required
-							label={"Email"}
-							placeholder="you@example.com"
-							{...form.getInputProps("email")}
-						/>
+						<TextInput required aria-label={"Email"} placeholder="Email" {...form.getInputProps("email")} />
 					</GridCol>
 					<GridCol span={{ base: 12 }}>
-						<Center>
-							<Button
-								w={{ base: "100%", xs: "50%", md: "100%" }}
-								type="submit"
-								color="pri"
-								loading={sending}
-								mt={"md"}
-							>
-								{sending ? "Sending Reset Link" : "Send Reset Link"}
-							</Button>
-						</Center>
+						<Button fullWidth type="submit" color="pri" loading={sending}>
+							{sending ? "Sending Reset Link" : "Send Reset Link"}
+						</Button>
 					</GridCol>
 				</Grid>
 

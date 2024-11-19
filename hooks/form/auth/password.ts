@@ -64,7 +64,7 @@ export const useFormAuthPasswordForgot = () => {
 					return;
 				}
 
-				showNotification({ variant: NotificationVariant.WARNING }, response, result);
+				showNotification({ variant: NotificationVariant.FAILED }, response, result);
 				return;
 			}
 		} catch (error) {

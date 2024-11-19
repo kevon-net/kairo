@@ -27,83 +27,75 @@ export default function SignUp() {
 
 	return (
 		<form onSubmit={form.onSubmit(handleSubmit)} noValidate>
-			<Stack gap={"xl"}>
-				<AuthProviders />
+			<Stack>
+				<Stack>
+					<Grid>
+						<GridCol span={{ base: 12, xs: 6 }}>
+							<TextInput
+								required
+								aria-label="First Name"
+								placeholder="First Name"
+								{...form.getInputProps("name.first")}
+							/>
+						</GridCol>
+
+						<GridCol span={{ base: 12, xs: 6 }}>
+							<TextInput
+								required
+								aria-label="Last Name"
+								placeholder="Last Name"
+								{...form.getInputProps("name.last")}
+							/>
+						</GridCol>
+
+						<GridCol span={{ base: 12 }}>
+							<TextInput
+								required
+								aria-label="Email"
+								placeholder="Email"
+								{...form.getInputProps("email")}
+							/>
+						</GridCol>
+
+						<GridCol span={{ base: 12, xs: 6 }}>
+							<PopoverPasswordStrength
+								required
+								aria-label="Password"
+								placeholder="Password"
+								value={form.values.password.initial}
+								{...form.getInputProps("password.initial")}
+							/>
+						</GridCol>
+
+						<GridCol span={{ base: 12, xs: 6 }}>
+							<PasswordInput
+								required
+								aria-label="Confirm Password"
+								placeholder="Confirm Password"
+								{...form.getInputProps("password.confirm")}
+							/>
+						</GridCol>
+
+						<GridCol span={12}>
+							<Button fullWidth type="submit" loading={submitted}>
+								{submitted ? "Signing Up" : "Sign Up"}
+							</Button>
+						</GridCol>
+					</Grid>
+
+					<Text fz={"xs"} ta={"center"}>
+						Already have an account?{" "}
+						<FragmentSignIn>
+							<Anchor inherit fw={500} underline="hover">
+								Sign In
+							</Anchor>
+						</FragmentSignIn>
+					</Text>
+				</Stack>
 
 				<Divider label="or" />
 
-				<Grid>
-					<GridCol span={{ base: 12, sm: 6 }}>
-						<TextInput
-							required
-							label="First Name"
-							placeholder="First Name"
-							{...form.getInputProps("name.first")}
-						/>
-					</GridCol>
-
-					<GridCol span={{ base: 12, sm: 6 }}>
-						<TextInput
-							required
-							label="Last Name"
-							placeholder="Last Name"
-							{...form.getInputProps("name.last")}
-						/>
-					</GridCol>
-
-					<GridCol span={{ base: 12, sm: 12 }}>
-						<TextInput
-							required
-							label="Email"
-							placeholder="you@example.com"
-							{...form.getInputProps("email")}
-						/>
-					</GridCol>
-
-					<GridCol span={{ base: 12, xs: 6 }}>
-						<PopoverPasswordStrength
-							required
-							label="Password"
-							placeholder="********"
-							value={form.values.password.initial}
-							{...form.getInputProps("password.initial")}
-						/>
-					</GridCol>
-
-					<GridCol span={{ base: 12, xs: 6 }}>
-						<PasswordInput
-							required
-							label="Confirm Password"
-							placeholder="********"
-							{...form.getInputProps("password.confirm")}
-						/>
-					</GridCol>
-
-					<GridCol span={12}>
-						<Center mt={"md"}>
-							<Button
-								w={{
-									base: "100%",
-									xs: "50%",
-									md: "100%",
-								}}
-								type="submit"
-								loading={submitted}
-							>
-								{submitted ? "Signing Up" : "Sign Up"}
-							</Button>
-						</Center>
-					</GridCol>
-				</Grid>
-
-				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
-					Already have an account?{" "}
-					<FragmentSignIn>
-						<Anchor inherit fw={500} underline="hover">
-							Sign In
-						</Anchor>
-					</FragmentSignIn>
-				</Text>
+				<AuthProviders />
 			</Stack>
 		</form>
 	);

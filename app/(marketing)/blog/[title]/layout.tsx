@@ -11,17 +11,23 @@ import { PostRelations } from "@/types/models/post";
 import { postsGet } from "@/handlers/requests/database/post";
 
 export const generateMetadata = async ({ params }: { params: typeParams }): Promise<Metadata> => {
-	const posts: PostRelations[] = await postsGet();
+	const { posts }: { posts: PostRelations[] } = await postsGet();
 
 	return {
-		title: posts.find((p) => linkify(p.title) == params.blogId)?.title,
+		title: posts.find((p) => linkify(p.title) == params.title)?.title,
 	};
 };
 
 export default function Post({
 	children, // will be a page or nested layout
+	params,
 }: {
 	children: React.ReactNode;
+	params: typeParams;
 }) {
-	return <LayoutBody aside={{ right: { component: <AsideBlog /> } }}>{children}</LayoutBody>;
+	return (
+		<LayoutBody aside={{ gap: 64, right: { component: <AsideBlog params={params} />, width: { md: 40 } } }}>
+			{children}
+		</LayoutBody>
+	);
 }

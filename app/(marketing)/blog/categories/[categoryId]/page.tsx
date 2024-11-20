@@ -4,13 +4,13 @@ import { Grid, GridCol, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/components/layout/page";
 import LayoutSection from "@/components/layout/section";
-import CardBlogNew from "@/components/common/cards/blog/new";
 import CardBlogMain from "@/components/common/cards/blog/main";
 
 import { postsGet } from "@/handlers/requests/database/post";
 import { PostRelations } from "@/types/models/post";
+import { typeParams } from "../../layout";
 
-export default async function Blog() {
+export default async function Category({ params }: { params: typeParams }) {
 	const { posts }: { posts: PostRelations[] } = await postsGet();
 
 	return (
@@ -19,7 +19,7 @@ export default async function Blog() {
 				<Stack gap={"xl"}>
 					<Stack align="center">
 						<Title order={1} ta={"center"}>
-							Expert web design advice
+							{posts.find((p) => p.category?.id == params.categoryId)?.category?.title}
 						</Title>
 						<Text ta={"center"} w={{ md: "50%", lg: "40%" }}>
 							Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit
@@ -28,18 +28,13 @@ export default async function Blog() {
 					</Stack>
 
 					<Grid gutter={"xl"}>
-						<GridCol span={12}>
-							<CardBlogNew post={posts[0]} />
-						</GridCol>
-
-						{posts.map(
-							(post) =>
-								posts.indexOf(post) != 0 && (
-									<GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
-										<CardBlogMain post={post} />
-									</GridCol>
-								)
-						)}
+						{posts
+							.filter((p) => p.category?.id == params.categoryId)
+							.map((post) => (
+								<GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
+									<CardBlogMain post={post} />
+								</GridCol>
+							))}
 					</Grid>
 				</Stack>
 			</LayoutSection>

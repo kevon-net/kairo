@@ -35,7 +35,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 				key={link.link}
 				href={link.link}
 				label={link.label}
-				active={pathname == link.link}
+				active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
 				onClick={close}
 				fw={pathname == link.link ? 500 : undefined}
 				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
@@ -46,13 +46,9 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 				key={link.link}
 				href={link.link}
 				label={link.label}
-				active={pathname == link.link}
+				active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
 				fw={pathname == link.link ? 500 : undefined}
-				opened={
-					pathname == link.link || link.subLinks?.find((sl) => sl.link == pathname)?.link == pathname
-						? true
-						: undefined
-				}
+				opened={pathname == link.link || pathname.includes(link.link)}
 				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
 				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
 			>

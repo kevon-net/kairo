@@ -171,6 +171,7 @@ model Address {
 
 model Post {
   id            String  @id @default(cuid())
+  image         String
   title         String
   content       String
   status        Status  @default(DRAFT)

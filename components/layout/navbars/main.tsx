@@ -13,8 +13,6 @@ import MenuNavbar from "@/components/common/menus/navbar";
 import LayoutBrand from "../brand";
 import { SignIn as FragmentSignIn } from "@/components/common/fragments/auth";
 
-import sample from "@/data/sample";
-
 import links from "@/data/links";
 import classes from "./main.module.scss";
 import { IconChevronDown } from "@tabler/icons-react";
@@ -30,7 +28,11 @@ export default function Main() {
 				<Anchor
 					component={Link}
 					href={link.link}
-					className={`${classes.link} ${pathname == link.link ? classes.linkActive : ""}`}
+					className={`${classes.link} ${
+						pathname == link.link || (link.link != "/" && pathname.includes(link.link))
+							? classes.linkActive
+							: ""
+					}`}
 				>
 					{link.label}
 				</Anchor>
@@ -78,7 +80,7 @@ export default function Main() {
 				</Group>
 
 				<Group hiddenFrom="sm" gap={"xs"} justify="space-between" w={"100%"}>
-					<DrawerNavbarMain props={sample.links.navbar} />
+					<DrawerNavbarMain props={links.navbar} />
 					<MenuAvatar />
 				</Group>
 			</Group>

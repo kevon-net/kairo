@@ -68,11 +68,13 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 						updateSession({ ...session, user: { ...session.user, withPassword: true } });
 
 						// refresh the page
-						window.location.reload();
+						setTimeout(() => window.location.reload(), timeout.redirect);
 
+						showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 						return;
 					}
 
+					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
 					return;
 				}
 

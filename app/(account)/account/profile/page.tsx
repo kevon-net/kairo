@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Profile" };
 export default async function Profile() {
 	return (
 		<LayoutPage stacked>
-			<LayoutSection id="page-profile-personal">
+			<LayoutSection id="page-profile-personal" containerized={false}>
 				<Grid>
 					<GridCol span={{ base: 12 }}>
 						<Title order={2} fz={"xl"}>

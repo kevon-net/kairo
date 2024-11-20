@@ -13,7 +13,7 @@ export const metadata: Metadata = { title: "Notifications" };
 export default async function Notifications() {
 	return (
 		<LayoutPage stacked>
-			<LayoutSection id="page-notifications">
+			<LayoutSection id="page-notifications" containerized={false}>
 				<Grid gutter={"xl"}>
 					<GridCol span={{ base: 12 }}>
 						<Stack gap={"xl"}>

@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Security" };
 export default async function Security() {
 	return (
 		<LayoutPage stacked>
-			<LayoutSection id="page-security-password">
+			<LayoutSection id="page-security-password" containerized={false}>
 				<Grid gutter={"xl"}>
 					<GridCol span={{ base: 12 }}>
 						<Stack gap={"lg"}>
@@ -32,7 +32,7 @@ export default async function Security() {
 
 			<Divider />
 
-			<LayoutSection id="page-security-delete">
+			<LayoutSection id="page-security-delete" containerized={false}>
 				<Stack gap={"lg"}>
 					<Group justify="space-between">
 						<Title order={2} fz={"xl"}>
@@ -56,7 +56,7 @@ export default async function Security() {
 
 			<Divider />
 
-			<LayoutSection id="page-security-delete">
+			<LayoutSection id="page-security-delete" containerized={false}>
 				<Stack gap={"lg"} align="start">
 					<Title order={2} fz={"xl"}>
 						Delete Account

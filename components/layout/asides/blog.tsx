@@ -4,7 +4,7 @@ import LayoutSection from "@/components/layout/section";
 
 export default function Blog() {
 	return (
-		<LayoutSection id={"partial-aside-blog"} padded>
+		<LayoutSection id={"partial-aside-blog"} padded containerized={false}>
 			Aside blog
 		</LayoutSection>
 	);

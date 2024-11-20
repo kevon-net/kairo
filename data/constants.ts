@@ -52,8 +52,8 @@ export const headers = { withBody, withoutBody };
 
 export const key = new TextEncoder().encode(process.env.JWT_SECRET);
 
-const expirySessionSecStandard = 60;
-const expirySessionSecExtended = 2 * expirySessionSecStandard;
+const expirySessionSecStandard = 60 * 60 * 24;
+const expirySessionSecExtended = 7 * expirySessionSecStandard;
 
 export const expiry = {
 	session: {

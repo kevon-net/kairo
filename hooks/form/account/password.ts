@@ -9,9 +9,11 @@ import { showNotification } from "@/utilities/notifications";
 import { useSession, useSignOut } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
+import { useNetwork } from "@mantine/hooks";
 
 export const useFormUserAccountPassword = (params: { credentials: boolean }) => {
 	const router = useRouter();
+	const networkStatus = useNetwork();
 
 	const { session, updateSession, pathname } = useSession();
 	const { signOut } = useSignOut();
@@ -36,8 +38,17 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 	});
 
 	const handleSubmit = async () => {
-		try {
-			if (form.isValid()) {
+		if (form.isValid()) {
+			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				setSending(true);
 
 				const response = await userUpdate(
@@ -83,12 +94,12 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 
 				showNotification({ variant: NotificationVariant.FAILED }, response, result);
 				return;
+			} catch (error) {
+				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+				return;
+			} finally {
+				setSending(false);
 			}
-		} catch (error) {
-			showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
-			return;
-		} finally {
-			setSending(false);
 		}
 	};
 

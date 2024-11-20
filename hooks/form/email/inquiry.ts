@@ -6,10 +6,12 @@ import email from "@/utilities/validators/special/email";
 import phone from "@/utilities/validators/special/phone";
 import text from "@/utilities/validators/special/text";
 import { useForm } from "@mantine/form";
+import { useNetwork } from "@mantine/hooks";
 import { useState } from "react";
 
 export const useFormEmailInquiry = () => {
 	const [submitted, setSubmitted] = useState(false);
+	const networkStatus = useNetwork();
 
 	const form = useForm({
 		initialValues: {
@@ -42,6 +44,15 @@ export const useFormEmailInquiry = () => {
 	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				setSubmitted(true);
 
 				const response = await emailCreate(parseValues());

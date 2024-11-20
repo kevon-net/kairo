@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
-import { useOs } from "@mantine/hooks";
+import { useNetwork, useOs } from "@mantine/hooks";
 import { signIn } from "@/handlers/events/auth";
 import { Provider } from "@prisma/client";
 
 export const useFormAuthSignIn = () => {
 	const router = useRouter();
 	const os = useOs();
+	const networkStatus = useNetwork();
 
 	const [submitted, setSubmitted] = useState(false);
 
@@ -36,6 +37,15 @@ export const useFormAuthSignIn = () => {
 	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				setSubmitted(true);
 
 				const response = await signIn(Provider.CREDENTIALS, parseValues(), { os });

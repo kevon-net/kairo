@@ -2,10 +2,7 @@
 
 import React, { useState } from "react";
 
-import {
-	Transition as TransitionComponent,
-	TransitionProps
-} from "@mantine/core";
+import { Transition as TransitionComponent, TransitionProps } from "@mantine/core";
 
 export default function Transition({
 	mounted = false,
@@ -25,18 +22,7 @@ export default function Transition({
 			timingFunction="ease"
 			{...restProps} // Spread the restProps here
 		>
-			{(styles) => (
-				<div
-					style={{
-						...styles,
-						overflow: "hidden", // Ensure content is hidden during height transition
-						transition: "max-height 250ms ease", // Animate max-height property
-						maxHeight: mounted ? 200 : 0 // Set your content height when mounted, or 0 when unmounting
-					}}
-				>
-					{children}
-				</div>
-			)}
+			{(styles) => <div style={styles}>{children}</div>}
 		</TransitionComponent>
 	);
 }

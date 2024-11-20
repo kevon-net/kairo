@@ -11,10 +11,12 @@ import { timeout } from "@/data/constants";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
 import { setRedirectUrl } from "@/utilities/helpers/url";
+import { useNetwork } from "@mantine/hooks";
 
 export const useFormAuthSignUp = () => {
 	const router = useRouter();
 	const pathname = usePathname();
+	const networkStatus = useNetwork();
 
 	const [submitted, setSubmitted] = useState(false);
 
@@ -49,6 +51,15 @@ export const useFormAuthSignUp = () => {
 	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				setSubmitted(true);
 
 				const response = await handleSignUp(parseValues());

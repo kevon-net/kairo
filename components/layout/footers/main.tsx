@@ -31,7 +31,7 @@ import { iconStrokeWidth } from "@/data/constants";
 
 export default function Main() {
 	return (
-		<LayoutSection id={"partial-footer-main"} pt={56} pb={"lg"} className={classes.footer}>
+		<LayoutSection id={"partial-footer-main"} containerized={false} pt={56} pb={"lg"} className={classes.footer}>
 			<Container size={"responsive"}>
 				<Grid gutter={{ base: "xl", md: "md" }}>
 					<GridCol span={{ base: 12, md: 4, lg: 3.5 }}>

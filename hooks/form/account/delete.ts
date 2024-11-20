@@ -7,11 +7,13 @@ import { userDelete } from "@/handlers/requests/database/user";
 import { useSession, useSignOut } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
+import { useNetwork } from "@mantine/hooks";
 
 export const useFormUserAccountDelete = () => {
 	const [submitted, setSubmitted] = useState(false);
 	const { session, pathname } = useSession();
 	const { signOut } = useSignOut();
+	const networkStatus = useNetwork();
 
 	const router = useRouter();
 
@@ -22,6 +24,15 @@ export const useFormUserAccountDelete = () => {
 	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				setSubmitted(true);
 
 				const response = await userDelete(session.user.id, form.values.password.trim());

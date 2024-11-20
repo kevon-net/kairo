@@ -10,9 +10,11 @@ import { useSession, useSignOut } from "@/hooks/auth";
 import { useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
 import { capitalizeWords, segmentFullName } from "@/utilities/formatters/string";
+import { useNetwork } from "@mantine/hooks";
 
 export const useFormUserProfile = () => {
 	const router = useRouter();
+	const networkStatus = useNetwork();
 
 	const { session, updateSession, pathname } = useSession();
 	const { signOut } = useSignOut();
@@ -49,6 +51,15 @@ export const useFormUserProfile = () => {
 	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				if (!form.isDirty()) {
 					showNotification({
 						variant: NotificationVariant.WARNING,

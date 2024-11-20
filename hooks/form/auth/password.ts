@@ -13,11 +13,13 @@ import { showNotification } from "@/utilities/notifications";
 import { userUpdate } from "@/handlers/requests/database/user";
 import { getUrlParam, setRedirectUrl } from "@/utilities/helpers/url";
 import { decrypt } from "@/utilities/helpers/token";
+import { useNetwork } from "@mantine/hooks";
 
 export const useFormAuthPasswordForgot = () => {
 	const [sending, setSending] = useState(false);
 	const [requested, setRequested] = useState(false);
 	const [time, setTime] = useState<MinSec | null>(null);
+	const networkStatus = useNetwork();
 
 	const form = useForm({
 		initialValues: { email: "" },
@@ -27,8 +29,17 @@ export const useFormAuthPasswordForgot = () => {
 	const router = useRouter();
 
 	const handleSubmit = async () => {
-		try {
-			if (form.isValid()) {
+		if (form.isValid()) {
+			try {
+				if (!networkStatus.online) {
+					showNotification({
+						variant: NotificationVariant.WARNING,
+						title: "Network Error",
+						desc: "Please check your internet connection.",
+					});
+					return;
+				}
+
 				setSending(true);
 				setRequested(true);
 
@@ -66,13 +77,13 @@ export const useFormAuthPasswordForgot = () => {
 
 				showNotification({ variant: NotificationVariant.FAILED }, response, result);
 				return;
+			} catch (error) {
+				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
+				return;
+			} finally {
+				setSending(false);
+				setRequested(false);
 			}
-		} catch (error) {
-			showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
-			return;
-		} finally {
-			setSending(false);
-			setRequested(false);
 		}
 	};
 

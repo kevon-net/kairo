@@ -9,6 +9,7 @@ import LayoutSection from "@/components/layout/section";
 import NavbarAccount from "@/components/layout/navbars/account";
 
 import AffixTop from "@/components/common/affixi/top";
+import AffixNavbar from "@/components/common/affixi/navbar";
 
 import appData from "@/data/app";
 
@@ -55,6 +56,7 @@ export default function LayoutAccount({
 			</LayoutSection>
 
 			<AffixTop />
+			<AffixNavbar />
 		</LayoutBody>
 	);
 }

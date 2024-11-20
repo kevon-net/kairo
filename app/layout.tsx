@@ -32,6 +32,7 @@ import { linkify } from "@/utilities/formatters/string";
 
 import SessionProvider from "@/components/providers/session";
 import { getSession } from "@/libraries/auth";
+
 import AffixOffline from "@/components/common/affixi/offline";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
@@ -63,6 +64,7 @@ export default async function RootLayout({
 						<ModalsProvider>{children}</ModalsProvider>
 
 						<Notifications limit={3} />
+
 						<AffixOffline />
 					</MantineProvider>
 				</SessionProvider>

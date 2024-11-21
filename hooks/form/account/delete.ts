@@ -17,9 +17,12 @@ export const useFormUserAccountDelete = () => {
 
 	const router = useRouter();
 
-	const form = useForm({ initialValues: { password: "" } });
-
-	if (!session) return;
+	const form = useForm({
+		initialValues: { confirmation: "", password: "" },
+		validate: {
+			confirmation: (value) => value.trim() != "DELETE" && "Please enter the confirmation phrase",
+		},
+	});
 
 	const handleSubmit = async () => {
 		if (form.isValid()) {
@@ -35,7 +38,7 @@ export const useFormUserAccountDelete = () => {
 
 				setSubmitted(true);
 
-				const response = await userDelete(session.user.id, form.values.password.trim());
+				const response = await userDelete(session?.user.id!, form.values.password.trim());
 
 				if (!response) throw new Error("No response from server");
 

@@ -1,5 +1,5 @@
 import { cookieName } from "@/data/constants";
-import { cookies } from "next/headers";
+import { getSessionCookie } from "@/libraries/auth";
 
 export const authHeaders = async (headers: any) => {
 	// Check if running in the client-side (browser)
@@ -7,7 +7,7 @@ export const authHeaders = async (headers: any) => {
 
 	if (!isClient) {
 		// In server-side, manually pass the session cookie if it's available
-		const sessionCookieValue = cookies().get(cookieName.session)?.value;
+		const sessionCookieValue = await getSessionCookie();
 
 		if (sessionCookieValue) {
 			headers["Cookie"] = `${cookieName.session}=${sessionCookieValue}`;

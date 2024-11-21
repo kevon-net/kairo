@@ -12,8 +12,13 @@ import { UserGet } from "@/types/models/user";
 import { Provider } from "@prisma/client";
 import { ProfileGet } from "@/types/models/profile";
 
-export const getSession = async (): Promise<Session | null> => {
+export const getSessionCookie = async (): Promise<string | null> => {
 	const sessionCookieValue = cookies().get(cookieName.session)?.value;
+	return sessionCookieValue || null;
+};
+
+export const getSession = async (): Promise<Session | null> => {
+	const sessionCookieValue = await getSessionCookie();
 	const session = !sessionCookieValue ? null : await decrypt(sessionCookieValue);
 
 	return session;

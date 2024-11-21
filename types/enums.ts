@@ -16,6 +16,14 @@ export enum Request {
 	DELETE = "DELETE",
 }
 
+export enum Platform {
+	TWITTER = "TWITTER",
+	FACEBOOK = "FACEBOOK",
+	LINKEDIN = "LINKEDIN",
+	WHATSAPP = "WHATSAPP",
+	INSTAGRAM = "INSTAGRAM",
+}
+
 export enum HashingAlgorithm {
 	BCRYPT = "bcrypt",
 	SHA256 = "sha256",

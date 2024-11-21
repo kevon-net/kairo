@@ -9,9 +9,11 @@ import { typeParams } from "../layout";
 import { PostRelations } from "@/types/models/post";
 import { postsGet } from "@/handlers/requests/database/post";
 import { linkify } from "@/utilities/formatters/string";
-import { Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Divider, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { getRegionalDate } from "@/utilities/formatters/date";
 import { IconCircleFilled } from "@tabler/icons-react";
+import PartialShare from "@/components/partial/share";
+import Link from "next/link";
 
 export default async function Post({ params }: { params: typeParams }) {
 	const { posts }: { posts: PostRelations[] } = await postsGet();
@@ -28,13 +30,24 @@ export default async function Post({ params }: { params: typeParams }) {
 							<IconCircleFilled size={4} />
 							<Text inherit>{getRegionalDate(post?.createdAt!)}</Text>
 							<IconCircleFilled size={4} />
-							<Text inherit>{post?.category?.title}</Text>
+							<Anchor
+								component={Link}
+								href={`/blog/categories/${post?.category?.id}`}
+								underline="never"
+								inherit
+							>
+								{post?.category?.title}
+							</Anchor>
 						</Group>
 
 						<Title order={1} fz={40} ta={"center"}>
 							{post?.title}
 						</Title>
 					</Stack>
+
+					<Group justify="center">
+						<PartialShare props={{ postTitle: post?.title! }} size={32} />
+					</Group>
 
 					<Stack
 						style={{ overflow: "hidden", borderRadius: "var(--mantine-radius-sm)" }}
@@ -52,6 +65,24 @@ export default async function Post({ params }: { params: typeParams }) {
 					</Stack>
 
 					<Text>{post?.content}</Text>
+
+					<Divider />
+
+					<Group justify="space-between">
+						<Text fw={"bold"}>
+							Tags:{" "}
+							<Text component="span" inherit fw={"normal"}>
+								{post?.tags.map(
+									(t) => `${t.title}${post.tags.indexOf(t) == post.tags.length - 1 ? "" : ", "}`
+								)}
+							</Text>
+						</Text>
+
+						<Group gap={"xs"}>
+							<Text>Share: </Text>
+							<PartialShare props={{ postTitle: post?.title! }} />
+						</Group>
+					</Group>
 				</Stack>
 			</LayoutSection>
 		</LayoutPage>

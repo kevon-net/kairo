@@ -1,6 +1,7 @@
 import { apiUrl, headers } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
 import { UserCreate, UserUpdate } from "@/types/models/user";
+import { authHeaders } from "@/utilities/helpers/auth";
 
 const baseRequestUrl = `${apiUrl}/users`;
 
@@ -9,7 +10,7 @@ export const userCreate = async (user: UserCreate) => {
 		const request = new Request(`${baseRequestUrl}/create`, {
 			method: EnumRequest.POST,
 			credentials: "include",
-			headers: headers.withBody,
+			headers: await authHeaders(headers.withBody),
 			body: JSON.stringify(user),
 		});
 
@@ -27,7 +28,7 @@ export const userUpdate = async (user: UserUpdate, options?: { password?: string
 		const request = new Request(`${baseRequestUrl}/${user.id}`, {
 			method: EnumRequest.PUT,
 			credentials: "include",
-			headers: headers.withBody,
+			headers: await authHeaders(headers.withBody),
 			body: JSON.stringify({ user, options }),
 		});
 
@@ -45,7 +46,7 @@ export const userDelete = async (userId: string, password: string) => {
 		const request = new Request(`${baseRequestUrl}/${userId}`, {
 			method: EnumRequest.DELETE,
 			credentials: "include",
-			headers: headers.withBody,
+			headers: await authHeaders(headers.withBody),
 			body: JSON.stringify({ password }),
 		});
 

@@ -4,7 +4,20 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Menu, MenuDivider, MenuDropdown, MenuItem, MenuLabel, MenuTarget, Text, Stack, Skeleton } from "@mantine/core";
+import {
+	Menu,
+	MenuDivider,
+	MenuDropdown,
+	MenuItem,
+	MenuLabel,
+	MenuTarget,
+	Text,
+	Stack,
+	Skeleton,
+	Anchor,
+	Title,
+	Divider,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 import AvatarMain from "../avatars/main";
@@ -13,6 +26,7 @@ import classes from "./avatar.module.scss";
 import { navLinkItems } from "@/components/layout/asides/account";
 import { useSession } from "@/hooks/auth";
 import { getRegionalDate } from "@/utilities/formatters/date";
+import { IconSettings } from "@tabler/icons-react";
 
 export default function Avatar() {
 	const { session } = useSession();
@@ -20,7 +34,14 @@ export default function Avatar() {
 	const mobile = useMediaQuery("(max-width: 48em)");
 
 	return (
-		<Menu position={"bottom"} withArrow width={mobile ? 200 : 240} trigger="click-hover" classNames={classes}>
+		<Menu
+			position={"bottom-end"}
+			withArrow
+			arrowOffset={24}
+			width={mobile ? 200 : 240}
+			trigger="click-hover"
+			classNames={classes}
+		>
 			<MenuTarget>
 				<div>
 					<AvatarMain size={40} />
@@ -34,11 +55,11 @@ export default function Avatar() {
 					) : (
 						session && (
 							<Stack gap={"xs"}>
-								<Text fz={"sm"} lh={1} ta={"center"}>
+								<Title order={3} fz={"md"} lh={1} ta={"center"}>
 									{session.user.name}
-								</Text>
-								<Text fz={"xs"} lh={1} ta={"center"}>
-									({session.user.email})
+								</Title>
+								<Text fz={"sm"} lh={1} ta={"center"}>
+									{session.user.email}
 								</Text>
 
 								{/* <Text fz={"xs"} lh={1} ta={"center"}>
@@ -49,39 +70,20 @@ export default function Avatar() {
 					)}
 				</Stack>
 
-				{session && <MenuDivider />}
-
-				{/* <MenuLabel>Activity</MenuLabel>
-				{navLinkItems.activity.map((item) => (
-					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
-						{item.label}
-					</MenuItem>
-				))}
-
-				<MenuDivider /> */}
-
-				<MenuLabel>Account</MenuLabel>
-				{navLinkItems.account.map((item) => (
-					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
-						{item.label}
-					</MenuItem>
-				))}
-
 				<MenuDivider />
 
-				<MenuLabel>Support</MenuLabel>
-				{navLinkItems.support.map((item) => (
-					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
-						{item.label}
-					</MenuItem>
-				))}
-
-				<MenuDivider />
+				<MenuItem
+					leftSection={<IconSettings size={16} stroke={1.5} />}
+					component={Link}
+					href={"/account/profile"}
+				>
+					Manage Account
+				</MenuItem>
 
 				{navLinkItems.danger.map((item) => (
 					<MenuItem
 						key={item.label}
-						leftSection={<item.icon size={16} />}
+						leftSection={<item.icon size={16} stroke={1.5} />}
 						component={Link}
 						href={item.link}
 						color={item.color}

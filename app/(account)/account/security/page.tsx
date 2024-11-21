@@ -7,13 +7,18 @@ import LayoutSection from "@/components/layout/section";
 import FormUserAccountPassword from "@/components/form/user/account/password";
 import ModalDeleteAccount from "@/components/common/modals/delete/account";
 import ButtonClearSessions from "@/components/common/buttons/clear-sessions";
+import CardSession from "@/components/common/cards/session";
 
 import { Metadata } from "next";
 import appData from "@/data/app";
+import { sessionsGet } from "@/handlers/requests/database/session";
+import { SessionRelations } from "@/types/models/session";
 
 export const metadata: Metadata = { title: "Security" };
 
 export default async function Security() {
+	const { sessions }: { sessions: SessionRelations[] } = await sessionsGet();
+
 	return (
 		<LayoutPage stacked>
 			<LayoutSection id="page-security-password" containerized={false}>
@@ -44,13 +49,13 @@ export default async function Security() {
 
 					<Text>A list of all devices signed in to your {appData.name.app} account.</Text>
 
-					{/* <Grid>
-						{sessions.sessions?.map((session) => (
-							<GridCol key={session.sessionToken} span={{ base: 12, sm: 6, xl: 4 }}>
+					<Grid>
+						{sessions?.map((session) => (
+							<GridCol key={session.id} span={{ base: 12, sm: 6, xl: 4 }}>
 								<CardSession props={session} />
 							</GridCol>
 						))}
-					</Grid> */}
+					</Grid>
 				</Stack>
 			</LayoutSection>
 

@@ -1,5 +1,6 @@
 import { Request as EnumRequest } from "@/types/enums";
 import { apiUrl, headers } from "@/data/constants";
+import { authHeaders } from "@/utilities/helpers/auth";
 
 const baseRequestUrl = `${apiUrl}/posts/categories`;
 
@@ -8,7 +9,7 @@ export const categoriesGet = async () => {
 		const request = new Request(baseRequestUrl, {
 			method: EnumRequest.GET,
 			credentials: "include",
-			headers: headers.withoutBody,
+			headers: await authHeaders(headers.withoutBody),
 		});
 
 		const response = await fetch(request);

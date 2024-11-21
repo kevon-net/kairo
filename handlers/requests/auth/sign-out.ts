@@ -1,12 +1,13 @@
-import { apiUrl, baseUrl, headers } from "@/data/constants";
+import { apiUrl, headers } from "@/data/constants";
 import { Request as EnumRequest } from "@/types/enums";
+import { authHeaders } from "@/utilities/helpers/auth";
 
 export const signOut = async () => {
 	try {
 		const request = new Request(`${apiUrl}/auth/sign-out`, {
 			method: EnumRequest.POST,
 			credentials: "include",
-			headers: headers.withoutBody,
+			headers: await authHeaders(headers.withoutBody),
 		});
 
 		const response = await fetch(request);

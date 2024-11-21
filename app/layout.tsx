@@ -18,7 +18,7 @@ import "@mantine/tiptap/styles.css";
 
 import "@/styles/globals.scss";
 
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, MantineColorScheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 
@@ -31,9 +31,12 @@ import appData from "@/data/app";
 import { linkify } from "@/utilities/formatters/string";
 
 import SessionProvider from "@/components/providers/session";
+import ColorSchemeProvider from "@/components/providers/color-scheme";
 import { getSession } from "@/libraries/auth";
 
 import AffixOffline from "@/components/common/affixi/offline";
+import { getCookie } from "@/utilities/helpers/cookie-server";
+import { cookieName } from "@/data/constants";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 
@@ -47,10 +50,12 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const colorScheme = await getCookie(cookieName.colorScheme);
+
 	return (
-		<html lang="en" data-mantine-color-scheme="dark">
+		<html lang="en" data-mantine-color-scheme={(colorScheme || "light") as MantineColorScheme}>
 			<head>
-				<ColorSchemeScript defaultColorScheme="dark" />
+				<ColorSchemeScript defaultColorScheme={(colorScheme || "light") as MantineColorScheme} />
 			</head>
 
 			<body className={noto.className}>
@@ -58,10 +63,12 @@ export default async function RootLayout({
 					<MantineProvider
 						theme={appTheme}
 						cssVariablesResolver={appResolver}
-						defaultColorScheme="dark"
+						defaultColorScheme={(colorScheme || "light") as MantineColorScheme}
 						classNamesPrefix={linkify(appData.name.app)}
 					>
-						<ModalsProvider>{children}</ModalsProvider>
+						<ColorSchemeProvider scheme={(await getCookie(cookieName.colorSchemeState)) || "light"}>
+							<ModalsProvider>{children}</ModalsProvider>
+						</ColorSchemeProvider>
 
 						<Notifications limit={3} />
 

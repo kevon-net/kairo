@@ -4,7 +4,6 @@ import React from "react";
 
 import { Burger, Button, Drawer, Group, NavLink, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import ActionIconTheme from "@/components/common/buttons/theme";
 import LayoutBrand from "@/components/layout/brand";
 import { SignIn as FragmentSignIn } from "../../fragments/auth";
 
@@ -86,13 +85,9 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 							</FragmentSignIn>
 						)}
 
-						<Group gap={"xs"} grow preventGrowOverflow={false}>
-							<Button size="xs" w={"75%"}>
-								Get in Touch
-							</Button>
-
-							<ActionIconTheme />
-						</Group>
+						<Button size="xs" w={"75%"}>
+							Get in Touch
+						</Button>
 					</Stack>
 				</Stack>
 			</Drawer>

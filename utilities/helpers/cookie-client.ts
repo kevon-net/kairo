@@ -29,3 +29,14 @@ export const setCookie = (
 
 	document.cookie = cookieString;
 };
+
+export const getCookie = (cookieName: string): string | null => {
+	if (typeof document === "undefined") {
+		return null;
+	}
+
+	const cookies = document.cookie.split("; ");
+	const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
+
+	return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+};

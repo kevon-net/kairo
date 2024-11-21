@@ -37,6 +37,8 @@ export const timeout = { redirect: 5000 };
 export const cookieName = {
 	device: { geo: "device.geo-data" },
 	session: "auth.session",
+	colorScheme: "color-scheme",
+	colorSchemeState: "color-scheme-state",
 };
 
 const withoutBody: HeadersInit = {

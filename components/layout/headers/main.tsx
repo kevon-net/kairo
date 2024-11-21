@@ -3,7 +3,6 @@ import React from "react";
 import { Anchor, Group, ThemeIcon } from "@mantine/core";
 
 import LayoutSection from "@/components/layout/section";
-import ActionIconTheme from "@/components/common/buttons/theme";
 
 import classes from "./main.module.scss";
 import { dataContact, dataSocials } from "@/app/(marketing)/contact/page";
@@ -34,8 +33,6 @@ export default function Main() {
 							</Group>
 						</Anchor>
 					))}
-
-					<ActionIconTheme props={{ size: 24 }} />
 				</Group>
 			</Group>
 		</LayoutSection>

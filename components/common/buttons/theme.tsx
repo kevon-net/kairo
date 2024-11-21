@@ -2,28 +2,45 @@
 
 import React from "react";
 
-import { useMantineColorScheme, useComputedColorScheme, ActionIcon } from "@mantine/core";
+import { SegmentedControl, Group } from "@mantine/core";
 
-import { IconMoon, IconSun } from "@tabler/icons-react";
+import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
 import { iconStrokeWidth } from "@/data/constants";
+import { useColorSchemeHandler } from "@/hooks/color-scheme";
 
-export default function Theme({ props }: { props?: { size?: number } }) {
-	const { colorScheme, setColorScheme } = useMantineColorScheme({
-		keepTransitions: true,
-	});
-	const computedColorScheme = useComputedColorScheme("light", {
-		getInitialValueInEffect: true,
-	});
+export default function Theme() {
+	const { colorScheme, handleChange } = useColorSchemeHandler();
 
 	return (
-		<ActionIcon
-			onClick={() => setColorScheme(computedColorScheme === "light" ? "dark" : "light")}
-			aria-label="Toggle color scheme"
-			size={props?.size || 30}
-			variant="light"
-		>
-			{colorScheme == "dark" && <IconSun size={16} stroke={iconStrokeWidth} />}
-			{colorScheme == "light" && <IconMoon size={16} stroke={iconStrokeWidth} />}
-		</ActionIcon>
+		<SegmentedControl
+			value={colorScheme}
+			onChange={(v) => handleChange(v)}
+			data={[
+				{
+					label: (
+						<Group>
+							<IconSun size={16} stroke={iconStrokeWidth} />
+						</Group>
+					),
+					value: "light",
+				},
+				{
+					label: (
+						<Group>
+							<IconMoon size={16} stroke={iconStrokeWidth} />
+						</Group>
+					),
+					value: "dark",
+				},
+				{
+					label: (
+						<Group>
+							<IconDeviceDesktop size={16} stroke={iconStrokeWidth} />
+						</Group>
+					),
+					value: "auto",
+				},
+			]}
+		/>
 	);
 }

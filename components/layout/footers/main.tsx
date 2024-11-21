@@ -28,6 +28,7 @@ import classes from "./main.module.scss";
 import appData from "@/data/app";
 import { dataSocials } from "@/app/(marketing)/contact/page";
 import { iconStrokeWidth } from "@/data/constants";
+import ActionIconTheme from "@/components/common/buttons/theme";
 
 export default function Main() {
 	return (
@@ -93,28 +94,32 @@ export default function Main() {
 				</Grid>
 			</Container>
 
-			<Container size={"responsive"} px={"xl"}>
+			<Container size={"responsive"}>
 				<Divider mt={56} mb={"lg"} color="var(--mantine-color-default-border)" />
 			</Container>
 
 			<Container size={"responsive"}>
-				<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
-					<Text component="span" inherit>
-						Copyright © {new Date().getFullYear()} {appData.name.app}
-					</Text>{" "}
-					|{" "}
-					<Text component="span" inherit>
-						All Rights Reserved
-					</Text>{" "}
-					|{" "}
-					<Anchor inherit href="#tc" className={classes.link}>
-						Terms and Conditions
-					</Anchor>{" "}
-					|{" "}
-					<Anchor inherit href="#pp" className={classes.link}>
-						Privacy Policy
-					</Anchor>
-				</Text>
+				<Group justify="space-between">
+					<Text fz={{ base: "xs", lg: "sm" }} lh={1}>
+						<Text component="span" inherit>
+							Copyright © {new Date().getFullYear()} {appData.name.app}
+						</Text>{" "}
+						|{" "}
+						<Text component="span" inherit>
+							All Rights Reserved
+						</Text>{" "}
+						|{" "}
+						<Anchor inherit href="#tc" className={classes.link}>
+							Terms and Conditions
+						</Anchor>{" "}
+						|{" "}
+						<Anchor inherit href="#pp" className={classes.link}>
+							Privacy Policy
+						</Anchor>
+					</Text>
+
+					<ActionIconTheme />
+				</Group>
 			</Container>
 		</LayoutSection>
 	);

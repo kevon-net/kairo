@@ -4,20 +4,7 @@ import React from "react";
 
 import Link from "next/link";
 
-import {
-	Menu,
-	MenuDivider,
-	MenuDropdown,
-	MenuItem,
-	MenuLabel,
-	MenuTarget,
-	Text,
-	Stack,
-	Skeleton,
-	Anchor,
-	Title,
-	Divider,
-} from "@mantine/core";
+import { Menu, MenuDivider, MenuDropdown, MenuItem, MenuTarget, Text, Stack, Skeleton, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 
 import AvatarMain from "../avatars/main";
@@ -32,6 +19,7 @@ export default function Avatar() {
 	const { session } = useSession();
 
 	const mobile = useMediaQuery("(max-width: 48em)");
+	const desktop = useMediaQuery("(min-width: 62em)");
 
 	return (
 		<Menu
@@ -41,6 +29,7 @@ export default function Avatar() {
 			width={mobile ? 200 : 240}
 			trigger="click-hover"
 			classNames={classes}
+			opened={desktop ? undefined : false}
 		>
 			<MenuTarget>
 				<div>

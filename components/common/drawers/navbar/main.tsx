@@ -2,9 +2,10 @@
 
 import React from "react";
 
+import Link from "next/link";
+
 import { Burger, Button, Drawer, Group, NavLink, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import LayoutBrand from "@/components/layout/brand";
 import { SignIn as FragmentSignIn } from "../../fragments/auth";
 
 import classes from "./main.module.scss";
@@ -22,6 +23,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 			link.subLinks.map((subLink) => (
 				<NavLink
 					key={subLink.link}
+					component={Link}
 					href={subLink.link}
 					label={subLink.label}
 					active={pathname == subLink.link}
@@ -32,6 +34,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 		return !subLinks ? (
 			<NavLink
 				key={link.link}
+				component={Link}
 				href={link.link}
 				label={link.label}
 				active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
@@ -43,6 +46,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 		) : (
 			<NavLink
 				key={link.link}
+				component={Link}
 				href={link.link}
 				label={link.label}
 				active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
@@ -62,16 +66,11 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 				opened={opened}
 				onClose={close}
 				withCloseButton={false}
-				size={"200"}
+				size={240}
 				classNames={{
 					body: classes.body,
 					header: classes.header,
 				}}
-				title={
-					<Group>
-						<LayoutBrand />
-					</Group>
-				}
 			>
 				<Stack>
 					<Stack gap={0}>{navMobile}</Stack>
@@ -92,7 +91,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 				</Stack>
 			</Drawer>
 
-			<Burger opened={opened} onClick={toggle} size={"sm"} aria-label="Toggle Navigation" color="pri" />
+			<Burger opened={opened} onClick={toggle} size={"sm"} aria-label="Toggle Main Navbar" color="pri" />
 		</>
 	);
 }

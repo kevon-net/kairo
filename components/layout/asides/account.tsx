@@ -4,7 +4,7 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Divider, Flex, NavLink, Stack, Text, Title } from "@mantine/core";
+import { Divider, NavLink, Stack, Title } from "@mantine/core";
 import {
 	IconBellRinging,
 	IconChevronRight,
@@ -19,38 +19,18 @@ import {
 } from "@tabler/icons-react";
 
 import LayoutSection from "@/components/layout/section";
-import AvatarMain from "@/components/common/avatars/main";
+import PartialUser from "@/components/partial/user";
 
 import { authUrls, iconStrokeWidth } from "@/data/constants";
-import { useSession } from "@/hooks/auth";
+import { usePathname } from "next/navigation";
 
 export default function Account() {
-	const { session, pathname } = useSession();
+	const pathname = usePathname();
 
 	return (
 		<LayoutSection containerized={false} id={"partial-aside-user"} padded pos={"sticky"} top={0}>
 			<Stack gap={48} align="center">
-				<Flex
-					direction={{ base: "column", lg: "row" }}
-					align={"center"}
-					justify={"center"}
-					gap={"md"}
-					w={"100%"}
-				>
-					<AvatarMain />
-
-					{session && (
-						<Stack gap={0}>
-							<Title order={3} fz={"md"} ta={{ base: "center", lg: "start" }}>
-								{session.user.name}
-							</Title>
-
-							<Text fz={"xs"} c={"dimmed"} ta={{ base: "center", lg: "start" }}>
-								{session.user.email}
-							</Text>
-						</Stack>
-					)}
-				</Flex>
+				<PartialUser />
 
 				<Stack w={"100%"}>
 					{/* <Stack gap={"xs"}>

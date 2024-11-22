@@ -11,13 +11,7 @@ import { typeMenuNavbar } from "@/types/components/menu";
 
 import classes from "./navbar.module.scss";
 
-export default function Navbar({
-	children,
-	subLinks
-}: {
-	children: React.ReactNode;
-	subLinks?: typeMenuNavbar[];
-}) {
+export default function Navbar({ children, subLinks }: { children: React.ReactNode; subLinks?: typeMenuNavbar[] }) {
 	const pathname = usePathname();
 
 	const menuItems =
@@ -28,12 +22,8 @@ export default function Navbar({
 				component={Link}
 				href={item.link}
 				leftSection={item.leftSection && <item.leftSection size={14} />}
-				rightSection={
-					item.rightSection && <item.rightSection size={14} />
-				}
-				className={`${classes.item} ${
-					pathname == item.link ? classes.itemActive : ""
-				}`}
+				rightSection={item.rightSection && <item.rightSection size={14} />}
+				className={`${classes.item} ${pathname == item.link ? classes.itemActive : ""}`}
 			>
 				{item.label}
 			</MenuItem>
@@ -53,7 +43,7 @@ export default function Navbar({
 				label: classes.label,
 				item: classes.item,
 				itemLabel: classes.itemLabel,
-				itemSection: classes.itemSection
+				itemSection: classes.itemSection,
 			}}
 		>
 			<MenuTarget>{children}</MenuTarget>

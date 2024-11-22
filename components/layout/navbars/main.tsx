@@ -4,23 +4,26 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Group, Button, Divider, Anchor } from "@mantine/core";
+import { Group, Button, Divider, Anchor, Grid, GridCol } from "@mantine/core";
 
 import LayoutSection from "@/components/layout/section";
 import DrawerNavbarMain from "@/components/common/drawers/navbar/main";
 import MenuAvatar from "@/components/common/menus/avatar";
 import MenuNavbar from "@/components/common/menus/navbar";
+import DrawerUser from "@/components/common/drawers/user";
 import LayoutBrand from "../brand";
 import { SignIn as FragmentSignIn } from "@/components/common/fragments/auth";
 
 import links from "@/data/links";
 import classes from "./main.module.scss";
 import { IconChevronDown } from "@tabler/icons-react";
-import { iconStrokeWidth } from "@/data/constants";
+import { authUrls, iconStrokeWidth } from "@/data/constants";
 import { useSession } from "@/hooks/auth";
+import { useMediaQuery } from "@mantine/hooks";
 
 export default function Main() {
 	const { session, pathname } = useSession();
+	const desktop = useMediaQuery("(min-width: 62em)");
 
 	const navLinks = links.navbar.map((link) => (
 		<MenuNavbar key={link.link} subLinks={link.subLinks}>
@@ -43,7 +46,7 @@ export default function Main() {
 					className={`${classes.link} ${
 						pathname == link.link || link.subLinks.find((l) => l.link == pathname) ? classes.linkActive : ""
 					}`}
-					// onClick={e => e.preventDefault()}
+					onClick={(e) => e.preventDefault()}
 				>
 					<Group gap={4}>
 						<span>{link.label}</span>
@@ -55,35 +58,54 @@ export default function Main() {
 	));
 
 	return (
-		<LayoutSection id={"partial-navbar-main"} shadowed padded="md">
-			<Group justify="space-between">
-				<Group align="end" gap={"lg"} visibleFrom="sm">
-					<Link href={"/"}>
-						<LayoutBrand />
-					</Link>
+		<LayoutSection id={"partial-navbar-main"} shadowed>
+			<Grid align="center" gutter={0}>
+				<GridCol span={{ base: 4, sm: 8 }}>
+					<Group gap={"lg"} visibleFrom="sm">
+						<Anchor component={Link} href={"/"}>
+							<LayoutBrand />
+						</Anchor>
 
-					<Divider orientation="vertical" />
+						<Divider orientation="vertical" h={24} my={"auto"} />
 
-					<Group component={"nav"}>{navLinks}</Group>
-				</Group>
+						<Group component={"nav"}>{navLinks}</Group>
+					</Group>
 
-				<Group visibleFrom="sm" gap={"xs"}>
-					{!session ? (
-						<FragmentSignIn>
-							<Button size="xs" variant="light">
-								Log In
-							</Button>
-						</FragmentSignIn>
-					) : (
-						<MenuAvatar />
-					)}
-				</Group>
+					<Group hiddenFrom="sm" gap={"xs"} justify="space-between">
+						<DrawerNavbarMain props={links.navbar} />
+					</Group>
+				</GridCol>
 
-				<Group hiddenFrom="sm" gap={"xs"} justify="space-between" w={"100%"}>
-					<DrawerNavbarMain props={links.navbar} />
-					<MenuAvatar />
-				</Group>
-			</Group>
+				<GridCol span={{ base: 4 }} hiddenFrom="sm">
+					<Group gap={"xs"} justify="center">
+						<Anchor component={Link} href={"/"} py={"md"}>
+							<LayoutBrand />
+						</Anchor>
+					</Group>
+				</GridCol>
+
+				<GridCol span={{ base: 4 }}>
+					<Group justify="end">
+						{!session ? (
+							<Group gap={"xs"}>
+								<Button size="xs" component={Link} href={authUrls.signUp} visibleFrom="sm">
+									Sign Up
+								</Button>
+
+								<FragmentSignIn>
+									<Button size="xs" variant="light">
+										Log In
+									</Button>
+								</FragmentSignIn>
+							</Group>
+						) : desktop ? (
+							<MenuAvatar />
+						) : (
+							<DrawerUser />
+						)}
+					</Group>
+				</GridCol>
+			</Grid>
 		</LayoutSection>
 	);
 }

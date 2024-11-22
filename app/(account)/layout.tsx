@@ -6,7 +6,6 @@ import FooterMain from "@/components/layout/footers/main";
 import HeaderMain from "@/components/layout/headers/main";
 import AsideAccount from "@/components/layout/asides/account";
 import LayoutSection from "@/components/layout/section";
-import NavbarAccount from "@/components/layout/navbars/account";
 
 import AffixTop from "@/components/common/affixi/top";
 import AffixNavbar from "@/components/common/affixi/navbar";
@@ -14,8 +13,6 @@ import AffixNavbar from "@/components/common/affixi/navbar";
 import appData from "@/data/app";
 
 import { Metadata } from "next";
-
-import { Box, Divider, Stack } from "@mantine/core";
 
 export const metadata: Metadata = {
 	title: {
@@ -44,15 +41,7 @@ export default function LayoutAccount({
 			footer={<FooterMain />}
 		>
 			<LayoutSection containerized={false} id={"layout-account"} component={"main"} padded>
-				<Stack gap={48}>
-					<Box hiddenFrom="md">
-						<NavbarAccount />
-					</Box>
-
-					<Divider hiddenFrom="md" />
-
-					{children}
-				</Stack>
+				{children}
 			</LayoutSection>
 
 			<AffixTop />

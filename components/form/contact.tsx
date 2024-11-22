@@ -39,8 +39,9 @@ export default function Contact() {
 						label={"Message"}
 						placeholder="Write your message here..."
 						autosize
-						minRows={3}
-						maxRows={10}
+						minRows={7}
+						maxRows={15}
+						resize="vertical"
 						{...form.getInputProps("message")}
 					/>
 				</GridCol>

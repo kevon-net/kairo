@@ -20,11 +20,11 @@ export default function Body({ children, bar, header, nav, hero, aside, footer }
 	const widthMain = {
 		md:
 			100 -
-			((aside?.left?.width?.md ? aside?.left?.width.md : 0) +
+			((aside?.left?.width?.md ? aside?.left?.width.md : 33) +
 				(aside?.right?.width?.md ? aside?.right?.width.md : 0)),
 		lg:
 			100 -
-			((aside?.left?.width?.lg ? aside?.left?.width.lg : 0) +
+			((aside?.left?.width?.lg ? aside?.left?.width.lg : 25) +
 				(aside?.right?.width?.lg ? aside?.right?.width.lg : 0)),
 	};
 

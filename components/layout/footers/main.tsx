@@ -32,7 +32,7 @@ import ActionIconTheme from "@/components/common/buttons/theme";
 
 export default function Main() {
 	return (
-		<LayoutSection id={"partial-footer-main"} containerized={false} pt={56} pb={"lg"} className={classes.footer}>
+		<LayoutSection id={"partial-footer-main"} containerized={false} padded className={classes.footer}>
 			<Container size={"responsive"}>
 				<Grid gutter={{ base: "xl", md: "md" }}>
 					<GridCol span={{ base: 12, md: 4, lg: 3.5 }}>
@@ -55,7 +55,7 @@ export default function Main() {
 								{dataSocials.map((social) => (
 									<Anchor key={social.link} title={social.label} href={social.link}>
 										<Group>
-											<ThemeIcon size={iconWrapperSize} variant="light">
+											<ThemeIcon size={iconWrapperSize}>
 												<social.icon size={iconSize} stroke={iconStrokeWidth} />
 											</ThemeIcon>
 										</Group>
@@ -64,6 +64,7 @@ export default function Main() {
 							</Group>
 						</Flex>
 					</GridCol>
+
 					<GridCol span={{ base: 12, md: 8, lg: 8.5 }} visibleFrom="sm">
 						<Grid gutter={{ base: "xl", md: "md" }}>
 							{linkSets.map((linkSet) => (
@@ -99,27 +100,39 @@ export default function Main() {
 			</Container>
 
 			<Container size={"responsive"}>
-				<Group justify="space-between">
-					<Text fz={{ base: "xs", lg: "sm" }} lh={1}>
+				<Flex
+					align={{ base: "center", md: "start" }}
+					justify={{ md: "space-between" }}
+					direction={{ base: "column", md: "row" }}
+					gap={"md"}
+				>
+					<Flex
+						align={{ base: "center", md: "stretch" }}
+						direction={"column"}
+						gap={{ base: "md", md: "sm" }}
+						fz={"sm"}
+						ta={{ base: "center", md: "start" }}
+						lh={1}
+					>
 						<Text component="span" inherit>
-							Copyright © {new Date().getFullYear()} {appData.name.app}
-						</Text>{" "}
-						|{" "}
-						<Text component="span" inherit>
-							All Rights Reserved
-						</Text>{" "}
-						|{" "}
-						<Anchor inherit href="#tc" className={classes.link}>
-							Terms and Conditions
-						</Anchor>{" "}
-						|{" "}
-						<Anchor inherit href="#pp" className={classes.link}>
-							Privacy Policy
-						</Anchor>
-					</Text>
+							© {new Date().getFullYear()} {appData.name.app}. All Rights Reserved.
+						</Text>
 
-					<ActionIconTheme />
-				</Group>
+						<Text inherit>
+							<Anchor inherit href="#tc" className={classes.link}>
+								Terms and Conditions
+							</Anchor>{" "}
+							|{" "}
+							<Anchor inherit href="#pp" className={classes.link}>
+								Privacy Policy
+							</Anchor>
+						</Text>
+					</Flex>
+
+					<Group>
+						<ActionIconTheme />
+					</Group>
+				</Flex>
 			</Container>
 		</LayoutSection>
 	);

@@ -49,14 +49,11 @@ export default async function Post({ params }: { params: typeParams }) {
 						<PartialShare props={{ postTitle: post?.title! }} size={32} />
 					</Group>
 
-					<Stack
-						style={{ overflow: "hidden", borderRadius: "var(--mantine-radius-sm)" }}
-						justify="center"
-						h={480}
-					>
+					<Stack style={{ overflow: "hidden", borderRadius: "var(--mantine-radius-sm)" }} justify="center">
 						<Image
 							src={post?.image}
 							alt={post?.title!}
+							mah={480}
 							component={NextImage}
 							width={1920}
 							height={1080}

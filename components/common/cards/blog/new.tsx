@@ -21,20 +21,21 @@ export default function New({ post }: { post: PostRelations }) {
 			<Grid gutter={0}>
 				<GridCol span={{ base: 12, sm: 6 }}>
 					<Anchor component={Link} underline="hover" inherit href={path} title={post.title} pos={"relative"}>
-						<Stack>
+						<Group h={"100%"}>
 							<Image
 								src={post.image}
 								alt={post.title}
+								h={"100%"}
 								component={NextImage}
 								width={1920}
 								height={1080}
 								priority
 							/>
-						</Stack>
+						</Group>
 
 						<Group gap={"xs"} align="start" className={classes.overlay}>
 							{post.tags.map((t) => (
-								<Badge key={t.id} radius={"sm"} color="white" c={"black"} tt={"lowercase"}>
+								<Badge key={t.id} radius={"sm"} color="white" c={"black"}>
 									{t.title}
 								</Badge>
 							))}
@@ -50,6 +51,10 @@ export default function New({ post }: { post: PostRelations }) {
 						h={"100%"}
 					>
 						<Stack>
+							<Badge size="sm" variant="light" color="blue">
+								latest
+							</Badge>
+
 							<Title order={3} fz={28} lh={{ md: 1 }} className={classes.title}>
 								<Anchor
 									component={Link}
@@ -62,6 +67,7 @@ export default function New({ post }: { post: PostRelations }) {
 									{post.title}
 								</Anchor>
 							</Title>
+
 							<Text className={classes.desc} lineClamp={6}>
 								{post.content}
 							</Text>

@@ -16,7 +16,7 @@ export default function Session({ props }: { props: SessionGet }) {
 				<Group justify="space-between">
 					<Group gap={"xs"} align="start">
 						<Title order={2} fz={"lg"}>
-							{capitalizeWord(props.os!)} Device
+							{capitalizeWord(props.os!)}
 						</Title>
 
 						{session?.id == props.id && (
@@ -39,7 +39,13 @@ export default function Session({ props }: { props: SessionGet }) {
 					<Text inherit>
 						Location:{" "}
 						<Text component="span" inherit fw={500} fz={"md"}>
-							{props.city}, {props.country} ({props.loc})
+							{props.city}, {props.country}
+						</Text>
+					</Text>
+					<Text inherit>
+						GPS:{" "}
+						<Text component="span" inherit fw={500} fz={"md"}>
+							{props.loc}
 						</Text>
 					</Text>
 				</Stack>

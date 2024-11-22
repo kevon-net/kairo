@@ -1,7 +1,8 @@
-import { Request as EnumRequest } from "@/types/enums";
+import { Request as EnumRequest, SortOrder } from "@/types/enums";
 import { apiUrl, headers } from "@/data/constants";
 import { PostCreate, PostUpdate } from "@/types/models/post";
 import { authHeaders } from "@/utilities/helpers/auth";
+import { sortArray } from "@/utilities/helpers/array";
 
 const baseRequestUrl = `${apiUrl}/posts`;
 
@@ -17,7 +18,10 @@ export const postsGet = async () => {
 
 		const result = await response.json();
 
-		return result;
+		return {
+			...result,
+			posts: !result.posts ? undefined : sortArray(result.posts, "createdAt", SortOrder.DESCENDING),
+		};
 	} catch (error) {
 		console.error("---> handler error - (get posts):", error);
 		throw error;

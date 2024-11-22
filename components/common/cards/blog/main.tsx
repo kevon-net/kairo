@@ -20,7 +20,7 @@ export default function Main({ post }: { post: PostRelations }) {
 	return (
 		<Card className={classes.card} bg={"transparent"}>
 			<Stack gap={"lg"}>
-				<CardSection>
+				<CardSection style={{ borderRadius: "var(--mantine-radius-sm)", overflow: "hidden" }}>
 					<Anchor component={Link} underline="hover" inherit href={path} title={post.title} pos={"relative"}>
 						<Stack>
 							<Image

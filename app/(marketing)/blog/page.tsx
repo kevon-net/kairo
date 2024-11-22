@@ -28,14 +28,18 @@ export default async function Blog() {
 					</Stack>
 
 					<Grid gutter={"xl"}>
-						<GridCol span={12}>
+						<GridCol span={{ md: 12, lg: 10 }} mx={{ lg: "auto" }} visibleFrom="md">
 							<CardBlogNew post={posts[0]} />
+						</GridCol>
+
+						<GridCol span={{ base: 12, xs: 6 }} hiddenFrom="md">
+							<CardBlogMain post={posts[0]} />
 						</GridCol>
 
 						{posts.map(
 							(post) =>
 								posts.indexOf(post) != 0 && (
-									<GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
+									<GridCol key={post.title} span={{ base: 12, xs: 6, md: 4, lg: 3 }}>
 										<CardBlogMain post={post} />
 									</GridCol>
 								)

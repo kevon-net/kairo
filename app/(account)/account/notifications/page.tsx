@@ -4,7 +4,7 @@ import LayoutPage from "@/components/layout/page";
 import LayoutSection from "@/components/layout/section";
 import { Metadata } from "next";
 
-import { Grid, GridCol, Stack, Title } from "@mantine/core";
+import { Stack, Title } from "@mantine/core";
 
 import FormUserAccountNotifications from "@/components/form/user/account/notifications";
 
@@ -14,16 +14,13 @@ export default async function Notifications() {
 	return (
 		<LayoutPage stacked>
 			<LayoutSection id="page-notifications" containerized={false}>
-				<Grid gutter={"xl"}>
-					<GridCol span={{ base: 12 }}>
-						<Stack gap={"xl"}>
-							<Title order={2} fw={"bold"}>
-								Notification Settings
-							</Title>
-							<FormUserAccountNotifications />
-						</Stack>
-					</GridCol>
-				</Grid>
+				<Stack gap={"xl"}>
+					<Title order={2} fw={"bold"}>
+						Notification Settings
+					</Title>
+
+					<FormUserAccountNotifications />
+				</Stack>
 			</LayoutSection>
 		</LayoutPage>
 	);

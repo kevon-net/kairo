@@ -22,17 +22,13 @@ export default async function Security() {
 	return (
 		<LayoutPage stacked>
 			<LayoutSection id="page-security-password" containerized={false}>
-				<Grid gutter={"xl"}>
-					<GridCol span={{ base: 12 }}>
-						<Stack gap={"lg"}>
-							<Title order={2} fz={"xl"}>
-								Password
-							</Title>
+				<Stack gap={"lg"}>
+					<Title order={2} fz={"xl"}>
+						Password
+					</Title>
 
-							<FormUserAccountPassword />
-						</Stack>
-					</GridCol>
-				</Grid>
+					<FormUserAccountPassword />
+				</Stack>
 			</LayoutSection>
 
 			<Divider />
@@ -51,7 +47,7 @@ export default async function Security() {
 
 					<Grid>
 						{sessions?.map((session) => (
-							<GridCol key={session.id} span={{ base: 12, sm: 6, xl: 4 }}>
+							<GridCol key={session.id} span={{ base: 12, xs: 6, lg: 4 }}>
 								<CardSession props={session} />
 							</GridCol>
 						))}

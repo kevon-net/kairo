@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Box, Button, Divider, Grid, GridCol, Stack, Switch, Text, Title } from "@mantine/core";
+import { Box, Button, Divider, Grid, GridCol, Group, Stack, Switch, Text, Title } from "@mantine/core";
 
 import { useFormUserAccountNotifications } from "@/hooks/form/account/notifications";
 
@@ -22,94 +22,90 @@ export default function Notifications() {
 
 	return (
 		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
-			<Grid gutter={40}>
-				<GridCol span={12}>
-					<Grid>
-						<GridCol span={{ base: 12 }}>
-							<Title order={4} fz={"lg"}>
-								Email Notifications
-							</Title>
-						</GridCol>
+			<Stack gap={"xl"}>
+				<Grid>
+					<GridCol span={{ base: 12 }}>
+						<Title order={4} fz={"lg"}>
+							Email Notifications
+						</Title>
+					</GridCol>
 
-						<GridCol span={{ base: 12 }}>
-							<Divider />
-						</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Divider />
+					</GridCol>
 
-						<GridCol span={{ base: 12 }}>
-							<Switch
-								classNames={{
-									body: classes.body,
-									labelWrapper: classes.labelWrapper,
-								}}
-								labelPosition="left"
-								label={getLabel({
-									title: "Weekly Notification",
-									desc: "Various versions have evolved over the years, sometimes by accident, sometimes on purpose.",
-								})}
-							/>
-						</GridCol>
-						<GridCol span={{ base: 12 }}>
-							<Switch
-								classNames={{
-									body: classes.body,
-									labelWrapper: classes.labelWrapper,
-								}}
-								labelPosition="left"
-								label={getLabel({
-									title: "Account Summary",
-									desc: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis eguris eu sollicitudin massa.",
-								})}
-							/>
-						</GridCol>
-					</Grid>
-				</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Switch
+							classNames={{
+								body: classes.body,
+								labelWrapper: classes.labelWrapper,
+							}}
+							labelPosition="left"
+							label={getLabel({
+								title: "Weekly Notification",
+								desc: "Various versions have evolved over the years, sometimes by accident, sometimes on purpose.",
+							})}
+						/>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Switch
+							classNames={{
+								body: classes.body,
+								labelWrapper: classes.labelWrapper,
+							}}
+							labelPosition="left"
+							label={getLabel({
+								title: "Account Summary",
+								desc: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis eguris eu sollicitudin massa.",
+							})}
+						/>
+					</GridCol>
+				</Grid>
 
-				<GridCol span={12}>
-					<Grid>
-						<GridCol span={{ base: 12 }}>
-							<Title order={4} fz={"lg"}>
-								Order Updates
-							</Title>
-						</GridCol>
+				<Grid>
+					<GridCol span={{ base: 12 }}>
+						<Title order={4} fz={"lg"}>
+							Order Updates
+						</Title>
+					</GridCol>
 
-						<GridCol span={{ base: 12 }}>
-							<Divider />
-						</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Divider />
+					</GridCol>
 
-						<GridCol span={{ base: 12 }}>
-							<Switch
-								classNames={{
-									body: classes.body,
-									labelWrapper: classes.labelWrapper,
-								}}
-								labelPosition="left"
-								label={getLabel({
-									title: "Text messages",
-								})}
-							/>
-						</GridCol>
-						<GridCol span={{ base: 12 }}>
-							<Switch
-								classNames={{
-									body: classes.body,
-									labelWrapper: classes.labelWrapper,
-								}}
-								labelPosition="left"
-								label={getLabel({
-									title: "Call before checkout",
-									desc: "We'll only call if there are pending changes.",
-								})}
-							/>
-						</GridCol>
-					</Grid>
-				</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Switch
+							classNames={{
+								body: classes.body,
+								labelWrapper: classes.labelWrapper,
+							}}
+							labelPosition="left"
+							label={getLabel({
+								title: "Text messages",
+							})}
+						/>
+					</GridCol>
+					<GridCol span={{ base: 12 }}>
+						<Switch
+							classNames={{
+								body: classes.body,
+								labelWrapper: classes.labelWrapper,
+							}}
+							labelPosition="left"
+							label={getLabel({
+								title: "Call before checkout",
+								desc: "We'll only call if there are pending changes.",
+							})}
+						/>
+					</GridCol>
+				</Grid>
 
-				<GridCol span={{ base: 6 }}>
+				<Group>
 					<Button type="submit" color="pri" loading={sending} mt={"md"}>
 						{sending ? "Saving" : "Save"}
 					</Button>
-				</GridCol>
-			</Grid>
+				</Group>
+			</Stack>
 		</Box>
 	);
 }

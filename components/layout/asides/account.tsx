@@ -11,6 +11,7 @@ import {
 	IconHeart,
 	IconHelpCircle,
 	IconInfoCircle,
+	IconLicense,
 	IconLock,
 	IconLogout,
 	IconPackage,
@@ -183,9 +184,14 @@ export const navLinkItems = {
 			label: "Help Center",
 		},
 		{
-			icon: IconInfoCircle,
-			link: `/help/terms-and-conditions`,
+			icon: IconLicense,
+			link: `/legal/terms-and-conditions`,
 			label: "Terms and Conditions",
+		},
+		{
+			icon: IconInfoCircle,
+			link: `/legal/privacy-policy`,
+			label: "Privacy Policy",
 		},
 	],
 	danger: [

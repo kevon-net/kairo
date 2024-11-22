@@ -14,6 +14,8 @@ export default async function Blog({ params }: { params: { title: string } }) {
 	const { posts }: { posts: PostRelations[] } = await postsGet();
 	const { categories }: { categories: CategoryGet[] } = await categoriesGet();
 
+	const postsTrimmed = posts.filter((p) => linkify(p.title) != params.title);
+
 	return (
 		<LayoutSection id={"partial-aside-blog"} padded containerized={false} pos={"sticky"} top={32}>
 			<Stack gap={"xl"}>
@@ -21,13 +23,12 @@ export default async function Blog({ params }: { params: { title: string } }) {
 					<Title order={2}>Latest Posts</Title>
 
 					<Grid>
-						{posts.map(
+						{postsTrimmed.map(
 							(post) =>
-								linkify(post.title) != params.title &&
-								posts.indexOf(post) < 3 && (
+								postsTrimmed.indexOf(post) < 3 && (
 									<GridCol key={post.id} span={12}>
 										<Stack>
-											{posts.indexOf(post) != 0 && <Divider />}
+											{postsTrimmed.indexOf(post) != 0 && <Divider />}
 											<CardBlogAside post={post} />
 										</Stack>
 									</GridCol>

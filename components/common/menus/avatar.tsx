@@ -14,6 +14,7 @@ import { navLinkItems } from "@/components/layout/asides/account";
 import { useSession } from "@/hooks/auth";
 import { getRegionalDate } from "@/utilities/formatters/date";
 import { IconSettings } from "@tabler/icons-react";
+import { iconSize, iconStrokeWidth } from "@/data/constants";
 
 export default function Avatar() {
 	const { session } = useSession();
@@ -62,7 +63,7 @@ export default function Avatar() {
 				<MenuDivider />
 
 				<MenuItem
-					leftSection={<IconSettings size={16} stroke={1.5} />}
+					leftSection={<IconSettings size={iconSize} stroke={iconStrokeWidth} />}
 					component={Link}
 					href={"/account/profile"}
 				>
@@ -72,7 +73,7 @@ export default function Avatar() {
 				{navLinkItems.danger.map((item) => (
 					<MenuItem
 						key={item.label}
-						leftSection={<item.icon size={16} stroke={1.5} />}
+						leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
 						component={Link}
 						href={item.link}
 						color={item.color}

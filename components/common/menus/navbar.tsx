@@ -10,6 +10,7 @@ import { Menu, MenuDropdown, MenuItem, MenuTarget } from "@mantine/core";
 import { typeMenuNavbar } from "@/types/components/menu";
 
 import classes from "./navbar.module.scss";
+import { iconSize, iconStrokeWidth } from "@/data/constants";
 
 export default function Navbar({ children, subLinks }: { children: React.ReactNode; subLinks?: typeMenuNavbar[] }) {
 	const pathname = usePathname();
@@ -21,8 +22,8 @@ export default function Navbar({ children, subLinks }: { children: React.ReactNo
 				key={item.link}
 				component={Link}
 				href={item.link}
-				leftSection={item.leftSection && <item.leftSection size={14} />}
-				rightSection={item.rightSection && <item.rightSection size={14} />}
+				leftSection={item.leftSection && <item.leftSection size={iconSize} stroke={iconStrokeWidth} />}
+				rightSection={item.rightSection && <item.rightSection size={iconSize} stroke={iconStrokeWidth} />}
 				className={`${classes.item} ${pathname == item.link ? classes.itemActive : ""}`}
 			>
 				{item.label}

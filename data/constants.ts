@@ -17,6 +17,10 @@ export const authUrls = {
 
 export const geoDataUrl = `${process.env.NEXT_PUBLIC_IP_INFO_URL}?token=${process.env.NEXT_PUBLIC_IP_INFO_TOKEN}`;
 
+export const iconSize = 20;
+
+export const iconWrapperSize = iconSize + 8;
+
 export const iconStrokeWidth = 1.5;
 
 export const transitionDuration = 250;

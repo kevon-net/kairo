@@ -19,7 +19,7 @@ import FormContact from "@/components/form/contact";
 import AccordionFaq from "@/components/common/accordions/faq";
 
 import appData from "@/data/app";
-import { iconStrokeWidth } from "@/data/constants";
+import { iconSize, iconStrokeWidth, iconWrapperSize } from "@/data/constants";
 
 export const metadata: Metadata = { title: "Contact" };
 
@@ -70,9 +70,9 @@ export default async function Contact() {
 												xs: "fit-content",
 											}}
 										>
-											<ThemeIcon size={40} variant="transparent">
+											<ThemeIcon size={iconWrapperSize + 8} variant="light">
 												<item.icon
-													size={24}
+													size={iconSize + 8}
 													stroke={iconStrokeWidth}
 													style={{ marginTop: 2 }}
 												/>
@@ -112,8 +112,8 @@ export default async function Contact() {
 										{dataSocials.map((social) => (
 											<Anchor key={social.link} title={social.label} href={social.link}>
 												<Group>
-													<ThemeIcon size={24}>
-														<social.icon size={16} stroke={iconStrokeWidth} />
+													<ThemeIcon size={iconWrapperSize}>
+														<social.icon size={iconSize} stroke={iconStrokeWidth} />
 													</ThemeIcon>
 												</Group>
 											</Anchor>

@@ -11,6 +11,7 @@ import { linkify } from "@/utilities/formatters/string";
 import { PostRelations } from "@/types/models/post";
 import { getRegionalDate } from "@/utilities/formatters/date";
 import { IconCategory } from "@tabler/icons-react";
+import { iconSize, iconStrokeWidth } from "@/data/constants";
 
 export default function New({ post }: { post: PostRelations }) {
 	const path = `/blog/${linkify(post.title)}`;
@@ -84,7 +85,7 @@ export default function New({ post }: { post: PostRelations }) {
 										variant="light"
 										radius={"sm"}
 										tt={"capitalize"}
-										leftSection={<IconCategory size={16} stroke={1} />}
+										leftSection={<IconCategory size={iconSize} stroke={iconStrokeWidth} />}
 									>
 										{post.category?.title}
 									</Badge>

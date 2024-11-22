@@ -17,7 +17,7 @@ import { SignIn as FragmentSignIn } from "@/components/common/fragments/auth";
 import links from "@/data/links";
 import classes from "./main.module.scss";
 import { IconChevronDown } from "@tabler/icons-react";
-import { authUrls, iconStrokeWidth } from "@/data/constants";
+import { authUrls, iconSize, iconStrokeWidth } from "@/data/constants";
 import { useSession } from "@/hooks/auth";
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -50,7 +50,7 @@ export default function Main() {
 				>
 					<Group gap={4}>
 						<span>{link.label}</span>
-						<IconChevronDown size={16} stroke={iconStrokeWidth} style={{ marginTop: 2 }} />
+						<IconChevronDown size={iconSize} stroke={iconStrokeWidth} style={{ marginTop: 2 }} />
 					</Group>
 				</Anchor>
 			)}

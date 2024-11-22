@@ -12,6 +12,7 @@ import classes from "./user.module.scss";
 import { navLinkItems } from "@/components/layout/asides/account";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { iconSize, iconStrokeWidth } from "@/data/constants";
 
 export default function User() {
 	const [opened, { toggle, close }] = useDisclosure(false);
@@ -41,7 +42,7 @@ export default function User() {
 								active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
 								onClick={close}
 								fw={pathname == link.link ? 500 : undefined}
-								leftSection={<link.icon size={14} stroke={1.5} />}
+								leftSection={<link.icon size={iconSize} stroke={iconStrokeWidth} />}
 							/>
 						))}
 					</Stack>

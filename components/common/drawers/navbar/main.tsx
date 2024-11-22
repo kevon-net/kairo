@@ -12,6 +12,7 @@ import classes from "./main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
 import { useSession } from "@/hooks/auth";
+import { iconSize, iconStrokeWidth } from "@/data/constants";
 
 export default function Main({ props }: { props: typeMenuNavbar[] }) {
 	const [opened, { toggle, close }] = useDisclosure(false);
@@ -40,8 +41,12 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 				active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
 				onClick={close}
 				fw={pathname == link.link ? 500 : undefined}
-				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
-				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
+				leftSection={
+					link.leftSection ? <link.leftSection size={iconSize} stroke={iconStrokeWidth} /> : undefined
+				}
+				rightSection={
+					link.rightSection ? <link.rightSection size={iconSize} stroke={iconStrokeWidth} /> : undefined
+				}
 			/>
 		) : (
 			<NavLink
@@ -52,8 +57,12 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
 				active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
 				fw={pathname == link.link ? 500 : undefined}
 				opened={pathname == link.link || pathname.includes(link.link)}
-				leftSection={link.leftSection ? <link.leftSection size={14} /> : undefined}
-				rightSection={link.rightSection ? <link.rightSection size={14} /> : undefined}
+				leftSection={
+					link.leftSection ? <link.leftSection size={iconSize} stroke={iconStrokeWidth} /> : undefined
+				}
+				rightSection={
+					link.rightSection ? <link.rightSection size={iconSize} stroke={iconStrokeWidth} /> : undefined
+				}
 			>
 				{subLinks}
 			</NavLink>

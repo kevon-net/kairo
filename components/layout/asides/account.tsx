@@ -21,7 +21,7 @@ import {
 import LayoutSection from "@/components/layout/section";
 import PartialUser from "@/components/partial/user";
 
-import { authUrls, iconStrokeWidth } from "@/data/constants";
+import { authUrls, iconSize, iconStrokeWidth } from "@/data/constants";
 import { usePathname } from "next/navigation";
 
 export default function Account() {
@@ -70,8 +70,8 @@ export default function Account() {
 									component={Link}
 									href={item.link}
 									label={item.label}
-									leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
-									rightSection={<IconChevronRight size={16} />}
+									leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+									rightSection={<IconChevronRight size={iconSize} stroke={iconStrokeWidth} />}
 									active={item.link == pathname}
 									style={{
 										borderRadius: "var(--mantine-radius-md)",
@@ -95,8 +95,8 @@ export default function Account() {
 									component={Link}
 									href={item.link}
 									label={item.label}
-									leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
-									rightSection={<IconChevronRight size={16} />}
+									leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+									rightSection={<IconChevronRight size={iconSize} stroke={iconStrokeWidth} />}
 									active={item.link == pathname}
 									style={{
 										borderRadius: "var(--mantine-radius-md)",
@@ -116,8 +116,8 @@ export default function Account() {
 								href={item.link}
 								label={item.label}
 								color={item.color}
-								leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
-								rightSection={<IconChevronRight size={16} />}
+								leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+								rightSection={<IconChevronRight size={iconSize} stroke={iconStrokeWidth} />}
 								style={{
 									borderRadius: "var(--mantine-radius-md)",
 								}}

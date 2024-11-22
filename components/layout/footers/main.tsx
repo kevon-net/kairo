@@ -27,7 +27,7 @@ import images from "@/data/images";
 import classes from "./main.module.scss";
 import appData from "@/data/app";
 import { dataSocials } from "@/app/(marketing)/contact/page";
-import { iconStrokeWidth } from "@/data/constants";
+import { iconSize, iconStrokeWidth, iconWrapperSize } from "@/data/constants";
 import ActionIconTheme from "@/components/common/buttons/theme";
 
 export default function Main() {
@@ -55,8 +55,8 @@ export default function Main() {
 								{dataSocials.map((social) => (
 									<Anchor key={social.link} title={social.label} href={social.link}>
 										<Group>
-											<ThemeIcon size={24} variant="light">
-												<social.icon size={16} stroke={iconStrokeWidth} />
+											<ThemeIcon size={iconWrapperSize} variant="light">
+												<social.icon size={iconSize} stroke={iconStrokeWidth} />
 											</ThemeIcon>
 										</Group>
 									</Anchor>

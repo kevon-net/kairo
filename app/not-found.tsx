@@ -3,19 +3,7 @@ import React from "react";
 import Link from "next/link";
 import NextImage from "next/image";
 
-import {
-	Anchor,
-	Center,
-	Grid,
-	GridCol,
-	Group,
-	Stack,
-	Text,
-	Title,
-	Image,
-	Button,
-	Flex
-} from "@mantine/core";
+import { Anchor, Center, Grid, GridCol, Group, Stack, Text, Title, Image, Button, Flex } from "@mantine/core";
 
 import { IconArrowLeft } from "@tabler/icons-react";
 
@@ -23,30 +11,16 @@ import LayoutSection from "@/components/layout/section";
 
 import images from "@/data/images";
 import appData from "@/data/app";
+import { iconSize, iconStrokeWidth } from "@/data/constants";
 
 export default function NotFound() {
 	return (
 		<LayoutSection id={"page-not-found"}>
 			<Center mih={"100vh"} py={96}>
-				<Grid
-					w={"100%"}
-					gutter={{ base: "xl", sm: "md" }}
-					align="center"
-				>
-					<GridCol
-						span={{ base: 12, sm: 5 }}
-						order={{ base: 2, sm: 1 }}
-					>
-						<Flex
-							align={{ base: "center", sm: "start" }}
-							direction={"column"}
-							gap={{ base: "md", sm: 64 }}
-						>
-							<Anchor
-								component={Link}
-								href={"/"}
-								visibleFrom="sm"
-							>
+				<Grid w={"100%"} gutter={{ base: "xl", sm: "md" }} align="center">
+					<GridCol span={{ base: 12, sm: 5 }} order={{ base: 2, sm: 1 }}>
+						<Flex align={{ base: "center", sm: "start" }} direction={"column"} gap={{ base: "md", sm: 64 }}>
+							<Anchor component={Link} href={"/"} visibleFrom="sm">
 								<Group>
 									<Image
 										src={images.brand.logo.light}
@@ -69,38 +43,27 @@ export default function NotFound() {
 								>
 									Not Found
 								</Title>
-								<Text
-									fz={{ base: "sm", sm: "md" }}
-									ta={{ base: "center", sm: "start" }}
-								>
-									The page you&apos;re looking for has either
-									been removed or moved to another section of
-									the site.
+								<Text fz={{ base: "sm", sm: "md" }} ta={{ base: "center", sm: "start" }}>
+									The page you&apos;re looking for has either been removed or moved to another section
+									of the site.
 								</Text>
 							</Stack>
 
 							<Group>
 								<Button
-									leftSection={<IconArrowLeft size={16} />}
+									leftSection={<IconArrowLeft size={iconSize} stroke={iconStrokeWidth} />}
 									component={Link}
 									href={"/"}
 								>
 									Back Home
 								</Button>
-								<Button
-									variant="light"
-									component={Link}
-									href={"/"}
-								>
+								<Button variant="light" component={Link} href={"/"}>
 									Help Center
 								</Button>
 							</Group>
 						</Flex>
 					</GridCol>
-					<GridCol
-						span={{ base: 12, sm: 7 }}
-						order={{ base: 1, sm: 2 }}
-					>
+					<GridCol span={{ base: 12, sm: 7 }} order={{ base: 1, sm: 2 }}>
 						<Center>
 							<Group>
 								<Image

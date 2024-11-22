@@ -1,5 +1,6 @@
 "use client";
 
+import { iconSize, iconStrokeWidth, iconWrapperSize } from "@/data/constants";
 import { SessionGet } from "@/types/models/session";
 import { Modal, Button, Stack, Text, ActionIcon, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -32,8 +33,8 @@ export default function Session({ props }: { props: SessionGet }) {
 				</Stack>
 			</Modal>
 
-			<ActionIcon size={28} color="red" variant="light" onClick={open}>
-				<IconLogout size={16} stroke={1.5} />
+			<ActionIcon size={iconWrapperSize} color="red" variant="light" onClick={open}>
+				<IconLogout size={iconSize} stroke={iconStrokeWidth} />
 			</ActionIcon>
 		</>
 	);

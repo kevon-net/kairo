@@ -10,10 +10,10 @@ import { useFormUserAccountPassword } from "@/hooks/form/account/password";
 import PopoverPasswordStrength from "@/components/wrapper/popovers/password-strength";
 
 import classes from "./notifications.module.scss";
-import { useSession } from "@/hooks/auth";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function Password() {
-	const { session } = useSession();
+	const session = useAppSelector((state) => state.session.value);
 
 	const { form, sending, handleSubmit } = useFormUserAccountPassword({ credentials: session?.user.withPassword! });
 

@@ -28,7 +28,7 @@ import classes from "./main.module.scss";
 import appData from "@/data/app";
 import { dataSocials } from "@/app/(marketing)/contact/page";
 import { iconSize, iconStrokeWidth, iconWrapperSize } from "@/data/constants";
-import ActionIconTheme from "@/components/common/buttons/theme";
+import SegmentedControlTheme from "@/components/common/segmented-control/theme";
 
 export default function Main() {
 	return (
@@ -130,7 +130,7 @@ export default function Main() {
 					</Flex>
 
 					<Group>
-						<ActionIconTheme />
+						<SegmentedControlTheme />
 					</Group>
 				</Flex>
 			</Container>

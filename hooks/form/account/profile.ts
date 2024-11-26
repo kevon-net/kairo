@@ -6,17 +6,21 @@ import { profileUpdate } from "@/handlers/requests/database/profile";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { timeout } from "@/data/constants";
-import { useSession, useSignOut } from "@/hooks/auth";
-import { useRouter } from "next/navigation";
+import { useSignOut } from "@/hooks/auth";
+import { usePathname, useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
 import { capitalizeWords, segmentFullName } from "@/utilities/formatters/string";
 import { useNetwork } from "@mantine/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { updateSession } from "@/libraries/redux/slices/session";
 
 export const useFormUserProfile = () => {
 	const router = useRouter();
 	const networkStatus = useNetwork();
+	const pathname = usePathname();
 
-	const { session, updateSession, pathname } = useSession();
+	const session = useAppSelector((state) => state.session.value);
+	const dispatch = useAppDispatch();
 	const { signOut } = useSignOut();
 
 	const [submitted, setSubmitted] = useState(false);
@@ -82,7 +86,7 @@ export const useFormUserProfile = () => {
 				if (response.ok) {
 					if (session) {
 						// Update the session data on the client-side
-						updateSession({ ...session, user: { ...session.user, ...parseValues() } });
+						dispatch(updateSession({ ...session, user: { ...session.user, ...parseValues() } }));
 
 						// refresh the page
 						window.location.reload();

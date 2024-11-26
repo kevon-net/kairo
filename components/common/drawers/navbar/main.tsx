@@ -4,19 +4,21 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Burger, Button, Drawer, Group, NavLink, Stack } from "@mantine/core";
+import { Burger, Button, Drawer, NavLink, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SignIn as FragmentSignIn } from "../../fragments/auth";
 
 import classes from "./main.module.scss";
 
 import { typeMenuNavbar } from "@/types/components/menu";
-import { useSession } from "@/hooks/auth";
 import { iconSize, iconStrokeWidth } from "@/data/constants";
+import { useAppSelector } from "@/hooks/redux";
+import { usePathname } from "next/navigation";
 
 export default function Main({ props }: { props: typeMenuNavbar[] }) {
 	const [opened, { toggle, close }] = useDisclosure(false);
-	const { session, pathname } = useSession();
+	const session = useAppSelector((state) => state.session.value);
+	const pathname = usePathname();
 
 	const navMobile = props.map((link) => {
 		const subLinks =

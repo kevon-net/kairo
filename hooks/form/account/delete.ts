@@ -4,16 +4,21 @@ import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
 import { timeout } from "@/data/constants";
 import { userDelete } from "@/handlers/requests/database/user";
-import { useSession, useSignOut } from "@/hooks/auth";
-import { useRouter } from "next/navigation";
+import { useSignOut } from "@/hooks/auth";
+import { usePathname, useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
 import { useNetwork } from "@mantine/hooks";
+import { useAppSelector } from "@/hooks/redux";
 
 export const useFormUserAccountDelete = () => {
-	const [submitted, setSubmitted] = useState(false);
-	const { session, pathname } = useSession();
-	const { signOut } = useSignOut();
+	const pathname = usePathname();
 	const networkStatus = useNetwork();
+
+	const [submitted, setSubmitted] = useState(false);
+
+	const session = useAppSelector((state) => state.session.value);
+
+	const { signOut } = useSignOut();
 
 	const router = useRouter();
 

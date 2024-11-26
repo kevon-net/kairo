@@ -3,12 +3,12 @@
 import React from "react";
 
 import { Flex, Stack, Text, Title } from "@mantine/core";
-import { useSession } from "@/hooks/auth";
 
 import AvatarMain from "@/components/common/avatars/main";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function User() {
-	const { session } = useSession();
+	const session = useAppSelector((state) => state.session.value);
 
 	return (
 		<Flex direction={{ base: "column", lg: "row" }} align={"center"} justify={"center"} gap={"md"} w={"100%"}>

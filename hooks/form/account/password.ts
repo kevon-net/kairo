@@ -6,16 +6,21 @@ import { userUpdate } from "@/handlers/requests/database/user";
 import { timeout } from "@/data/constants";
 import { NotificationVariant } from "@/types/enums";
 import { showNotification } from "@/utilities/notifications";
-import { useSession, useSignOut } from "@/hooks/auth";
-import { useRouter } from "next/navigation";
+import { useSignOut } from "@/hooks/auth";
+import { usePathname, useRouter } from "next/navigation";
 import { setRedirectUrl } from "@/utilities/helpers/url";
 import { useNetwork } from "@mantine/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { updateSession } from "@/libraries/redux/slices/session";
 
 export const useFormUserAccountPassword = (params: { credentials: boolean }) => {
 	const router = useRouter();
 	const networkStatus = useNetwork();
+	const pathname = usePathname();
 
-	const { session, updateSession, pathname } = useSession();
+	const session = useAppSelector((state) => state.session.value);
+	const dispatch = useAppDispatch();
+
 	const { signOut } = useSignOut();
 
 	const [sending, setSending] = useState(false);
@@ -65,7 +70,7 @@ export const useFormUserAccountPassword = (params: { credentials: boolean }) => 
 				if (response.ok && session) {
 					if (!session.user.withPassword) {
 						// update the session data on the client-side
-						updateSession({ ...session, user: { ...session.user, withPassword: true } });
+						dispatch(updateSession({ ...session, user: { ...session.user, withPassword: true } }));
 
 						// refresh the page
 						setTimeout(() => window.location.reload(), timeout.redirect);

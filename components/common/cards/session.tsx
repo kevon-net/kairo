@@ -5,10 +5,10 @@ import { capitalizeWord } from "@/utilities/formatters/string";
 import { Badge, Card, Group, Stack, Text, Title } from "@mantine/core";
 import React from "react";
 import ModalDeleteSession from "../modals/delete/session";
-import { useSession } from "@/hooks/auth";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function Session({ props }: { props: SessionGet }) {
-	const { session } = useSession();
+	const session = useAppSelector((state) => state.session.value);
 
 	return (
 		<Card>

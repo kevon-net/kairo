@@ -1,12 +1,12 @@
 "use client";
 
-import { useSession } from "@/hooks/auth";
+import { useAppSelector } from "@/hooks/redux";
 import { initialize } from "@/utilities/formatters/string";
 import { Avatar, MantineStyleProps } from "@mantine/core";
 import React from "react";
 
 export default function Main({ size = { base: 56, md: 120, lg: 56 } }: { size?: MantineStyleProps["w"] }) {
-	const { session } = useSession();
+	const session = useAppSelector((state) => state.session.value);
 
 	return !session ? (
 		<Avatar alt={"avatar"} title={"User Name"} w={size} h={size} />

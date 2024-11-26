@@ -1,22 +1,9 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { SessionContext } from "@/contexts/session";
-import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { signOut } from "@/handlers/events/auth";
 import { showNotification } from "@/utilities/notifications";
 import { NotificationVariant } from "@/types/enums";
-
-export const useSession = () => {
-	const session = useContext(SessionContext);
-	const pathname = usePathname();
-
-	if (!session) {
-		throw new Error("useSessionContext must be used within SessionProvider component");
-	}
-
-	return { session: session.session, updateSession: session.setSession, pathname };
-};
 
 export const useSignOut = () => {
 	const [submitted, setSubmitted] = useState(false);

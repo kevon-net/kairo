@@ -18,11 +18,13 @@ import links from "@/data/links";
 import classes from "./main.module.scss";
 import { IconChevronDown } from "@tabler/icons-react";
 import { authUrls, iconSize, iconStrokeWidth } from "@/data/constants";
-import { useSession } from "@/hooks/auth";
 import { useMediaQuery } from "@mantine/hooks";
+import { usePathname } from "next/navigation";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function Main() {
-	const { session, pathname } = useSession();
+	const session = useAppSelector((state) => state.session.value);
+	const pathname = usePathname();
 	const desktop = useMediaQuery("(min-width: 62em)");
 
 	const navLinks = links.navbar.map((link) => (

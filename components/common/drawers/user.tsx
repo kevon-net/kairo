@@ -45,6 +45,32 @@ export default function User() {
 								leftSection={<link.icon size={iconSize} stroke={iconStrokeWidth} />}
 							/>
 						))}
+
+						{navLinkItems.support.map((link) => (
+							<NavLink
+								key={link.link}
+								component={Link}
+								href={link.link}
+								label={link.label}
+								active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
+								onClick={close}
+								fw={pathname == link.link ? 500 : undefined}
+								leftSection={<link.icon size={iconSize} stroke={iconStrokeWidth} />}
+							/>
+						))}
+
+						{navLinkItems.danger.map((link) => (
+							<NavLink
+								key={link.link}
+								component={Link}
+								href={link.link}
+								label={link.label}
+								active={pathname == link.link || (link.link != "/" && pathname.includes(link.link))}
+								onClick={close}
+								fw={pathname == link.link ? 500 : undefined}
+								leftSection={<link.icon size={iconSize} stroke={iconStrokeWidth} />}
+							/>
+						))}
 					</Stack>
 				</Stack>
 			</Drawer>

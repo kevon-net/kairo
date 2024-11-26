@@ -10,4 +10,6 @@ export type PostUpdate = Prisma.PostUpdateInput;
 export type PostGet = Post;
 
 // Type for fetched post with relations
-export type PostRelations = Prisma.PostGetPayload<{ include: { user: true; category: true; tags: true } }>;
+export type PostRelations = Prisma.PostGetPayload<{
+	include: { user: true; category: true; tags: true; comments: true };
+}>;

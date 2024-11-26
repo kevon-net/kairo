@@ -9,11 +9,13 @@ import { typeParams } from "../layout";
 import { PostRelations } from "@/types/models/post";
 import { postsGet } from "@/handlers/requests/database/post";
 import { linkify } from "@/utilities/formatters/string";
-import { Anchor, Divider, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Card, Divider, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { getRegionalDate } from "@/utilities/formatters/date";
 import { IconCircleFilled } from "@tabler/icons-react";
 import PartialShare from "@/components/partial/share";
 import Link from "next/link";
+import FormBlogComment from "@/components/form/blog/comment";
+import CardBlogComment from "@/components/common/cards/blog/comment";
 
 export default async function Post({ params }: { params: typeParams }) {
 	const { posts }: { posts: PostRelations[] } = await postsGet();
@@ -22,7 +24,7 @@ export default async function Post({ params }: { params: typeParams }) {
 
 	return (
 		<LayoutPage>
-			<LayoutSection id={"page-post"} padded containerized={false}>
+			<LayoutSection id={"page-post"} margined containerized={false}>
 				<Stack gap={"xl"}>
 					<Stack>
 						<Group fz={"sm"} justify="center">
@@ -63,9 +65,7 @@ export default async function Post({ params }: { params: typeParams }) {
 
 					<Text>{post?.content}</Text>
 
-					<Divider />
-
-					<Group justify="space-between">
+					<Group justify="space-between" mt={"xl"}>
 						<Text fw={"bold"}>
 							Tags:{" "}
 							<Text component="span" inherit fw={"normal"}>
@@ -80,7 +80,38 @@ export default async function Post({ params }: { params: typeParams }) {
 							<PartialShare props={{ postTitle: post?.title! }} />
 						</Group>
 					</Group>
+
+					<Divider />
 				</Stack>
+			</LayoutSection>
+
+			<LayoutSection id={"page-post-comment"} margined containerized={false}>
+				<Grid gutter={0}>
+					{post?.comments.map((comment) => (
+						<GridCol key={comment.id} span={12}>
+							<Stack gap={0}>
+								<CardBlogComment props={comment} />
+
+								{post.comments.indexOf(comment) != post.comments.length - 1 && <Divider />}
+							</Stack>
+						</GridCol>
+					))}
+				</Grid>
+			</LayoutSection>
+
+			<LayoutSection id={"page-post-comment"} margined containerized={false}>
+				<Card padding={"xl"} bg={"transparent"} withBorder shadow="xs">
+					<Stack gap={"xl"}>
+						<Stack gap={"xs"}>
+							<Title order={2} lh={1} fz={"xl"}>
+								Leave a Comment
+							</Title>
+							<Text>Your email address will not be published.</Text>
+						</Stack>
+
+						<FormBlogComment postId={post?.id!} />
+					</Stack>
+				</Card>
 			</LayoutSection>
 		</LayoutPage>
 	);

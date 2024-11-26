@@ -25,5 +25,9 @@ export default function Post({
 	children: React.ReactNode;
 	params: typeParams;
 }) {
-	return <LayoutBody aside={{ gap: 32, right: { component: <AsideBlog params={params} /> } }}>{children}</LayoutBody>;
+	return (
+		<LayoutBody aside={{ gap: 32, right: { component: <AsideBlog params={params} />, width: { md: 33, lg: 33 } } }}>
+			{children}
+		</LayoutBody>
+	);
 }

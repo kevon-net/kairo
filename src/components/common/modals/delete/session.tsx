@@ -26,19 +26,14 @@ export default function Session({ props }: { props: SessionGet }) {
           </Text>
 
           <Group justify="end">
-            <Button variant="light" color="red" onClick={handleDelete}>
+            <Button color="red" onClick={handleDelete}>
               Delete
             </Button>
           </Group>
         </Stack>
       </Modal>
 
-      <ActionIcon
-        size={iconWrapperSize}
-        color="red"
-        variant="light"
-        onClick={open}
-      >
+      <ActionIcon size={iconWrapperSize} color="red" onClick={open}>
         <IconLogout size={iconSize} stroke={iconStrokeWidth} />
       </ActionIcon>
     </>

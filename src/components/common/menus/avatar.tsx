@@ -35,15 +35,14 @@ export default function Avatar() {
   return (
     <Menu
       position={'bottom-end'}
-      withArrow
-      arrowOffset={24}
+      offset={{ mainAxis: 16, crossAxis: 0 }}
       width={mobile ? 200 : 240}
       trigger="click-hover"
       classNames={classes}
       opened={desktop ? undefined : false}
     >
       <MenuTarget>
-        <div>
+        <div className={classes.target}>
           <AvatarMain size={40} />
         </div>
       </MenuTarget>
@@ -72,27 +71,33 @@ export default function Avatar() {
 
         <MenuDivider />
 
-        <MenuItem
-          leftSection={
-            <IconSettings size={iconSize} stroke={iconStrokeWidth} />
-          }
-          component={Link}
-          href={'/account/profile'}
-        >
-          Manage Account
-        </MenuItem>
-
-        {navLinkItems.danger.map((item) => (
+        <Stack gap={2}>
           <MenuItem
-            key={item.label}
-            leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+            leftSection={
+              <IconSettings size={iconSize} stroke={iconStrokeWidth} />
+            }
             component={Link}
-            href={item.link}
-            color={item.color}
+            href={'/account/profile'}
+            className={classes.item}
           >
-            {item.label}
+            Manage Account
           </MenuItem>
-        ))}
+
+          {navLinkItems.danger.map((item) => (
+            <MenuItem
+              key={item.label}
+              leftSection={
+                <item.icon size={iconSize} stroke={iconStrokeWidth} />
+              }
+              component={Link}
+              href={item.link}
+              color={item.color}
+              className={classes.itemDanger}
+            >
+              {item.label}
+            </MenuItem>
+          ))}
+        </Stack>
       </MenuDropdown>
     </Menu>
   );

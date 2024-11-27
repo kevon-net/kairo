@@ -34,7 +34,7 @@ export const useFormAuthSignUp = () => {
         last: (value) => text(value.trim(), 2, 24),
       },
       password: {
-        initial: (value) => password(value.trim(), 8, 24),
+        initial: (value) => password(value.trim(), 8, 32),
         confirm: (value, values) =>
           compare.string(values.password.initial, value, 'Password'),
       },

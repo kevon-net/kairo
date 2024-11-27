@@ -51,6 +51,7 @@ enum SubType {
 
 enum Provider {
   CREDENTIALS
+  GITHUB
   GOOGLE
 }
 

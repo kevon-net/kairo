@@ -41,7 +41,7 @@ export default function Main() {
           {dataSocials.map((social) => (
             <Anchor key={social.link} title={social.label} href={social.link}>
               <Group>
-                <ThemeIcon size={iconWrapperSize}>
+                <ThemeIcon size={iconWrapperSize} variant="default">
                   <social.icon size={iconSize} stroke={iconStrokeWidth} />
                 </ThemeIcon>
               </Group>

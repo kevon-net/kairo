@@ -13,7 +13,7 @@ export default function Reset() {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} noValidate>
       <Grid>
-        <GridCol span={{ base: 12, sm: 6, md: 12 }}>
+        <GridCol span={{ base: 12 }}>
           <PopoverPasswordStrength
             required
             aria-label={'New Password'}
@@ -22,7 +22,7 @@ export default function Reset() {
             {...form.getInputProps('password.initial')}
           />
         </GridCol>
-        <GridCol span={{ base: 12, sm: 6, md: 12 }}>
+        <GridCol span={{ base: 12 }}>
           <PasswordInput
             required
             aria-label={'Confirm New Password'}

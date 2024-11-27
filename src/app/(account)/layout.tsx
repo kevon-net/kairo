@@ -3,7 +3,6 @@ import React from 'react';
 import LayoutBody from '@/components/layout/body';
 import NavbarMain from '@/components/layout/navbars/main';
 import FooterMain from '@/components/layout/footers/main';
-import HeaderMain from '@/components/layout/headers/main';
 import AsideAccount from '@/components/layout/asides/account';
 import LayoutSection from '@/components/layout/section';
 
@@ -28,7 +27,6 @@ export default function LayoutAccount({
 }) {
   return (
     <LayoutBody
-      header={<HeaderMain />}
       nav={<NavbarMain />}
       aside={{
         gap: 48,

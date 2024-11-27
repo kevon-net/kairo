@@ -71,7 +71,7 @@ export default function Main() {
                     href={social.link}
                   >
                     <Group>
-                      <ThemeIcon size={iconWrapperSize}>
+                      <ThemeIcon size={iconWrapperSize} variant="default">
                         <social.icon size={iconSize} stroke={iconStrokeWidth} />
                       </ThemeIcon>
                     </Group>
@@ -90,7 +90,7 @@ export default function Main() {
                     align={{ base: 'center', md: 'end' }}
                     gap={'xs'}
                   >
-                    <Title order={4} fw={'bold'}>
+                    <Title order={4} fw={500}>
                       {linkSet.title}
                     </Title>
                     <List listStyleType="none">

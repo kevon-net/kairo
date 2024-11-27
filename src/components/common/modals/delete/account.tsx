@@ -23,7 +23,7 @@ export default function Account() {
         </Stack>
       </Modal>
 
-      <Button color="red" variant="light" onClick={open}>
+      <Button color="red" onClick={open}>
         Delete Account
       </Button>
     </>

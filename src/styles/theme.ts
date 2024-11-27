@@ -6,6 +6,9 @@ import {
   Container,
   createTheme,
   Notification,
+  PasswordInput,
+  Textarea,
+  TextInput,
   virtualColor,
 } from '@mantine/core';
 
@@ -20,7 +23,7 @@ const appTheme = createTheme({
   activeClassName: 'active',
 
   colors: {
-    primaryDark: [
+    priWhite: [
       '#000000', // Black
       '#1a1a1a',
       '#333333',
@@ -33,14 +36,14 @@ const appTheme = createTheme({
       '#ffffff', // White
     ],
 
-    primaryLight: [
+    priBlack: [
       '#ffffff', // White
+      '#f2f2f2',
       '#cccccc',
       '#b3b3b3',
-      '#999999',
-      '#808080', // Medium Gray
+      '#999999', // Medium Gray
+      '#808080',
       '#666666',
-      '#4d4d4d',
       '#333333',
       '#1a1a1a',
       '#000000', // Black
@@ -48,8 +51,8 @@ const appTheme = createTheme({
 
     pri: virtualColor({
       name: 'pri',
-      dark: 'primaryDark',
-      light: 'primaryLight',
+      light: 'blue',
+      dark: 'yellow',
     }),
   },
 
@@ -57,11 +60,11 @@ const appTheme = createTheme({
 
   defaultRadius: 'sm',
 
-  primaryShade: { light: 9, dark: 9 },
+  primaryShade: { light: 6, dark: 6 },
 
   defaultGradient: {
-    from: 'primaryDark',
-    to: 'primaryLight',
+    from: 'red',
+    to: 'blue',
     deg: 45,
   },
 
@@ -88,6 +91,18 @@ const appTheme = createTheme({
       classNames: (_: any, { size }: { size?: any }) => ({
         root: cx({ [classesContainer.root]: size === 'responsive' }),
       }),
+    }),
+
+    TextInput: TextInput.extend({
+      defaultProps: { variant: 'filled' },
+    }),
+
+    Textarea: Textarea.extend({
+      defaultProps: { variant: 'filled' },
+    }),
+
+    PasswordInput: PasswordInput.extend({
+      defaultProps: { variant: 'filled' },
     }),
 
     Notification: Notification.extend({ classNames: classesNotification }),

@@ -1,36 +1,34 @@
 .dropdown {
-  background-color: var(--mantine-color-body);
-}
-
-.arrow {
-}
-
-.divider {
-}
-
-.label {
+  background-color: light-dark(
+    var(--mantine-color-body),
+    var(--mantine-color-dark-8)
+  );
+  border: 0px transparent;
 }
 
 .item {
   transition: 0.25s all ease;
 
   @include hover {
-    background-color: var(--mantine-color-pri-light);
+    background-color: light-dark(
+      var(--mantine-color-pri-light),
+      var(--mantine-color-dark-6)
+    );
+
+    .itemLabel {
+      color: var(--mantine-color-pri-6);
+    }
   }
 }
 
 .itemActive {
-  font-weight: 500;
-  background-color: var(--mantine-color-pri-light);
-
-  @include hover {
-    background-color: var(--mantine-color-body);
-  }
+  font-weight: bold;
+  background-color: light-dark(
+    var(--mantine-color-pri-light),
+    var(--mantine-color-dark-6)
+  );
 }
 
 .itemLabel {
-  color: light-dark(var(--mantine-color-anchor));
-}
-
-.itemSection {
+  color: var(--mantine-color-text);
 }

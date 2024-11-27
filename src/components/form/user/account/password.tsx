@@ -71,7 +71,7 @@ export default function Password() {
                     <PasswordInput
                       required
                       label={'Current Password'}
-                      placeholder="Your Current Password"
+                      placeholder="********"
                       {...form.getInputProps('current')}
                       description={
                         <>
@@ -95,7 +95,7 @@ export default function Password() {
                   <PopoverPasswordStrength
                     required
                     label={'New Password'}
-                    placeholder="Your New Password"
+                    placeholder="********"
                     value={form.values.password.initial}
                     {...form.getInputProps('password.initial')}
                   />
@@ -105,7 +105,7 @@ export default function Password() {
                   <PasswordInput
                     required
                     label={'Confirm New Password'}
-                    placeholder="Confirm Your New Password"
+                    placeholder="********"
                     {...form.getInputProps('password.confirm')}
                   />
                 </GridCol>

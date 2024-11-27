@@ -20,6 +20,10 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
   const session = useAppSelector((state) => state.session.value);
   const pathname = usePathname();
 
+  const matchesPath = (link: string) => {
+    return pathname == link || (link != '/' && pathname.includes(link));
+  };
+
   const navMobile = props.map((link) => {
     const subLinks =
       link.subLinks &&
@@ -29,8 +33,9 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
           component={Link}
           href={subLink.link}
           label={subLink.label}
-          active={pathname == subLink.link}
+          active={matchesPath(link.link)}
           onClick={close}
+          className={`${classes.link} ${pathname == subLink.link ? classes.linkActive : ''}`}
         />
       ));
 
@@ -40,10 +45,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
         component={Link}
         href={link.link}
         label={link.label}
-        active={
-          pathname == link.link ||
-          (link.link != '/' && pathname.includes(link.link))
-        }
+        active={matchesPath(link.link)}
         onClick={close}
         fw={pathname == link.link ? 500 : undefined}
         leftSection={
@@ -56,6 +58,9 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
             <link.rightSection size={iconSize} stroke={iconStrokeWidth} />
           ) : undefined
         }
+        className={`${classes.link} ${
+          matchesPath(link.link) ? classes.linkActive : ''
+        }`}
       />
     ) : (
       <NavLink
@@ -63,10 +68,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
         component={Link}
         href={link.link}
         label={link.label}
-        active={
-          pathname == link.link ||
-          (link.link != '/' && pathname.includes(link.link))
-        }
+        active={matchesPath(link.link)}
         fw={pathname == link.link ? 500 : undefined}
         opened={pathname == link.link || pathname.includes(link.link)}
         leftSection={
@@ -79,6 +81,9 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
             <link.rightSection size={iconSize} stroke={iconStrokeWidth} />
           ) : undefined
         }
+        className={`${classes.link} ${
+          matchesPath(link.link) ? classes.linkActive : ''
+        }`}
       >
         {subLinks}
       </NavLink>
@@ -108,10 +113,6 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
                 </Button>
               </FragmentSignIn>
             )}
-
-            <Button size="xs" w={'75%'}>
-              Get in Touch
-            </Button>
           </Stack>
         </Stack>
       </Drawer>
@@ -121,7 +122,6 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
         onClick={toggle}
         size={'sm'}
         aria-label="Toggle Main Navbar"
-        color="pri"
       />
     </>
   );

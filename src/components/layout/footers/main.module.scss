@@ -1,5 +1,6 @@
 .footer {
-  background-color: var(--mantine-color-pri-light);
+  background-color: var(--mantine-color-body);
+  border-top: 1px solid var(--mantine-color-default-border);
 }
 
 .listItem {
@@ -11,9 +12,9 @@
 }
 
 .link {
-  transition: 0.25s all ease;
+  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-gray-6));
 
   @include hover {
-    color: light-dark(var(--mantine-color-pri-9), var(--mantine-color-pri-9));
+    color: var(--mantine-color-pri-6);
   }
 }

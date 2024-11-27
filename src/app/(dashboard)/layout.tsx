@@ -3,7 +3,6 @@ import React from 'react';
 import LayoutBody from '@/components/layout/body';
 import NavbarMain from '@/components/layout/navbars/main';
 import FooterMain from '@/components/layout/footers/main';
-import HeaderMain from '@/components/layout/headers/main';
 
 import AffixNavbar from '@/components/common/affixi/navbar';
 import AffixTop from '@/components/common/affixi/top';
@@ -24,11 +23,7 @@ export default function LayoutDashboard({
   children: React.ReactNode;
 }) {
   return (
-    <LayoutBody
-      header={<HeaderMain />}
-      nav={<NavbarMain />}
-      footer={<FooterMain />}
-    >
+    <LayoutBody nav={<NavbarMain />} footer={<FooterMain />}>
       <main>{children}</main>
 
       <AffixTop />

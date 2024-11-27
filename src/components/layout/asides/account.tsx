@@ -25,8 +25,14 @@ import PartialUser from '@/components/partial/user';
 import { authUrls, iconSize, iconStrokeWidth } from '@/data/constants';
 import { usePathname } from 'next/navigation';
 
+import classes from './account.module.scss';
+
 export default function Account() {
   const pathname = usePathname();
+
+  const matchesPath = (link: string) => {
+    return pathname == link || (link != '/' && pathname.includes(link));
+  };
 
   return (
     <LayoutSection
@@ -40,30 +46,31 @@ export default function Account() {
         <PartialUser />
 
         <Stack w={'100%'}>
-          {/* <Stack gap={"xs"}>
-						<Title order={3} fz={"md"} ml={{ md: "sm" }}>
-							Activity
-						</Title>
+          {/* <Stack gap={'xs'}>
+            <Title order={3} fz={'md'} ml={{ md: 'sm' }}>
+              Activity
+            </Title>
 
-						<Stack gap={4}>
-							{navLinkItems.activity.map((item) => (
-								<NavLink
-									key={item.label}
-									component={Link}
-									href={item.link}
-									label={item.label}
-									leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
-									rightSection={<IconChevronRight size={16} />}
-									active={item.link == pathname}
-									style={{
-										borderRadius: "var(--mantine-radius-md)",
-									}}
-								/>
-							))}
-						</Stack>
-					</Stack>
+            <Stack gap={4}>
+              {navLinkItems.activity.map((item) => (
+                <NavLink
+                  key={item.label}
+                  component={Link}
+                  href={item.link}
+                  label={item.label}
+                  leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
+                  rightSection={<IconChevronRight size={16} />}
+                  active={matchesPath(item.link)}
+                  style={{
+                    borderRadius: 'var(--mantine-radius-md)',
+                  }}
+                  className={matchesPath(item.link) ? classes.linkActive : classes.link}
+                />
+              ))}
+            </Stack>
+          </Stack>
 
-					<Divider /> */}
+          <Divider /> */}
 
           <Stack gap={'xs'}>
             <Title order={3} fz={'md'} ml={{ md: 'sm' }}>
@@ -86,10 +93,13 @@ export default function Account() {
                       stroke={iconStrokeWidth}
                     />
                   }
-                  active={item.link == pathname}
+                  active={matchesPath(item.link)}
                   style={{
                     borderRadius: 'var(--mantine-radius-md)',
                   }}
+                  className={
+                    matchesPath(item.link) ? classes.linkActive : classes.link
+                  }
                 />
               ))}
             </Stack>
@@ -118,10 +128,13 @@ export default function Account() {
                       stroke={iconStrokeWidth}
                     />
                   }
-                  active={item.link == pathname}
+                  active={matchesPath(item.link)}
                   style={{
                     borderRadius: 'var(--mantine-radius-md)',
                   }}
+                  className={
+                    matchesPath(item.link) ? classes.linkActive : classes.link
+                  }
                 />
               ))}
             </Stack>
@@ -147,6 +160,7 @@ export default function Account() {
                   borderRadius: 'var(--mantine-radius-md)',
                 }}
                 active
+                className={classes.linkDanger}
               />
             ))}
           </Stack>

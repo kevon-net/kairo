@@ -27,6 +27,10 @@ export default function Main() {
   const pathname = usePathname();
   const desktop = useMediaQuery('(min-width: 62em)');
 
+  const matchesPath = (link: string) => {
+    return pathname == link || (link != '/' && pathname.includes(link));
+  };
+
   const navLinks = links.navbar.map((link) => (
     <MenuNavbar key={link.link} subLinks={link.subLinks}>
       {!link.subLinks ? (
@@ -34,10 +38,7 @@ export default function Main() {
           component={Link}
           href={link.link}
           className={`${classes.link} ${
-            pathname == link.link ||
-            (link.link != '/' && pathname.includes(link.link))
-              ? classes.linkActive
-              : ''
+            matchesPath(link.link) ? classes.linkActive : ''
           }`}
         >
           {link.label}
@@ -47,10 +48,7 @@ export default function Main() {
           component={Link}
           href={link.link}
           className={`${classes.link} ${
-            pathname == link.link ||
-            link.subLinks.find((l) => l.link == pathname)
-              ? classes.linkActive
-              : ''
+            matchesPath(link.link) ? classes.linkActive : ''
           }`}
           onClick={(e) => e.preventDefault()}
         >

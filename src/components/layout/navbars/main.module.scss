@@ -1,16 +1,19 @@
 .link {
   padding: var(--mantine-spacing-md) 0;
   font-size: var(--mantine-font-size-sm);
-  border-bottom: 2px solid transparent;
+  border-bottom: 1.5px solid transparent;
+  color: var(--mantine-color-text) !important;
   transition: 0.25s color ease;
 
   @include hover {
-    color: var(--mantine-color-pri-9);
-    border-bottom: 2px solid var(--mantine-color-pri-9);
+    border-bottom: 1.5px solid var(--mantine-color-pri-6);
+    color: var(--mantine-color-pri-6) !important;
   }
 }
 
 .linkActive {
   font-weight: bold;
-  border-bottom: 2px solid var(--mantine-color-default-border);
+
+  color: var(--mantine-color-pri-6) !important;
+  border-bottom: 1.5px solid var(--mantine-color-pri-6);
 }

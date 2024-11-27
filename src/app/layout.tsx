@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Noto_Sans_Display } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
 
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
@@ -42,7 +42,7 @@ import { cookieName } from '@/data/constants';
 
 import ProviderStore from '@/components/providers/store';
 
-const noto = Noto_Sans_Display({ subsets: ['latin'] });
+const noto = DM_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {

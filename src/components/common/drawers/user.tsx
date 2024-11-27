@@ -18,6 +18,10 @@ export default function User() {
   const [opened, { toggle, close }] = useDisclosure(false);
   const pathname = usePathname();
 
+  const matchesPath = (link: string) => {
+    return pathname == link || (link != '/' && pathname.includes(link));
+  };
+
   return (
     <>
       <Drawer
@@ -39,14 +43,14 @@ export default function User() {
                 component={Link}
                 href={link.link}
                 label={link.label}
-                active={
-                  pathname == link.link ||
-                  (link.link != '/' && pathname.includes(link.link))
-                }
+                active={matchesPath(link.link)}
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
                   <link.icon size={iconSize} stroke={iconStrokeWidth} />
+                }
+                className={
+                  matchesPath(link.link) ? classes.linkActive : classes.link
                 }
               />
             ))}
@@ -57,14 +61,14 @@ export default function User() {
                 component={Link}
                 href={link.link}
                 label={link.label}
-                active={
-                  pathname == link.link ||
-                  (link.link != '/' && pathname.includes(link.link))
-                }
+                active={matchesPath(link.link)}
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
                   <link.icon size={iconSize} stroke={iconStrokeWidth} />
+                }
+                className={
+                  matchesPath(link.link) ? classes.linkActive : classes.link
                 }
               />
             ))}
@@ -75,15 +79,13 @@ export default function User() {
                 component={Link}
                 href={link.link}
                 label={link.label}
-                active={
-                  pathname == link.link ||
-                  (link.link != '/' && pathname.includes(link.link))
-                }
+                active={matchesPath(link.link)}
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
                   <link.icon size={iconSize} stroke={iconStrokeWidth} />
                 }
+                className={classes.linkDanger}
               />
             ))}
           </Stack>

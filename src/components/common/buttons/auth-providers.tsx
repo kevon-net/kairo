@@ -13,24 +13,24 @@ import { signIn } from '@/handlers/events/auth';
 import { Provider } from '@prisma/client';
 
 export default function Providers() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
   const os = useOs();
 
-  const getButton = (image: string, provider: Provider) => (
+  const getButton = (provider: { image: string; provider: Provider }) => (
     <Button
-      key={provider}
+      key={provider.provider}
       fullWidth
-      variant="light"
+      variant="default"
       onClick={async () => {
-        setLoading(true);
-        await signIn(provider, undefined, { os });
+        setLoading(provider.provider);
+        await signIn(provider.provider, undefined, { os });
       }}
-      loading={loading}
+      loading={loading == provider.provider}
       leftSection={
         <Group>
           <Image
-            src={image}
-            alt={provider}
+            src={provider.image}
+            alt={provider.provider}
             h={{ base: 24 }}
             component={NextImage}
             width={1920}
@@ -40,20 +40,20 @@ export default function Providers() {
         </Group>
       }
     >
-      Continue with {capitalizeWords(provider)}
+      Continue with {capitalizeWords(provider.provider)}
     </Button>
   );
 
-  return (
-    <Stack>
-      {providers.map((button) => getButton(button.image, button.provider))}
-    </Stack>
-  );
+  return <Stack>{providers.map((provider) => getButton(provider))}</Stack>;
 }
 
 const providers = [
   {
     image: images.icons.google,
     provider: Provider.GOOGLE,
+  },
+  {
+    image: 'https://img.icons8.com/?size=100&id=16318&format=png&color=000000',
+    provider: Provider.GITHUB,
   },
 ];

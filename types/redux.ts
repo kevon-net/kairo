@@ -1,3 +1,3 @@
-import { Session as SessionPayload } from "./auth";
+import { Session as SessionPayload } from './auth';
 
-export type Session = Omit<SessionPayload, "iat" | "exp"> | null;
+export type Session = Omit<SessionPayload, 'iat' | 'exp'> | null;

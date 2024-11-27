@@ -1,94 +1,120 @@
-import { useForm } from "@mantine/form";
-import { useState } from "react";
-import { NotificationVariant } from "@/types/enums";
-import { showNotification } from "@/utilities/notifications";
-import { timeout } from "@/data/constants";
-import { userDelete } from "@/handlers/requests/database/user";
-import { useSignOut } from "@/hooks/auth";
-import { usePathname, useRouter } from "next/navigation";
-import { setRedirectUrl } from "@/utilities/helpers/url";
-import { useNetwork } from "@mantine/hooks";
-import { useAppSelector } from "@/hooks/redux";
+import { useForm } from '@mantine/form';
+import { useState } from 'react';
+import { NotificationVariant } from '@/types/enums';
+import { showNotification } from '@/utilities/notifications';
+import { timeout } from '@/data/constants';
+import { userDelete } from '@/handlers/requests/database/user';
+import { useSignOut } from '@/hooks/auth';
+import { usePathname, useRouter } from 'next/navigation';
+import { setRedirectUrl } from '@/utilities/helpers/url';
+import { useNetwork } from '@mantine/hooks';
+import { useAppSelector } from '@/hooks/redux';
 
 export const useFormUserAccountDelete = () => {
-	const pathname = usePathname();
-	const networkStatus = useNetwork();
+  const pathname = usePathname();
+  const networkStatus = useNetwork();
 
-	const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-	const session = useAppSelector((state) => state.session.value);
+  const session = useAppSelector((state) => state.session.value);
 
-	const { signOut } = useSignOut();
+  const { signOut } = useSignOut();
 
-	const router = useRouter();
+  const router = useRouter();
 
-	const form = useForm({
-		initialValues: { confirmation: "", password: "" },
-		validate: {
-			confirmation: (value) => value.trim() != "DELETE" && "Please enter the confirmation phrase",
-		},
-	});
+  const form = useForm({
+    initialValues: { confirmation: '', password: '' },
+    validate: {
+      confirmation: (value) =>
+        value.trim() != 'DELETE' && 'Please enter the confirmation phrase',
+    },
+  });
 
-	const handleSubmit = async () => {
-		if (form.isValid()) {
-			try {
-				if (!networkStatus.online) {
-					showNotification({
-						variant: NotificationVariant.WARNING,
-						title: "Network Error",
-						desc: "Please check your internet connection.",
-					});
-					return;
-				}
+  const handleSubmit = async () => {
+    if (form.isValid()) {
+      try {
+        if (!networkStatus.online) {
+          showNotification({
+            variant: NotificationVariant.WARNING,
+            title: 'Network Error',
+            desc: 'Please check your internet connection.',
+          });
+          return;
+        }
 
-				setSubmitted(true);
+        setSubmitted(true);
 
-				const response = await userDelete(session?.user.id!, form.values.password.trim());
+        const response = await userDelete(
+          session?.user.id!,
+          form.values.password.trim()
+        );
 
-				if (!response) throw new Error("No response from server");
+        if (!response) throw new Error('No response from server');
 
-				const result = await response.json();
+        const result = await response.json();
 
-				form.reset();
+        form.reset();
 
-				if (response.ok) {
-					// sign out
-					setTimeout(async () => await signOut(), timeout.redirect);
+        if (response.ok) {
+          // sign out
+          setTimeout(async () => await signOut(), timeout.redirect);
 
-					showNotification({ variant: NotificationVariant.SUCCESS }, response, result);
-					return;
-				}
+          showNotification(
+            { variant: NotificationVariant.SUCCESS },
+            response,
+            result
+          );
+          return;
+        }
 
-				if (response.status === 401) {
-					// redirect to sign in
-					setTimeout(async () => router.push(setRedirectUrl(pathname)), timeout.redirect);
+        if (response.status === 401) {
+          // redirect to sign in
+          setTimeout(
+            async () => router.push(setRedirectUrl(pathname)),
+            timeout.redirect
+          );
 
-					showNotification({ variant: NotificationVariant.WARNING }, response, result);
-					return;
-				}
+          showNotification(
+            { variant: NotificationVariant.WARNING },
+            response,
+            result
+          );
+          return;
+        }
 
-				if (response.status === 404) {
-					// sign out
-					setTimeout(async () => await signOut(), timeout.redirect);
+        if (response.status === 404) {
+          // sign out
+          setTimeout(async () => await signOut(), timeout.redirect);
 
-					showNotification({ variant: NotificationVariant.WARNING }, response, result);
-					return;
-				}
+          showNotification(
+            { variant: NotificationVariant.WARNING },
+            response,
+            result
+          );
+          return;
+        }
 
-				showNotification({ variant: NotificationVariant.FAILED }, response, result);
-				return;
-			} catch (error) {
-				showNotification({ variant: NotificationVariant.FAILED, desc: (error as Error).message });
-				return;
-			} finally {
-				setSubmitted(false);
-			}
-		}
-	};
+        showNotification(
+          { variant: NotificationVariant.FAILED },
+          response,
+          result
+        );
+        return;
+      } catch (error) {
+        showNotification({
+          variant: NotificationVariant.FAILED,
+          desc: (error as Error).message,
+        });
+        return;
+      } finally {
+        setSubmitted(false);
+      }
+    }
+  };
 
-	return {
-		form,
-		submitted,
-		handleSubmit,
-	};
+  return {
+    form,
+    submitted,
+    handleSubmit,
+  };
 };

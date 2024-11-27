@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import LayoutBody from "@/components/layout/body";
+import LayoutBody from '@/components/layout/body';
 
 export default function Authentication({
-	children // will be a page or nested layout
+  children, // will be a page or nested layout
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return (
-		<LayoutBody>
-			<main>{children}</main>
-		</LayoutBody>
-	);
+  return (
+    <LayoutBody>
+      <main>{children}</main>
+    </LayoutBody>
+  );
 }

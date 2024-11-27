@@ -1,24 +1,24 @@
-import React from "react";
+import React from 'react';
 
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
-import LayoutBody from "@/components/layout/body";
+import LayoutBody from '@/components/layout/body';
 
-import appData from "@/data/app";
+import appData from '@/data/app';
 
 export interface typeParams {
-	title: string;
-	categoryId: string;
+  title: string;
+  categoryId: string;
 }
 
 export const metadata: Metadata = {
-	title: { default: "Blog", template: `%s - Blog - ${appData.name.app}` },
+  title: { default: 'Blog', template: `%s - Blog - ${appData.name.app}` },
 };
 
 export default function Blog({
-	children, // will be a page or nested layout
+  children, // will be a page or nested layout
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return <LayoutBody>{children}</LayoutBody>;
+  return <LayoutBody>{children}</LayoutBody>;
 }

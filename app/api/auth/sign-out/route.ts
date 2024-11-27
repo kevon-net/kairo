@@ -1,40 +1,53 @@
-import prisma from "@/libraries/prisma";
-import { NextRequest, NextResponse } from "next/server";
-import { getSession, signOut } from "@/libraries/auth";
+import prisma from '@/libraries/prisma';
+import { NextResponse } from 'next/server';
+import { getSession, signOut } from '@/libraries/auth';
 
-export async function POST(request: NextRequest) {
-	try {
-		const session = await getSession();
+export async function POST() {
+  try {
+    const session = await getSession();
 
-		if (!session) {
-			return NextResponse.json({ error: "Already signed out" }, { status: 401, statusText: "Unauthorized" });
-		}
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Already signed out' },
+        { status: 401, statusText: 'Unauthorized' }
+      );
+    }
 
-		// remove sessions from db
-		const transactions = await prisma.$transaction(async () => {
-			const sessionRecord = await prisma.session.findUnique({ where: { id: session.id } });
+    // remove sessions from db
+    const transactions = await prisma.$transaction(async () => {
+      const sessionRecord = await prisma.session.findUnique({
+        where: { id: session.id },
+      });
 
-			let deleteSession;
+      let deleteSession;
 
-			if (sessionRecord) {
-				deleteSession = await prisma.session.delete({ where: { id: session.id } });
-			}
+      if (sessionRecord) {
+        deleteSession = await prisma.session.delete({
+          where: { id: session.id },
+        });
+      }
 
-			const deleteSessions = await prisma.session.deleteMany({
-				where: { userId: session.user.id, expiresAt: { lt: new Date(Date.now()) } },
-			});
+      const deleteSessions = await prisma.session.deleteMany({
+        where: {
+          userId: session.user.id,
+          expiresAt: { lt: new Date(Date.now()) },
+        },
+      });
 
-			return { deleteSession, deleteSessions };
-		});
+      return { deleteSession, deleteSessions };
+    });
 
-		await signOut();
+    await signOut();
 
-		return NextResponse.json(
-			{ message: "User signed out", sessions: transactions.deleteSession },
-			{ status: 200, statusText: "Signed Out" }
-		);
-	} catch (error) {
-		console.error("---> route handler error (sign out):", error);
-		return NextResponse.json({ error: "Something went wrong on our end" }, { status: 500 });
-	}
+    return NextResponse.json(
+      { message: 'User signed out', sessions: transactions.deleteSession },
+      { status: 200, statusText: 'Signed Out' }
+    );
+  } catch (error) {
+    console.error('---> route handler error (sign out):', error);
+    return NextResponse.json(
+      { error: 'Something went wrong on our end' },
+      { status: 500 }
+    );
+  }
 }

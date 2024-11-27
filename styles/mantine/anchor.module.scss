@@ -1,7 +1,7 @@
 .root {
-	transition: 0.25s all ease;
+  transition: 0.25s all ease;
 
-	@include hover {
-		color: var(--mantine-color-pri-9);
-	}
+  @include hover {
+    color: var(--mantine-color-pri-9);
+  }
 }

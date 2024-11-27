@@ -1,6 +1,6 @@
 export interface Link {
-	link: string;
-	label: string;
-	alt?: string;
-	title?: string;
+  link: string;
+  label: string;
+  alt?: string;
+  title?: string;
 }

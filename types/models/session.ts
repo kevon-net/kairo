@@ -1,4 +1,4 @@
-import { Session, Prisma } from "@prisma/client";
+import { Session, Prisma } from '@prisma/client';
 
 // Type for creating a session (without id and relations)
 export type SessionCreate = Prisma.SessionCreateInput;
@@ -10,4 +10,6 @@ export type SessionUpdate = Prisma.SessionUpdateInput;
 export type SessionGet = Session;
 
 // Type for fetched session with relations
-export type SessionRelations = Prisma.SessionGetPayload<{ include: { user: true } }>;
+export type SessionRelations = Prisma.SessionGetPayload<{
+  include: { user: true };
+}>;

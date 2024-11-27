@@ -1,4 +1,4 @@
-import { Profile, Prisma } from "@prisma/client";
+import { Profile, Prisma } from '@prisma/client';
 
 // Type for creating a profile (without id and relations)
 export type ProfileCreate = Prisma.ProfileCreateInput;
@@ -10,4 +10,6 @@ export type ProfileUpdate = Prisma.ProfileUpdateInput;
 export type ProfileGet = Profile;
 
 // Type for fetched profile with relations
-export type ProfileRelations = Prisma.ProfileGetPayload<{ include: { user: true } }>;
+export type ProfileRelations = Prisma.ProfileGetPayload<{
+  include: { user: true };
+}>;

@@ -1,4 +1,4 @@
-import { Account, Prisma } from "@prisma/client";
+import { Account, Prisma } from '@prisma/client';
 
 // Type for creating an account (without id and relations)
 export type AccountCreate = Prisma.AccountCreateInput;
@@ -10,4 +10,6 @@ export type AccountUpdate = Prisma.AccountUpdateInput;
 export type AccountGet = Account;
 
 // Type for fetched category with relations
-export type AccountRelations = Prisma.AccountGetPayload<{ include: { user: true } }>;
+export type AccountRelations = Prisma.AccountGetPayload<{
+  include: { user: true };
+}>;

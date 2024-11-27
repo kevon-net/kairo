@@ -1,11 +1,11 @@
 .root {
-	max-width: var(--mantine-breakpoint-xl);
+  max-width: var(--mantine-breakpoint-xl);
 
-	@include larger-than($mantine-breakpoint-sm) {
-		padding: 0 var(--mantine-spacing-xl);
-	}
+  @include larger-than($mantine-breakpoint-sm) {
+    padding: 0 var(--mantine-spacing-xl);
+  }
 
-	@include larger-than($mantine-breakpoint-xl) {
-		padding: 0 calc(var(--mantine-spacing-xl) * 2);
-	}
+  @include larger-than($mantine-breakpoint-xl) {
+    padding: 0 calc(var(--mantine-spacing-xl) * 2);
+  }
 }

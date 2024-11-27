@@ -1,4 +1,4 @@
-import { ReplyComment, ReplyReply, Prisma } from "@prisma/client";
+import { ReplyComment, ReplyReply, Prisma } from '@prisma/client';
 
 // Type for creating a reply_comment (without id and relations)
 export type ReplyCommentCreate = Prisma.ReplyCommentCreateInput;
@@ -10,7 +10,9 @@ export type ReplyCommentUpdate = Prisma.ReplyCommentUpdateInput;
 export type ReplyCommentGet = ReplyComment;
 
 // Type for fetched reply_comment with relations
-export type ReplyCommentRelations = Prisma.ReplyCommentGetPayload<{ include: { replies: true; user: true } }>;
+export type ReplyCommentRelations = Prisma.ReplyCommentGetPayload<{
+  include: { replies: true; user: true };
+}>;
 
 // reply to replies
 
@@ -24,4 +26,6 @@ export type ReplyReplyUpdate = Prisma.ReplyReplyUpdateInput;
 export type ReplyReplyGet = ReplyReply;
 
 // Type for fetched reply_reply with relations
-export type ReplyReplyRelations = Prisma.ReplyReplyGetPayload<{ include: { user: true } }>;
+export type ReplyReplyRelations = Prisma.ReplyReplyGetPayload<{
+  include: { user: true };
+}>;

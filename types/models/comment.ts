@@ -1,4 +1,4 @@
-import { Comment, Prisma } from "@prisma/client";
+import { Comment, Prisma } from '@prisma/client';
 
 // Type for creating a comment (without id and relations)
 export type CommentCreate = Prisma.CommentCreateInput;
@@ -10,4 +10,6 @@ export type CommentUpdate = Prisma.CommentUpdateInput;
 export type CommentGet = Comment;
 
 // Type for fetched comment with relations
-export type CommentRelations = Prisma.CommentGetPayload<{ include: { post: true; replies: true; user: true } }>;
+export type CommentRelations = Prisma.CommentGetPayload<{
+  include: { post: true; replies: true; user: true };
+}>;

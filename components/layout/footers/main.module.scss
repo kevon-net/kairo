@@ -1,19 +1,19 @@
 .footer {
-	background-color: var(--mantine-color-pri-light);
+  background-color: var(--mantine-color-pri-light);
 }
 
 .listItem {
-	text-align: end;
+  text-align: end;
 
-	@include smaller-than($mantine-breakpoint-md) {
-		text-align: center;
-	}
+  @include smaller-than($mantine-breakpoint-md) {
+    text-align: center;
+  }
 }
 
 .link {
-	transition: 0.25s all ease;
+  transition: 0.25s all ease;
 
-	@include hover {
-		color: light-dark(var(--mantine-color-pri-9), var(--mantine-color-pri-9));
-	}
+  @include hover {
+    color: light-dark(var(--mantine-color-pri-9), var(--mantine-color-pri-9));
+  }
 }

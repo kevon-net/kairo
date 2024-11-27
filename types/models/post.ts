@@ -1,4 +1,4 @@
-import { Post, Prisma } from "@prisma/client";
+import { Post, Prisma } from '@prisma/client';
 
 // Type for creating a post (without id and relations)
 export type PostCreate = Prisma.PostCreateInput;
@@ -11,5 +11,5 @@ export type PostGet = Post;
 
 // Type for fetched post with relations
 export type PostRelations = Prisma.PostGetPayload<{
-	include: { user: true; category: true; tags: true; comments: true };
+  include: { user: true; category: true; tags: true; comments: true };
 }>;

@@ -56,6 +56,19 @@ export async function POST(
         { status: 409, statusText: 'Already Sent' }
       );
     } catch {
+      if (options?.email) {
+        const userWithProvidedEmail = await prisma.user.findUnique({
+          where: { email: options.email as string },
+        });
+
+        if (userWithProvidedEmail) {
+          return NextResponse.json(
+            { error: 'An account with that email already exists' },
+            { status: 409, statusText: 'Account Exists' }
+          );
+        }
+      }
+
       const tokenRecord = await prisma.token.findUnique({
         where: {
           type_userId: {

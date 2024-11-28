@@ -114,7 +114,7 @@ export async function PUT(
         });
 
         return NextResponse.json(
-          { error: 'New session created' },
+          { message: 'New session created' },
           { status: 200, statusText: 'Session Created' }
         );
       }

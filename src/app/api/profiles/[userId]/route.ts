@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const createProfile = await prisma.profile.create({ data: profile });
 
     return NextResponse.json(
-      { error: 'Profile created successfully', profile: createProfile },
+      { message: 'Profile created successfully', profile: createProfile },
       { status: 200, statusText: 'Profile Created' }
     );
   } catch (error) {

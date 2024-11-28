@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { compareHashes, hashValue } from '@/utilities/helpers/hasher';
 import { UserCreate, UserUpdate } from '@/types/models/user';
 import { getSession } from '@/libraries/auth';
-import { SubType, Type } from '@prisma/client';
+import { Type } from '@prisma/client';
 import { decrypt, encrypt } from '@/utilities/helpers/token';
 import { getExpiry } from '@/utilities/helpers/time';
 import { cookies } from 'next/headers';
@@ -65,9 +65,7 @@ export async function PUT(
 
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
-      include: {
-        tokens: { where: { type: Type.JWT, subType: SubType.PASSWORD_RESET } },
-      },
+      include: { tokens: { where: { type: Type.PASSWORD_RESET } } },
     });
 
     if (!userRecord) {
@@ -90,6 +88,7 @@ export async function PUT(
       if (options.token) {
         try {
           parsed = await decrypt(options.token);
+
           const tokenExists = await prisma.token.findUnique({
             where: { id: parsed.id },
           });
@@ -103,22 +102,25 @@ export async function PUT(
         }
       }
 
-      if (options.password != 'update' && options.password != 'reset') {
-        const passwordMatch = await compareHashes(
-          options.password,
-          userRecord.password
-        );
-
-        if (!passwordMatch) {
-          return NextResponse.json(
-            { error: "You've entered the wrong password" },
-            { status: 403, statusText: 'Wrong Password' }
+      if (options.password != 'update') {
+        if (options.password != 'reset') {
+          const passwordMatch = await compareHashes(
+            options.password,
+            userRecord.password
           );
+
+          if (!passwordMatch) {
+            return NextResponse.json(
+              { error: "You've entered the wrong password" },
+              { status: 403, statusText: 'Wrong Password' }
+            );
+          }
         }
 
-        const passwordSame =
-          options.password != 'update' &&
-          (await compareHashes(user.password as string, userRecord.password));
+        const passwordSame = await compareHashes(
+          user.password as string,
+          userRecord.password
+        );
 
         if (passwordSame) {
           return NextResponse.json(
@@ -128,7 +130,7 @@ export async function PUT(
         }
       }
 
-      if (session && !session.user.withPassword && !options.token) {
+      if (session && !session.user.withPassword) {
         const sessionToken = await encrypt(
           { ...session, user: { ...session.user, withPassword: true } },
           getExpiry(session.user.remember).sec
@@ -146,13 +148,12 @@ export async function PUT(
           data: { password: await hashValue(user.password as string) },
         });
 
-        if (userRecord.tokens.length > 0) {
+        if (options.token && userRecord.tokens.length > 0) {
           await prisma.token.delete({ where: { id: parsed.id } });
 
           await prisma.token.deleteMany({
             where: {
-              type: Type.JWT,
-              subType: SubType.PASSWORD_RESET,
+              type: Type.PASSWORD_RESET,
               userId: userRecord.id,
               expiresAt: { lt: new Date() },
             },

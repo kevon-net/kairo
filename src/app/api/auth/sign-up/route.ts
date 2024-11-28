@@ -5,7 +5,7 @@ import prisma from '@/libraries/prisma';
 import { hashValue } from '@/utilities/helpers/hasher';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
-import { SubType, Type } from '@prisma/client';
+import { Type } from '@prisma/client';
 import { encrypt } from '@/utilities/helpers/token';
 
 export async function POST(request: NextRequest) {
@@ -46,8 +46,7 @@ export async function POST(request: NextRequest) {
 
       await prisma.token.deleteMany({
         where: {
-          type: Type.JWT,
-          subType: SubType.CONFIRM_EMAIL,
+          type: Type.CONFIRM_EMAIL,
           userId,
           expiresAt: { lt: new Date() },
         },
@@ -56,8 +55,7 @@ export async function POST(request: NextRequest) {
       await prisma.token.create({
         data: {
           id: tokenId,
-          type: Type.JWT,
-          subType: SubType.CONFIRM_EMAIL,
+          type: Type.CONFIRM_EMAIL,
           token: token,
           expiresAt: new Date(Date.now() + 60 * 60 * 1000),
           userId,

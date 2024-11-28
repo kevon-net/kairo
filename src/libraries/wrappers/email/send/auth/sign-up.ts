@@ -16,7 +16,7 @@ export const emailCreateSignUp = async (
         ? process.env.NEXT_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? options : process.env.NEXT_EMAIL_NOREPLY!],
+    to: [isProduction() ? options : process.env.NEXT_EMAIL_INFO!],
     subject: `Verify Your Email Address`,
     html: await render(TemplateEmailCodeSignUp({ otp })),
     replyTo: process.env.NEXT_EMAIL_NOREPLY!,

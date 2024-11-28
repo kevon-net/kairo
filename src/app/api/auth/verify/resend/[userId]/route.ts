@@ -4,7 +4,7 @@ import prisma from '@/libraries/prisma';
 import { hashValue } from '@/utilities/helpers/hasher';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
-import { SubType, Type } from '@prisma/client';
+import { Type } from '@prisma/client';
 import { decrypt, encrypt } from '@/utilities/helpers/token';
 
 export async function POST(
@@ -48,9 +48,8 @@ export async function POST(
     } catch {
       const tokenRecord = await prisma.token.findUnique({
         where: {
-          type_subType_userId: {
-            type: Type.JWT,
-            subType: SubType.CONFIRM_EMAIL,
+          type_userId: {
+            type: Type.CONFIRM_EMAIL,
             userId: userRecord.id,
           },
         },
@@ -80,8 +79,7 @@ export async function POST(
           data: {
             id: tokenId,
             token,
-            type: Type.JWT,
-            subType: SubType.CONFIRM_EMAIL,
+            type: Type.CONFIRM_EMAIL,
             expiresAt: new Date(Date.now() + 60 * 60 * 1000),
             userId: userRecord.id,
           },
@@ -89,8 +87,7 @@ export async function POST(
 
         await prisma.token.deleteMany({
           where: {
-            type: Type.JWT,
-            subType: SubType.CONFIRM_EMAIL,
+            type: Type.CONFIRM_EMAIL,
             userId: userRecord.id,
             expiresAt: { lt: new Date() },
           },

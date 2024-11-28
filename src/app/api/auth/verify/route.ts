@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { compareHashes } from '@/utilities/helpers/hasher';
 import { decrypt } from '@/utilities/helpers/token';
-import { SubType, Type } from '@prisma/client';
+import { Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -9,11 +9,6 @@ export async function POST(request: NextRequest) {
     const { otp, token }: { otp: string; token: string } = await request.json();
 
     let parsed: any;
-
-    const userRecord = await prisma.user.findUnique({
-      where: { id: parsed.userId },
-      include: { tokens: true },
-    });
 
     try {
       parsed = await decrypt(token);
@@ -29,10 +24,15 @@ export async function POST(request: NextRequest) {
       }
     } catch {
       return NextResponse.json(
-        { error: "The OTP is expired or doesn't exist" },
-        { status: 409, statusText: 'Invalid OTP' }
+        { error: 'The link is broken, expired or already used' },
+        { status: 409, statusText: 'Invalid Link' }
       );
     }
+
+    const userRecord = await prisma.user.findUnique({
+      where: { id: parsed.userId },
+      include: { tokens: true },
+    });
 
     if (!userRecord) {
       return NextResponse.json(
@@ -68,8 +68,7 @@ export async function POST(request: NextRequest) {
 
         await prisma.token.deleteMany({
           where: {
-            type: Type.JWT,
-            subType: SubType.CONFIRM_EMAIL,
+            type: Type.CONFIRM_EMAIL,
             userId: parsed.userId,
             expiresAt: { lt: new Date() },
           },

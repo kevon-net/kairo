@@ -35,18 +35,10 @@ enum Status {
 }
 
 enum Type {
-  JWT
-  OTP
-}
-
-enum SubType {
-  // JWT
-  PASSWORD_RESET
-  SSO
-
-  // OTP
   CONFIRM_EMAIL
+  SSO
   TWO_FACTOR_AUTH
+  PASSWORD_RESET
 }
 
 enum Provider {
@@ -106,7 +98,6 @@ model Token {
   id        String   @id @default(cuid())
   token     String
   type      Type
-  subType   SubType  @map(name: "sub_type")
   expiresAt DateTime @map(name: "expires_at")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -116,7 +107,7 @@ model Token {
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(ACTIVE)
 
-  @@unique([type, subType, userId])
+  @@unique([type, userId])
   @@map(name: "tokens")
 }
 

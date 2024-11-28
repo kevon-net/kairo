@@ -4,7 +4,7 @@ import prisma from '@/libraries/prisma';
 import { emailCreatePasswordForgot } from '@/libraries/wrappers/email/send/auth/password';
 import { generateId } from '@/utilities/generators/id';
 import { encrypt } from '@/utilities/helpers/token';
-import { SubType, Type } from '@prisma/client';
+import { Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -13,9 +13,7 @@ export async function POST(request: NextRequest) {
 
     const userRecord = await prisma.user.findUnique({
       where: { email },
-      include: {
-        tokens: { where: { type: Type.JWT, subType: SubType.PASSWORD_RESET } },
-      },
+      include: { tokens: { where: { type: Type.PASSWORD_RESET } } },
     });
 
     if (!userRecord) {
@@ -47,8 +45,7 @@ export async function POST(request: NextRequest) {
     const tokens = await prisma.$transaction(async () => {
       const deleteExpired = await prisma.token.deleteMany({
         where: {
-          type: Type.JWT,
-          subType: SubType.PASSWORD_RESET,
+          type: Type.PASSWORD_RESET,
           userId: userRecord.id,
           expiresAt: { lt: now },
         },
@@ -57,8 +54,7 @@ export async function POST(request: NextRequest) {
       const createNew = await prisma.token.create({
         data: {
           id,
-          type: Type.JWT,
-          subType: SubType.PASSWORD_RESET,
+          type: Type.PASSWORD_RESET,
           token: token,
           expiresAt: new Date(Date.now() + 60 * 60 * 1000),
           userId: userRecord.id,

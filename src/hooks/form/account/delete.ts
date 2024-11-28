@@ -27,6 +27,8 @@ export const useFormUserAccountDelete = () => {
     validate: {
       confirmation: (value) =>
         value.trim() != 'DELETE' && 'Please enter the confirmation phrase',
+      password: (value) =>
+        value.trim().length < 1 && 'Please fill in this field',
     },
   });
 

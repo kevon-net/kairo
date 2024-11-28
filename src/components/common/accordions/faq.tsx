@@ -27,6 +27,7 @@ export default function Faq() {
   return (
     <Accordion
       defaultValue={sample.faqs[0].q}
+      variant="separated"
       classNames={{
         item: classes.item,
         label: classes.label,

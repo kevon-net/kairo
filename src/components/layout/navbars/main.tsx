@@ -96,6 +96,12 @@ export default function Main() {
           <Group justify="end">
             {!session ? (
               <Group gap={'xs'}>
+                <FragmentSignIn>
+                  <Button size="xs" variant="light">
+                    Log In
+                  </Button>
+                </FragmentSignIn>
+
                 <Button
                   size="xs"
                   component={Link}
@@ -104,12 +110,6 @@ export default function Main() {
                 >
                   Sign Up
                 </Button>
-
-                <FragmentSignIn>
-                  <Button size="xs" variant="light">
-                    Log In
-                  </Button>
-                </FragmentSignIn>
               </Group>
             ) : desktop ? (
               <MenuAvatar />

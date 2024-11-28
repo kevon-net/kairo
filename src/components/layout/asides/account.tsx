@@ -74,7 +74,7 @@ export default function Account() {
 
           <Stack gap={'xs'}>
             <Title order={3} fz={'md'} ml={{ md: 'sm' }}>
-              Account
+              Settings
             </Title>
 
             <Stack gap={4}>

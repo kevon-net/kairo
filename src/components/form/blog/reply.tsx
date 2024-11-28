@@ -12,6 +12,7 @@ import {
   Textarea,
 } from '@mantine/core';
 import { useFormBlogReply } from '@/hooks/form/blog/reply';
+import TooltipInputInfo from '@/components/common/tooltips/input/info';
 
 export default function Reply({
   commentId,
@@ -42,6 +43,7 @@ export default function Reply({
             label={'Email'}
             placeholder="Email"
             {...form.getInputProps('email')}
+            rightSection={<TooltipInputInfo />}
           />
         </GridCol>
 

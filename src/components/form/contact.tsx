@@ -12,6 +12,7 @@ import {
   Textarea,
 } from '@mantine/core';
 import { useFormEmailInquiry } from '@/hooks/form/email/inquiry';
+import TooltipInputInfo from '../common/tooltips/input/info';
 
 export default function Contact() {
   const { form, submitted, handleSubmit } = useFormEmailInquiry();
@@ -40,6 +41,7 @@ export default function Contact() {
             label={'Email'}
             placeholder="Your Email"
             {...form.getInputProps('from.email')}
+            rightSection={<TooltipInputInfo />}
           />
         </GridCol>
         <GridCol span={12}>

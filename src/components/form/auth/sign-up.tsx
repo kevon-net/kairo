@@ -5,6 +5,7 @@ import React from 'react';
 import {
   Anchor,
   Button,
+  Center,
   Divider,
   Grid,
   GridCol,
@@ -12,6 +13,7 @@ import {
   Stack,
   Text,
   TextInput,
+  Tooltip,
 } from '@mantine/core';
 
 import AuthProviders from '@/components/common/buttons/auth-providers';
@@ -19,6 +21,7 @@ import PopoverPasswordStrength from '@/components/wrapper/popovers/password-stre
 import { SignIn as FragmentSignIn } from '@/components/common/fragments/auth';
 
 import { useFormAuthSignUp } from '@/hooks/form/auth/sign-up';
+import TooltipInputInfo from '@/components/common/tooltips/input/info';
 
 export default function SignUp() {
   const { form, handleSubmit, submitted } = useFormAuthSignUp();
@@ -52,6 +55,7 @@ export default function SignUp() {
                 aria-label="Email"
                 placeholder="Email"
                 {...form.getInputProps('email')}
+                rightSection={<TooltipInputInfo />}
               />
             </GridCol>
 

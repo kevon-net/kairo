@@ -11,6 +11,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useFormUserAccountDelete } from '@/hooks/form/account/delete';
+import TooltipInputWarning from '@/components/common/tooltips/input/warning';
 
 export default function Delete() {
   const { form, submitted, handleSubmit } = useFormUserAccountDelete();
@@ -21,7 +22,6 @@ export default function Delete() {
         <PasswordInput
           label={'Password'}
           placeholder="********"
-          description="Leave empty if you used password-less sign in (eg. Google)"
           {...form.getInputProps('password')}
         />
 
@@ -34,7 +34,7 @@ export default function Delete() {
         />
 
         <Group justify="end">
-          <Button type="submit" color="red" variant="light" loading={submitted}>
+          <Button type="submit" color="red" loading={submitted}>
             {submitted ? 'Deleting Account' : 'Delete Account'}
           </Button>
         </Group>

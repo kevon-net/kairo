@@ -16,7 +16,6 @@ export default function ClearSessions({
       position="top-end"
       multiline
       w={280}
-      color="dark"
       arrowOffset={16}
       transitionProps={{ transition: 'fade', duration: 250 }}
     >

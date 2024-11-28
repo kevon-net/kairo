@@ -13,6 +13,8 @@ import {
 } from '@mantine/core';
 import { useFormBlogComment } from '@/hooks/form/blog/comment';
 
+import TooltipInputInfo from '@/components/common/tooltips/input/info';
+
 export default function Comment({ postId }: { postId: string }) {
   const { form, submitted, handleSubmit } = useFormBlogComment({ postId });
 
@@ -34,6 +36,7 @@ export default function Comment({ postId }: { postId: string }) {
             label={'Email'}
             placeholder="Email"
             {...form.getInputProps('email')}
+            rightSection={<TooltipInputInfo />}
           />
         </GridCol>
 

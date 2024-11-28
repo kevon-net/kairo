@@ -14,6 +14,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useFormUserEmail } from '@/hooks/form/account/email';
+import TooltipInputInfo from '../tooltips/input/info';
 
 export default function EmailChange() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -87,7 +88,7 @@ export default function EmailChange() {
                   label="New Email"
                   placeholder="Your new email"
                   {...formEmail.getInputProps('email')}
-                  error={formEmail.errors.email}
+                  rightSection={<TooltipInputInfo />}
                 />
               )}
             </Stack>

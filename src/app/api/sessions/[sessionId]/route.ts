@@ -87,7 +87,7 @@ export async function PUT(
       const deleteExpiredSessions = await prisma.session.deleteMany({
         where: {
           userId: body.options?.userId,
-          expiresAt: { lt: new Date(Date.now()) },
+          expiresAt: { lt: new Date() },
         },
       });
 

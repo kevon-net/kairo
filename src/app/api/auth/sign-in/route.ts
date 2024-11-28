@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     await prisma.session.deleteMany({
-      where: { userId: userRecord.id, expiresAt: { lt: new Date(Date.now()) } },
+      where: { userId: userRecord.id, expiresAt: { lt: new Date() } },
     });
 
     const deviceGeoCookie = cookies().get(cookieName.device.geo)?.value;

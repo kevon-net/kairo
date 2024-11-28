@@ -30,7 +30,7 @@ export async function POST() {
       const deleteSessions = await prisma.session.deleteMany({
         where: {
           userId: session.user.id,
-          expiresAt: { lt: new Date(Date.now()) },
+          expiresAt: { lt: new Date() },
         },
       });
 

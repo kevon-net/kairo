@@ -1,7 +1,7 @@
 import { baseUrl } from '@/data/constants';
 import prisma from '@/libraries/prisma';
 
-import { emailCreatePasswordForgot } from '@/libraries/wrappers/email/send/auth/password';
+import { emailSendAuthPasswordForgot } from '@/libraries/wrappers/email/send/auth/password';
 import { generateId } from '@/utilities/generators/id';
 import { encrypt } from '@/utilities/helpers/token';
 import { Type } from '@prisma/client';
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       {
         message: 'An OTL has been sent',
         token: tokens.createNew,
-        resend: await emailCreatePasswordForgot(otlValue, userRecord.email),
+        resend: await emailSendAuthPasswordForgot(otlValue, userRecord.email),
       },
       { status: 200, statusText: 'OTL Sent' }
     );

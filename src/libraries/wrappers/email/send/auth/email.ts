@@ -1,15 +1,15 @@
 import appData from '@/data/app';
 import resend from '@/libraries/resend';
 
-import EmailAuthPasswordForgot from '@/components/email/auth/password-forgot';
-import EmailAuthPasswordChanged from '@/components/email/auth/password-changed';
+import EmailAuthVerify from '@/components/email/auth/verify';
+import EmailAuthEmailChanged from '@/components/email/auth/email-changed';
 import { isProduction } from '@/utilities/helpers/environment';
 import { EmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 
-export const emailSendAuthPasswordForgot = async (
-  otl: string,
-  options: EmailInquiry['to']
+export const emailSendAuthEmailVerify = async (
+  otp: string,
+  options: { to: EmailInquiry['to']; signUp?: boolean }
 ) => {
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
@@ -17,24 +17,22 @@ export const emailSendAuthPasswordForgot = async (
         ? process.env.NEXT_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? options : process.env.NEXT_EMAIL_NOREPLY!],
-    subject: 'Reset Your Password',
-    html: await render(EmailAuthPasswordForgot({ otl })),
+    to: [isProduction() ? options.to : process.env.NEXT_EMAIL_INFO!],
+    subject: `Verify Your Email Address`,
+    html: await render(
+      EmailAuthVerify({ otp, options: { signUp: options.signUp ?? true } })
+    ),
     replyTo: process.env.NEXT_EMAIL_NOREPLY!,
   });
   if (!error) {
     return data;
   } else {
-    console.error(
-      '---> wrapper error - (email create (send) password forgot):',
-      error
-    );
-
+    console.error('---> wrapper error - (email send sign up):', error);
     throw error;
   }
 };
 
-export const emailSendAuthPasswordChanged = async (
+export const emailSendAuthEmailChanged = async (
   options: EmailInquiry['to']
 ) => {
   const { data, error } = await resend.general.emails.send({
@@ -44,8 +42,8 @@ export const emailSendAuthPasswordChanged = async (
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
     to: [isProduction() ? options : process.env.NEXT_EMAIL_NOREPLY!],
-    subject: `Password Changed`,
-    html: await render(EmailAuthPasswordChanged()),
+    subject: `Email Changed`,
+    html: await render(EmailAuthEmailChanged()),
     replyTo: process.env.NEXT_EMAIL_NOREPLY!,
   });
   if (!error) {

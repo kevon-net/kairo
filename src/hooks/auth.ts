@@ -22,6 +22,8 @@ export const useSignOut = (redirectUrl?: string) => {
         return;
       }
 
+      setSubmitted(false);
+
       if (response.status == 401) {
         showNotification(
           { variant: NotificationVariant.WARNING },
@@ -43,8 +45,6 @@ export const useSignOut = (redirectUrl?: string) => {
         desc: (error as Error).message,
       });
       return null;
-    } finally {
-      setSubmitted(false);
     }
   };
 

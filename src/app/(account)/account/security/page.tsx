@@ -17,6 +17,7 @@ import FormUserAccountPassword from '@/components/form/user/account/password';
 import ModalDeleteAccount from '@/components/common/modals/delete/account';
 import ButtonClearSessions from '@/components/common/buttons/clear-sessions';
 import CardSession from '@/components/common/cards/session';
+import ModalEmailChange from '@/components/common/modals/email-change';
 
 import { Metadata } from 'next';
 import appData from '@/data/app';
@@ -30,6 +31,18 @@ export default async function Security() {
 
   return (
     <LayoutPage stacked>
+      <LayoutSection id="page-security-email" containerized={false}>
+        <Stack gap={'lg'}>
+          <Title order={2} fz={'xl'}>
+            Email
+          </Title>
+
+          <ModalEmailChange />
+        </Stack>
+      </LayoutSection>
+
+      <Divider />
+
       <LayoutSection id="page-security-password" containerized={false}>
         <Stack gap={'lg'}>
           <Title order={2} fz={'xl'}>

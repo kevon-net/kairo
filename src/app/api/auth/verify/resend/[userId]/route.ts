@@ -1,4 +1,4 @@
-import { emailCreateSignUp } from '@/libraries/wrappers/email/send/auth/sign-up';
+import { emailSendAuthEmailVerify } from '@/libraries/wrappers/email/send/auth/email';
 import { generateOtpCode } from '@/utilities/generators/otp';
 import prisma from '@/libraries/prisma';
 import { hashValue } from '@/utilities/helpers/hasher';
@@ -23,20 +23,30 @@ export async function POST(
       );
     }
 
-    if (userRecord.verified) {
+    const {
+      token,
+      options,
+    }: {
+      token: string | null;
+      options?: { verified?: boolean; email?: string };
+    } = await request.json();
+
+    if (!options?.verified && userRecord.verified) {
       return NextResponse.json(
         { error: 'Account is already verified' },
         { status: 409, statusText: 'Already Verified' }
       );
     }
 
-    const token: string = await request.json();
-
     const now = new Date();
 
     let parsed: any;
 
     try {
+      if (!token) {
+        throw new Error('Token not included');
+      }
+
       parsed = await decrypt(token);
 
       const expiry = new Date(parsed.exp * 1000).getTime() - now.getTime();
@@ -99,10 +109,10 @@ export async function POST(
           message: 'A new OTP has been sent',
           user: { id: userRecord.id },
           token,
-          resend: await emailCreateSignUp(
-            otpValue.toString(),
-            userRecord.email
-          ),
+          resend: await emailSendAuthEmailVerify(otpValue.toString(), {
+            to: options?.email || userRecord.email,
+            signUp: false,
+          }),
         },
         { status: 200, statusText: 'OTP Sent' }
       );

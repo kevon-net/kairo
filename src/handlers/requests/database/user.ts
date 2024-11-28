@@ -25,7 +25,7 @@ export const userCreate = async (user: UserCreate) => {
 
 export const userUpdate = async (
   user: UserUpdate,
-  options?: { password?: string; token?: string }
+  options?: { password?: string; token?: string; email?: string }
 ) => {
   try {
     const request = new Request(`${baseRequestUrl}/${user.id}`, {

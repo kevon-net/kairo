@@ -6,8 +6,11 @@ import appData from '@/data/app';
 
 import LayoutEmail, { h1, section, text } from '@/components/layout/email';
 
-export default function SignUp(params: { otp: string }) {
-  const message = `Thanks creating an account with ${appData.name.app}. We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
+export default function Verify(params: {
+  otp: string;
+  options?: { signUp?: boolean };
+}) {
+  const message = `${!params.options?.signUp ? '' : `Thanks creating an account with ${appData.name.app}. `}We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
 
   return (
     <LayoutEmail props={{ preview: message }}>

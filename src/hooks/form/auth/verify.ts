@@ -118,8 +118,8 @@ export const useFormAuthVerify = () => {
       setRequested(true);
 
       const response = await handleVerifyResend(
-        parseValues().token,
-        getUrlParam('userId')
+        getUrlParam('userId'),
+        parseValues().token
       );
 
       if (!response) throw new Error('No response from server');

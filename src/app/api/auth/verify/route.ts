@@ -1,3 +1,4 @@
+import { getSession } from '@/libraries/auth';
 import prisma from '@/libraries/prisma';
 import { compareHashes } from '@/utilities/helpers/hasher';
 import { decrypt } from '@/utilities/helpers/token';
@@ -6,12 +7,38 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { otp, token }: { otp: string; token: string } = await request.json();
+    const {
+      otp,
+      token,
+      options,
+    }: { otp: string; token: string | null; options?: { verified?: boolean } } =
+      await request.json();
 
     let parsed: any;
+    let tokenDatabase: any;
+
+    if (!token) {
+      const session = await getSession();
+
+      tokenDatabase = !session
+        ? null
+        : await prisma.token.findUnique({
+            where: {
+              type_userId: {
+                type: Type.CONFIRM_EMAIL,
+                userId: session?.user.id,
+              },
+            },
+          });
+    }
 
     try {
-      parsed = await decrypt(token);
+      if (token) {
+        parsed = await decrypt(token);
+      } else if (tokenDatabase) {
+        parsed = await decrypt(tokenDatabase.token);
+      }
+
       const tokenRecord = await prisma.token.findUnique({
         where: { id: parsed.id },
       });
@@ -41,7 +68,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (userRecord.verified) {
+    if (!options?.verified && userRecord.verified) {
       return NextResponse.json(
         { error: 'Account is already verified' },
         { status: 409, statusText: 'Already Verified' }
@@ -53,7 +80,7 @@ export async function POST(request: NextRequest) {
     if (!match) {
       return NextResponse.json(
         { error: "You've entered the wrong OTP" },
-        { status: 401, statusText: 'Invalid OTP' }
+        { status: 403, statusText: 'Invalid OTP' }
       );
     }
 

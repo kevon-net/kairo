@@ -2,10 +2,10 @@ import { render } from '@react-email/render';
 import { NextRequest, NextResponse } from 'next/server';
 
 import EmailMarketingContact from '@/components/email/marketing/contact';
-import EmailPasswordChanged from '@/components/email/auth/password-changed';
-import EmailPasswordForgot from '@/components/email/auth/password-forgot';
-import EmailSignIn from '@/components/email/auth/sign-in';
-import EmailSignUp from '@/components/email/auth/sign-up';
+import EmailAuthPasswordChanged from '@/components/email/auth/password-changed';
+import EmailAuthPasswordForgot from '@/components/email/auth/password-forgot';
+import EmailAuthSignIn from '@/components/email/auth/sign-in';
+import EmailAuthVerify from '@/components/email/auth/verify';
 
 import { baseUrl } from '@/data/constants';
 import { generateOtpCode } from '@/utilities/generators/otp';
@@ -16,10 +16,13 @@ const emails: Record<string, any> = {
     name: 'Jane Doe',
     message: sample.text.prose,
   }),
-  passwordChanged: EmailPasswordChanged(),
-  passwordForgot: EmailPasswordForgot({ otl: baseUrl }),
-  signIn: EmailSignIn({ otp: String(generateOtpCode()) }),
-  signUp: EmailSignUp({ otp: String(generateOtpCode()) }),
+  passwordChanged: EmailAuthPasswordChanged(),
+  passwordForgot: EmailAuthPasswordForgot({ otl: baseUrl }),
+  signIn: EmailAuthSignIn({ otp: String(generateOtpCode()) }),
+  signUp: EmailAuthVerify({
+    otp: String(generateOtpCode()),
+    options: { signUp: true },
+  }),
 };
 
 export async function GET(req: NextRequest) {

@@ -99,18 +99,19 @@ export const useFormUserProfile = () => {
 
         if (response.ok) {
           if (session) {
-            // Update the session data on the client-side
             dispatch(
               updateSession({
                 ...session,
-                user: { ...session.user, ...parseValues() },
+                user: { ...session?.user, ...parseValues() },
               })
             );
-
-            // refresh the page
-            router.refresh();
           }
 
+          showNotification(
+            { variant: NotificationVariant.SUCCESS },
+            response,
+            result
+          );
           return;
         }
 

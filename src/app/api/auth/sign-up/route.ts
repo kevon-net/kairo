@@ -1,5 +1,5 @@
 import { contactCreate } from '@/libraries/wrappers/email/contact';
-import { emailCreateSignUp } from '@/libraries/wrappers/email/send/auth/sign-up';
+import { emailSendAuthEmailVerify } from '@/libraries/wrappers/email/send/auth/email';
 import { generateOtpCode } from '@/utilities/generators/otp';
 import prisma from '@/libraries/prisma';
 import { hashValue } from '@/utilities/helpers/hasher';
@@ -71,7 +71,9 @@ export async function POST(request: NextRequest) {
         user: { id: transactions.createUser.id },
         token,
         resend: {
-          email: await emailCreateSignUp(otpValue.toString(), email),
+          email: await emailSendAuthEmailVerify(otpValue.toString(), {
+            to: email,
+          }),
           contact: await contactCreate({
             name: `${name.first} ${name.last}`,
             email,

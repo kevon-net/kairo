@@ -9,7 +9,8 @@ import { decrypt, encrypt } from '@/utilities/helpers/token';
 import { getExpiry } from '@/utilities/helpers/time';
 import { cookies } from 'next/headers';
 import { cookieName } from '@/data/constants';
-import { emailCreatePasswordChanged } from '@/libraries/wrappers/email/send/auth/password';
+import { emailSendAuthPasswordChanged } from '@/libraries/wrappers/email/send/auth/password';
+import { emailSendAuthEmailChanged } from '@/libraries/wrappers/email/send/auth/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,8 +54,10 @@ export async function PUT(
     const {
       user,
       options,
-    }: { user: UserUpdate; options?: { password?: string; token?: string } } =
-      await request.json();
+    }: {
+      user: UserUpdate;
+      options?: { password?: string; token?: string; email?: string };
+    } = await request.json();
 
     if (!session && !options?.token) {
       return NextResponse.json(
@@ -164,17 +167,37 @@ export async function PUT(
       return NextResponse.json(
         {
           message: 'Password changed successfully',
-          resend: await emailCreatePasswordChanged(userRecord.email),
+          resend: await emailSendAuthPasswordChanged(userRecord.email),
         },
         { status: 200, statusText: 'Password Changed' }
       );
     }
 
+    if (options?.email && session) {
+      const sessionToken = await encrypt(
+        { ...session, user: { ...session.user, email: user.email } },
+        getExpiry(session.user.remember).sec
+      );
+
+      cookies().set(cookieName.session, sessionToken, {
+        expires: new Date(session.expires),
+        httpOnly: true,
+      });
+    }
+
     await prisma.user.update({ where: { id: params.userId }, data: user });
 
     return NextResponse.json(
-      { message: 'User record has been updated' },
-      { status: 200, statusText: 'User Updated' }
+      {
+        message: `Your ${options?.email ? 'email has' : 'details have'} been updated`,
+        resend: !options?.email
+          ? undefined
+          : await emailSendAuthEmailChanged(user.email as string),
+      },
+      {
+        status: 200,
+        statusText: `${options?.email ? 'Email' : 'User'} Updated`,
+      }
     );
   } catch (error) {
     console.error('---> route handler error (update user):', error);

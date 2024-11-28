@@ -29,6 +29,7 @@ export default function Verify() {
               type={'number'}
               length={6}
               oneTimeCode
+              styles={{ input: { fontWeight: 'bold' } }}
             />
           </Group>
 

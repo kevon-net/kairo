@@ -14,6 +14,7 @@ export const authUrls = {
   verifyRequest: `${baseUrl}/auth/verify-request`,
   error: `${baseUrl}/auth/error`,
   signOut: `${baseUrl}/auth/sign-out`,
+  passwordForgot: `${baseUrl}/auth/password/forgot`,
 };
 
 export const geoDataUrl = `${process.env.NEXT_PUBLIC_IP_INFO_URL}?token=${process.env.NEXT_PUBLIC_IP_INFO_TOKEN}`;

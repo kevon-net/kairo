@@ -5,7 +5,7 @@ import { signOut } from '@/handlers/events/auth';
 import { showNotification } from '@/utilities/notifications';
 import { NotificationVariant } from '@/types/enums';
 
-export const useSignOut = () => {
+export const useSignOut = (redirectUrl?: string) => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSignOut = async () => {
@@ -18,8 +18,7 @@ export const useSignOut = () => {
       if (!result) throw new Error('No response from server');
 
       if (!result.error) {
-        // redirect to home page
-        window.location.replace('/');
+        window.location.replace(redirectUrl || '/');
         return;
       }
 

@@ -2,10 +2,7 @@
 
 import React from 'react';
 
-import Link from 'next/link';
-
 import {
-  Anchor,
   Box,
   Button,
   Grid,
@@ -19,6 +16,7 @@ import {
 
 import { useFormUserAccountPassword } from '@/hooks/form/account/password';
 import PopoverPasswordStrength from '@/components/wrapper/popovers/password-strength';
+import ModalPasswordReset from '@/components/common/modals/password-reset';
 
 import classes from './notifications.module.scss';
 import { useAppSelector } from '@/hooks/redux';
@@ -76,14 +74,9 @@ export default function Password() {
                       description={
                         <>
                           If you can&apos;t remember, you can{' '}
-                          <Anchor
-                            underline="always"
-                            inherit
-                            component={Link}
-                            href="/auth/password/forgot"
-                          >
+                          <ModalPasswordReset>
                             reset your password
-                          </Anchor>
+                          </ModalPasswordReset>
                           .
                         </>
                       }

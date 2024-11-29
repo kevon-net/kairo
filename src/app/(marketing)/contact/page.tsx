@@ -29,6 +29,7 @@ import {
 import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
 import FormContact from '@/components/form/contact';
+import IntroPage from '@/components/layout/intro/page';
 
 import appData from '@/data/app';
 import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
@@ -38,17 +39,26 @@ export const metadata: Metadata = { title: 'Contact' };
 export default async function Contact() {
   return (
     <LayoutPage>
-      <LayoutSection id={'page-contact'} padded>
+      <IntroPage
+        props={{
+          title: 'Contact Us',
+          desc: 'Please reach out to us if you have questions about our enterprise offerings, or anything else.',
+        }}
+      />
+
+      <LayoutSection id={'page-contact'} margined>
         <Card
-          bg={'var(--mantine-color-pri-6)'}
+          bg={
+            'linear-gradient(-60deg, var(--mantine-color-pri-4) 0%, var(--mantine-color-pri-7) 100%)'
+          }
           c={'var(--mantine-color-body)'}
           p={{ base: 'xs', xs: 32, md: 64 }}
         >
           <SimpleGrid cols={{ base: 1, md: 2 }}>
             <Stack gap={'xl'}>
               <Stack gap={'xs'} pt={{ base: 'xl', xs: 0 }}>
-                <Title order={1} ta={{ base: 'center', md: 'start' }}>
-                  Contact us
+                <Title order={2} ta={{ base: 'center', md: 'start' }}>
+                  Drop Us A Line
                 </Title>
 
                 <Text
@@ -64,7 +74,8 @@ export default async function Contact() {
                   <Group key={item.link} wrap="nowrap">
                     <ThemeIcon
                       size={iconWrapperSize + 8}
-                      c={'var(--mantine-color-body)'}
+                      color={'var(--mantine-color-body)'}
+                      c={'var(--mantine-color-pri-6)'}
                     >
                       <item.icon size={iconSize + 8} stroke={iconStrokeWidth} />
                     </ThemeIcon>

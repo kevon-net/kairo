@@ -9,16 +9,19 @@ import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';
 
-export const useFormEmailInquiry = () => {
+export const useFormEmailInquiry = (initialValues?: {
+  subject?: string;
+  message?: string;
+}) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();
 
   const form = useForm({
     initialValues: {
       from: { name: '', email: '' },
-      subject: '',
+      subject: initialValues?.subject || '',
       phone: '',
-      message: '',
+      message: initialValues?.message || '',
     },
 
     validate: {

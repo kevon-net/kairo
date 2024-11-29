@@ -14,6 +14,7 @@ import {
   Image,
   Button,
   Flex,
+  Container,
 } from '@mantine/core';
 
 import { IconArrowLeft } from '@tabler/icons-react';
@@ -50,20 +51,18 @@ export default function NotFound() {
                 </Group>
               </Anchor>
 
-              <Stack gap={'xs'}>
-                <Title order={1} ta={{ base: 'center', md: 'start' }}>
-                  Something&apos;s not right...
-                </Title>
-                <Text
-                  ta={{ base: 'center', md: 'start' }}
-                  w={{ xs: '80%', md: '100%' }}
-                  mx={{ xs: 'auto' }}
-                >
-                  Page you are trying to open does not exist. You may have
-                  mistyped the address, or the page has been moved to another
-                  URL. If you think this is an error contact support.
-                </Text>
-              </Stack>
+              <Container px={0} size={'sm'}>
+                <Stack gap={'xs'}>
+                  <Title order={1} ta={{ base: 'center', md: 'start' }}>
+                    Something&apos;s not right...
+                  </Title>
+                  <Text ta={{ base: 'center', md: 'start' }}>
+                    Page you are trying to open does not exist. You may have
+                    mistyped the address, or the page has been moved to another
+                    URL. If you think this is an error contact support.
+                  </Text>
+                </Stack>
+              </Container>
 
               <Flex
                 direction={{ base: 'column', xs: 'row' }}

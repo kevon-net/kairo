@@ -1,0 +1,65 @@
+import {
+  font,
+  iconSize,
+  iconStrokeWidth,
+  sectionSpacing,
+} from '@/data/constants';
+import {
+  Button,
+  Card,
+  Container,
+  Group,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
+import { IconArrowRight } from '@tabler/icons-react';
+import React from 'react';
+
+export default function Inquiry() {
+  return (
+    <Card
+      bg={
+        'linear-gradient(-60deg, var(--mantine-color-pri-4) 0%, var(--mantine-color-pri-7) 100%)'
+      }
+      padding={0}
+      c={'var(--mantine-color-body)'}
+      pos={'relative'}
+    >
+      <Container size={'sm'}>
+        <Stack gap={'xl'} py={sectionSpacing}>
+          <Stack>
+            <Title order={2} fz={font.ctaTitle} ta={'center'}>
+              Want to speak with an expert?
+            </Title>
+
+            <Text fz={'xl'} ta={'center'}>
+              We&apos;d love to hear about your brand and business challenges,
+              even if you&apos;re not sure what your next step is. No pitch, no
+              strings attached.
+            </Text>
+          </Stack>
+
+          <Group justify="center">
+            <Button
+              color="var(--mantine-color-body)"
+              c={'var(--mantine-color-pri-6)'}
+            >
+              Let&apos;s Talk
+            </Button>
+
+            <Button
+              color="var(--mantine-color-body)"
+              variant="transparent"
+              rightSection={
+                <IconArrowRight size={iconSize} stroke={iconStrokeWidth} />
+              }
+            >
+              Learn More
+            </Button>
+          </Group>
+        </Stack>
+      </Container>
+    </Card>
+  );
+}

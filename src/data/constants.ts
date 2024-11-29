@@ -29,6 +29,10 @@ export const transitionDuration = 250;
 
 export const sectionSpacing = 64;
 
+export const fontCtaTitle = 40;
+
+export const font = { ctaTitle: fontCtaTitle };
+
 export const passwordRequirements = [
   { re: /[0-9]/, label: 'number' },
   { re: /[a-z]/, label: 'lowercase letter' },

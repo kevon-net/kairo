@@ -37,6 +37,7 @@
     "@tiptap/react": "^2.8.0",
     "@tiptap/starter-kit": "^2.8.0",
     "bcryptjs": "^2.4.3",
+    "embla-carousel-autoplay": "^7.1.0",
     "embla-carousel-react": "^7.1.0",
     "jose": "^5.9.6",
     "next": "^14.2.17",
@@ -61,7 +62,7 @@
     "prettier": "3.4.1",
     "prisma": "^5.21.1",
     "react-email": "3.0.2",
-    "sass": "^1.79.5",
+    "sass": "^1.81.0",
     "typescript": "^5"
   }
 }

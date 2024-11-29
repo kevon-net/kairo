@@ -2,7 +2,7 @@
 
 const nextConfig = {
   sassOptions: {
-    prependData: `@import "./src/styles/_mantine.scss";`,
+    prependData: `@import "./_mantine.scss";`,
   },
 
   images: {

@@ -34,6 +34,11 @@ export enum JwtAlgorithm {
   HS256 = 'HS256',
 }
 
+export enum SwitchPricing {
+  MONTHLY = 'MONTHLY',
+  ANNUALLY = 'ANNUALLY',
+}
+
 export enum NotificationVariant {
   SUCCESS = 'success',
   WARNING = 'warning',

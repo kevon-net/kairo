@@ -17,7 +17,7 @@ export const metadata: Metadata = { title: 'Authentication Error' };
 export default async function AuthenticationError() {
   return (
     <LayoutPage>
-      <LayoutSection id={'page-sign-out'} containerized={false} padded>
+      <LayoutSection id={'page-sign-out'} containerized={false} margined>
         <Flex
           direction={'column'}
           align={{ base: 'center', md: 'start' }}

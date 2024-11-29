@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <LayoutBody nav={<NavbarMain />} footer={<FooterMain />}>
       <main>
-        <LayoutSection id={'page-home'} padded>
+        <LayoutSection id={'page-home'} margined>
           Home page
         </LayoutSection>
       </main>

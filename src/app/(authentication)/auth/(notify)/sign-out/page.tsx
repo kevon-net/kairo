@@ -18,7 +18,11 @@ export const metadata: Metadata = { title: 'Sign Out' };
 export default async function SignOut() {
   return (
     <LayoutPage>
-      <LayoutSection id={'page-sign-out-sign-out'} containerized={false} padded>
+      <LayoutSection
+        id={'page-sign-out-sign-out'}
+        containerized={false}
+        margined
+      >
         <Flex
           direction={'column'}
           align={{ base: 'center', md: 'start' }}

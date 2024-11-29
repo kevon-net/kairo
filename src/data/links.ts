@@ -2,22 +2,19 @@ const links = {
   navbar: [
     { link: '/', label: 'Home' },
     { link: '/about', label: 'About' },
-    {
-      link: '/services',
-      label: 'Services',
-      subLinks: [
-        { link: '/services/1', label: 'Service One' },
-        { link: '/services/2', label: 'Service Two' },
-        { link: '/services/3', label: 'Service Three' },
-      ],
-    },
+    { link: '/pricing', label: 'Pricing' },
     {
       link: '/blog',
       label: 'Blog',
     },
     {
+      link: '/help',
+      label: 'Help',
+      subLinks: [{ link: '/help/faq', label: "FAQ's" }],
+    },
+    {
       link: '/contact',
-      label: 'Contact',
+      label: 'Contact Us',
     },
   ],
 };

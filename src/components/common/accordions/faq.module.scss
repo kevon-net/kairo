@@ -1,9 +1,7 @@
 .item {
   border-radius: var(--mantine-radius-sm);
   overflow: hidden;
-  // border: 1px solid
-  //   light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
-  // box-shadow: var(--mantine-shadow-xs);
+  box-shadow: var(--mantine-shadow-xs);
 }
 
 .control {
@@ -12,10 +10,5 @@
 }
 
 .label {
-  color: var(--mantine-color-pri-6);
-  font-weight: 500;
-}
-
-.chevron {
-  color: var(--mantine-color-pri-6);
+  font-weight: 700;
 }

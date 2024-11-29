@@ -30,25 +30,6 @@ const sample = {
       },
     ],
   },
-
-  faqs: [
-    {
-      q: 'How long does a web design project take?',
-      a: sampleProse,
-    },
-    {
-      q: 'What factors affect the cost of web design?',
-      a: sampleProse,
-    },
-    {
-      q: 'Do you provide ongoing support?',
-      a: sampleProse,
-    },
-    {
-      q: 'What is your web design process?',
-      a: sampleProse,
-    },
-  ],
 };
 
 export default sample;

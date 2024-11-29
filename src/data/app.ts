@@ -16,7 +16,7 @@ export const emails = {
 
 export const socials = {
   twitter: {
-    platform: `Twitter`,
+    platform: `X`,
     link: '#twitter',
   },
   facebook: {

@@ -22,8 +22,6 @@ import classes from './new.module.scss';
 import { linkify } from '@/utilities/formatters/string';
 import { PostRelations } from '@/types/models/post';
 import { getRegionalDate } from '@/utilities/formatters/date';
-import { IconCategory } from '@tabler/icons-react';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function New({ post }: { post: PostRelations }) {
   const path = `/blog/${linkify(post.title)}`;
@@ -70,7 +68,7 @@ export default function New({ post }: { post: PostRelations }) {
             h={'100%'}
           >
             <Stack>
-              <Badge size="sm" variant="light" color="blue">
+              <Badge size="sm" color="blue">
                 latest
               </Badge>
 
@@ -108,11 +106,9 @@ export default function New({ post }: { post: PostRelations }) {
                   <Badge
                     style={{ cursor: 'inherit' }}
                     variant="light"
+                    size="lg"
                     radius={'sm'}
                     tt={'capitalize'}
-                    leftSection={
-                      <IconCategory size={iconSize} stroke={iconStrokeWidth} />
-                    }
                   >
                     {post.category?.title}
                   </Badge>

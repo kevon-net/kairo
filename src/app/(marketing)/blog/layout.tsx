@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: { default: 'Blog', template: `%s - Blog - ${appData.name.app}` },
 };
 
-export default function Blog({
+export default function LayoutBlog({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;

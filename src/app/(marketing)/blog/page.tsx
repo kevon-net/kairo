@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { Grid, GridCol, Text, Title } from '@mantine/core';
+import { Grid, GridCol } from '@mantine/core';
 
 import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
 import CardBlogNew from '@/components/common/cards/blog/new';
 import CardBlogMain from '@/components/common/cards/blog/main';
+import IntroPage from '@/components/layout/intro/page';
 
 import { postsGet } from '@/handlers/requests/database/post';
 import { PostRelations } from '@/types/models/post';
@@ -15,18 +16,12 @@ export default async function Blog() {
 
   return (
     <LayoutPage>
-      <LayoutSection id={'page-blog-title'} margined containerized={'md'}>
-        <Title order={1} ta={'center'}>
-          Expert web design advice
-        </Title>
-
-        <Text ta={'center'} mt={'md'}>
-          Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit
-          phasellus mollis sit aliquam sit nullam. Lorem ipsum dolor sit amet
-          consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit
-          nullam.
-        </Text>
-      </LayoutSection>
+      <IntroPage
+        props={{
+          title: 'Expert Web Design Advice',
+          desc: 'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam. Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam.',
+        }}
+      />
 
       <LayoutSection id={'page-blog-grid'} margined>
         <Grid gutter={'xl'}>

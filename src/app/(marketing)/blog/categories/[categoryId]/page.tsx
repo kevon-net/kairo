@@ -15,7 +15,7 @@ export default async function Category({ params }: { params: typeParams }) {
 
   return (
     <LayoutPage>
-      <LayoutSection id={'page-blog'} padded>
+      <LayoutSection id={'page-blog'} margined>
         <Stack gap={'xl'}>
           <Stack align="center">
             <Title order={1} ta={'center'}>

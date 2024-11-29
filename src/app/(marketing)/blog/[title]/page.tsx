@@ -12,7 +12,9 @@ import { linkify } from '@/utilities/formatters/string';
 import {
   Anchor,
   Card,
+  Center,
   Divider,
+  Flex,
   Grid,
   GridCol,
   Group,
@@ -22,11 +24,14 @@ import {
   Title,
 } from '@mantine/core';
 import { getRegionalDate } from '@/utilities/formatters/date';
-import { IconCircleFilled } from '@tabler/icons-react';
-import PartialShare from '@/components/partial/share';
+import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
+import MenuShare from '@/components/common/menus/share';
 import Link from 'next/link';
 import FormBlogComment from '@/components/form/blog/comment';
 import CardBlogComment from '@/components/common/cards/blog/comment';
+import IntroPage from '@/components/layout/intro/page';
+import { iconSize, iconStrokeWidth } from '@/data/constants';
+import CardBlogAuthor from '@/components/common/cards/blog/author';
 
 export default async function Post({ params }: { params: typeParams }) {
   const { posts }: { posts: PostRelations[] } = await postsGet();
@@ -37,16 +42,22 @@ export default async function Post({ params }: { params: typeParams }) {
 
   return !post ? null : (
     <LayoutPage>
-      <LayoutSection id={'page-post'} margined containerized={false}>
+      <IntroPage props={{ title: post.title || '' }} />
+
+      <LayoutSection id={'page-post'} margined containerized={'sm'}>
         <Stack gap={'xl'}>
-          <Stack>
-            <Group fz={'sm'} justify="center">
-              <Text inherit>
-                {!post.user ? 'Anonymous' : post.user.profile.name}
-              </Text>
-              <IconCircleFilled size={4} />
+          <Flex
+            direction={{ base: 'column', xs: 'row' }}
+            align={'center'}
+            justify={{ xs: 'center' }}
+            gap={'md'}
+            fz={'sm'}
+          >
+            <Group justify="center">
               <Text inherit>{getRegionalDate(post.createdAt)}</Text>
+
               <IconCircleFilled size={4} />
+
               <Anchor
                 component={Link}
                 href={`/blog/categories/${post.category?.id}`}
@@ -57,14 +68,29 @@ export default async function Post({ params }: { params: typeParams }) {
               </Anchor>
             </Group>
 
-            <Title order={1} fz={40} ta={'center'}>
-              {post.title}
-            </Title>
-          </Stack>
+            <Center visibleFrom="xs">
+              <IconCircleFilled size={4} />
+            </Center>
 
-          <Group justify="center">
-            <PartialShare props={{ postTitle: post.title }} size={32} />
-          </Group>
+            <Group justify="center">
+              <MenuShare props={{ postTitle: post.title }} />
+
+              <IconCircleFilled size={4} />
+
+              <Anchor inherit href="#page-post-comment">
+                <Group gap={6}>
+                  <IconMessageCircle
+                    size={iconSize - 4}
+                    stroke={iconStrokeWidth}
+                  />
+
+                  <Text component="span" inherit>
+                    {post.comments.length}
+                  </Text>
+                </Group>
+              </Anchor>
+            </Group>
+          </Flex>
 
           <Stack
             style={{
@@ -87,6 +113,13 @@ export default async function Post({ params }: { params: typeParams }) {
           <Text>{post.content}</Text>
 
           <Group justify="space-between" mt={'xl'}>
+            <CardBlogAuthor
+              props={{
+                name: !post.user ? 'Anonymous' : post.user.profile.name,
+                date: post.createdAt,
+              }}
+            />
+
             <Text fw={'bold'}>
               Tags:{' '}
               <Text component="span" inherit fw={'normal'}>
@@ -96,18 +129,13 @@ export default async function Post({ params }: { params: typeParams }) {
                 )}
               </Text>
             </Text>
-
-            <Group gap={'xs'}>
-              <Text>Share: </Text>
-              <PartialShare props={{ postTitle: post.title }} />
-            </Group>
           </Group>
 
           <Divider />
         </Stack>
       </LayoutSection>
 
-      <LayoutSection id={'page-post-comment'} margined containerized={false}>
+      <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
         <Grid gutter={0}>
           {post.comments.map((comment) => (
             <GridCol key={comment.id} span={12}>
@@ -123,7 +151,7 @@ export default async function Post({ params }: { params: typeParams }) {
         </Grid>
       </LayoutSection>
 
-      <LayoutSection id={'page-post-comment'} margined containerized={false}>
+      <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
         <Card padding={'xl'} bg={'transparent'} withBorder shadow="xs">
           <Stack gap={'xl'}>
             <Stack gap={'xs'}>

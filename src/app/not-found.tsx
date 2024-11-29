@@ -5,7 +5,6 @@ import NextImage from 'next/image';
 
 import {
   Anchor,
-  Center,
   Grid,
   GridCol,
   Group,
@@ -23,20 +22,21 @@ import LayoutSection from '@/components/layout/section';
 
 import images from '@/data/images';
 import appData from '@/data/app';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { iconSize, iconStrokeWidth, sectionSpacing } from '@/data/constants';
+import ModalCommunicationSupport from '@/components/common/modals/communication/support';
 
 export default function NotFound() {
   return (
     <LayoutSection id={'page-not-found'}>
-      <Center mih={'100vh'} py={96}>
-        <Grid w={'100%'} gutter={{ base: 'xl', sm: 'md' }} align="center">
-          <GridCol span={{ base: 12, sm: 5 }} order={{ base: 2, sm: 1 }}>
+      <Stack justify="center" mih={'100vh'} py={sectionSpacing}>
+        <Grid align="center">
+          <GridCol span={{ base: 12, md: 5 }} order={{ base: 2, md: 1 }}>
             <Flex
-              align={{ base: 'center', sm: 'start' }}
+              align={{ base: 'center', md: 'start' }}
               direction={'column'}
-              gap={{ base: 'md', sm: 64 }}
+              gap={'xl'}
             >
-              <Anchor component={Link} href={'/'} visibleFrom="sm">
+              <Anchor component={Link} href={'/'} visibleFrom="md">
                 <Group>
                   <Image
                     src={images.brand.logo.light}
@@ -51,56 +51,59 @@ export default function NotFound() {
               </Anchor>
 
               <Stack gap={'xs'}>
-                <Title
-                  order={1}
-                  fw={'bold'}
-                  fz={{ base: 24, sm: 32 }}
-                  ta={{ base: 'center', sm: 'start' }}
-                >
-                  Not Found
+                <Title order={1} ta={{ base: 'center', md: 'start' }}>
+                  Something&apos;s not right...
                 </Title>
                 <Text
-                  fz={{ base: 'sm', sm: 'md' }}
-                  ta={{ base: 'center', sm: 'start' }}
+                  ta={{ base: 'center', md: 'start' }}
+                  w={{ xs: '80%', md: '100%' }}
+                  mx={{ xs: 'auto' }}
                 >
-                  The page you&apos;re looking for has either been removed or
-                  moved to another section of the site.
+                  Page you are trying to open does not exist. You may have
+                  mistyped the address, or the page has been moved to another
+                  URL. If you think this is an error contact support.
                 </Text>
               </Stack>
 
-              <Group>
+              <Flex
+                direction={{ base: 'column', xs: 'row' }}
+                align={'center'}
+                gap={'md'}
+              >
                 <Button
                   leftSection={
                     <IconArrowLeft size={iconSize} stroke={iconStrokeWidth} />
                   }
                   component={Link}
                   href={'/'}
+                  variant="light"
                 >
-                  Back Home
+                  Go To Home Page
                 </Button>
-                <Button variant="light" component={Link} href={'/'}>
-                  Help Center
-                </Button>
-              </Group>
+
+                <ModalCommunicationSupport>
+                  <Button>Contact Support</Button>
+                </ModalCommunicationSupport>
+              </Flex>
             </Flex>
           </GridCol>
-          <GridCol span={{ base: 12, sm: 7 }} order={{ base: 1, sm: 2 }}>
-            <Center>
+          <GridCol span={{ base: 12, md: 7 }} order={{ base: 1, md: 2 }}>
+            <Flex justify={{ base: 'center', md: 'end', lg: 'center' }}>
               <Group>
                 <Image
                   src={images.error.err404}
                   alt={'Not Found'}
-                  h={{ base: 120, xs: 160, md: 240, lg: 280 }}
+                  h={{ base: 120, xs: 160, md: 240, lg: 280, xl: 320 }}
                   component={NextImage}
                   width={1920}
                   height={1080}
                   priority
                 />
               </Group>
-            </Center>
+            </Flex>
           </GridCol>
         </Grid>
-      </Center>
+      </Stack>
     </LayoutSection>
   );
 }

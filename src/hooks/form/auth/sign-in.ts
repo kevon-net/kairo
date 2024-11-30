@@ -73,12 +73,13 @@ export const useFormAuthSignIn = () => {
           return;
         }
 
-        if (result.error.includes('User not Verified')) {
-          const userId = result.error.split(': ')[1];
-
+        if (response.status == 403) {
           // redirect to verification page
           setTimeout(
-            () => router.push(`/auth/verify/${userId}`),
+            () =>
+              router.push(
+                `/auth/verify/?token=${result.token}&userId=${result.user.id}`
+              ),
             timeout.redirect
           );
 

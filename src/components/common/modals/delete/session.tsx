@@ -2,9 +2,11 @@
 
 import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
 import { SessionGet } from '@/types/models/session';
-import { Modal, Button, Stack, Text, ActionIcon, Group } from '@mantine/core';
+import { Modal, Button, Stack, Text, ActionIcon, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout } from '@tabler/icons-react';
+import LayoutModal from '@/components/layout/modal';
+import { Alert } from '@/types/enums';
 
 export default function Session({ props }: { props: SessionGet }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -15,22 +17,36 @@ export default function Session({ props }: { props: SessionGet }) {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} centered title="Delete Session">
-        <Stack>
-          <Text>
-            Are you sure? Deleting your session will sign you out of (
-            <Text component="span" inherit fw={'bold'}>
-              {props.ip}
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        withCloseButton={false}
+        padding={'xl'}
+      >
+        <LayoutModal
+          props={{
+            title: 'Delete Session',
+            close,
+          }}
+          variant={Alert.WARNING}
+        >
+          <Stack>
+            <Text ta={{ base: 'center', xs: 'start' }}>
+              Are you sure? Deleting your session will sign you out of (
+              <Text component="span" inherit fw={'bold'}>
+                {props.ip}
+              </Text>
+              ).
             </Text>
-            ).
-          </Text>
 
-          <Group justify="end">
-            <Button color="red" onClick={handleDelete}>
-              Delete
-            </Button>
-          </Group>
-        </Stack>
+            <Flex justify={{ base: 'center', xs: 'end' }} gap={'xs'}>
+              <Button color="yellow" onClick={handleDelete}>
+                Delete
+              </Button>
+            </Flex>
+          </Stack>
+        </LayoutModal>
       </Modal>
 
       <ActionIcon size={iconWrapperSize} color="red" onClick={open}>

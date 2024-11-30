@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Card,
-  Container,
   Divider,
   Grid,
   GridCol,
@@ -19,6 +18,8 @@ import {
 import { IconCheck } from '@tabler/icons-react';
 import React from 'react';
 import TooltipInfo from '../../tooltips/input/info';
+import { roundAndTruncate } from '@/utilities/helpers/number';
+import { Discount } from '@/types/static';
 
 interface Pricing {
   title: string;
@@ -31,9 +32,11 @@ interface Pricing {
 export default function Enterprise({
   props,
   options,
+  functions,
 }: {
   props: Pricing;
   options?: { period: SwitchPricing };
+  functions?: { getDiscount: (prices: Discount) => number };
 }) {
   const annual = options?.period == SwitchPricing.ANNUALLY;
 
@@ -127,14 +130,15 @@ export default function Enterprise({
                       c={'green'}
                       lh={1}
                     >
+                      -{' '}
                       <NumberFormatter
-                        prefix="- $"
+                        prefix="$"
                         value={getDiscount({
                           initial: props.price.monthly * 12,
                           current: props.price.annually * 12,
                         })}
                         thousandSeparator
-                        decimalScale={2}
+                        decimalScale={0}
                         style={{ fontWeight: 'bold' }}
                       />{' '}
                       %
@@ -143,12 +147,18 @@ export default function Enterprise({
 
                   <TooltipInfo
                     props={{
-                      label: annual
-                        ? 'Billed annually'
-                        : 'Switch to annual billing for a discount',
+                      label: !annual
+                        ? 'Billed monthly'
+                        : `Save ${roundAndTruncate(
+                            functions?.getDiscount({
+                              initial: props.price.monthly * 12,
+                              current: props.price.annually * 12,
+                            }) || 0,
+                            0
+                          )}% on annual plan (billed annually)`,
                     }}
-                    multiline
-                    w={160}
+                    multiline={annual}
+                    w={annual ? 200 : undefined}
                   />
                 </Group>
               </Group>

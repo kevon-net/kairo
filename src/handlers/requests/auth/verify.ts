@@ -4,7 +4,7 @@ import { Request as EnumRequest } from '@/types/enums';
 export const verify = async (params: {
   otp: string;
   token: string | null;
-  options?: { verified?: boolean };
+  options?: { verified?: boolean; userId?: string };
 }) => {
   try {
     const request = new Request(`${apiUrl}/auth/verify`, {

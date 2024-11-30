@@ -5,12 +5,26 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Menu, MenuDropdown, MenuItem, MenuTarget } from '@mantine/core';
+import {
+  Button,
+  Card,
+  Grid,
+  GridCol,
+  Group,
+  Menu,
+  MenuDropdown,
+  MenuItem,
+  MenuTarget,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 
 import { typeMenuNavbar } from '@/types/components/menu';
 
 import classes from './navbar.module.scss';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
+import CardMenu from '../cards/menu';
 
 export default function Navbar({
   children,
@@ -21,6 +35,8 @@ export default function Navbar({
 }) {
   const pathname = usePathname();
 
+  const megaMenu = subLinks && subLinks[0].desc;
+
   const menuItems =
     subLinks &&
     subLinks.map((item) => (
@@ -29,18 +45,20 @@ export default function Navbar({
         component={Link}
         href={item.link}
         leftSection={
-          item.leftSection && (
+          item.leftSection &&
+          !megaMenu && (
             <item.leftSection size={iconSize} stroke={iconStrokeWidth} />
           )
         }
         rightSection={
-          item.rightSection && (
+          item.rightSection &&
+          !megaMenu && (
             <item.rightSection size={iconSize} stroke={iconStrokeWidth} />
           )
         }
         className={`${classes.item} ${pathname == item.link ? classes.itemActive : ''}`}
       >
-        {item.label}
+        {!item.desc ? item.label : <CardMenu props={item} />}
       </MenuItem>
     ));
 
@@ -63,7 +81,41 @@ export default function Navbar({
     >
       <MenuTarget>{children}</MenuTarget>
 
-      {menuItems && <MenuDropdown>{menuItems}</MenuDropdown>}
+      {menuItems && (
+        <MenuDropdown maw={560}>
+          {!megaMenu ? (
+            menuItems
+          ) : (
+            <Stack gap={4}>
+              <Grid gutter={0}>
+                {menuItems.map((menuItem, index) => (
+                  <GridCol key={index} span={{ base: 12, xs: 6 }}>
+                    {menuItem}
+                  </GridCol>
+                ))}
+              </Grid>
+
+              <Card
+                bg={'var(--mantine-color-pri-6)'}
+                c={'var(--mantine-color-body)'}
+              >
+                <Group justify="space-between">
+                  <Stack gap={4}>
+                    <Title order={3} fz={'sm'} lh={1}>
+                      Get started
+                    </Title>
+                    <Text fz={'xs'}>
+                      Their food sources have decreased, and their numbers
+                    </Text>
+                  </Stack>
+
+                  <Button variant="default">Get Started</Button>
+                </Group>
+              </Card>
+            </Stack>
+          )}
+        </MenuDropdown>
+      )}
     </Menu>
   );
 }

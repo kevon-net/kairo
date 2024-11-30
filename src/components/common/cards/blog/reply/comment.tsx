@@ -53,7 +53,12 @@ export default function Comment({
         </Group>
 
         {mounted && (
-          <Card padding={'xl'} bg={'transparent'} withBorder shadow="xs">
+          <Card
+            p={{ base: 'xs', xs: 'xl' }}
+            bg={'transparent'}
+            withBorder
+            shadow="xs"
+          >
             <Stack gap={'xl'}>
               <Stack gap={'xs'}>
                 <Title order={2} lh={1} fz={'xl'}>

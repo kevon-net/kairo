@@ -5,7 +5,7 @@ import { Text } from '@react-email/components';
 import LayoutEmail, { text } from '@/components/layout/email';
 import appData from '@/data/app';
 
-export default function Contact(params: { name: string; message: string }) {
+export default function Inquiry(params: { name: string; message: string }) {
   return (
     <LayoutEmail
       props={{ preview: params.message }}

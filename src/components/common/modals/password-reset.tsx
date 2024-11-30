@@ -2,10 +2,12 @@
 
 import React from 'react';
 
-import { Modal, Button, Stack, Text, Group, Anchor } from '@mantine/core';
+import { Modal, Button, Stack, Text, Anchor, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useSignOut } from '@/hooks/auth';
 import { authUrls } from '@/data/constants';
+import LayoutModal from '@/components/layout/modal';
+import { Alert } from '@/types/enums';
 
 export default function PasswordReset({
   children,
@@ -17,18 +19,33 @@ export default function PasswordReset({
 
   return (
     <>
-      <Modal opened={opened} onClose={close} centered title="Reset Password">
-        <Stack>
-          <Text>
-            You&apos;ll be signed out and redirected to the password reset page.
-          </Text>
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        withCloseButton={false}
+        padding={'xl'}
+      >
+        <LayoutModal
+          props={{
+            title: 'Reset Password',
+            close,
+          }}
+          variant={Alert.WARNING}
+        >
+          <Stack>
+            <Text ta={{ base: 'center', xs: 'start' }}>
+              You&apos;ll be signed out and redirected to the password reset
+              page.
+            </Text>
 
-          <Group justify="end">
-            <Button color="yellow" onClick={signOut} loading={loading}>
-              Sign Out and Redirect
-            </Button>
-          </Group>
-        </Stack>
+            <Flex justify={{ base: 'center', xs: 'end' }} gap={'xs'}>
+              <Button color="yellow" onClick={signOut} loading={loading}>
+                Reset
+              </Button>
+            </Flex>
+          </Stack>
+        </LayoutModal>
       </Modal>
 
       <Anchor component="span" inherit onClick={open}>

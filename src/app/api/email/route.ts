@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { emailCreateInquiry } from '@/libraries/wrappers/email/send/inquiry';
+import { sendEmailMarketingInquiry } from '@/libraries/wrappers/email/marketing/inquiry';
 import { EmailInquiry } from '@/types/email';
 
 export async function POST(request: NextRequest) {
@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        email: await emailCreateInquiry({
+        email: await sendEmailMarketingInquiry({
           from: email.from,
           to: email.to,
           subject: email.subject,

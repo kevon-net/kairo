@@ -1,5 +1,4 @@
-import { contactCreate } from '@/libraries/wrappers/email/contact';
-import { emailSendAuthEmailVerify } from '@/libraries/wrappers/email/send/auth/email';
+import { sendTransactionalEmailAuthVerify } from '@/libraries/wrappers/email/transactional/auth/email';
 import { generateOtpCode } from '@/utilities/generators/otp';
 import prisma from '@/libraries/prisma';
 import { hashValue } from '@/utilities/helpers/hasher';
@@ -70,15 +69,9 @@ export async function POST(request: NextRequest) {
         message: 'Your account has been created',
         user: { id: transactions.createUser.id },
         token,
-        resend: {
-          email: await emailSendAuthEmailVerify(otpValue.toString(), {
-            to: email,
-          }),
-          contact: await contactCreate({
-            name: `${name.first} ${name.last}`,
-            email,
-          }),
-        },
+        resend: await sendTransactionalEmailAuthVerify(otpValue.toString(), {
+          to: email,
+        }),
       },
       { status: 200, statusText: `Account Created` }
     );

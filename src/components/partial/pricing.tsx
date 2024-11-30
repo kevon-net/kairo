@@ -10,7 +10,7 @@ import { capitalizeWord } from '@/utilities/formatters/string';
 import CardPricingEnterprise from '../common/cards/pricing/enterprise';
 
 export default function Pricing() {
-  const { period, setPeriod } = useSwitchPricing();
+  const { period, setPeriod, getDiscount } = useSwitchPricing();
 
   return (
     <Stack gap={sectionSpacing / 2}>
@@ -38,7 +38,11 @@ export default function Pricing() {
           (tier) =>
             tiers.indexOf(tier) != tiers.length - 1 && (
               <GridCol key={tier.title} span={{ base: 12, sm: 6, md: 4 }}>
-                <CardPricingMain props={tier} options={{ period }} />
+                <CardPricingMain
+                  props={tier}
+                  options={{ period }}
+                  functions={{ getDiscount }}
+                />
               </GridCol>
             )
         )}
@@ -47,6 +51,7 @@ export default function Pricing() {
           <CardPricingEnterprise
             props={tiers[tiers.length - 1]}
             options={{ period }}
+            functions={{ getDiscount }}
           />
         </GridCol>
       </Grid>

@@ -22,6 +22,7 @@ import classes from './new.module.scss';
 import { linkify } from '@/utilities/formatters/string';
 import { PostRelations } from '@/types/models/post';
 import { getRegionalDate } from '@/utilities/formatters/date';
+import { IconCircleFilled } from '@tabler/icons-react';
 
 export default function New({ post }: { post: PostRelations }) {
   const path = `/blog/${linkify(post.title)}`;
@@ -93,25 +94,18 @@ export default function New({ post }: { post: PostRelations }) {
             <Stack>
               <Divider />
 
-              <Group justify="space-between">
-                <Text fz={'xs'} inherit>
-                  {getRegionalDate(post.createdAt)}
-                </Text>
+              <Group gap={'xs'} fz={'sm'}>
+                <Text inherit>{getRegionalDate(post.createdAt)}</Text>
+
+                <IconCircleFilled size={4} />
 
                 <Anchor
                   component={Link}
                   href={`/blog/categories/${post.category?.id}`}
                   underline="never"
+                  inherit
                 >
-                  <Badge
-                    style={{ cursor: 'inherit' }}
-                    variant="light"
-                    size="lg"
-                    radius={'sm'}
-                    tt={'capitalize'}
-                  >
-                    {post.category?.title}
-                  </Badge>
+                  {post.category?.title}
                 </Anchor>
               </Group>
             </Stack>

@@ -152,7 +152,12 @@ export default async function Post({ params }: { params: typeParams }) {
       </LayoutSection>
 
       <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
-        <Card padding={'xl'} bg={'transparent'} withBorder shadow="xs">
+        <Card
+          p={{ base: 'xs', xs: 'xl' }}
+          bg={'transparent'}
+          withBorder
+          shadow="xs"
+        >
           <Stack gap={'xl'}>
             <Stack gap={'xs'}>
               <Title order={2} lh={1} fz={'xl'}>

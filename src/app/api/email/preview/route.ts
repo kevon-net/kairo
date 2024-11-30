@@ -1,25 +1,25 @@
 import { render } from '@react-email/render';
 import { NextRequest, NextResponse } from 'next/server';
 
-import EmailMarketingContact from '@/components/email/marketing/contact';
-import EmailAuthPasswordChanged from '@/components/email/auth/password-changed';
-import EmailAuthPasswordForgot from '@/components/email/auth/password-forgot';
-import EmailAuthSignIn from '@/components/email/auth/sign-in';
-import EmailAuthVerify from '@/components/email/auth/verify';
+import EmailTransactionalInquiry from '@/components/email/transactional/inquiry';
+import EmailTransactionalAuthPasswordChanged from '@/components/email/transactional/auth/password-changed';
+import EmailTransactionalAuthPasswordForgot from '@/components/email/transactional/auth/password-forgot';
+import EmailTransactionalAuthSignIn from '@/components/email/transactional/auth/sign-in';
+import EmailTransactionalAuthVerify from '@/components/email/transactional/auth/verify';
 
 import { baseUrl } from '@/data/constants';
 import { generateOtpCode } from '@/utilities/generators/otp';
 import sample from '@/data/sample';
 
 const emails: Record<string, any> = {
-  contact: EmailMarketingContact({
+  contact: EmailTransactionalInquiry({
     name: 'Jane Doe',
     message: sample.text.prose,
   }),
-  passwordChanged: EmailAuthPasswordChanged(),
-  passwordForgot: EmailAuthPasswordForgot({ otl: baseUrl }),
-  signIn: EmailAuthSignIn({ otp: String(generateOtpCode()) }),
-  signUp: EmailAuthVerify({
+  passwordChanged: EmailTransactionalAuthPasswordChanged(),
+  passwordForgot: EmailTransactionalAuthPasswordForgot({ otl: baseUrl }),
+  signIn: EmailTransactionalAuthSignIn({ otp: String(generateOtpCode()) }),
+  signUp: EmailTransactionalAuthVerify({
     otp: String(generateOtpCode()),
     options: { signUp: true },
   }),

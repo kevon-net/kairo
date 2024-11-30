@@ -1,14 +1,14 @@
 import { apiUrl } from '@/data/constants';
-import { EmailInquiry } from '@/types/email';
+import { EmailContactCreate } from '@/types/email';
 import { Request as EnumRequest } from '@/types/enums';
 
 const baseRequestUrl = `${apiUrl}/email/contact`;
 
-export const contactCreate = async (options: EmailInquiry['from']) => {
+export const contactCreate = async (contactOptions: EmailContactCreate) => {
   try {
     const request = new Request(baseRequestUrl, {
       method: EnumRequest.POST,
-      body: JSON.stringify(options),
+      body: JSON.stringify(contactOptions),
     });
 
     const response = await fetch(request);

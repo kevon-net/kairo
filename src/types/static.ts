@@ -17,3 +17,16 @@ export interface Testimonial {
     company: { image: string; name: string };
   };
 }
+
+export interface Pricing {
+  title: string;
+  desc: string;
+  price: { monthly: number; annually: number };
+  specs: string[];
+  meta?: { popular: boolean };
+}
+
+export interface Discount {
+  initial: number;
+  current: number;
+}

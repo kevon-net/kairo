@@ -27,7 +27,11 @@ export const useFormAuthVerify = () => {
   });
 
   const parseValues = () => {
-    return { otp: form.values.otp.trim(), token: getUrlParam('token') };
+    return {
+      otp: form.values.otp.trim(),
+      token: getUrlParam('token'),
+      options: { userId: getUrlParam('userId') },
+    };
   };
 
   const handleSubmit = async () => {
@@ -69,8 +73,10 @@ export const useFormAuthVerify = () => {
         }
 
         if (response.status === 404) {
-          // redirect to home page
-          setTimeout(() => router.replace('/'), timeout.redirect);
+          if (response.statusText.includes('User')) {
+            // redirect to home page
+            setTimeout(() => router.replace('/'), timeout.redirect);
+          }
 
           showNotification(
             { variant: NotificationVariant.FAILED },

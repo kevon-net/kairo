@@ -8,6 +8,7 @@ import { useDisclosure } from '@mantine/hooks';
 import FormContact from '@/components/form/contact';
 import { usePathname } from 'next/navigation';
 import { baseUrl } from '@/data/constants';
+import LayoutModal from '@/components/layout/modal';
 
 export default function Support({ children }: { children: React.ReactNode }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -19,22 +20,30 @@ export default function Support({ children }: { children: React.ReactNode }) {
         opened={opened}
         onClose={close}
         centered
-        title="Contact Support"
+        withCloseButton={false}
         size={'xl'}
+        padding={'xl'}
       >
-        <Stack>
-          <Text>
-            Leave your email and we will get back to you within 24 hours.
-          </Text>
+        <LayoutModal
+          props={{
+            title: 'Contact Support',
+            close,
+          }}
+        >
+          <Stack>
+            <Text ta={{ base: 'center', xs: 'start' }}>
+              Leave your email and we will get back to you within 24 hours.
+            </Text>
 
-          <FormContact
-            props={{
-              subject: '404 Error',
-              message: `Hi, I just got a 404 error at ${baseUrl}${pathname}`,
-            }}
-            options={{ modal: true }}
-          />
-        </Stack>
+            <FormContact
+              props={{
+                subject: 'Technical Support',
+                message: `I just got a 404 error at ${baseUrl}${pathname}`,
+              }}
+              options={{ modal: true }}
+            />
+          </Stack>
+        </LayoutModal>
       </Modal>
 
       <span onClick={open}>{children}</span>

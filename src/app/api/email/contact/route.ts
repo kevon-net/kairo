@@ -1,17 +1,26 @@
 import { contactCreate } from '@/libraries/wrappers/email/contact';
 import { NextRequest, NextResponse } from 'next/server';
-import { EmailInquiry } from '@/types/email';
+import { EmailContactCreate } from '@/types/email';
 
 export async function POST(request: NextRequest) {
   try {
-    const contact: EmailInquiry['from'] = await request.json();
+    const contactOptions: EmailContactCreate = await request.json();
+
+    const createContact = await contactCreate(contactOptions);
+
+    if (createContact.exists) {
+      return NextResponse.json(
+        { error: "You're already a subscriber", exists: true },
+        { status: 409, statusText: 'Already Subscribed' }
+      );
+    }
 
     return NextResponse.json(
       {
-        contact: await contactCreate(contact),
-        message: 'Contact created successfully',
+        contact: createContact,
+        message: 'You have subscribed to the mailing list',
       },
-      { status: 200, statusText: 'Contact Created' }
+      { status: 200, statusText: 'Subscribed' }
     );
   } catch (error) {
     console.error('---> route handler error (create contact):', error);

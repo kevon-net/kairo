@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { compareHashes } from '@/utilities/helpers/hasher';
 import { generateId } from '@/utilities/generators/id';
-import { Provider } from '@prisma/client';
+import { Provider, Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { Credentials } from '@/types/auth';
 import { cookies } from 'next/headers';
@@ -34,13 +34,26 @@ export async function POST(request: NextRequest) {
 
     const userRecord = await prisma.user.findUnique({
       where: { email: credentials.email },
-      include: { profile: true },
+      include: { profile: true, tokens: true },
     });
 
     if (!userRecord) {
       return NextResponse.json(
         { error: 'User does not exist' },
-        { status: 404, statusText: 'User Not Found' }
+        { status: 404, statusText: 'Not Found' }
+      );
+    }
+
+    if (!userRecord.verified) {
+      return NextResponse.json(
+        {
+          error: 'User not verified',
+          user: { id: userRecord.id },
+          token:
+            userRecord.tokens.find((token) => token.type == Type.CONFIRM_EMAIL)
+              ?.token || null,
+        },
+        { status: 403, statusText: 'Not Verified' }
       );
     }
 

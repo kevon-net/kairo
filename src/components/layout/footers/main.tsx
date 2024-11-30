@@ -6,7 +6,6 @@ import Link from 'next/link';
 import {
   Flex,
   Grid,
-  Container,
   Image,
   Text,
   Title,
@@ -17,6 +16,7 @@ import {
   GridCol,
   ListItem,
   ThemeIcon,
+  Stack,
 } from '@mantine/core';
 
 import LayoutSection from '@/components/layout/section';
@@ -26,139 +26,140 @@ import images from '@/data/images';
 import classes from './main.module.scss';
 import appData from '@/data/app';
 import { dataSocials } from '@/app/(marketing)/contact/page';
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  iconSize,
+  iconStrokeWidth,
+  iconWrapperSize,
+  sectionSpacing,
+} from '@/data/constants';
 import SegmentedControlTheme from '@/components/common/segmented-control/theme';
+import { IconCircleFilled } from '@tabler/icons-react';
+import FormNewsletter from '@/components/form/newsletter';
 
 export default function Main() {
   return (
-    <LayoutSection
-      id={'partial-footer-main'}
-      containerized={false}
-      padded
-      className={classes.footer}
-    >
-      <Container size={'responsive'}>
-        <Grid gutter={{ base: 'xl', md: 'md' }}>
-          <GridCol span={{ base: 12, md: 4, lg: 3.5 }}>
-            <Flex
-              direction={'column'}
-              align={{ base: 'center', md: 'start' }}
-              gap={'md'}
-            >
-              <Image
-                src={images.brand.logo.light}
-                alt="next logo"
-                w={{ base: 80 }}
-                component={NextImage}
-                width={1920}
-                height={1080}
-                loading="lazy"
-              />
-
-              <Text
-                className="textResponsive"
-                ta={{ base: 'center', md: 'start' }}
-              >
-                Lorem ipsum dolor sit amet consectetur adipiscing elit aliquam
-                mauris sed ma
-              </Text>
-
-              <Group>
-                {dataSocials.map((social) => (
-                  <Anchor
-                    key={social.link}
-                    title={social.label}
-                    href={social.link}
-                  >
-                    <Group>
-                      <ThemeIcon size={iconWrapperSize} variant="default">
-                        <social.icon size={iconSize} stroke={iconStrokeWidth} />
-                      </ThemeIcon>
-                    </Group>
-                  </Anchor>
-                ))}
-              </Group>
-            </Flex>
-          </GridCol>
-
-          <GridCol span={{ base: 12, md: 8, lg: 8.5 }} visibleFrom="sm">
-            <Grid gutter={{ base: 'xl', md: 'md' }}>
-              {linkSets.map((linkSet) => (
-                <GridCol key={linkSet.title} span={{ base: 6, xs: 4, sm: 3 }}>
-                  <Flex
-                    direction={'column'}
-                    align={{ base: 'center', md: 'end' }}
-                    gap={'xs'}
-                  >
-                    <Title order={4} fw={500}>
-                      {linkSet.title}
-                    </Title>
-                    <List listStyleType="none">
-                      {linkSet.links.map((link) => (
-                        <ListItem key={link.link} className={classes.listItem}>
-                          <Anchor
-                            component={Link}
-                            href={link.link}
-                            title={link.label}
-                            className={classes.link}
-                          >
-                            {link.label}
-                          </Anchor>
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Flex>
-                </GridCol>
-              ))}
-            </Grid>
-          </GridCol>
-        </Grid>
-      </Container>
-
-      <Container size={'responsive'}>
-        <Divider
-          mt={56}
-          mb={'lg'}
-          color="var(--mantine-color-default-border)"
-        />
-      </Container>
-
-      <Container size={'responsive'}>
+    <LayoutSection id={'partial-footer-main'} padded className={classes.footer}>
+      <Stack gap={sectionSpacing}>
         <Flex
+          direction={'column'}
           align={{ base: 'center', md: 'start' }}
-          justify={{ md: 'space-between' }}
-          direction={{ base: 'column', md: 'row' }}
           gap={'md'}
         >
-          <Flex
-            align={{ base: 'center', md: 'stretch' }}
-            direction={'column'}
-            gap={{ base: 'md', md: 'sm' }}
-            fz={'sm'}
-            ta={{ base: 'center', md: 'start' }}
-            lh={1}
-          >
-            <Text component="span" inherit>
-              © {new Date().getFullYear()} {appData.name.app}. All Rights
-              Reserved.
-            </Text>
+          <Image
+            src={images.brand.logo.light}
+            alt="next logo"
+            w={{ base: 96 }}
+            component={NextImage}
+            width={1920}
+            height={1080}
+            loading="lazy"
+          />
+        </Flex>
 
-            <Text inherit>
-              <Anchor inherit href="#tc" className={classes.link}>
-                Terms and Conditions
-              </Anchor>{' '}
-              |{' '}
-              <Anchor inherit href="#pp" className={classes.link}>
-                Privacy Policy
-              </Anchor>
-            </Text>
+        <Grid gutter={{ base: 'xl', md: 'md' }}>
+          {linkSets.map((linkSet) => (
+            <GridCol key={linkSet.title} span={{ base: 6, sm: 3 }}>
+              <Flex
+                direction={'column'}
+                align={{ base: 'center', md: 'start' }}
+                gap={'xl'}
+              >
+                <Title order={4} fw={500}>
+                  {linkSet.title}
+                </Title>
+
+                <List listStyleType="none" spacing={'md'}>
+                  {linkSet.links.map((link) => (
+                    <ListItem key={link.link} className={classes.listItem}>
+                      <Anchor
+                        component={Link}
+                        href={link.link}
+                        title={link.label}
+                        className={classes.link}
+                      >
+                        {link.label}
+                      </Anchor>
+                    </ListItem>
+                  ))}
+                </List>
+              </Flex>
+            </GridCol>
+          ))}
+        </Grid>
+
+        <Flex
+          direction={{ base: 'column', sm: 'row' }}
+          align={{ base: 'center', sm: 'end' }}
+          justify={{ sm: 'space-between' }}
+          gap={'lg'}
+        >
+          <Flex
+            direction={'column'}
+            align={{ base: 'center', sm: 'start' }}
+            gap={'lg'}
+          >
+            <Stack gap={'xs'}>
+              <Title order={3} fz={'lg'} ta={{ base: 'center', sm: 'start' }}>
+                Subscribe to our newsletter
+              </Title>
+              <Text c={'dimmed'} ta={{ base: 'center', sm: 'start' }}>
+                The latest news, articles, and resources, sent to your inbox
+                weekly.
+              </Text>
+            </Stack>
+
+            <FormNewsletter />
           </Flex>
 
           <Group>
-            <SegmentedControlTheme />
+            {dataSocials.map((social) => (
+              <Anchor key={social.link} title={social.label} href={social.link}>
+                <Group>
+                  <ThemeIcon size={iconWrapperSize} variant="default">
+                    <social.icon size={iconSize} stroke={iconStrokeWidth} />
+                  </ThemeIcon>
+                </Group>
+              </Anchor>
+            ))}
           </Group>
         </Flex>
-      </Container>
+      </Stack>
+
+      <Divider
+        mt={sectionSpacing}
+        mb={sectionSpacing / 2}
+        color="var(--mantine-color-default-border)"
+      />
+
+      <Stack gap={'lg'} fz={'sm'} ta={{ base: 'center', md: 'start' }} lh={1}>
+        <Flex
+          align={'center'}
+          justify={{ sm: 'space-between' }}
+          direction={{ base: 'column', sm: 'row' }}
+          gap={'md'}
+        >
+          <Text component="span" inherit>
+            © {new Date().getFullYear()} {appData.name.app}, Inc. All Rights
+            Reserved.
+          </Text>
+
+          <Group gap={'xs'}>
+            <Anchor inherit href="#tc" className={classes.link}>
+              Terms and Conditions
+            </Anchor>
+
+            <IconCircleFilled size={4} />
+
+            <Anchor inherit href="#pp" className={classes.link}>
+              Privacy Policy
+            </Anchor>
+          </Group>
+        </Flex>
+
+        <Flex justify={{ base: 'center', sm: 'start' }}>
+          <SegmentedControlTheme />
+        </Flex>
+      </Stack>
     </LayoutSection>
   );
 }

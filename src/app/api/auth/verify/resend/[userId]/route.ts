@@ -1,4 +1,4 @@
-import { emailSendAuthEmailVerify } from '@/libraries/wrappers/email/send/auth/email';
+import { sendTransactionalEmailAuthVerify } from '@/libraries/wrappers/email/transactional/auth/email';
 import { generateOtpCode } from '@/utilities/generators/otp';
 import prisma from '@/libraries/prisma';
 import { hashValue } from '@/utilities/helpers/hasher';
@@ -122,7 +122,7 @@ export async function POST(
           message: 'A new OTP has been sent',
           user: { id: userRecord.id },
           token,
-          resend: await emailSendAuthEmailVerify(otpValue.toString(), {
+          resend: await sendTransactionalEmailAuthVerify(otpValue.toString(), {
             to: options?.email || userRecord.email,
             signUp: false,
           }),

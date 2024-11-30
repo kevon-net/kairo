@@ -30,6 +30,13 @@ export enum HashingAlgorithm {
   SHA512 = 'sha512',
 }
 
+export enum Alert {
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  DANGER = 'DANGER',
+  SUCCESS = 'SUCCESS',
+}
+
 export enum JwtAlgorithm {
   HS256 = 'HS256',
 }

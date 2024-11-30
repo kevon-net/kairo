@@ -1,9 +1,11 @@
 import { getSession } from '@/libraries/auth';
 import prisma from '@/libraries/prisma';
+import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/onboard';
 import { compareHashes } from '@/utilities/helpers/hasher';
 import { decrypt } from '@/utilities/helpers/token';
 import { Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import { contactCreate } from '@/libraries/wrappers/email/contact';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,11 +13,31 @@ export async function POST(request: NextRequest) {
       otp,
       token,
       options,
-    }: { otp: string; token: string | null; options?: { verified?: boolean } } =
-      await request.json();
+    }: {
+      otp: string;
+      token: string | null;
+      options?: { verified?: boolean; userId?: string };
+    } = await request.json();
 
     let parsed: any;
     let tokenDatabase: any;
+
+    let userRecord = !options?.userId
+      ? null
+      : await prisma.user.findUnique({
+          where: { id: options?.userId },
+          include: { tokens: true, profile: true },
+        });
+
+    if (
+      options?.userId &&
+      !userRecord?.tokens.find((t) => t.type == Type.CONFIRM_EMAIL)
+    ) {
+      return NextResponse.json(
+        { error: 'Please request another OTP' },
+        { status: 404, statusText: 'OTP Not Found' }
+      );
+    }
 
     if (!token) {
       const session = await getSession();
@@ -56,15 +78,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const userRecord = await prisma.user.findUnique({
-      where: { id: parsed.userId },
-      include: { tokens: true },
-    });
+    userRecord =
+      userRecord ||
+      (await prisma.user.findUnique({
+        where: { id: parsed.userId },
+        include: { tokens: true, profile: true },
+      }));
 
     if (!userRecord) {
       return NextResponse.json(
         { error: 'Action not allowed' },
-        { status: 404, statusText: 'Not Found' }
+        { status: 404, statusText: 'User Not Found' }
       );
     }
 
@@ -82,6 +106,20 @@ export async function POST(request: NextRequest) {
         { error: "You've entered the wrong OTP" },
         { status: 403, statusText: 'Invalid OTP' }
       );
+    }
+
+    if (!userRecord.verified) {
+      await contactCreate({
+        params: {
+          name:
+            userRecord.profile?.name != null
+              ? userRecord.profile?.name
+              : undefined,
+          email: userRecord.email,
+        },
+      });
+
+      await sendEmailTransactionalOnboard(userRecord.email);
     }
 
     await prisma.$transaction(async () => {

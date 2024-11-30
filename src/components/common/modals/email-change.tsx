@@ -11,10 +11,13 @@ import {
   Title,
   PinInput,
   TextInput,
+  Flex,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useFormUserEmail } from '@/hooks/form/account/email';
 import TooltipInputInfo from '../tooltips/input/info';
+import LayoutModal from '@/components/layout/modal';
+import { Alert } from '@/types/enums';
 
 export default function EmailChange() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -35,83 +38,113 @@ export default function EmailChange() {
     session,
   } = useFormUserEmail(close);
 
-  const getButtonProps = () =>
+  const getProps = () =>
     context == 'email1'
       ? code1Sent
         ? {
+            title: 'Verify Email',
             event: handleSubmitCode1,
             children: submitted ? 'Verifying' : 'Verify',
           }
-        : { event: code1Send, children: submitted ? 'Sending' : 'Send' }
+        : {
+            title: 'Change Email',
+            event: code1Send,
+            children: submitted ? 'Sending' : 'Send',
+          }
       : code2Sent
         ? {
+            title: 'Verify Email',
             event: handleSubmitCode2,
             children: submitted ? 'Verifying' : 'Verify',
           }
-        : { event: code2Send, children: submitted ? 'Sending' : 'Send' };
+        : {
+            title: 'Change Email',
+            event: code2Send,
+            children: submitted ? 'Sending' : 'Send',
+          };
 
   return (
     <>
-      <Modal opened={opened} onClose={close} centered title="Change Email">
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered
+        withCloseButton={false}
+        padding={'xl'}
+        size={'lg'}
+      >
         <Stack>
-          {context == 'email1' && (
-            <Text>
-              Your current email is{' '}
-              <Text component="span" inherit fw={'bold'}>
-                {session?.user.email}
-              </Text>
-              . {code1Sent ? "We've sent" : "We'll send"} a temporary
-              verification code to this email.
-            </Text>
-          )}
-
-          {context == 'email2' && (
+          <LayoutModal
+            props={{
+              title: getProps().title || '',
+              close,
+            }}
+            variant={Alert.WARNING}
+          >
             <Stack>
-              {code2Sent ? (
-                <Text>
-                  We&apos;ve sent a temporary verification code to{' '}
+              {context == 'email1' && (
+                <Text ta={{ base: 'center', xs: 'start' }}>
+                  Your current email is{' '}
                   <Text component="span" inherit fw={'bold'}>
-                    {formEmail.values.email}
+                    {session?.user.email}
                   </Text>
-                  . Remember to check the spam/junk folder(s).
-                </Text>
-              ) : (
-                <Text>
-                  Provide your new email and we will send you a verification
-                  code.
+                  . {code1Sent ? "We've sent" : "We'll send"} a temporary
+                  verification code to this email.
                 </Text>
               )}
 
-              {!code2Sent && (
-                <TextInput
-                  required
-                  label="New Email"
-                  placeholder="Your new email"
-                  {...formEmail.getInputProps('email')}
-                  rightSection={<TooltipInputInfo />}
-                />
+              {context == 'email2' && (
+                <Stack>
+                  {code2Sent ? (
+                    <Text ta={{ base: 'center', xs: 'start' }}>
+                      We&apos;ve sent a temporary verification code to{' '}
+                      <Text component="span" inherit fw={'bold'}>
+                        {formEmail.values.email}
+                      </Text>
+                      . Remember to check the spam/junk folder(s).
+                    </Text>
+                  ) : (
+                    <Text ta={{ base: 'center', xs: 'start' }}>
+                      Provide your new email and we will send you a verification
+                      code.
+                    </Text>
+                  )}
+
+                  {!code2Sent && (
+                    <TextInput
+                      required
+                      label="New Email"
+                      placeholder="Your new email"
+                      {...formEmail.getInputProps('email')}
+                      rightSection={<TooltipInputInfo />}
+                    />
+                  )}
+                </Stack>
               )}
+
+              {(code1Sent || code2Sent) && (
+                <Flex justify={{ base: 'center', xs: 'start' }}>
+                  <PinInput
+                    {...formCode.getInputProps('otp')}
+                    type={'number'}
+                    length={6}
+                    oneTimeCode
+                    styles={{ input: { fontWeight: 'bold' } }}
+                  />
+                </Flex>
+              )}
+
+              <Flex justify={{ base: 'center', xs: 'end' }} gap={'xs'}>
+                <Button
+                  color="yellow"
+                  onClick={() => getProps().event()}
+                  loading={submitted}
+                >
+                  {getProps().children}
+                </Button>
+              </Flex>
             </Stack>
-          )}
-
-          {(code1Sent || code2Sent) && (
-            <PinInput
-              {...formCode.getInputProps('otp')}
-              type={'number'}
-              length={6}
-              oneTimeCode
-              styles={{ input: { fontWeight: 'bold' } }}
-            />
-          )}
-
-          <Group justify="end">
-            <Button
-              onClick={() => getButtonProps().event()}
-              loading={submitted}
-            >
-              {getButtonProps().children}
-            </Button>
-          </Group>
+          </LayoutModal>
         </Stack>
       </Modal>
 

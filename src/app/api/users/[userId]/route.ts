@@ -9,8 +9,8 @@ import { decrypt, encrypt } from '@/utilities/helpers/token';
 import { getExpiry } from '@/utilities/helpers/time';
 import { cookies } from 'next/headers';
 import { cookieName } from '@/data/constants';
-import { emailSendAuthPasswordChanged } from '@/libraries/wrappers/email/send/auth/password';
-import { emailSendAuthEmailChanged } from '@/libraries/wrappers/email/send/auth/email';
+import { sendEmailTransactionalAuthPasswordChanged } from '@/libraries/wrappers/email/transactional/auth/password';
+import { sendEmailTransactionalAuthEmailChanged } from '@/libraries/wrappers/email/transactional/auth/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -167,7 +167,9 @@ export async function PUT(
       return NextResponse.json(
         {
           message: 'Password changed successfully',
-          resend: await emailSendAuthPasswordChanged(userRecord.email),
+          resend: await sendEmailTransactionalAuthPasswordChanged(
+            userRecord.email
+          ),
         },
         { status: 200, statusText: 'Password Changed' }
       );
@@ -192,7 +194,7 @@ export async function PUT(
         message: `Your ${options?.email ? 'email has' : 'details have'} been updated`,
         resend: !options?.email
           ? undefined
-          : await emailSendAuthEmailChanged(user.email as string),
+          : await sendEmailTransactionalAuthEmailChanged(user.email as string),
       },
       {
         status: 200,

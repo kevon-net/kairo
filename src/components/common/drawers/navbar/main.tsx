@@ -70,7 +70,11 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
         label={link.label}
         active={matchesPath(link.link)}
         fw={pathname == link.link ? 500 : undefined}
-        opened={pathname == link.link || pathname.includes(link.link)}
+        opened={
+          pathname != link.link && !pathname.includes(link.link)
+            ? undefined
+            : true
+        }
         leftSection={
           link.leftSection ? (
             <link.leftSection size={iconSize} stroke={iconStrokeWidth} />

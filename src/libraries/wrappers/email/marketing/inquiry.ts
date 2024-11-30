@@ -1,10 +1,10 @@
 import resend from '@/libraries/resend';
-import TemplateEmailContact from '@/components/email/marketing/contact';
+import EmailTransactionalInquiry from '@/components/email/transactional/inquiry';
 import { isProduction } from '@/utilities/helpers/environment';
 import { EmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 
-export const emailCreateInquiry = async (options: {
+export const sendEmailMarketingInquiry = async (options: {
   from: EmailInquiry['from'];
   to: EmailInquiry['to'];
   subject: EmailInquiry['subject'];
@@ -20,7 +20,7 @@ export const emailCreateInquiry = async (options: {
     to: [process.env.NEXT_EMAIL_INFO!],
     subject: options.subject,
     html: await render(
-      TemplateEmailContact({
+      EmailTransactionalInquiry({
         name: options.from.name,
         message: options.message,
       })

@@ -14,6 +14,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
+import Link from 'next/link';
 import React from 'react';
 
 export default function Inquiry() {
@@ -44,6 +45,8 @@ export default function Inquiry() {
             <Button
               color="var(--mantine-color-body)"
               c={'var(--mantine-color-pri-6)'}
+              component={Link}
+              href={'/contact'}
             >
               Let&apos;s Talk
             </Button>

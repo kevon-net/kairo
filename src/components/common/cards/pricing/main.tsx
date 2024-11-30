@@ -18,21 +18,17 @@ import {
 import { IconCheck } from '@tabler/icons-react';
 import React from 'react';
 import TooltipInfo from '../../tooltips/input/info';
-
-interface Pricing {
-  title: string;
-  desc: string;
-  price: { monthly: number; annually: number };
-  specs: string[];
-  meta?: { popular: boolean };
-}
+import { Discount, Pricing } from '@/types/static';
+import { roundAndTruncate } from '@/utilities/helpers/number';
 
 export default function Main({
   props,
   options,
+  functions,
 }: {
   props: Pricing;
   options?: { period: SwitchPricing };
+  functions?: { getDiscount: (prices: Discount) => number };
 }) {
   const annual = options?.period == SwitchPricing.ANNUALLY;
 
@@ -85,14 +81,15 @@ export default function Main({
                 c={'green'}
                 lh={1}
               >
+                -{' '}
                 <NumberFormatter
-                  prefix="- $"
-                  value={getDiscount({
+                  prefix="$"
+                  value={functions?.getDiscount({
                     initial: props.price.monthly * 12,
                     current: props.price.annually * 12,
                   })}
                   thousandSeparator
-                  decimalScale={2}
+                  decimalScale={0}
                   style={{ fontWeight: 'bold' }}
                 />{' '}
                 %
@@ -101,12 +98,18 @@ export default function Main({
 
             <TooltipInfo
               props={{
-                label: annual
-                  ? 'Billed annually'
-                  : 'Switch to annual billing for a discount',
+                label: !annual
+                  ? 'Billed monthly'
+                  : `Save ${roundAndTruncate(
+                      functions?.getDiscount({
+                        initial: props.price.monthly * 12,
+                        current: props.price.annually * 12,
+                      }) || 0,
+                      0
+                    )}% on annual plan (billed annually)`,
               }}
-              multiline
-              w={160}
+              multiline={annual}
+              w={annual ? 200 : undefined}
             />
           </Group>
         </Group>
@@ -153,6 +156,3 @@ export default function Main({
     </Card>
   );
 }
-
-const getDiscount = (prices: { initial: number; current: number }) =>
-  ((prices.initial - prices.current) / prices.initial) * 100;

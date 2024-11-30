@@ -5,15 +5,14 @@ import React from 'react';
 import {
   Box,
   Button,
-  Group,
+  Flex,
   PasswordInput,
   Stack,
   TextInput,
 } from '@mantine/core';
 import { useFormUserAccountDelete } from '@/hooks/form/account/delete';
-import TooltipInputWarning from '@/components/common/tooltips/input/warning';
 
-export default function Delete() {
+export default function Delete({ close }: { close?: () => void }) {
   const { form, submitted, handleSubmit } = useFormUserAccountDelete();
 
   return (
@@ -33,11 +32,24 @@ export default function Delete() {
           {...form.getInputProps('confirmation')}
         />
 
-        <Group justify="end">
+        <Flex justify={{ base: 'center', xs: 'end' }} gap={'xs'}>
+          <Button
+            variant="default"
+            disabled={submitted}
+            onClick={() => {
+              form.reset();
+              if (close) {
+                close();
+              }
+            }}
+          >
+            {submitted ? 'Deleting Account' : 'Cancel'}
+          </Button>
+
           <Button type="submit" color="red" loading={submitted}>
             {submitted ? 'Deleting Account' : 'Delete Account'}
           </Button>
-        </Group>
+        </Flex>
       </Stack>
     </Box>
   );

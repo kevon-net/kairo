@@ -30,6 +30,7 @@ export const showNotification = (
       message,
       variant: notification.variant,
       autoClose: timeout.redirect,
+      withBorder: false,
     });
   } catch (error) {
     console.error('---> notification error (show notification)', error);

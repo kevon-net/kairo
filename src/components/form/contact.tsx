@@ -102,7 +102,7 @@ export default function Contact({
                   options?.modal ? 'Message *' : 'Write your message here...'
                 }
                 autosize
-                minRows={options?.modal ? 2 : 7}
+                minRows={2}
                 styles={{ input: { height: '100%' } }}
                 maxRows={15}
                 resize="vertical"

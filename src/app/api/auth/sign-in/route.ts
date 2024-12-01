@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { compareHashes } from '@/utilities/helpers/hasher';
 import { generateId } from '@/utilities/generators/id';
-import { Provider, Type } from '@prisma/client';
+import { Provider, Status, Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { Credentials } from '@/types/auth';
 import { cookies } from 'next/headers';
@@ -64,14 +64,10 @@ export async function POST(request: NextRequest) {
 
     if (!passwordMatches) {
       return NextResponse.json(
-        { error: 'User is not authorized' },
-        { status: 401, statusText: 'Not Authorized' }
+        { error: 'Incorrect username/password' },
+        { status: 401, statusText: 'Unauthorized' }
       );
     }
-
-    await prisma.session.deleteMany({
-      where: { userId: userRecord.id, expiresAt: { lt: new Date() } },
-    });
 
     const deviceGeoCookie = cookies().get(cookieName.device.geo)?.value;
     const deviceGeo = deviceGeoCookie
@@ -82,20 +78,33 @@ export async function POST(request: NextRequest) {
       Date.now() + getExpiry(credentials.remember).millisec
     );
 
-    const createSession = await prisma.session.create({
-      data: {
-        id: generateId(),
-        expiresAt: expires,
-        ip: deviceGeo.ip,
-        city: deviceGeo.city,
-        country: deviceGeo.country,
-        loc: deviceGeo.loc,
-        os: deviceGeo.os,
-        userId: userRecord.id,
-      },
+    const transaction = await prisma.$transaction(async () => {
+      await prisma.session.deleteMany({
+        where: { userId: userRecord.id, expiresAt: { lt: new Date() } },
+      });
+
+      await prisma.user.update({
+        where: { id: userRecord.id },
+        data: { status: Status.ACTIVE },
+      });
+
+      const createSession = await prisma.session.create({
+        data: {
+          id: generateId(),
+          expiresAt: expires,
+          ip: deviceGeo.ip,
+          city: deviceGeo.city,
+          country: deviceGeo.country,
+          loc: deviceGeo.loc,
+          os: deviceGeo.os,
+          userId: userRecord.id,
+        },
+      });
+
+      return { createSession };
     });
 
-    await signIn(provider, createSession, userRecord, credentials);
+    await signIn(provider, transaction.createSession, userRecord, credentials);
 
     return NextResponse.json(
       { message: 'User authenticated successfully', user: userRecord },

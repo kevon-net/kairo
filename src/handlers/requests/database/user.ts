@@ -44,13 +44,20 @@ export const userUpdate = async (
   }
 };
 
-export const userDelete = async (userId: string, password: string) => {
+export const userDelete = async (params: {
+  userId: string;
+  password?: string;
+  options?: { trigger?: boolean };
+}) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${userId}`, {
+    const request = new Request(`${baseRequestUrl}/${params.userId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
       headers: await authHeaders(headers.withBody),
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({
+        password: params.password,
+        options: params.options,
+      }),
     });
 
     const response = await fetch(request);

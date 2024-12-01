@@ -4,13 +4,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { compareHashes, hashValue } from '@/utilities/helpers/hasher';
 import { UserCreate, UserUpdate } from '@/types/models/user';
 import { getSession } from '@/libraries/auth';
-import { Type } from '@prisma/client';
+import { Status, Token, Type } from '@prisma/client';
 import { decrypt, encrypt } from '@/utilities/helpers/token';
 import { getExpiry } from '@/utilities/helpers/time';
 import { cookies } from 'next/headers';
-import { cookieName } from '@/data/constants';
+import { baseUrl, cookieName } from '@/data/constants';
 import { sendEmailTransactionalAuthPasswordChanged } from '@/libraries/wrappers/email/transactional/auth/password';
 import { sendEmailTransactionalAuthEmailChanged } from '@/libraries/wrappers/email/transactional/auth/email';
+import { sendEmailTransactionalOffboardConfirm } from '@/libraries/wrappers/email/transactional/off-board';
 
 export async function POST(request: NextRequest) {
   try {
@@ -215,15 +216,6 @@ export async function DELETE(
   { params }: { params: { userId: string } }
 ) {
   try {
-    const session = await getSession();
-
-    if (!session) {
-      return NextResponse.json(
-        { error: 'Sign in to continue' },
-        { status: 401, statusText: 'Unauthorized' }
-      );
-    }
-
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
     });
@@ -235,16 +227,134 @@ export async function DELETE(
       );
     }
 
-    const { password }: { password: string | null } = await request.json();
+    const {
+      password,
+      options,
+    }: { password: string | null; options?: { trigger?: boolean } } =
+      await request.json();
 
-    const passwordMatch =
-      (!password && !userRecord.password) ||
-      (await compareHashes(password!, userRecord.password));
+    let tokenRecord: Token | null = null;
+    let tokenRecordExpired: boolean | null = null;
 
-    if (!passwordMatch) {
+    if (password || options?.trigger) {
+      if (userRecord.status == Status.INACTIVE) {
+        return NextResponse.json(
+          { message: 'The request is already confirmed' },
+          { status: 200, statusText: 'Already Confirmed' }
+        );
+      }
+
+      await prisma.token.deleteMany({
+        where: { type: Type.DELETE_ACCOUNT, expiresAt: { lt: new Date() } },
+      });
+
+      tokenRecord = await prisma.token.findUnique({
+        where: {
+          type_userId: { type: Type.DELETE_ACCOUNT, userId: params.userId },
+        },
+      });
+
+      // check if token is expired
+      if (tokenRecord && tokenRecord.expiresAt < new Date()) {
+        tokenRecordExpired = true;
+
+        return NextResponse.json(
+          { error: 'The link is expired' },
+          { status: 409, statusText: 'Invalid Link' }
+        );
+      }
+    }
+
+    // if password is provided then it's a delete request
+    if (password) {
+      const passwordMatch =
+        (!password && !userRecord.password) ||
+        (await compareHashes(password!, userRecord.password));
+
+      if (!passwordMatch) {
+        return NextResponse.json(
+          { error: "You've entered the wrong password" },
+          { status: 403, statusText: 'Wrong Password' }
+        );
+      }
+
+      if (tokenRecord && !tokenRecordExpired) {
+        return NextResponse.json(
+          {
+            error: 'A confirmation email has already been sent',
+            expiry: tokenRecord.expiresAt.getTime() - new Date().getTime(),
+          },
+          { status: 409, statusText: 'Already Sent' }
+        );
+      }
+
+      const tokenId = generateId();
+
+      // create token
+      const token = await encrypt(
+        { id: tokenId, userId: userRecord.id },
+        60 * 60
+      );
+
+      // add token to database
+      await prisma.token.create({
+        data: {
+          id: tokenId,
+          token,
+          type: Type.DELETE_ACCOUNT,
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+          userId: userRecord.id,
+        },
+      });
+
+      // create link
+      const link = `${baseUrl}/confirm/delete-account?token=${token}`;
+
+      // send confirmation email containing link
+      await sendEmailTransactionalOffboardConfirm(userRecord.email, link);
+
       return NextResponse.json(
-        { error: "You've entered the wrong password" },
-        { status: 403, statusText: 'Wrong Password' }
+        { message: 'An email to confirm deletion has been sent' },
+        { status: 200, statusText: 'Confirmation Email Sent' }
+      );
+    }
+
+    if (options?.trigger) {
+      if (tokenRecord) {
+        // check if token is expired
+        if (tokenRecordExpired) {
+          return NextResponse.json(
+            { error: 'The link is expired' },
+            { status: 409, statusText: 'Invalid Link' }
+          );
+        }
+
+        // if user is active, deactivate (and related records visible to other users)
+        if (userRecord.status != Status.INACTIVE) {
+          await prisma.user.update({
+            where: { id: params.userId },
+            data: {
+              status: Status.INACTIVE,
+            },
+          });
+        }
+
+        // delete used token
+        await prisma.token.delete({
+          where: {
+            type_userId: { type: Type.DELETE_ACCOUNT, userId: params.userId },
+          },
+        });
+
+        return NextResponse.json(
+          { message: 'Your account is now marked for deletion' },
+          { status: 200, statusText: 'Request Confirmed' }
+        );
+      }
+
+      return NextResponse.json(
+        { error: 'The link is already used' },
+        { status: 404, statusText: 'Not Found' }
       );
     }
 

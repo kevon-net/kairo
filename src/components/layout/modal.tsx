@@ -22,10 +22,12 @@ export default function Modal({
   children,
   props,
   variant,
+  size,
 }: {
   children: React.ReactNode;
   props: { title: string; close: () => void };
   variant?: Alert;
+  size?: string;
 }) {
   let options: {
     icon: Icon | null;
@@ -64,7 +66,7 @@ export default function Modal({
       </ActionIcon>
 
       {variant && (
-        <GridCol span={{ base: 12, xs: 2.5 }}>
+        <GridCol span={{ base: 12, xs: size == 'xl' ? 2 : 2.5 }}>
           {options.icon && (
             <Center mt={{ xs: 'sm' }}>
               <ThemeIcon
@@ -79,7 +81,12 @@ export default function Modal({
         </GridCol>
       )}
 
-      <GridCol span={{ base: 12, xs: variant ? 9.5 : undefined }}>
+      <GridCol
+        span={{
+          base: 12,
+          xs: variant ? (size == 'xl' ? 10 : 9.5) : undefined,
+        }}
+      >
         <Stack gap={'md'}>
           <Title
             order={1}

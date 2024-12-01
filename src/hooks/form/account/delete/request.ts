@@ -9,12 +9,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { setRedirectUrl } from '@/utilities/helpers/url';
 import { useNetwork } from '@mantine/hooks';
 import { useAppSelector } from '@/hooks/redux';
+import { millToMinSec, MinSec } from '@/utilities/formatters/number';
 
-export const useFormUserAccountDelete = () => {
+export const useFormUserAccountDeleteRequest = (close?: () => void) => {
   const pathname = usePathname();
   const networkStatus = useNetwork();
 
   const [submitted, setSubmitted] = useState(false);
+  const [time, setTime] = useState<MinSec | null>(null);
 
   const session = useAppSelector((state) => state.session.value);
 
@@ -46,10 +48,10 @@ export const useFormUserAccountDelete = () => {
 
         setSubmitted(true);
 
-        const response = await userDelete(
-          session?.user.id || '',
-          form.values.password.trim()
-        );
+        const response = await userDelete({
+          userId: session?.user.id || '',
+          password: form.values.password.trim(),
+        });
 
         if (!response) throw new Error('No response from server');
 
@@ -58,8 +60,9 @@ export const useFormUserAccountDelete = () => {
         form.reset();
 
         if (response.ok) {
-          // sign out
-          setTimeout(async () => await signOut(), timeout.redirect);
+          if (close) {
+            close();
+          }
 
           showNotification(
             { variant: NotificationVariant.SUCCESS },
@@ -96,6 +99,17 @@ export const useFormUserAccountDelete = () => {
           return;
         }
 
+        if (response.status === 409) {
+          setTime(millToMinSec(result.expiry) || null);
+
+          showNotification(
+            { variant: NotificationVariant.WARNING },
+            response,
+            result
+          );
+          return;
+        }
+
         showNotification(
           { variant: NotificationVariant.FAILED },
           response,
@@ -118,5 +132,6 @@ export const useFormUserAccountDelete = () => {
     form,
     submitted,
     handleSubmit,
+    time,
   };
 };

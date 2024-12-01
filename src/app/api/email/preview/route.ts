@@ -6,6 +6,8 @@ import EmailTransactionalAuthPasswordChanged from '@/components/email/transactio
 import EmailTransactionalAuthPasswordForgot from '@/components/email/transactional/auth/password-forgot';
 import EmailTransactionalAuthSignIn from '@/components/email/transactional/auth/sign-in';
 import EmailTransactionalAuthVerify from '@/components/email/transactional/auth/verify';
+import EmailTransactionalOffBoardConfirm from '@/components/email/transactional/off-board/confirm';
+import EmailTransactionalOffBoarded from '@/components/email/transactional/off-board/off-boarded';
 
 import { baseUrl } from '@/data/constants';
 import { generateOtpCode } from '@/utilities/generators/otp';
@@ -23,6 +25,8 @@ const emails: Record<string, any> = {
     otp: String(generateOtpCode()),
     options: { signUp: true },
   }),
+  offboardConfirm: EmailTransactionalOffBoardConfirm({ params: { link: '/' } }),
+  offboarded: EmailTransactionalOffBoarded(),
 };
 
 export async function GET(req: NextRequest) {

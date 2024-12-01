@@ -39,6 +39,7 @@ enum Type {
   SSO
   TWO_FACTOR_AUTH
   PASSWORD_RESET
+  DELETE_ACCOUNT
 }
 
 enum Provider {

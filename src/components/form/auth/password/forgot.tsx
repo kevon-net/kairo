@@ -3,7 +3,7 @@
 import React from 'react';
 
 import {
-  Box,
+  Alert,
   Button,
   Grid,
   GridCol,
@@ -14,6 +14,8 @@ import {
 import { useFormAuthPasswordForgot } from '@/hooks/form/auth/password';
 
 import WrapperTransition from '@/components/wrapper/transition';
+import { IconAlertTriangle } from '@tabler/icons-react';
+import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function Forgot() {
   const { form, handleSubmit, sending, requested, time } =
@@ -38,22 +40,22 @@ export default function Forgot() {
           </GridCol>
         </Grid>
 
-        <WrapperTransition mounted={time != undefined} transition="fade">
-          <Box
-            style={{ transition: '0.25s all ease' }}
-            opacity={requested ? '0' : '1'}
+        <WrapperTransition mounted={time != undefined || requested}>
+          <Alert
+            color="yellow"
+            icon={
+              <IconAlertTriangle size={iconSize} stroke={iconStrokeWidth} />
+            }
+            fz={'sm'}
           >
-            <Stack ta={'center'} fz={{ base: 'xs', xs: 'sm' }}>
-              <Text c={'dimmed'} inherit>
-                To prevent our system from abuse, we limit the number of times a
-                user can reset their password. You can request a new link in{' '}
-                <Text component="span" inherit fw={'bold'}>
-                  {time?.minutes} minutes
-                </Text>
-                .
-              </Text>
-            </Stack>
-          </Box>
+            To prevent our system from abuse, we limit the number of times a
+            user can reset their password. Remember to check your spam/junk
+            folder(s). You can otherwise request a new link in{' '}
+            <Text component="span" inherit fw={'bold'}>
+              {time?.minutes} minutes
+            </Text>
+            .
+          </Alert>
         </WrapperTransition>
       </Stack>
     </form>

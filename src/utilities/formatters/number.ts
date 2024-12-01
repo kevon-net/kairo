@@ -5,8 +5,13 @@ export interface MinSec {
 
 export const millToMinSec = (milliseconds: number): MinSec | undefined => {
   try {
-    const minutes = Math.floor(milliseconds / 60000).toString();
-    const seconds = ((milliseconds % 60000) / 1000).toFixed(0).toString();
+    if (milliseconds < 0) {
+      throw new Error('Milliseconds value cannot be negative.');
+    }
+
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60).toString();
+    const seconds = (totalSeconds % 60).toString();
 
     return { minutes, seconds };
   } catch (error) {

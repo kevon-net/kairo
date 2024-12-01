@@ -1,6 +1,6 @@
 import { getSession } from '@/libraries/auth';
 import prisma from '@/libraries/prisma';
-import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/onboard';
+import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
 import { compareHashes } from '@/utilities/helpers/hasher';
 import { decrypt } from '@/utilities/helpers/token';
 import { Type } from '@prisma/client';

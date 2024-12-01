@@ -17,7 +17,7 @@ export default function Account() {
         onClose={close}
         centered
         withCloseButton={false}
-        size={'lg'}
+        size={'xl'}
         padding={'xl'}
       >
         <LayoutModal
@@ -26,15 +26,18 @@ export default function Account() {
             close,
           }}
           variant={Alert.DANGER}
+          size={'xl'}
         >
           <Stack>
-            <Text ta={{ base: 'center', xs: 'start' }}>
-              Deleting your account will permanently remove all data associated
-              with it.{' '}
-              <Text component="span" inherit c="red">
-                Proceed with caution. This action is irreversible.
+            <Stack gap={'xs'}>
+              <Text ta={{ base: 'center', xs: 'start' }}>
+                Deleting your account will permanently remove all data
+                associated with it. An email will be sent to confirm the
+                deletion request. It will take 30 days to delete all your data.
+                If you log into your account again within that time, the
+                deletion process will be canceled.
               </Text>
-            </Text>
+            </Stack>
 
             <FormUserAccountDelete close={close} />
           </Stack>

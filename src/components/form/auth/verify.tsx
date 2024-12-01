@@ -3,7 +3,7 @@
 import React from 'react';
 
 import {
-  Box,
+  Alert,
   Button,
   Grid,
   GridCol,
@@ -11,9 +11,11 @@ import {
   PinInput,
   Stack,
   Text,
-  Transition,
 } from '@mantine/core';
 import { useFormAuthVerify } from '@/hooks/form/auth/verify';
+import WrapperTransition from '@/components/wrapper/transition';
+import { IconAlertTriangle } from '@tabler/icons-react';
+import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function Verify() {
   const { form, handleSubmit, handleRequest, submitted, requested, time } =
@@ -53,35 +55,23 @@ export default function Verify() {
           </Grid>
         </Stack>
 
-        <Transition mounted={time != undefined} transition="fade" duration={0}>
-          {(styles) => (
-            <Box
-              style={{
-                ...styles,
-                transition: '0.25s all ease',
-              }}
-              opacity={requested ? '0' : '1'}
-            >
-              <Stack
-                ta={'center'}
-                fz={{
-                  base: 'xs',
-                  xs: 'sm',
-                }}
-              >
-                <Text c={'dimmed'} inherit>
-                  If the email you provided is valid, you should have received
-                  the code. Remember to check your spam/junk folder(s). You can
-                  otherwise request another code in{' '}
-                  <Text component="span" inherit fw={'bold'}>
-                    {time?.minutes} minutes
-                  </Text>
-                  .
-                </Text>
-              </Stack>
-            </Box>
-          )}
-        </Transition>
+        <WrapperTransition mounted={time != undefined || requested}>
+          <Alert
+            color="yellow"
+            icon={
+              <IconAlertTriangle size={iconSize} stroke={iconStrokeWidth} />
+            }
+            fz={'sm'}
+          >
+            If the email you provided is valid, you should have received the
+            code. Remember to check your spam/junk folder(s). You can otherwise
+            request another code in{' '}
+            <Text component="span" inherit fw={'bold'}>
+              {time?.minutes} minutes
+            </Text>
+            .
+          </Alert>
+        </WrapperTransition>
       </Stack>
     </form>
   );

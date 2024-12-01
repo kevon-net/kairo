@@ -3,21 +3,45 @@
 import React from 'react';
 
 import {
+  Alert,
   Box,
   Button,
   Flex,
   PasswordInput,
   Stack,
+  Text,
   TextInput,
 } from '@mantine/core';
-import { useFormUserAccountDelete } from '@/hooks/form/account/delete';
+import { useFormUserAccountDeleteRequest } from '@/hooks/form/account/delete/request';
+import WrapperTransition from '@/components/wrapper/transition';
+import { IconAlertTriangle } from '@tabler/icons-react';
+import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function Delete({ close }: { close?: () => void }) {
-  const { form, submitted, handleSubmit } = useFormUserAccountDelete();
+  const { form, submitted, handleSubmit, time } =
+    useFormUserAccountDeleteRequest(close);
 
   return (
     <Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
       <Stack>
+        <WrapperTransition mounted={time != undefined}>
+          <Alert
+            color="yellow"
+            icon={
+              <IconAlertTriangle size={iconSize} stroke={iconStrokeWidth} />
+            }
+            fz={'sm'}
+          >
+            To prevent our system from abuse, we limit the number of times a
+            user can request a link. Remember to check your spam/junk folder(s).
+            You can otherwise request another account deletion link in{' '}
+            <Text component="span" inherit fw={'bold'}>
+              {time?.minutes} minutes
+            </Text>
+            .
+          </Alert>
+        </WrapperTransition>
+
         <PasswordInput
           label={'Password'}
           placeholder="********"

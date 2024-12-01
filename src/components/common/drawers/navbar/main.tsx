@@ -15,7 +15,13 @@ import { iconSize, iconStrokeWidth } from '@/data/constants';
 import { useAppSelector } from '@/hooks/redux';
 import { usePathname } from 'next/navigation';
 
-export default function Main({ props }: { props: typeMenuNavbar[] }) {
+export default function Main({
+  props,
+  options,
+}: {
+  props: typeMenuNavbar[];
+  options?: { absolute?: boolean };
+}) {
   const [opened, { toggle, close }] = useDisclosure(false);
   const session = useAppSelector((state) => state.session.value);
   const pathname = usePathname();
@@ -126,6 +132,7 @@ export default function Main({ props }: { props: typeMenuNavbar[] }) {
         onClick={toggle}
         size={'sm'}
         aria-label="Toggle Main Navbar"
+        color={options?.absolute ? 'white' : undefined}
       />
     </>
   );

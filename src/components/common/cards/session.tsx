@@ -30,7 +30,7 @@ export default function Session({ props }: { props: SessionGet }) {
             </Title>
 
             {session?.id == props.id && (
-              <Badge size="sm" variant="light" color="blue.6">
+              <Badge size="sm" variant="light" color="blue.6" radius={'sm'}>
                 current
               </Badge>
             )}

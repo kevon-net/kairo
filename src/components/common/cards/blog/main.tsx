@@ -56,7 +56,12 @@ export default function Main({ post }: { post: PostRelations }) {
 
             <Group gap={'xs'} align="start" className={classes.overlay}>
               {post.tags.map((t) => (
-                <Badge key={t.id} radius={'sm'} color="white" c={'black'}>
+                <Badge
+                  key={t.id}
+                  color="white"
+                  c={'black'}
+                  radius={'sm'}
+                >
                   {t.title}
                 </Badge>
               ))}

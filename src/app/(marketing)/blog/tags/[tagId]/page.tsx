@@ -11,17 +11,19 @@ import { postsGet } from '@/handlers/requests/database/post';
 import { PostRelations } from '@/types/models/post';
 import { typeParams } from '../../layout';
 
-export default async function Category({ params }: { params: typeParams }) {
+export default async function Tag({ params }: { params: typeParams }) {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 
   return (
     <LayoutPage>
       <IntroPage
         props={{
-          path: `Categories`,
+          path: `Tags`,
           title:
-            posts.find((p) => p.category?.id == params.categoryId)?.category
-              ?.title || 'Category',
+            getTag(
+              posts.find((p) => getTag(p, params.tagId)),
+              params.tagId
+            )?.title || 'Tag',
           desc: `Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit
               phasellus mollis sit aliquam sit nullam.`,
         }}
@@ -30,7 +32,7 @@ export default async function Category({ params }: { params: typeParams }) {
       <LayoutSection id={'page-blog'} margined>
         <Grid gutter={'xl'}>
           {posts
-            .filter((p) => p.category?.id == params.categoryId)
+            .filter((p) => getTag(p, params.tagId))
             .map((post) => (
               <GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
                 <CardBlogMain post={post} />
@@ -41,3 +43,6 @@ export default async function Category({ params }: { params: typeParams }) {
     </LayoutPage>
   );
 }
+
+const getTag = (p?: PostRelations, tagId?: string) =>
+  p?.tags.find((t) => t.id == tagId);

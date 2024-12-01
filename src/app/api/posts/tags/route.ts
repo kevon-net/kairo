@@ -3,16 +3,14 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const categoryRecords = await prisma.category.findMany({
-      include: { posts: true },
-    });
+    const tagRecords = await prisma.tag.findMany({ include: { posts: true } });
 
     return NextResponse.json(
-      { categories: categoryRecords },
-      { status: 200, statusText: 'Categories Retrieved' }
+      { tags: tagRecords },
+      { status: 200, statusText: 'Tags Retrieved' }
     );
   } catch (error) {
-    console.error('---> route handler error (get categories):', error);
+    console.error('---> route handler error (get tags):', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

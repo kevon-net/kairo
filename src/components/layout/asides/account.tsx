@@ -35,13 +35,7 @@ export default function Account() {
   };
 
   return (
-    <LayoutSection
-      containerized={false}
-      id={'partial-aside-user'}
-      padded
-      pos={'sticky'}
-      top={0}
-    >
+    <LayoutSection containerized={false} id={'partial-aside-user'} padded>
       <Stack gap={48} align="center">
         <PartialUser />
 
@@ -146,10 +140,11 @@ export default function Account() {
             {navLinkItems.danger.map((item) => (
               <NavLink
                 key={item.label}
-                component={'a'}
+                component={Link}
                 href={item.link}
                 label={item.label}
-                color={item.color}
+                active={matchesPath(item.link)}
+                className={classes.linkDanger}
                 leftSection={
                   <item.icon size={iconSize} stroke={iconStrokeWidth} />
                 }
@@ -159,8 +154,6 @@ export default function Account() {
                 style={{
                   borderRadius: 'var(--mantine-radius-md)',
                 }}
-                active
-                className={classes.linkDanger}
               />
             ))}
           </Stack>
@@ -237,7 +230,6 @@ export const navLinkItems = {
       icon: IconLogout,
       link: authUrls.signOut,
       label: 'Sign Out',
-      color: 'red.6',
     },
   ],
 };

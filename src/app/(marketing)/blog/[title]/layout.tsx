@@ -3,7 +3,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 import LayoutBody from '@/components/layout/body';
-// import AsideBlog from '@/components/layout/asides/blog';
+import AsideBlog from '@/components/layout/asides/blog';
 
 import { typeParams } from '../layout';
 import { linkify } from '@/utilities/formatters/string';
@@ -24,20 +24,20 @@ export const generateMetadata = async ({
 
 export default function Post({
   children, // will be a page or nested layout
-  // params,
+  params,
 }: {
   children: React.ReactNode;
   params: typeParams;
 }) {
   return (
     <LayoutBody
-    // aside={{
-    //   gap: 32,
-    //   right: {
-    //     component: <AsideBlog params={params} />,
-    //     width: { md: 33, lg: 33 },
-    //   },
-    // }}
+      aside={{
+        gap: 32,
+        right: {
+          component: <AsideBlog params={params} />,
+          width: { md: 33, lg: 33 },
+        },
+      }}
     >
       {children}
     </LayoutBody>

@@ -12,16 +12,22 @@ import {
   GridCol,
   Group,
   Stack,
+  Text,
   Title,
 } from '@mantine/core';
 import Link from 'next/link';
-import { CategoryGet } from '@/types/models/category';
+import { CategoryRelations } from '@/types/models/category';
 import { categoriesGet } from '@/handlers/requests/database/category';
 import { linkify } from '@/utilities/formatters/string';
+import { TagRelations } from '@/types/models/tag';
+import { tagsGet } from '@/handlers/requests/database/tag';
 
 export default async function Blog({ params }: { params: { title: string } }) {
   const { posts }: { posts: PostRelations[] } = await postsGet();
-  const { categories }: { categories: CategoryGet[] } = await categoriesGet();
+
+  const { tags }: { tags: TagRelations[] } = await tagsGet();
+  const { categories }: { categories: CategoryRelations[] } =
+    await categoriesGet();
 
   const postsTrimmed = posts.filter((p) => linkify(p.title) != params.title);
 
@@ -35,7 +41,38 @@ export default async function Blog({ params }: { params: { title: string } }) {
     >
       <Stack gap={'xl'}>
         <Stack>
-          <Title order={2}>Latest Posts</Title>
+          <Title order={2} fz={'xl'}>
+            Categories
+          </Title>
+
+          <Stack gap={'xs'}>
+            {categories.map((c) => (
+              <Stack key={c.id}>
+                {categories.indexOf(c) != 0 && <Divider />}
+
+                <Anchor
+                  component={Link}
+                  href={`/blog/categories/${c.id}`}
+                  underline="never"
+                  c={'gray'}
+                >
+                  <Group justify="space-between" fz={'sm'}>
+                    <Text inherit>{c.title}</Text>
+
+                    <Text inherit ta={'end'}>
+                      {c.posts.length}
+                    </Text>
+                  </Group>
+                </Anchor>
+              </Stack>
+            ))}
+          </Stack>
+        </Stack>
+
+        <Stack>
+          <Title order={2} fz={'xl'}>
+            Recent Posts
+          </Title>
 
           <Grid>
             {postsTrimmed.map(
@@ -53,14 +90,16 @@ export default async function Blog({ params }: { params: { title: string } }) {
         </Stack>
 
         <Stack>
-          <Title order={2}>Categories</Title>
+          <Title order={2} fz={'xl'}>
+            Tags
+          </Title>
 
           <Group gap={'xs'}>
-            {categories.map((c) => (
+            {tags.map((t) => (
               <Anchor
-                key={c.id}
+                key={t.id}
                 component={Link}
-                href={`/blog/categories/${c.id}`}
+                href={`/blog/tags/${t.id}`}
                 underline="never"
               >
                 <Badge
@@ -68,7 +107,7 @@ export default async function Blog({ params }: { params: { title: string } }) {
                   radius={'sm'}
                   tt={'capitalize'}
                 >
-                  {c.title}
+                  {t.title}
                 </Badge>
               </Anchor>
             ))}

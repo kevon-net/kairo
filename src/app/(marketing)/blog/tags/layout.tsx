@@ -6,17 +6,14 @@ import LayoutBody from '@/components/layout/body';
 
 import appData from '@/data/app';
 
-export interface typeParams {
-  title: string;
-  categoryId: string;
-  tagId: string;
-}
-
 export const metadata: Metadata = {
-  title: { default: 'Blog', template: `%s - Blog - ${appData.name.app}` },
+  title: {
+    default: 'Tags',
+    template: `%s - Tags - Blog - ${appData.name.app}`,
+  },
 };
 
-export default function LayoutBlog({
+export default function LayoutTags({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;

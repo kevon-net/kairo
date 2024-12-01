@@ -66,9 +66,10 @@ export default function Navbar({
     <Menu
       shadow="xs"
       width={'auto'}
-      trigger="hover"
+      trigger="click-hover"
       openDelay={50}
       closeDelay={50}
+      transitionProps={{ transition: 'pop' }}
       classNames={{
         dropdown: classes.dropdown,
         arrow: classes.arrow,
@@ -86,7 +87,7 @@ export default function Navbar({
           {!megaMenu ? (
             menuItems
           ) : (
-            <Stack gap={4}>
+            <Stack gap={0}>
               <Grid gutter={0}>
                 {menuItems.map((menuItem, index) => (
                   <GridCol key={index} span={{ base: 12, xs: 6 }}>
@@ -98,6 +99,7 @@ export default function Navbar({
               <Card
                 bg={'var(--mantine-color-pri-6)'}
                 c={'var(--mantine-color-body)'}
+                radius={0}
               >
                 <Group justify="space-between">
                   <Stack gap={4}>

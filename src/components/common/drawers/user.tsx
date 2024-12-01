@@ -43,7 +43,6 @@ export default function User() {
                 component={Link}
                 href={link.link}
                 label={link.label}
-                active={matchesPath(link.link)}
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
@@ -61,7 +60,6 @@ export default function User() {
                 component={Link}
                 href={link.link}
                 label={link.label}
-                active={matchesPath(link.link)}
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
@@ -79,13 +77,16 @@ export default function User() {
                 component={Link}
                 href={link.link}
                 label={link.label}
-                active={matchesPath(link.link)}
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
                   <link.icon size={iconSize} stroke={iconStrokeWidth} />
                 }
-                className={classes.linkDanger}
+                className={
+                  matchesPath(link.link)
+                    ? classes.linkDangerActive
+                    : classes.linkDanger
+                }
               />
             ))}
           </Stack>

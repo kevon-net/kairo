@@ -69,7 +69,12 @@ export default function New({ post }: { post: PostRelations }) {
             h={'100%'}
           >
             <Stack>
-              <Badge size="sm" color="blue">
+              <Badge
+                size="sm"
+                color="blue"
+                radius={'sm'}
+                leftSection={<IconCircleFilled size={4} />}
+              >
                 latest
               </Badge>
 

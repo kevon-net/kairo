@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import NextImage from 'next/image';
 
-import { Button, Group, Image, Stack } from '@mantine/core';
+import { Button, Grid, GridCol, Group, Image } from '@mantine/core';
 
 import images from '@/data/images';
 import { capitalizeWords } from '@/utilities/formatters/string';
@@ -40,14 +40,34 @@ export default function Providers() {
         </Group>
       }
     >
-      Continue with {capitalizeWords(provider.provider)}
+      {provider.provider != Provider.CREDENTIALS
+        ? capitalizeWords(provider.provider)
+        : 'Email (SSO)'}
     </Button>
   );
 
-  return <Stack>{providers.map((provider) => getButton(provider))}</Stack>;
+  return (
+    <Grid>
+      {providers.map((provider) => (
+        <GridCol
+          key={provider.provider}
+          span={{
+            base: 12,
+            xs: provider.provider != Provider.CREDENTIALS ? 6 : undefined,
+          }}
+        >
+          {getButton(provider)}
+        </GridCol>
+      ))}
+    </Grid>
+  );
 }
 
 const providers = [
+  {
+    image: images.icons.credentials,
+    provider: Provider.CREDENTIALS,
+  },
   {
     image: images.icons.google,
     provider: Provider.GOOGLE,

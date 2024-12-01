@@ -52,7 +52,9 @@ export default function Share({
         {shareLinks.map((link) => (
           <MenuItem
             key={link.title}
-            leftSection={<link.icon size={iconSize} stroke={iconStrokeWidth} />}
+            leftSection={
+              <link.icon size={iconSize - 6} stroke={iconStrokeWidth} />
+            }
             component={'a'}
             href={getShareLink(link.title, pathname, props.postTitle)}
             target="_blank"

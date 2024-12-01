@@ -29,7 +29,11 @@ import { useMediaQuery } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/hooks/redux';
 
-export default function Main() {
+export default function Main({
+  options,
+}: {
+  options?: { absolute?: boolean };
+}) {
   const session = useAppSelector((state) => state.session.value);
   const pathname = usePathname();
   const desktop = useMediaQuery('(min-width: 62em)');
@@ -44,7 +48,7 @@ export default function Main() {
         <Anchor
           component={Link}
           href={link.link}
-          className={`${classes.link} ${
+          className={`${options?.absolute ? classes.linkAbsolute : classes.link} ${
             matchesPath(link.link) ? classes.linkActive : ''
           }`}
         >
@@ -54,7 +58,7 @@ export default function Main() {
         <Anchor
           component={Link}
           href={link.link}
-          className={`${classes.link} ${
+          className={`${options?.absolute ? classes.linkAbsolute : classes.link} ${
             matchesPath(link.link) ? classes.linkActive : ''
           }`}
           onClick={(e) => e.preventDefault()}
@@ -73,7 +77,15 @@ export default function Main() {
   ));
 
   return (
-    <LayoutSection id={'partial-navbar-main'} shadowed>
+    <LayoutSection
+      id={'partial-navbar-main'}
+      shadowed={!options?.absolute}
+      pos={options?.absolute ? 'absolute' : undefined}
+      left={options?.absolute ? 0 : undefined}
+      top={options?.absolute ? 0 : undefined}
+      right={options?.absolute ? 0 : undefined}
+      style={{ zIndex: 1 }}
+    >
       <Grid align="center" gutter={0}>
         <GridCol span={{ base: 4, md: 8 }}>
           <Group gap={'lg'} visibleFrom="md">
@@ -87,7 +99,10 @@ export default function Main() {
           </Group>
 
           <Group hiddenFrom="md" gap={'xs'} justify="space-between">
-            <DrawerNavbarMain props={links.navbar} />
+            <DrawerNavbarMain
+              props={links.navbar}
+              options={{ absolute: options?.absolute }}
+            />
           </Group>
         </GridCol>
 
@@ -104,7 +119,11 @@ export default function Main() {
             {!session ? (
               <Group gap={'xs'}>
                 <FragmentSignIn>
-                  <Button size="xs" variant="light">
+                  <Button
+                    size="xs"
+                    variant={options?.absolute ? 'outline' : 'light'}
+                    color={options?.absolute ? 'white' : undefined}
+                  >
                     Log In
                   </Button>
                 </FragmentSignIn>
@@ -184,7 +203,10 @@ const links = {
     {
       link: '/help',
       label: 'Help',
-      subLinks: [{ link: '/help/faq', label: "FAQ's" }],
+      subLinks: [
+        { link: '/help/faq', label: "FAQ's" },
+        { link: '/help/support', label: 'Support' },
+      ],
     },
     {
       link: '/contact',

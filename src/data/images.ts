@@ -29,6 +29,8 @@ const images = {
     },
 
     google: 'https://img.icons8.com/?size=100&id=17949&format=png&color=000000',
+    credentials:
+      'https://img.icons8.com/?size=100&id=jicLxt1sA2qa&format=png&color=000000',
   },
 };
 

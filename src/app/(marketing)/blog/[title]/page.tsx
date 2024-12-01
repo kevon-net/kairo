@@ -32,7 +32,7 @@ import CardBlogComment from '@/components/common/cards/blog/comment';
 import IntroPage from '@/components/layout/intro/page';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
 import CardBlogAuthor from '@/components/common/cards/blog/author';
-
+import WrapperComments from '@/components/wrapper/comments';
 export default async function Post({ params }: { params: typeParams }) {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 
@@ -44,7 +44,7 @@ export default async function Post({ params }: { params: typeParams }) {
     <LayoutPage>
       <IntroPage props={{ title: post.title || '' }} />
 
-      <LayoutSection id={'page-post'} margined containerized={'sm'}>
+      <LayoutSection id={'page-post'} margined mb={0} containerized={'sm'}>
         <Stack gap={'xl'}>
           <Flex
             direction={{ base: 'column', xs: 'row' }}
@@ -135,41 +135,54 @@ export default async function Post({ params }: { params: typeParams }) {
         </Stack>
       </LayoutSection>
 
-      <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
-        <Grid gutter={0}>
-          {post.comments.map((comment) => (
-            <GridCol key={comment.id} span={12}>
-              <Stack gap={0}>
-                <CardBlogComment props={comment} />
-
-                {post.comments.indexOf(comment) != post.comments.length - 1 && (
-                  <Divider />
-                )}
-              </Stack>
-            </GridCol>
-          ))}
-        </Grid>
-      </LayoutSection>
-
-      <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
-        <Card
-          p={{ base: 'xs', xs: 'xl' }}
-          bg={'transparent'}
-          withBorder
-          shadow="xs"
+      <WrapperComments props={{ comments: post.comments.length }}>
+        <LayoutSection
+          id={'page-post-comment'}
+          margined
+          mb={'md'}
+          containerized={'sm'}
         >
-          <Stack gap={'xl'}>
-            <Stack gap={'xs'}>
-              <Title order={2} lh={1} fz={'xl'}>
-                Leave a Comment
-              </Title>
-              <Text>Your email address will not be published.</Text>
-            </Stack>
+          <Title order={2}>Comments</Title>
 
-            <FormBlogComment postId={post.id} />
-          </Stack>
-        </Card>
-      </LayoutSection>
+          <Grid gutter={0}>
+            {post.comments.map((comment) => (
+              <GridCol key={comment.id} span={12}>
+                <Stack gap={0}>
+                  <CardBlogComment props={comment} />
+
+                  {post.comments.indexOf(comment) !=
+                    post.comments.length - 1 && <Divider />}
+                </Stack>
+              </GridCol>
+            ))}
+          </Grid>
+        </LayoutSection>
+
+        <LayoutSection
+          id={'page-post-comment'}
+          mt={'md'}
+          margined
+          containerized={'sm'}
+        >
+          <Card
+            p={{ base: 'xs', xs: 'xl' }}
+            bg={'transparent'}
+            withBorder
+            shadow="xs"
+          >
+            <Stack gap={'xl'}>
+              <Stack gap={'xs'}>
+                <Title order={2} lh={1} fz={'xl'}>
+                  Leave a Comment
+                </Title>
+                <Text>Your email address will not be published.</Text>
+              </Stack>
+
+              <FormBlogComment postId={post.id} />
+            </Stack>
+          </Card>
+        </LayoutSection>
+      </WrapperComments>
     </LayoutPage>
   );
 }

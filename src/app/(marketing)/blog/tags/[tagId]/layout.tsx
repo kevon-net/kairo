@@ -6,24 +6,23 @@ import LayoutBody from '@/components/layout/body';
 
 import { typeParams } from '../../layout';
 import { linkify } from '@/utilities/formatters/string';
-import { PostRelations } from '@/types/models/post';
-import { postsGet } from '@/handlers/requests/database/post';
+import { TagRelations } from '@/types/models/tag';
+import { tagsGet } from '@/handlers/requests/database/tag';
 
 export const generateMetadata = async ({
   params,
 }: {
   params: typeParams;
 }): Promise<Metadata> => {
-  const { posts }: { posts: PostRelations[] } = await postsGet();
+  const { tags }: { tags: TagRelations[] } = await tagsGet();
 
   return {
     title:
-      posts.find((p) => linkify(p.category?.id || '') == params.categoryId)
-        ?.category?.title || 'Category',
+      tags.find((t) => linkify(t.id || '') == params.tagId)?.title || 'Title',
   };
 };
 
-export default function Post({
+export default function LayoutTag({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;

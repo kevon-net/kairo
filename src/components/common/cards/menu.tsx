@@ -1,13 +1,13 @@
 import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
 import { typeMenuNavbar } from '@/types/components/menu';
 import {
-  ActionIcon,
   Card,
   Center,
   Grid,
   GridCol,
   Stack,
   Text,
+  ThemeIcon,
   Title,
 } from '@mantine/core';
 import React from 'react';
@@ -19,7 +19,7 @@ export default function Menu({ props }: { props: typeMenuNavbar }) {
         <GridCol span={2}>
           {props.leftSection && (
             <Center>
-              <ActionIcon
+              <ThemeIcon
                 size={iconWrapperSize + 4}
                 variant="default"
                 color="pri.6"
@@ -29,7 +29,7 @@ export default function Menu({ props }: { props: typeMenuNavbar }) {
                   stroke={iconStrokeWidth}
                   color="var(--mantine-color-pri-6)"
                 />
-              </ActionIcon>
+              </ThemeIcon>
             </Center>
           )}
         </GridCol>

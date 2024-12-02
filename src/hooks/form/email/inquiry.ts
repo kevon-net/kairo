@@ -9,10 +9,13 @@ import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';
 
-export const useFormEmailInquiry = (initialValues?: {
-  subject?: string;
-  message?: string;
-}) => {
+export const useFormEmailInquiry = (
+  initialValues?: {
+    subject?: string;
+    message?: string;
+  },
+  options?: { close: () => void }
+) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();
 
@@ -72,6 +75,10 @@ export const useFormEmailInquiry = (initialValues?: {
         form.reset();
 
         if (response.ok) {
+          if (options?.close) {
+            options.close();
+          }
+
           showNotification(
             { variant: NotificationVariant.SUCCESS },
             response,

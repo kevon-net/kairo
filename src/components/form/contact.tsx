@@ -23,12 +23,15 @@ export default function Contact({
   options,
 }: {
   props?: { subject?: string; message?: string };
-  options?: { modal?: boolean };
+  options?: { modal?: boolean; close?: () => void };
 }) {
-  const { form, submitted, handleSubmit } = useFormEmailInquiry({
-    subject: props?.subject,
-    message: props?.message,
-  });
+  const { form, submitted, handleSubmit } = useFormEmailInquiry(
+    {
+      subject: props?.subject,
+      message: props?.message,
+    },
+    { close }
+  );
 
   return (
     <Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>

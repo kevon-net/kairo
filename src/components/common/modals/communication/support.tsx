@@ -40,7 +40,7 @@ export default function Support({ children }: { children: React.ReactNode }) {
                 subject: 'Technical Support',
                 message: `I just got a 404 error at ${baseUrl}${pathname}`,
               }}
-              options={{ modal: true }}
+              options={{ modal: true, close }}
             />
           </Stack>
         </LayoutModal>

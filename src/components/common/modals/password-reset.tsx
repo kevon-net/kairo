@@ -15,7 +15,7 @@ export default function PasswordReset({
   children: React.ReactNode;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { signOut, loading } = useSignOut(authUrls.passwordForgot);
+  const { signOut, loading } = useSignOut(authUrls.passwordForgot, close);
 
   return (
     <>

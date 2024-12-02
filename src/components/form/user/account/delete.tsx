@@ -67,7 +67,7 @@ export default function Delete({ close }: { close?: () => void }) {
               }
             }}
           >
-            {submitted ? 'Deleting Account' : 'Cancel'}
+            Cancel
           </Button>
 
           <Button type="submit" color="red" loading={submitted}>

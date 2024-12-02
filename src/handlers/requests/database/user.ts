@@ -1,7 +1,8 @@
 import { apiUrl, headers } from '@/data/constants';
-import { Request as EnumRequest } from '@/types/enums';
-import { UserCreate, UserUpdate } from '@/types/models/user';
+import { Request as EnumRequest } from '@/enums/request';
+import { UserCreate } from '@/types/models/user';
 import { authHeaders } from '@/utilities/helpers/auth';
+import { UserDelete, UserUpdate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/users`;
 
@@ -23,16 +24,13 @@ export const userCreate = async (user: UserCreate) => {
   }
 };
 
-export const userUpdate = async (
-  user: UserUpdate,
-  options?: { password?: string; token?: string; email?: string }
-) => {
+export const userUpdate = async (requestBody: UserUpdate) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${user.id}`, {
+    const request = new Request(`${baseRequestUrl}/${requestBody.user.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
       headers: await authHeaders(headers.withBody),
-      body: JSON.stringify({ user, options }),
+      body: JSON.stringify(requestBody),
     });
 
     const response = await fetch(request);
@@ -44,20 +42,13 @@ export const userUpdate = async (
   }
 };
 
-export const userDelete = async (params: {
-  userId: string;
-  password?: string;
-  options?: { trigger?: boolean };
-}) => {
+export const userDelete = async (requestBody: UserDelete) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${params.userId}`, {
+    const request = new Request(`${baseRequestUrl}/${requestBody.userId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
       headers: await authHeaders(headers.withBody),
-      body: JSON.stringify({
-        password: params.password,
-        options: params.options,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     const response = await fetch(request);

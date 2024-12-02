@@ -65,14 +65,13 @@ model User {
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(ACTIVE)
 
-  accounts       Account[]
-  sessions       Session[]
-  tokens         Token[]
-  addresses      Address[]
-  posts          Post[]
-  comments       Comment[]
-  repliesComment ReplyComment[]
-  repliesReply   ReplyReply[]
+  accounts  Account[]
+  sessions  Session[]
+  tokens    Token[]
+  addresses Address[]
+  posts     Post[]
+  comments  Comment[]
+  replies   Reply[]
 
   @@map("users")
 }
@@ -219,57 +218,39 @@ model Tag {
 }
 
 model Comment {
-  id      String @id @default(cuid())
-  name    String
+  id      String  @id @default(cuid())
+  name    String?
   content String
 
-  post    Post?          @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId  String         @map("post_id")
-  user    User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String?        @map("user_id")
-  replies ReplyComment[]
+  post    Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId  String  @map("post_id")
+  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String? @map("user_id")
+  replies Reply[]
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(ACTIVE)
 
-  @@unique([content, postId, name])
+  @@unique([name, content, postId, userId])
   @@map(name: "comments")
 }
 
-model ReplyComment {
-  id      String @id @default(cuid())
-  name    String
+model Reply {
+  id      String  @id @default(cuid())
+  name    String?
   content String
+  replyId String? @map("reply_id")
 
-  comment   Comment      @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId String       @map("comment_id")
-  user      User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?      @map("user_id")
-  replies   ReplyReply[]
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?  @map("comment_id")
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?  @map("user_id")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(ACTIVE)
 
-  @@unique([content, commentId, name])
-  @@map(name: "replies_comment")
-}
-
-model ReplyReply {
-  id      String @id @default(cuid())
-  name    String
-  content String
-
-  replyComment   ReplyComment @relation(fields: [replyCommentId], references: [id], onDelete: Cascade)
-  replyCommentId String       @map("reply_comment_id")
-  user           User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         String?      @map("user_id")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  status    Status   @default(ACTIVE)
-
-  @@unique([content, replyCommentId, name])
-  @@map(name: "replies_reply")
+  @@unique([name, content, replyId, commentId, userId])
+  @@map(name: "replies")
 }

@@ -3,21 +3,17 @@ import { compareHashes } from '@/utilities/helpers/hasher';
 import { generateId } from '@/utilities/generators/id';
 import { Provider, Status, Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
-import { Credentials } from '@/types/auth';
 import { cookies } from 'next/headers';
 import { cookieName } from '@/data/constants';
 import { getExpiry } from '@/utilities/helpers/time';
 import { signIn } from '@/libraries/auth';
+import { SignIn } from '@/types/bodies/request';
 
 export async function POST(request: NextRequest) {
   try {
-    const {
-      provider,
-      credentials,
-    }: { provider?: Provider; credentials?: Credentials } =
-      await request.json();
+    const { provider, credentials }: SignIn = await request.json();
 
-    if (provider !== Provider.CREDENTIALS) {
+    if (provider != Provider.CREDENTIALS) {
       // handle oauth
       return NextResponse.json(
         { message: 'Handle oauth' },

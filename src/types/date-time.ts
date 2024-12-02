@@ -9,3 +9,11 @@ export interface FormatOptions {
   monthFormat?: 'numeric' | '2-digit' | 'long' | 'short' | 'narrow';
   yearFormat?: 'numeric' | '2-digit';
 }
+
+export interface Timer {
+  months: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}

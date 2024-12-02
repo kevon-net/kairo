@@ -6,6 +6,7 @@ import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 import { Type } from '@prisma/client';
 import { decrypt, encrypt } from '@/utilities/helpers/token';
+import { VerifyResend } from '@/types/bodies/request';
 
 export async function POST(
   request: NextRequest,
@@ -24,13 +25,8 @@ export async function POST(
       );
     }
 
-    const {
-      token,
-      options,
-    }: {
-      token: string | null;
-      options?: { verified?: boolean; email?: string };
-    } = await request.json();
+    const { token, options }: Omit<VerifyResend, 'userId'> =
+      await request.json();
 
     if (!options?.verified && userRecord.verified) {
       return NextResponse.json(

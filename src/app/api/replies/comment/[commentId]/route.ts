@@ -1,21 +1,24 @@
 import prisma from '@/libraries/prisma';
-import { ReplyCommentCreate, ReplyCommentUpdate } from '@/types/models/reply';
+import { ReplyCommentCreate } from '@/types/bodies/request';
+import { ReplyUpdate } from '@/types/models/reply';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { commentId: string } }
+) {
   try {
-    const reply: Omit<ReplyCommentCreate, 'id' | 'comment'> & {
-      commentId: string;
-      userId?: string;
-    } = await request.json();
+    const reply: Omit<ReplyCommentCreate, 'commentId'> = await request.json();
 
-    const replyRecord = await prisma.replyComment.findUnique({
+    const replyRecord = await prisma.reply.findUnique({
       where: {
-        content_commentId_name: {
+        name_content_replyId_commentId_userId: {
+          name: reply.name || '',
           content: reply.content,
-          commentId: reply.commentId,
-          name: reply.name,
+          replyId: '',
+          commentId: params.commentId,
+          userId: reply.userId || '',
         },
       },
     });
@@ -27,12 +30,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const createReply = await prisma.replyComment.create({
+    const createReply = await prisma.reply.create({
       data: {
         id: generateId(),
         name: reply.name,
         content: reply.content,
-        commentId: reply.commentId,
+        commentId: params.commentId,
+        userId: reply.userId,
       },
     });
 
@@ -49,13 +53,13 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { replyId: string } }
-) {
+export async function PUT(request: NextRequest) {
   try {
-    const replyRecord = await prisma.replyComment.findUnique({
-      where: { id: params.replyId },
+    const reply: Omit<ReplyUpdate, 'id'> & { id: string } =
+      await request.json();
+
+    const replyRecord = await prisma.reply.findUnique({
+      where: { id: reply.id },
     });
 
     if (!replyRecord) {
@@ -65,12 +69,7 @@ export async function PUT(
       );
     }
 
-    const reply: ReplyCommentUpdate = await request.json();
-
-    await prisma.replyComment.update({
-      where: { id: params.replyId },
-      data: reply,
-    });
+    await prisma.reply.update({ where: { id: reply.id }, data: reply });
 
     return NextResponse.json(
       { message: 'Your reply has been updated' },

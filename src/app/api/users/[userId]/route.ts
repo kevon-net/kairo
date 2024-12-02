@@ -2,7 +2,7 @@ import prisma from '@/libraries/prisma';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 import { compareHashes, hashValue } from '@/utilities/helpers/hasher';
-import { UserCreate, UserUpdate } from '@/types/models/user';
+import { UserCreate } from '@/types/models/user';
 import { getSession } from '@/libraries/auth';
 import { Status, Type } from '@prisma/client';
 import { decrypt, encrypt } from '@/utilities/helpers/token';
@@ -12,6 +12,7 @@ import { baseUrl, cookieName } from '@/data/constants';
 import { sendEmailTransactionalAuthPasswordChanged } from '@/libraries/wrappers/email/transactional/auth/password';
 import { sendEmailTransactionalAuthEmailChanged } from '@/libraries/wrappers/email/transactional/auth/email';
 import { sendEmailTransactionalOffboardConfirm } from '@/libraries/wrappers/email/transactional/off-board';
+import { UserUpdate, UserDelete } from '@/types/bodies/request';
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,13 +53,7 @@ export async function PUT(
   try {
     const session = await getSession();
 
-    const {
-      user,
-      options,
-    }: {
-      user: UserUpdate;
-      options?: { password?: string; token?: string; email?: string };
-    } = await request.json();
+    const { user, options }: UserUpdate = await request.json();
 
     if (!session && !options?.token) {
       return NextResponse.json(
@@ -228,11 +223,7 @@ export async function DELETE(
       );
     }
 
-    const {
-      password,
-      options,
-    }: { password: string | null; options?: { trigger?: boolean } } =
-      await request.json();
+    const { password, options }: UserDelete = await request.json();
 
     let tokenRecordExpired: boolean | null = null;
 

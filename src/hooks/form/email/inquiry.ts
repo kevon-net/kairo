@@ -1,5 +1,5 @@
-import { emailCreate } from '@/handlers/requests/email/email';
-import { NotificationVariant } from '@/types/enums';
+import { emailSend } from '@/handlers/requests/email/send';
+import { Variant } from '@/enums/notification';
 import { capitalizeWords } from '@/utilities/formatters/string';
 import { showNotification } from '@/utilities/notifications';
 import email from '@/utilities/validators/special/email';
@@ -55,7 +55,7 @@ export const useFormEmailInquiry = (
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -64,7 +64,7 @@ export const useFormEmailInquiry = (
 
         setSubmitted(true);
 
-        const response = await emailCreate(parseValues());
+        const response = await emailSend(parseValues());
 
         if (!response) {
           throw new Error('No response from server');
@@ -79,23 +79,15 @@ export const useFormEmailInquiry = (
             options.close();
           }
 
-          showNotification(
-            { variant: NotificationVariant.SUCCESS },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.SUCCESS }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

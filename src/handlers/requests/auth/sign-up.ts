@@ -1,10 +1,8 @@
 import { apiUrl, headers } from '@/data/constants';
-import { Request as EnumRequest } from '@/types/enums';
-import { SignUp as FormAuthSignUp } from '@/types/form';
+import { SignUp } from '@/types/bodies/request';
+import { Request as EnumRequest } from '@/enums/request';
 
-export const signUp = async (
-  params: Omit<FormAuthSignUp, 'password.confirm'>
-) => {
+export const signUp = async (params: SignUp) => {
   try {
     const request = new Request(`${apiUrl}/auth/sign-up`, {
       method: EnumRequest.POST,

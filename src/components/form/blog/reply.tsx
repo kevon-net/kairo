@@ -16,14 +16,15 @@ import TooltipInputInfo from '@/components/common/tooltips/input/info';
 
 export default function Reply({
   commentId,
-  replyCommentId,
+  replyId,
 }: {
   commentId?: string;
-  replyCommentId?: string;
+  replyId?: string;
 }) {
-  const { form, submitted, handleSubmit } = useFormBlogReply(
-    commentId ? { commentId } : { replyCommentId }
-  );
+  const { form, submitted, handleSubmit } = useFormBlogReply({
+    commentId,
+    replyId,
+  });
 
   return (
     <Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>

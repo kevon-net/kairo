@@ -6,10 +6,11 @@ import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 import { Type } from '@prisma/client';
 import { encrypt } from '@/utilities/helpers/token';
+import { SignUp } from '@/types/bodies/request';
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, password }: SignUp = await request.json();
 
     // query database for user
     const userRecord = await prisma.user.findUnique({

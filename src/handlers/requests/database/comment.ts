@@ -1,7 +1,8 @@
-import { Request as EnumRequest } from '@/types/enums';
+import { Request as EnumRequest } from '@/enums/request';
 import { apiUrl, headers } from '@/data/constants';
-import { CommentCreate, CommentUpdate } from '@/types/models/comment';
+import { CommentUpdate } from '@/types/models/comment';
 import { authHeaders } from '@/utilities/helpers/auth';
+import { CommentCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/comments`;
 
@@ -24,9 +25,7 @@ export const commentsGet = async () => {
   }
 };
 
-export const commentCreate = async (
-  comment: Omit<CommentCreate, 'id'> & { postId: string; userId?: string }
-) => {
+export const commentCreate = async (comment: CommentCreate) => {
   try {
     const request = new Request(`${baseRequestUrl}/create`, {
       method: EnumRequest.POST,

@@ -1,6 +1,7 @@
 import { replyCommentCreate } from '@/handlers/requests/database/reply/comment';
 import { replyReplyCreate } from '@/handlers/requests/database/reply/reply';
-import { NotificationVariant } from '@/types/enums';
+import { useAppSelector } from '@/hooks/redux';
+import { Variant } from '@/enums/notification';
 import { capitalizeWords } from '@/utilities/formatters/string';
 import { showNotification } from '@/utilities/notifications';
 import email from '@/utilities/validators/special/email';
@@ -12,11 +13,12 @@ import { useState } from 'react';
 
 export const useFormBlogReply = (params: {
   commentId?: string;
-  replyCommentId?: string;
+  replyId?: string;
 }) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();
   const router = useRouter();
+  const session = useAppSelector((state) => state.session.value);
 
   const form = useForm({
     initialValues: {
@@ -45,7 +47,7 @@ export const useFormBlogReply = (params: {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -59,14 +61,16 @@ export const useFormBlogReply = (params: {
         if (params.commentId) {
           response = await replyCommentCreate({
             ...parseValues(),
+            userId: session?.user.id || undefined,
             commentId: params.commentId,
           });
         }
 
-        if (params.replyCommentId) {
+        if (params.replyId) {
           response = await replyReplyCreate({
             ...parseValues(),
-            replyCommentId: params.replyCommentId,
+            userId: session?.user.id || undefined,
+            replyId: params.replyId,
           });
         }
 
@@ -83,15 +87,11 @@ export const useFormBlogReply = (params: {
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

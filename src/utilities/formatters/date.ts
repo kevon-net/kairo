@@ -1,4 +1,4 @@
-import { FormatOptions } from '@/types/date';
+import { FormatOptions } from '@/types/date-time';
 
 export const getRegionalDate = (date: Date, options: FormatOptions = {}) => {
   // Handle both string and Date inputs

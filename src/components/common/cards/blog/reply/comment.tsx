@@ -1,6 +1,6 @@
 'use client';
 
-import { ReplyCommentGet, ReplyReplyGet } from '@/types/models/reply';
+import { ReplyGet, ReplyRelations } from '@/types/models/reply';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { initialize } from '@/utilities/formatters/string';
 import {
@@ -18,11 +18,15 @@ import {
 import React, { useState } from 'react';
 import FormBlogReply from '@/components/form/blog/reply';
 import CardBlodReplyReply from './reply';
+import { UserRelations } from '@/types/models/user';
 
 export default function Comment({
   props,
 }: {
-  props: ReplyCommentGet & { replies?: ReplyReplyGet[] };
+  props: Omit<ReplyRelations, 'user'> & {
+    user: UserRelations;
+    replies?: ReplyGet[];
+  };
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -30,7 +34,9 @@ export default function Comment({
     <Card bg={'transparent'} padding={0} py={'md'}>
       <Stack>
         <Group gap={'xs'}>
-          <Avatar size={32}>{initialize(props.name)}</Avatar>
+          <Avatar size={32}>
+            {initialize(props.user.profile?.name || props.name || 'Anonymous')}
+          </Avatar>
 
           <Title order={3} fz={'md'}>
             {props.name}{' '}
@@ -67,7 +73,7 @@ export default function Comment({
                 <Text>Your email address will not be published.</Text>
               </Stack>
 
-              <FormBlogReply replyCommentId={props.id} />
+              <FormBlogReply replyId={props.id} />
             </Stack>
           </Card>
         )}
@@ -77,7 +83,7 @@ export default function Comment({
             {props.replies.map((reply) => (
               <GridCol key={reply.id} span={12}>
                 <Stack gap={0}>
-                  <CardBlodReplyReply props={reply} />
+                  <CardBlodReplyReply props={{ ...reply, user: props.user }} />
 
                   {props.replies &&
                     props.replies.indexOf(reply) !=

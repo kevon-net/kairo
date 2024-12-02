@@ -1,7 +1,8 @@
-import { Request as EnumRequest } from '@/types/enums';
+import { Request as EnumRequest } from '@/enums/request';
 import { apiUrl, headers } from '@/data/constants';
-import { SessionCreate, SessionUpdate } from '@/types/models/session';
+import { SessionCreate } from '@/types/models/session';
 import { authHeaders } from '@/utilities/helpers/auth';
+import { SessionUpdate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/sessions`;
 
@@ -24,9 +25,9 @@ export const sessionsGet = async () => {
   }
 };
 
-export const sessionGet = async (sessionToken: string) => {
+export const sessionGet = async (slug: { sessionToken: string }) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${sessionToken}`, {
+    const request = new Request(`${baseRequestUrl}/${slug.sessionToken}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: await authHeaders(headers.withoutBody),
@@ -61,16 +62,13 @@ export const sessionCreate = async (session: SessionCreate) => {
   }
 };
 
-export const sessionUpdate = async (
-  session: SessionUpdate,
-  options: { create?: boolean; userId: string }
-) => {
+export const sessionUpdate = async (requestBody: SessionUpdate) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${session.id}`, {
+    const request = new Request(`${baseRequestUrl}/${requestBody.session.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
       headers: await authHeaders(headers.withBody),
-      body: JSON.stringify({ session, options }),
+      body: JSON.stringify(requestBody),
     });
 
     const response = await fetch(request);
@@ -82,9 +80,9 @@ export const sessionUpdate = async (
   }
 };
 
-export const sessionDelete = async (sessionId: string) => {
+export const sessionDelete = async (slug: { sessionId: string }) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${sessionId}`, {
+    const request = new Request(`${baseRequestUrl}/${slug.sessionId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
       headers: await authHeaders(headers.withoutBody),

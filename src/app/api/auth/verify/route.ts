@@ -6,18 +6,11 @@ import { decrypt } from '@/utilities/helpers/token';
 import { Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { contactCreate } from '@/libraries/wrappers/email/contact';
+import { Verify } from '@/types/bodies/request';
 
 export async function POST(request: NextRequest) {
   try {
-    const {
-      otp,
-      token,
-      options,
-    }: {
-      otp: string;
-      token: string | null;
-      options?: { verified?: boolean; userId?: string };
-    } = await request.json();
+    const { otp, token, options }: Verify = await request.json();
 
     let parsed: any;
     let tokenDatabase: any;

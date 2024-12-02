@@ -1,21 +1,20 @@
 import prisma from '@/libraries/prisma';
-import { CommentCreate, CommentUpdate } from '@/types/models/comment';
+import { CommentCreate } from '@/types/bodies/request';
+import { CommentUpdate } from '@/types/models/comment';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const comment: Omit<CommentCreate, 'id'> & {
-      postId: string;
-      userId?: string;
-    } = await request.json();
+    const comment: CommentCreate = await request.json();
 
     const commentRecord = await prisma.comment.findUnique({
       where: {
-        content_postId_name: {
+        name_content_postId_userId: {
+          name: comment.name || '',
           content: comment.content,
           postId: comment.postId,
-          name: comment.name,
+          userId: comment.userId || '',
         },
       },
     });

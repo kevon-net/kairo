@@ -1,5 +1,5 @@
 import { apiUrl, headers } from '@/data/constants';
-import { Request as EnumRequest } from '@/types/enums';
+import { Request as EnumRequest } from '@/enums/request';
 import { authHeaders } from '@/utilities/helpers/auth';
 
 export const signOut = async () => {

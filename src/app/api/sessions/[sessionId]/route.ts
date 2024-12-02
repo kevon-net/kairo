@@ -1,14 +1,12 @@
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { SessionCreate, SessionUpdate } from '@/types/models/session';
+import { SessionCreate } from '@/types/models/session';
 import { cookies } from 'next/headers';
 import { cookieName } from '@/data/constants';
 import { Status } from '@prisma/client';
+import { SessionUpdate } from '@/types/bodies/request';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { sessionId: string } }
-) {
+export async function GET({ params }: { params: { sessionId: string } }) {
   try {
     const sessionRecord = await prisma.session.findUnique({
       where: { id: params.sessionId },
@@ -78,15 +76,12 @@ export async function PUT(
   { params }: { params: { sessionId: string } }
 ) {
   try {
-    const body: {
-      session: SessionUpdate;
-      options?: { create: boolean; userId: string };
-    } = await request.json();
+    const { session, options }: SessionUpdate = await request.json();
 
     const result = await prisma.$transaction(async () => {
       const deleteExpiredSessions = await prisma.session.deleteMany({
         where: {
-          userId: body.options?.userId,
+          userId: options?.userId,
           expiresAt: { lt: new Date() },
         },
       });
@@ -99,17 +94,17 @@ export async function PUT(
     });
 
     if (!result.sessionRecord) {
-      if (body.options?.create) {
+      if (options?.create) {
         await prisma.session.create({
           data: {
-            id: body.session.id as string,
-            expiresAt: body.session.expiresAt as Date,
-            ip: body.session.ip as string,
-            city: body.session.city as string,
-            country: body.session.country as string,
-            loc: body.session.loc as string,
-            os: body.session.os as string,
-            userId: body.options.userId,
+            id: session.id as string,
+            expiresAt: session.expiresAt as Date,
+            ip: session.ip as string,
+            city: session.city as string,
+            country: session.country as string,
+            loc: session.loc as string,
+            os: session.os as string,
+            userId: options.userId,
           },
         });
 
@@ -127,7 +122,7 @@ export async function PUT(
 
     await prisma.session.update({
       where: { id: params.sessionId },
-      data: body.session,
+      data: session,
     });
 
     return NextResponse.json(
@@ -143,10 +138,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { sessionId: string } }
-) {
+export async function DELETE({ params }: { params: { sessionId: string } }) {
   try {
     const sessionRecord = await prisma.session.findUnique({
       where: { id: params.sessionId },

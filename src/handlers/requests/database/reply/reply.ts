@@ -1,7 +1,8 @@
-import { Request as EnumRequest } from '@/types/enums';
+import { Request as EnumRequest } from '@/enums/request';
 import { apiUrl, headers } from '@/data/constants';
-import { ReplyReplyCreate, ReplyReplyUpdate } from '@/types/models/reply';
+import { ReplyUpdate } from '@/types/models/reply';
 import { authHeaders } from '@/utilities/helpers/auth';
+import { ReplyReplyCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/replies/reply`;
 
@@ -24,18 +25,13 @@ export const repliesReplyGet = async () => {
   }
 };
 
-export const replyReplyCreate = async (
-  reply: Omit<ReplyReplyCreate, 'id' | 'replyComment'> & {
-    replyCommentId: string;
-    userId?: string;
-  }
-) => {
+export const replyReplyCreate = async (requestBody: ReplyReplyCreate) => {
   try {
-    const request = new Request(`${baseRequestUrl}/create`, {
+    const request = new Request(`${baseRequestUrl}/${requestBody.replyId}`, {
       method: EnumRequest.POST,
       credentials: 'include',
       headers: await authHeaders(headers.withBody),
-      body: JSON.stringify(reply),
+      body: JSON.stringify(requestBody),
     });
 
     const response = await fetch(request);
@@ -47,13 +43,15 @@ export const replyReplyCreate = async (
   }
 };
 
-export const replyReplyUpdate = async (reply: ReplyReplyUpdate) => {
+export const replyReplyUpdate = async (
+  requestBody: Omit<ReplyUpdate, 'id'> & { id: string }
+) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${reply.id}`, {
+    const request = new Request(`${baseRequestUrl}/${requestBody.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
       headers: await authHeaders(headers.withBody),
-      body: JSON.stringify(reply),
+      body: JSON.stringify(requestBody),
     });
 
     const response = await fetch(request);
@@ -65,9 +63,9 @@ export const replyReplyUpdate = async (reply: ReplyReplyUpdate) => {
   }
 };
 
-export const replyReplyDelete = async (replyId: string) => {
+export const replyReplyDelete = async (slug: { replyId: string }) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${replyId}`, {
+    const request = new Request(`${baseRequestUrl}/${slug.replyId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
       headers: await authHeaders(headers.withoutBody),

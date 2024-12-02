@@ -1,6 +1,6 @@
 'use client';
 
-import { CommentGet } from '@/types/models/comment';
+import { CommentRelations } from '@/types/models/comment';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { initialize } from '@/utilities/formatters/string';
 import {
@@ -17,14 +17,20 @@ import {
 } from '@mantine/core';
 import React, { useState } from 'react';
 import CardBlogReplyComment from './reply/comment';
-import { ReplyCommentGet, ReplyReplyGet } from '@/types/models/reply';
+import { ReplyGet, ReplyRelations } from '@/types/models/reply';
 import FormBlogReply from '@/components/form/blog/reply';
+import { UserRelations } from '@/types/models/user';
+
+interface Replies extends ReplyRelations {
+  replies?: ReplyGet[];
+}
 
 export default function Comment({
   props,
 }: {
-  props: CommentGet & {
-    replies?: ReplyCommentGet[] & { replies?: ReplyReplyGet[] };
+  props: Omit<CommentRelations, 'replies' | 'user'> & {
+    replies?: Replies[];
+    user: UserRelations;
   };
 }) {
   const [mounted, setMounted] = useState(false);
@@ -33,7 +39,9 @@ export default function Comment({
     <Card bg={'transparent'} padding={0} py={'xl'}>
       <Stack>
         <Group gap={'xs'}>
-          <Avatar size={32}>{initialize(props.name)}</Avatar>
+          <Avatar size={32}>
+            {initialize(props.user.profile?.name || props.name || 'Anonymous')}
+          </Avatar>
 
           <Title order={3} fz={'md'}>
             {props.name}{' '}
@@ -80,7 +88,13 @@ export default function Comment({
             {props.replies.map((reply) => (
               <GridCol key={reply.id} span={12}>
                 <Stack gap={0}>
-                  <CardBlogReplyComment props={reply} />
+                  <CardBlogReplyComment
+                    props={{
+                      ...reply,
+                      user: props.user,
+                      replies: reply.replies,
+                    }}
+                  />
 
                   {props.replies &&
                     props.replies.indexOf(reply) !=

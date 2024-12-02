@@ -14,6 +14,7 @@ export async function POST(
   try {
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
+      include: { tokens: { where: { type: Type.CONFIRM_EMAIL } } },
     });
 
     if (!userRecord) {
@@ -108,13 +109,15 @@ export async function POST(
           },
         });
 
-        await prisma.token.deleteMany({
-          where: {
-            type: Type.CONFIRM_EMAIL,
-            userId: userRecord.id,
-            expiresAt: { lt: new Date() },
-          },
-        });
+        if (userRecord.tokens.length > 1) {
+          await prisma.token.deleteMany({
+            where: {
+              type: Type.CONFIRM_EMAIL,
+              userId: userRecord.id,
+              expiresAt: { lt: new Date() },
+            },
+          });
+        }
       });
 
       return NextResponse.json(

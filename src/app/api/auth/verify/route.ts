@@ -82,7 +82,10 @@ export async function POST(request: NextRequest) {
       userRecord ||
       (await prisma.user.findUnique({
         where: { id: parsed.userId },
-        include: { tokens: true, profile: true },
+        include: {
+          tokens: { where: { type: Type.CONFIRM_EMAIL } },
+          profile: true,
+        },
       }));
 
     if (!userRecord) {
@@ -128,9 +131,9 @@ export async function POST(request: NextRequest) {
         data: { verified: true },
       });
 
-      if (userRecord.tokens.length > 0) {
-        await prisma.token.delete({ where: { id: parsed.id } });
+      await prisma.token.delete({ where: { id: parsed.id } });
 
+      if (userRecord.tokens.length > 1) {
         await prisma.token.deleteMany({
           where: {
             type: Type.CONFIRM_EMAIL,

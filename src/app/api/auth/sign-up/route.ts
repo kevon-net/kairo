@@ -12,9 +12,22 @@ export async function POST(request: NextRequest) {
     const { name, email, password } = await request.json();
 
     // query database for user
-    const userRecord = await prisma.user.findUnique({ where: { email } });
+    const userRecord = await prisma.user.findUnique({
+      where: { email },
+      include: { tokens: { where: { type: Type.CONFIRM_EMAIL } } },
+    });
 
     if (userRecord) {
+      if (userRecord.tokens.length > 1) {
+        await prisma.token.deleteMany({
+          where: {
+            type: Type.CONFIRM_EMAIL,
+            userId: userRecord.id,
+            expiresAt: { lt: new Date() },
+          },
+        });
+      }
+
       return NextResponse.json(
         {
           error: 'Already signed up',
@@ -40,14 +53,6 @@ export async function POST(request: NextRequest) {
           password: (await hashValue(password.initial)) || null,
 
           profile: { create: { id: generateId(), name } },
-        },
-      });
-
-      await prisma.token.deleteMany({
-        where: {
-          type: Type.CONFIRM_EMAIL,
-          userId,
-          expiresAt: { lt: new Date() },
         },
       });
 

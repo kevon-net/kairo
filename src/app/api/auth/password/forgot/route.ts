@@ -43,13 +43,15 @@ export async function POST(request: NextRequest) {
     const token = await encrypt({ id, userId: userRecord.id }, 60 * 60);
 
     const tokens = await prisma.$transaction(async () => {
-      const deleteExpired = await prisma.token.deleteMany({
-        where: {
-          type: Type.PASSWORD_RESET,
-          userId: userRecord.id,
-          expiresAt: { lt: now },
-        },
-      });
+      if (userRecord.tokens.length > 1) {
+        await prisma.token.deleteMany({
+          where: {
+            type: Type.PASSWORD_RESET,
+            userId: userRecord.id,
+            expiresAt: { lt: now },
+          },
+        });
+      }
 
       const createNew = await prisma.token.create({
         data: {
@@ -61,7 +63,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      return { deleteExpired, createNew };
+      return { createNew };
     });
 
     const otlValue = `${baseUrl}/auth/password/reset?token=${token}`;

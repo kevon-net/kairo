@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { compareHashes, hashValue } from '@/utilities/helpers/hasher';
 import { UserCreate, UserUpdate } from '@/types/models/user';
 import { getSession } from '@/libraries/auth';
-import { Status, Token, Type } from '@prisma/client';
+import { Status, Type } from '@prisma/client';
 import { decrypt, encrypt } from '@/utilities/helpers/token';
 import { getExpiry } from '@/utilities/helpers/time';
 import { cookies } from 'next/headers';
@@ -152,9 +152,9 @@ export async function PUT(
           data: { password: await hashValue(user.password as string) },
         });
 
-        if (options.token && userRecord.tokens.length > 0) {
-          await prisma.token.delete({ where: { id: parsed.id } });
+        await prisma.token.delete({ where: { id: parsed.id } });
 
+        if (options.token && userRecord.tokens.length > 1) {
           await prisma.token.deleteMany({
             where: {
               type: Type.PASSWORD_RESET,
@@ -218,6 +218,7 @@ export async function DELETE(
   try {
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
+      include: { tokens: { where: { type: Type.DELETE_ACCOUNT } } },
     });
 
     if (!userRecord) {
@@ -233,7 +234,6 @@ export async function DELETE(
     }: { password: string | null; options?: { trigger?: boolean } } =
       await request.json();
 
-    let tokenRecord: Token | null = null;
     let tokenRecordExpired: boolean | null = null;
 
     if (password || options?.trigger) {
@@ -244,18 +244,8 @@ export async function DELETE(
         );
       }
 
-      await prisma.token.deleteMany({
-        where: { type: Type.DELETE_ACCOUNT, expiresAt: { lt: new Date() } },
-      });
-
-      tokenRecord = await prisma.token.findUnique({
-        where: {
-          type_userId: { type: Type.DELETE_ACCOUNT, userId: params.userId },
-        },
-      });
-
       // check if token is expired
-      if (tokenRecord && tokenRecord.expiresAt < new Date()) {
+      if (userRecord.tokens[0] && userRecord.tokens[0].expiresAt < new Date()) {
         tokenRecordExpired = true;
 
         return NextResponse.json(
@@ -278,11 +268,12 @@ export async function DELETE(
         );
       }
 
-      if (tokenRecord && !tokenRecordExpired) {
+      if (userRecord.tokens[0] && !tokenRecordExpired) {
         return NextResponse.json(
           {
             error: 'A confirmation email has already been sent',
-            expiry: tokenRecord.expiresAt.getTime() - new Date().getTime(),
+            expiry:
+              userRecord.tokens[0].expiresAt.getTime() - new Date().getTime(),
           },
           { status: 409, statusText: 'Already Sent' }
         );
@@ -320,7 +311,7 @@ export async function DELETE(
     }
 
     if (options?.trigger) {
-      if (tokenRecord) {
+      if (userRecord.tokens[0]) {
         // check if token is expired
         if (tokenRecordExpired) {
           return NextResponse.json(
@@ -329,21 +320,33 @@ export async function DELETE(
           );
         }
 
-        // if user is active, deactivate (and related records visible to other users)
-        if (userRecord.status != Status.INACTIVE) {
-          await prisma.user.update({
-            where: { id: params.userId },
-            data: {
-              status: Status.INACTIVE,
+        await prisma.$transaction(async () => {
+          // if user is active, deactivate (and related records visible to other users)
+          if (userRecord.status != Status.INACTIVE) {
+            await prisma.user.update({
+              where: { id: params.userId },
+              data: {
+                status: Status.INACTIVE,
+              },
+            });
+          }
+
+          // delete used token
+          await prisma.token.delete({
+            where: {
+              type_userId: { type: Type.DELETE_ACCOUNT, userId: params.userId },
             },
           });
-        }
 
-        // delete used token
-        await prisma.token.delete({
-          where: {
-            type_userId: { type: Type.DELETE_ACCOUNT, userId: params.userId },
-          },
+          if (userRecord.tokens.length > 1) {
+            await prisma.token.deleteMany({
+              where: {
+                type: Type.DELETE_ACCOUNT,
+                userId: params.userId,
+                expiresAt: { lt: new Date() },
+              },
+            });
+          }
         });
 
         return NextResponse.json(

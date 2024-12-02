@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signOut } from '@/handlers/events/auth';
 import { showNotification } from '@/utilities/notifications';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 
 export const useSignOut = (redirectUrl?: string, close?: () => void) => {
   const [submitted, setSubmitted] = useState(false);
@@ -29,23 +29,15 @@ export const useSignOut = (redirectUrl?: string, close?: () => void) => {
       setSubmitted(false);
 
       if (response.status == 401) {
-        showNotification(
-          { variant: NotificationVariant.WARNING },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.WARNING }, response, result);
         return null;
       }
 
-      showNotification(
-        { variant: NotificationVariant.FAILED },
-        response,
-        result
-      );
+      showNotification({ variant: Variant.FAILED }, response, result);
       return;
     } catch (error) {
       showNotification({
-        variant: NotificationVariant.FAILED,
+        variant: Variant.FAILED,
         desc: (error as Error).message,
       });
       return null;

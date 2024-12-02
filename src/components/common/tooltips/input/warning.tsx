@@ -8,7 +8,7 @@ export default function Warning({
   ...restProps
 }: {
   props: { label: string };
-} & Omit<TooltipProps, 'children'|'label'>) {
+} & Omit<TooltipProps, 'children' | 'label'>) {
   return (
     <Tooltip
       label={props.label}

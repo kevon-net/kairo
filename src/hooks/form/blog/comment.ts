@@ -1,5 +1,6 @@
 import { commentCreate } from '@/handlers/requests/database/comment';
-import { NotificationVariant } from '@/types/enums';
+import { useAppSelector } from '@/hooks/redux';
+import { Variant } from '@/enums/notification';
 import { capitalizeWords } from '@/utilities/formatters/string';
 import { showNotification } from '@/utilities/notifications';
 import email from '@/utilities/validators/special/email';
@@ -13,6 +14,7 @@ export const useFormBlogComment = (params: { postId: string }) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();
   const router = useRouter();
+  const session = useAppSelector((state) => state.session.value);
 
   const form = useForm({
     initialValues: {
@@ -42,7 +44,7 @@ export const useFormBlogComment = (params: { postId: string }) => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -51,7 +53,10 @@ export const useFormBlogComment = (params: { postId: string }) => {
 
         setSubmitted(true);
 
-        const response = await commentCreate(parseValues());
+        const response = await commentCreate({
+          ...parseValues(),
+          userId: session?.user.id,
+        });
 
         if (!response) {
           throw new Error('No response from server');
@@ -66,15 +71,11 @@ export const useFormBlogComment = (params: { postId: string }) => {
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

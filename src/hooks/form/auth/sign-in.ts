@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { timeout } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { useNetwork, useOs } from '@mantine/hooks';
 import { signIn } from '@/handlers/events/auth';
 import { Provider } from '@prisma/client';
@@ -40,7 +40,7 @@ export const useFormAuthSignIn = () => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -66,7 +66,7 @@ export const useFormAuthSignIn = () => {
 
         if (response.status == 404 || response.status == 401) {
           showNotification({
-            variant: NotificationVariant.FAILED,
+            variant: Variant.FAILED,
             title: 'Authentication Error',
             desc: 'Invalid username/password',
           });
@@ -85,7 +85,7 @@ export const useFormAuthSignIn = () => {
 
           showNotification(
             {
-              variant: NotificationVariant.WARNING,
+              variant: Variant.WARNING,
               title: 'Not Verified',
               desc: 'User not verified. Redirecting...',
             },
@@ -95,15 +95,11 @@ export const useFormAuthSignIn = () => {
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

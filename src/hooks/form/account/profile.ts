@@ -3,7 +3,7 @@ import text from '@/utilities/validators/special/text';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { profileUpdate } from '@/handlers/requests/database/profile';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { timeout } from '@/data/constants';
 import { useSignOut } from '@/hooks/auth';
@@ -68,7 +68,7 @@ export const useFormUserProfile = () => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -77,7 +77,7 @@ export const useFormUserProfile = () => {
 
         if (!form.isDirty()) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Nothing Updated',
             desc: 'Update at least one form field',
           });
@@ -107,11 +107,7 @@ export const useFormUserProfile = () => {
             );
           }
 
-          showNotification(
-            { variant: NotificationVariant.SUCCESS },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.SUCCESS }, response, result);
           return;
         }
 
@@ -122,11 +118,7 @@ export const useFormUserProfile = () => {
             timeout.redirect
           );
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
@@ -134,23 +126,15 @@ export const useFormUserProfile = () => {
           // sign out
           setTimeout(async () => await signOut(), timeout.redirect);
 
-          showNotification(
-            { variant: NotificationVariant.FAILED },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.FAILED }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

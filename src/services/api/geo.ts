@@ -1,8 +1,8 @@
 'use client';
 
 import { geoDataUrl, headers } from '@/data/constants';
-import { Request } from '@/types/enums';
-import { IpInfo } from '@/types/ipInfo';
+import { Request } from '@/enums/request';
+import { IpInfo } from '@/types/bodies/response';
 
 export const getGeoData = async (): Promise<IpInfo> => {
   try {

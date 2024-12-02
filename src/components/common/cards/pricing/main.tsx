@@ -1,7 +1,7 @@
 'use client';
 
 import { iconSize, iconStrokeWidth } from '@/data/constants';
-import { SwitchPricing } from '@/types/enums';
+import { Pricing as SwitchPricing } from '@/enums/switch';
 import {
   Badge,
   Button,

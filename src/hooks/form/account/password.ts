@@ -4,7 +4,7 @@ import password from '@/utilities/validators/special/password';
 import compare from '@/utilities/validators/special/compare';
 import { userUpdate } from '@/handlers/requests/database/user';
 import { timeout } from '@/data/constants';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
@@ -52,7 +52,7 @@ export const useFormUserAccountPassword = (params: {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -61,17 +61,17 @@ export const useFormUserAccountPassword = (params: {
 
         setSending(true);
 
-        const response = await userUpdate(
-          {
+        const response = await userUpdate({
+          user: {
             password: form.values.password.initial.trim(),
             id: session?.user.id,
           },
-          {
+          options: {
             password: session?.user.withPassword
               ? form.values.current.trim()
               : 'update',
-          }
-        );
+          },
+        });
 
         if (!response) throw new Error('No response from server');
 
@@ -92,19 +92,11 @@ export const useFormUserAccountPassword = (params: {
             // refresh the page
             setTimeout(() => router.refresh(), timeout.redirect);
 
-            showNotification(
-              { variant: NotificationVariant.SUCCESS },
-              response,
-              result
-            );
+            showNotification({ variant: Variant.SUCCESS }, response, result);
             return;
           }
 
-          showNotification(
-            { variant: NotificationVariant.SUCCESS },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.SUCCESS }, response, result);
           return;
         }
 
@@ -115,11 +107,7 @@ export const useFormUserAccountPassword = (params: {
             timeout.redirect
           );
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
@@ -127,23 +115,15 @@ export const useFormUserAccountPassword = (params: {
           // sign out
           setTimeout(async () => await signOut(), timeout.redirect);
 
-          showNotification(
-            { variant: NotificationVariant.FAILED },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.FAILED }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

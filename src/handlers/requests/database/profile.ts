@@ -1,4 +1,4 @@
-import { Request as EnumRequest } from '@/types/enums';
+import { Request as EnumRequest } from '@/enums/request';
 import { apiUrl, headers } from '@/data/constants';
 import { ProfileCreate, ProfileUpdate } from '@/types/models/profile';
 import { authHeaders } from '@/utilities/helpers/auth';

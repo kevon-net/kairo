@@ -1,5 +1,5 @@
 import { baseUrl } from '@/data/constants';
-import { Platform } from '@/types/enums';
+import { Platform } from '@/enums/social';
 
 export const getShareLink = (
   platform: Platform,

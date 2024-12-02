@@ -2,7 +2,7 @@
 
 import { sectionSpacing } from '@/data/constants';
 import { useSwitchPricing } from '@/hooks/switch/pricing';
-import { SwitchPricing } from '@/types/enums';
+import { Pricing as SwitchPricing } from '@/enums/switch';
 import { Grid, GridCol, Group, SegmentedControl, Stack } from '@mantine/core';
 import React from 'react';
 import CardPricingMain from '@/components/common/cards/pricing/main';

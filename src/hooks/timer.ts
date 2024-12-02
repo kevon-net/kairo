@@ -1,4 +1,5 @@
-import { TimerDirection } from '@/types/enums';
+import { TimerDirection } from '@/enums/date-time';
+import { Timer } from '@/types/date-time';
 import { getTimeElapsed, getTimeRemaining } from '@/utilities/helpers/time';
 import { useEffect, useState } from 'react';
 
@@ -13,7 +14,7 @@ export default function useTimer(
   active: boolean = true
 ) {
   // Decide which function to use based on direction
-  const getTime =
+  const getTime: (targetDate: Date) => Timer | null =
     direction === TimerDirection.DOWN ? getTimeRemaining : getTimeElapsed;
 
   const [time, setTime] = useState(() => getTime(targetDate));

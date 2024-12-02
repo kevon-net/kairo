@@ -1,24 +1,24 @@
 import { SALT_ROUNDS } from '@/data/constants';
-import { HashingAlgorithm } from '@/types/enums';
+import { Hashing } from '@/enums/algorithm';
 import bcryptjs from 'bcryptjs';
 import crypto from 'crypto';
 
 // create hashing function
 export const hashValue = async (
   rawValue: string | number,
-  algorithm: HashingAlgorithm = HashingAlgorithm.BCRYPT
+  algorithm: Hashing = Hashing.BCRYPT
 ): Promise<string | undefined> => {
   try {
     // handle different hashing algorithms
     switch (algorithm) {
-      case HashingAlgorithm.BCRYPT:
+      case Hashing.BCRYPT:
         return await bcryptjs.hash(`${rawValue}`, SALT_ROUNDS);
-      case HashingAlgorithm.SHA256:
+      case Hashing.SHA256:
         return crypto
           .createHash('sha256')
           .update(rawValue.toString())
           .digest('hex');
-      case HashingAlgorithm.SHA512:
+      case Hashing.SHA512:
         return crypto
           .createHash('sha512')
           .update(rawValue.toString())
@@ -36,7 +36,7 @@ export const hashValue = async (
 export const compareHashes = async (
   rawValue: string | number,
   hashedValue: string | null,
-  algorithm: HashingAlgorithm = HashingAlgorithm.BCRYPT
+  algorithm: Hashing = Hashing.BCRYPT
 ): Promise<boolean> => {
   try {
     if (!hashedValue) {
@@ -45,10 +45,10 @@ export const compareHashes = async (
 
     // handle different hashing algorithms
     switch (algorithm) {
-      case HashingAlgorithm.BCRYPT:
+      case Hashing.BCRYPT:
         return await bcryptjs.compare(rawValue.toString(), hashedValue);
-      case HashingAlgorithm.SHA256:
-      case HashingAlgorithm.SHA512:
+      case Hashing.SHA256:
+      case Hashing.SHA512:
         const hash = crypto
           .createHash(algorithm)
           .update(rawValue.toString())

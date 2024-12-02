@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 
 import FormUserAccountDelete from '@/components/form/user/account/delete';
 import LayoutModal from '@/components/layout/modal';
-import { Alert } from '@/types/enums';
+import { Alert } from '@/enums/notification';
 
 export default function Account() {
   const [opened, { open, close }] = useDisclosure(false);

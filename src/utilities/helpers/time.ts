@@ -1,5 +1,5 @@
 import { expiry } from '@/data/constants';
-import { Timer } from '@/types/time';
+import { Timer } from '@/types/date-time';
 
 export const getExpiry = (rememberUser: boolean = false) => {
   return {
@@ -38,7 +38,7 @@ export const getTimeRemaining = (targetDate: Date): Timer | null => {
   return { months, days, hours, minutes, seconds };
 };
 
-export const getTimeElapsed = (targetDate: Date) => {
+export const getTimeElapsed = (targetDate: Date): Timer | null => {
   const now = new Date();
 
   // Check if the target date is in the past

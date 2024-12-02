@@ -6,7 +6,7 @@ import { Modal, Button, Stack, Text, ActionIcon, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout } from '@tabler/icons-react';
 import LayoutModal from '@/components/layout/modal';
-import { Alert } from '@/types/enums';
+import { Alert } from '@/enums/notification';
 
 export default function Session({ props }: { props: SessionGet }) {
   const [opened, { open, close }] = useDisclosure(false);

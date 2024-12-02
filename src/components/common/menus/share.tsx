@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Platform } from '@/types/enums';
+import { Platform } from '@/enums/social';
 import { getShareLink } from '@/utilities/helpers/link';
 import {
   ActionIconProps,

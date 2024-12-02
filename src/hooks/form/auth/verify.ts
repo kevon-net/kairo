@@ -7,7 +7,7 @@ import {
 } from '@/handlers/requests/auth/verify';
 import { usePathname, useRouter } from 'next/navigation';
 import { timeout } from '@/data/constants';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { getUrlParam, setRedirectUrl } from '@/utilities/helpers/url';
 import { useNetwork } from '@mantine/hooks';
@@ -39,7 +39,7 @@ export const useFormAuthVerify = () => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -64,11 +64,7 @@ export const useFormAuthVerify = () => {
             timeout.redirect
           );
 
-          showNotification(
-            { variant: NotificationVariant.SUCCESS },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.SUCCESS }, response, result);
           return;
         }
 
@@ -78,11 +74,7 @@ export const useFormAuthVerify = () => {
             setTimeout(() => router.replace('/'), timeout.redirect);
           }
 
-          showNotification(
-            { variant: NotificationVariant.FAILED },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.FAILED }, response, result);
           return;
         }
 
@@ -93,23 +85,15 @@ export const useFormAuthVerify = () => {
             timeout.redirect
           );
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;
@@ -123,10 +107,10 @@ export const useFormAuthVerify = () => {
     try {
       setRequested(true);
 
-      const response = await handleVerifyResend(
-        getUrlParam('userId'),
-        parseValues().token
-      );
+      const response = await handleVerifyResend({
+        userId: getUrlParam('userId'),
+        token: parseValues().token,
+      });
 
       if (!response) throw new Error('No response from server');
 
@@ -146,22 +130,14 @@ export const useFormAuthVerify = () => {
           timeout.redirect
         );
 
-        showNotification(
-          { variant: NotificationVariant.SUCCESS },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.SUCCESS }, response, result);
         return;
       }
 
       if (response.statusText === 'Already Sent') {
         setTime(millToMinSec(result.otp.expiry)!);
 
-        showNotification(
-          { variant: NotificationVariant.WARNING },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.WARNING }, response, result);
         return;
       }
 
@@ -171,11 +147,7 @@ export const useFormAuthVerify = () => {
         // redirect to home page
         setTimeout(() => router.replace('/'), timeout.redirect);
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       }
 
@@ -186,23 +158,15 @@ export const useFormAuthVerify = () => {
           timeout.redirect
         );
 
-        showNotification(
-          { variant: NotificationVariant.WARNING },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.WARNING }, response, result);
         return;
       }
 
-      showNotification(
-        { variant: NotificationVariant.FAILED },
-        response,
-        result
-      );
+      showNotification({ variant: Variant.FAILED }, response, result);
       return;
     } catch (error) {
       showNotification({
-        variant: NotificationVariant.FAILED,
+        variant: Variant.FAILED,
         desc: (error as Error).message,
       });
       return;

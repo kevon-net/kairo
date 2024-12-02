@@ -1,14 +1,13 @@
 import { passwordForgot } from '@/handlers/requests/auth/password';
 import { millToMinSec, MinSec } from '@/utilities/formatters/number';
 import email from '@/utilities/validators/special/email';
-import { useForm, UseFormReturnType } from '@mantine/form';
+import { useForm } from '@mantine/form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { authUrls, timeout } from '@/data/constants';
 import password from '@/utilities/validators/special/password';
 import compare from '@/utilities/validators/special/compare';
-import { PasswordReset as FormAuthPasswordReset } from '@/types/form';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { userUpdate } from '@/handlers/requests/database/user';
 import { getUrlParam, setRedirectUrl } from '@/utilities/helpers/url';
@@ -33,7 +32,7 @@ export const useFormAuthPasswordForgot = () => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -43,9 +42,9 @@ export const useFormAuthPasswordForgot = () => {
         setSending(true);
         setRequested(true);
 
-        const response = await passwordForgot(
-          form.values.email.trim().toLowerCase()
-        );
+        const response = await passwordForgot({
+          email: form.values.email.trim().toLowerCase(),
+        });
 
         if (!response) throw new Error('No response from server');
 
@@ -73,23 +72,15 @@ export const useFormAuthPasswordForgot = () => {
           // redirect to notification page
           setTimeout(() => router.replace('/'), timeout.redirect);
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;
@@ -107,7 +98,7 @@ export const useFormAuthPasswordReset = () => {
   const router = useRouter();
   const [sending, setSending] = useState(false);
 
-  const form: UseFormReturnType<FormAuthPasswordReset> = useForm({
+  const form = useForm({
     initialValues: { password: { initial: '', confirm: '' } },
 
     validate: {
@@ -128,10 +119,13 @@ export const useFormAuthPasswordReset = () => {
           throw new Error('Link is broken, expired or already used');
         });
 
-        const response = await userUpdate(
-          { password: form.values.password.initial.trim(), id: parsed.userId },
-          { password: 'reset', token: getUrlParam('token') }
-        );
+        const response = await userUpdate({
+          user: {
+            password: form.values.password.initial.trim(),
+            id: parsed.userId,
+          },
+          options: { password: 'reset', token: getUrlParam('token') },
+        });
 
         if (!response) throw new Error('No response from server');
 
@@ -146,33 +140,21 @@ export const useFormAuthPasswordReset = () => {
             timeout.redirect
           );
 
-          showNotification(
-            { variant: NotificationVariant.SUCCESS },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.SUCCESS }, response, result);
           return;
         }
 
         if (response.status === 409) {
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       }
     } catch (error) {
       showNotification({
-        variant: NotificationVariant.FAILED,
+        variant: Variant.FAILED,
         desc: (error as Error).message,
       });
       return;

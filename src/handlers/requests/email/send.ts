@@ -1,11 +1,11 @@
 import { apiUrl } from '@/data/constants';
 import { EmailInquiry } from '@/types/email';
-import { Request as EnumRequest } from '@/types/enums';
+import { Request as EnumRequest } from '@/enums/request';
 import { contactCreate } from './contact';
 
 const baseRequestUrl = `${apiUrl}/email`;
 
-export const emailCreate = async (
+export const emailSend = async (
   options: Omit<EmailInquiry, 'to'> & { phone: string; message: string }
 ) => {
   try {
@@ -20,7 +20,7 @@ export const emailCreate = async (
 
     return response;
   } catch (error) {
-    console.error('---> handler error - (create email):', error);
+    console.error('---> handler error - (send email):', error);
     throw error;
   }
 };

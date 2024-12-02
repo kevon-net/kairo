@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { timeout } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { setRedirectUrl } from '@/utilities/helpers/url';
 import { useNetwork } from '@mantine/hooks';
 
@@ -57,7 +57,7 @@ export const useFormAuthSignUp = () => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -99,23 +99,15 @@ export const useFormAuthSignUp = () => {
             );
           }, timeout.redirect);
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

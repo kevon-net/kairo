@@ -1,6 +1,6 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { timeout } from '@/data/constants';
 import { userDelete } from '@/handlers/requests/database/user';
@@ -39,7 +39,7 @@ export const useFormUserAccountDeleteRequest = (close?: () => void) => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -64,11 +64,7 @@ export const useFormUserAccountDeleteRequest = (close?: () => void) => {
             close();
           }
 
-          showNotification(
-            { variant: NotificationVariant.SUCCESS },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.SUCCESS }, response, result);
           return;
         }
 
@@ -79,11 +75,7 @@ export const useFormUserAccountDeleteRequest = (close?: () => void) => {
             timeout.redirect
           );
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
@@ -91,34 +83,22 @@ export const useFormUserAccountDeleteRequest = (close?: () => void) => {
           // sign out
           setTimeout(async () => await signOut(), timeout.redirect);
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
         if (response.status === 409) {
           setTime(millToMinSec(result.expiry) || null);
 
-          showNotification(
-            { variant: NotificationVariant.WARNING },
-            response,
-            result
-          );
+          showNotification({ variant: Variant.WARNING }, response, result);
           return;
         }
 
-        showNotification(
-          { variant: NotificationVariant.FAILED },
-          response,
-          result
-        );
+        showNotification({ variant: Variant.FAILED }, response, result);
         return;
       } catch (error) {
         showNotification({
-          variant: NotificationVariant.FAILED,
+          variant: Variant.FAILED,
           desc: (error as Error).message,
         });
         return;

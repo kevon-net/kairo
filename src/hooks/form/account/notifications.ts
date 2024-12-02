@@ -1,6 +1,6 @@
 import IconNotification from '@/components/common/icons/notification';
 // import { updateAccountNotifications } from "@/handlers/request/database/notifications";
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
@@ -18,7 +18,7 @@ export const useFormUserAccountNotifications = () => {
       try {
         if (!networkStatus.online) {
           showNotification({
-            variant: NotificationVariant.WARNING,
+            variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
@@ -32,7 +32,7 @@ export const useFormUserAccountNotifications = () => {
       } catch (error) {
         notifications.show({
           id: 'notifications-update-failed',
-          icon: IconNotification({ variant: NotificationVariant.FAILED }),
+          icon: IconNotification({ variant: Variant.FAILED }),
           title: `Send Failed`,
           message: (error as Error).message,
           variant: 'failed',

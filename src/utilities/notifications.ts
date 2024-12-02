@@ -1,11 +1,11 @@
 import IconNotification from '@/components/common/icons/notification';
 import { notifications } from '@mantine/notifications';
 import { capitalizeWord, linkify } from './formatters/string';
-import { NotificationVariant } from '@/types/enums';
+import { Variant } from '@/enums/notification';
 import { timeout } from '@/data/constants';
 
 export const showNotification = (
-  notification: { variant: NotificationVariant; title?: string; desc?: string },
+  notification: { variant: Variant; title?: string; desc?: string },
   response?: Response,
   result?: any
 ) => {
@@ -16,7 +16,7 @@ export const showNotification = (
       capitalizeWord(notification.variant);
     const message =
       notification.desc ||
-      (notification.variant == NotificationVariant.SUCCESS
+      (notification.variant == Variant.SUCCESS
         ? result.message
         : result.error) ||
       null;

@@ -1,5 +1,5 @@
 import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
-import { Alert } from '@/types/enums';
+import { Alert } from '@/enums/notification';
 import {
   ActionIcon,
   Center,

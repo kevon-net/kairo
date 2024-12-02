@@ -1,89 +1,23 @@
-import { SortOrder } from '@/types/enums';
+import { Order } from '@/enums/sort';
 import { useState } from 'react';
-
-/**
- * dynamic button implementation
- * orderMap.property === 'asc' ? '↑' : orderMap.property === 'desc' ? '↓' : ''
- */
+import { sortArray } from '@/utilities/helpers/array';
 
 export const useSort = <T>(
   setList: React.Dispatch<React.SetStateAction<T[]>>
 ) => {
-  const [orderMap, setOrderMap] = useState<Record<string, SortOrder>>({});
+  const [orderMap, setOrderMap] = useState<Record<string, Order>>({});
 
   const sortItems = (field: keyof T) => {
-    setOrderMap((prevOrderMap) => {
-      const currentOrder = prevOrderMap[field as string] || SortOrder.DEFAULT;
-      let nextOrder: SortOrder = SortOrder.ASCENDING;
+    setOrderMap((orderMap) => {
+      const currentOrder = orderMap[field as string] || Order.DEFAULT;
+      const nextOrder =
+        currentOrder === Order.DEFAULT || currentOrder === Order.DESCENDING
+          ? Order.ASCENDING
+          : Order.DESCENDING;
 
-      if (
-        currentOrder === SortOrder.DEFAULT ||
-        currentOrder === SortOrder.DESCENDING
-      ) {
-        nextOrder = SortOrder.ASCENDING;
+      setList((list) => sortArray([...list], field, nextOrder)); // Create a copy
 
-        setList((list: T[]) => {
-          const validItems = list.filter(
-            (item) => item[field] !== null && item[field] !== undefined
-          );
-          const nullItems = list.filter(
-            (item) => item[field] === null || item[field] === undefined
-          );
-
-          validItems.sort((a, b) => {
-            const aValue = a[field];
-            const bValue = b[field];
-
-            if (typeof aValue === 'string' && typeof bValue === 'string') {
-              return aValue.localeCompare(bValue);
-            } else if (aValue instanceof Date && bValue instanceof Date) {
-              return aValue.getTime() - bValue.getTime();
-            } else if (
-              typeof aValue === 'number' &&
-              typeof bValue === 'number'
-            ) {
-              return aValue - bValue;
-            } else {
-              return 0;
-            }
-          });
-
-          return [...validItems, ...nullItems];
-        });
-      } else {
-        nextOrder = SortOrder.DESCENDING;
-
-        setList((list: T[]) => {
-          const validItems = list.filter(
-            (item) => item[field] !== null && item[field] !== undefined
-          );
-          const nullItems = list.filter(
-            (item) => item[field] === null || item[field] === undefined
-          );
-
-          validItems.sort((a, b) => {
-            const aValue = a[field];
-            const bValue = b[field];
-
-            if (typeof aValue === 'string' && typeof bValue === 'string') {
-              return bValue.localeCompare(aValue);
-            } else if (aValue instanceof Date && bValue instanceof Date) {
-              return bValue.getTime() - aValue.getTime();
-            } else if (
-              typeof aValue === 'number' &&
-              typeof bValue === 'number'
-            ) {
-              return bValue - aValue;
-            } else {
-              return 0;
-            }
-          });
-
-          return [...validItems, ...nullItems];
-        });
-      }
-
-      return { ...prevOrderMap, [field]: nextOrder };
+      return { ...orderMap, [field]: nextOrder };
     });
   };
 

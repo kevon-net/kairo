@@ -9,18 +9,18 @@ import { UserRelations } from '@/types/models/user';
 export default function Reply({
   props,
 }: {
-  props: Omit<ReplyGet, 'user'> & { user: UserRelations };
+  props: Omit<ReplyGet, 'user'> & { user?: UserRelations };
 }) {
+  const name = props.user?.profile?.name || props.name || 'Anonymous';
+
   return (
     <Card bg={'transparent'} padding={0} py={'md'}>
       <Stack>
         <Group gap={'xs'}>
-          <Avatar size={32}>
-            {initialize(props.user.profile?.name || props.name || 'Anonymous')}
-          </Avatar>
+          <Avatar size={32}>{initialize(name)}</Avatar>
 
           <Title order={3} fz={'md'}>
-            {props.name}{' '}
+            {name}{' '}
             <Text component="span" fw={'normal'}>
               on {getRegionalDate(props.createdAt)}
             </Text>

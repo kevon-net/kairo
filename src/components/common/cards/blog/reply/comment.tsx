@@ -24,22 +24,22 @@ export default function Comment({
   props,
 }: {
   props: Omit<ReplyRelations, 'user'> & {
-    user: UserRelations;
     replies?: ReplyGet[];
+    user?: UserRelations;
   };
 }) {
   const [mounted, setMounted] = useState(false);
+
+  const name = props.user?.profile?.name || props.name || 'Anonymous';
 
   return (
     <Card bg={'transparent'} padding={0} py={'md'}>
       <Stack>
         <Group gap={'xs'}>
-          <Avatar size={32}>
-            {initialize(props.user.profile?.name || props.name || 'Anonymous')}
-          </Avatar>
+          <Avatar size={32}>{initialize(name)}</Avatar>
 
           <Title order={3} fz={'md'}>
-            {props.name}{' '}
+            {name}{' '}
             <Text component="span" fw={'normal'}>
               on {getRegionalDate(props.createdAt)}
             </Text>
@@ -68,12 +68,12 @@ export default function Comment({
             <Stack gap={'xl'}>
               <Stack gap={'xs'}>
                 <Title order={2} lh={1} fz={'xl'}>
-                  Reply to {props.name}
+                  Reply to {name}
                 </Title>
                 <Text>Your email address will not be published.</Text>
               </Stack>
 
-              <FormBlogReply replyId={props.id} />
+              <FormBlogReply replyId={props.id} setMounted={setMounted} />
             </Stack>
           </Card>
         )}

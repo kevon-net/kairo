@@ -1,10 +1,8 @@
 'use client';
 
-import { IpInfo } from '@/types/bodies/response';
-
 export const setCookie = (
   name: string,
-  value: IpInfo & { os?: string },
+  value: any,
   options: {
     expiryInSeconds: number;
     secure?: boolean;

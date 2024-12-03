@@ -2,7 +2,7 @@ import { Request as EnumRequest } from '@/enums/request';
 import { apiUrl, headers } from '@/data/constants';
 import { authHeaders } from '@/utilities/helpers/auth';
 
-const baseRequestUrl = `${apiUrl}/posts/tags`;
+const baseRequestUrl = `${apiUrl}/tags`;
 
 export const tagsGet = async () => {
   try {

@@ -6,9 +6,9 @@ import { CommentCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/comments`;
 
-export const commentsGet = async () => {
+export const commentsGet = async (slug: { postId?: string }) => {
   try {
-    const request = new Request(baseRequestUrl, {
+    const request = new Request(`${baseRequestUrl}/post/${slug.postId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: await authHeaders(headers.withoutBody),

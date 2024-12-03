@@ -1,5 +1,5 @@
 import { commentCreate } from '@/handlers/requests/database/comment';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { Variant } from '@/enums/notification';
 import { capitalizeWords } from '@/utilities/formatters/string';
 import { showNotification } from '@/utilities/notifications';
@@ -7,14 +7,18 @@ import email from '@/utilities/validators/special/email';
 import text from '@/utilities/validators/special/text';
 import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { updateComments } from '@/libraries/redux/slices/comments';
+import { usePathname } from 'next/navigation';
 
 export const useFormBlogComment = (params: { postId: string }) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();
-  const router = useRouter();
+  const pathname = usePathname();
+
   const session = useAppSelector((state) => state.session.value);
+  const comments = useAppSelector((state) => state.comments.value);
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     initialValues: {
@@ -67,7 +71,8 @@ export const useFormBlogComment = (params: { postId: string }) => {
         form.reset();
 
         if (response.ok) {
-          router.refresh();
+          window.location.replace(`${pathname}#page-post-comment`);
+          dispatch(updateComments([result.comment, ...comments]));
           return;
         }
 

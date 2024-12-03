@@ -4,12 +4,14 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import reducerColorScheme from './slices/color-scheme';
 import reducerSession from './slices/session';
+import reducerComments from './slices/comments';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       colorScheme: reducerColorScheme,
       session: reducerSession,
+      comments: reducerComments,
     },
 
     devTools: process.env.NODE_ENV !== 'production',

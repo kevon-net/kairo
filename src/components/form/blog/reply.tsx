@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import {
   Box,
@@ -17,13 +17,16 @@ import TooltipInputInfo from '@/components/common/tooltips/input/info';
 export default function Reply({
   commentId,
   replyId,
+  setMounted,
 }: {
   commentId?: string;
   replyId?: string;
+  setMounted?: Dispatch<SetStateAction<boolean>>;
 }) {
   const { form, submitted, handleSubmit } = useFormBlogReply({
     commentId,
     replyId,
+    setMounted,
   });
 
   return (

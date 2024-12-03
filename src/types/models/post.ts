@@ -11,5 +11,11 @@ export type PostGet = Post;
 
 // Type for fetched post with relations
 export type PostRelations = Prisma.PostGetPayload<{
-  include: { user: true; category: true; tags: true; comments: true };
+  include: {
+    user: true;
+    category: true;
+    tags: true;
+    comments: true;
+    _count: true;
+  };
 }>;

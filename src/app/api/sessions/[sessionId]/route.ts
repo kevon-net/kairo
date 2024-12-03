@@ -6,7 +6,10 @@ import { cookieName } from '@/data/constants';
 import { Status } from '@prisma/client';
 import { SessionUpdate } from '@/types/bodies/request';
 
-export async function GET({ params }: { params: { sessionId: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { sessionId: string } }
+) {
   try {
     const sessionRecord = await prisma.session.findUnique({
       where: { id: params.sessionId },

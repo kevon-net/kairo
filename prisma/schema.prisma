@@ -167,17 +167,16 @@ model Address {
 }
 
 model Post {
-  id            String  @id @default(cuid())
+  id            String   @id @default(cuid())
   image         String
   title         String
   content       String
-  allowComments Boolean @default(true) @map(name: "allow_comments")
-  anonymous     Boolean @default(false)
+  allowComments Boolean? @default(true) @map(name: "allow_comments")
 
   user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String?   @map("user_id")
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  categoryId String?   @map("category_id")
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String    @map("category_id")
   tags       Tag[]
   comments   Comment[]
 
@@ -222,7 +221,7 @@ model Comment {
   name    String?
   content String
 
-  post    Post?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId  String  @map("post_id")
   user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  String? @map("user_id")
@@ -240,8 +239,8 @@ model Reply {
   id      String  @id @default(cuid())
   name    String?
   content String
-  replyId String? @map("reply_id")
 
+  replyId   String?  @map("reply_id")
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?  @map("comment_id")
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)

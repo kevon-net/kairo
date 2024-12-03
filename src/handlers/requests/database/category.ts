@@ -2,7 +2,7 @@ import { Request as EnumRequest } from '@/enums/request';
 import { apiUrl, headers } from '@/data/constants';
 import { authHeaders } from '@/utilities/helpers/auth';
 
-const baseRequestUrl = `${apiUrl}/posts/categories`;
+const baseRequestUrl = `${apiUrl}/categories`;
 
 export const categoriesGet = async () => {
   try {

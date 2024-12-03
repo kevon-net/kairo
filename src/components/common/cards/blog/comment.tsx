@@ -17,34 +17,34 @@ import {
 } from '@mantine/core';
 import React, { useState } from 'react';
 import CardBlogReplyComment from './reply/comment';
-import { ReplyGet, ReplyRelations } from '@/types/models/reply';
+import { ReplyGet } from '@/types/models/reply';
 import FormBlogReply from '@/components/form/blog/reply';
 import { UserRelations } from '@/types/models/user';
 
-interface Replies extends ReplyRelations {
+interface Replies extends ReplyGet {
   replies?: ReplyGet[];
 }
 
 export default function Comment({
   props,
 }: {
-  props: Omit<CommentRelations, 'replies' | 'user'> & {
+  props: Omit<CommentRelations, 'replies' | 'user' | 'post'> & {
     replies?: Replies[];
-    user: UserRelations;
+    user?: UserRelations;
   };
 }) {
   const [mounted, setMounted] = useState(false);
+
+  const name = props.user?.profile?.name || props.name || 'Anonymous';
 
   return (
     <Card bg={'transparent'} padding={0} py={'xl'}>
       <Stack>
         <Group gap={'xs'}>
-          <Avatar size={32}>
-            {initialize(props.user.profile?.name || props.name || 'Anonymous')}
-          </Avatar>
+          <Avatar size={32}>{initialize(name)}</Avatar>
 
           <Title order={3} fz={'md'}>
-            {props.name}{' '}
+            {name}{' '}
             <Text component="span" fw={'normal'}>
               on {getRegionalDate(props.createdAt)}
             </Text>
@@ -73,12 +73,12 @@ export default function Comment({
             <Stack gap={'xl'}>
               <Stack gap={'xs'}>
                 <Title order={2} lh={1} fz={'xl'}>
-                  Reply to {props.name}
+                  Reply to {name}
                 </Title>
                 <Text>Your email address will not be published.</Text>
               </Stack>
 
-              <FormBlogReply commentId={props.id} />
+              <FormBlogReply commentId={props.id} setMounted={setMounted} />
             </Stack>
           </Card>
         )}

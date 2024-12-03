@@ -28,7 +28,7 @@ export type VerifyResend = {
   options?: { verified?: boolean; email?: string };
 };
 
-export type CommentCreate = Omit<typeCommentCreate, 'id'> & {
+export type CommentCreate = Omit<typeCommentCreate, 'id' | 'post'> & {
   postId: string;
   userId?: string;
 };

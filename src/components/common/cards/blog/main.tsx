@@ -8,6 +8,7 @@ import {
   Card,
   CardSection,
   Group,
+  NumberFormatter,
   Stack,
   Text,
   Title,
@@ -19,8 +20,9 @@ import { PostRelations } from '@/types/models/post';
 
 import { linkify } from '@/utilities/formatters/string';
 import { getRegionalDate } from '@/utilities/formatters/date';
-import { IconCircleFilled } from '@tabler/icons-react';
+import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
+import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function Main({ post }: { post: PostRelations }) {
   const path = `/blog/${linkify(post.title)}`;
@@ -84,19 +86,34 @@ export default function Main({ post }: { post: PostRelations }) {
               </Text>
             </Stack>
 
-            <Group gap={'xs'} fz={'sm'}>
-              <Text inherit>{getRegionalDate(post.createdAt)}</Text>
+            <Group justify="space-between" fz={'sm'}>
+              <Group gap={'xs'}>
+                <Text inherit>{getRegionalDate(post.createdAt)}</Text>
 
-              <IconCircleFilled size={4} />
+                <IconCircleFilled size={4} />
 
-              <Anchor
-                component={Link}
-                href={`/blog/categories/${post.category?.id}`}
-                underline="never"
-                inherit
-              >
-                {post.category?.title}
-              </Anchor>
+                <Anchor
+                  component={Link}
+                  href={`/blog/categories/${post.category?.id}`}
+                  underline="never"
+                  inherit
+                >
+                  {post.category?.title}
+                </Anchor>
+              </Group>
+
+              {post._count.comments && (
+                <Group gap={4}>
+                  <IconMessageCircle
+                    size={iconSize - 4}
+                    stroke={iconStrokeWidth}
+                  />
+                  <NumberFormatter
+                    thousandSeparator
+                    value={post._count.comments}
+                  />
+                </Group>
+              )}
             </Group>
           </Stack>
         </CardSection>

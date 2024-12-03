@@ -9,27 +9,21 @@ import { postsGet } from '@/handlers/requests/database/post';
 import { linkify } from '@/utilities/formatters/string';
 import {
   Anchor,
-  Card,
   Center,
   Divider,
   Flex,
-  Grid,
-  GridCol,
   Group,
   Stack,
   Text,
-  Title,
 } from '@mantine/core';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import MenuShare from '@/components/common/menus/share';
 import Link from 'next/link';
-import FormBlogComment from '@/components/form/blog/comment';
-import CardBlogComment from '@/components/common/cards/blog/comment';
 import IntroPage from '@/components/layout/intro/page';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
 import CardBlogAuthor from '@/components/common/cards/blog/author';
-import WrapperComments from '@/components/wrapper/comments';
+import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
 
 export default async function Post({ params }: { params: typeParams }) {
@@ -84,7 +78,7 @@ export default async function Post({ params }: { params: typeParams }) {
                   />
 
                   <Text component="span" inherit>
-                    {post.comments.length}
+                    {post._count.comments}
                   </Text>
                 </Group>
               </Anchor>
@@ -124,54 +118,7 @@ export default async function Post({ params }: { params: typeParams }) {
         </Stack>
       </LayoutSection>
 
-      <WrapperComments props={{ comments: post.comments.length }}>
-        <LayoutSection
-          id={'page-post-comment'}
-          margined
-          mb={'md'}
-          containerized={'sm'}
-        >
-          <Title order={2}>Comments</Title>
-
-          <Grid gutter={0}>
-            {post.comments.map((comment) => (
-              <GridCol key={comment.id} span={12}>
-                <Stack gap={0}>
-                  <CardBlogComment props={comment} />
-
-                  {post.comments.indexOf(comment) !=
-                    post.comments.length - 1 && <Divider />}
-                </Stack>
-              </GridCol>
-            ))}
-          </Grid>
-        </LayoutSection>
-
-        <LayoutSection
-          id={'page-post-comment'}
-          mt={'md'}
-          margined
-          containerized={'sm'}
-        >
-          <Card
-            p={{ base: 'xs', xs: 'xl' }}
-            bg={'transparent'}
-            withBorder
-            shadow="xs"
-          >
-            <Stack gap={'xl'}>
-              <Stack gap={'xs'}>
-                <Title order={2} lh={1} fz={'xl'}>
-                  Leave a Comment
-                </Title>
-                <Text>Your email address will not be published.</Text>
-              </Stack>
-
-              <FormBlogComment postId={post.id} />
-            </Stack>
-          </Card>
-        </LayoutSection>
-      </WrapperComments>
+      <PartialComments props={{ post }} />
     </LayoutPage>
   );
 }

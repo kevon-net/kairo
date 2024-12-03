@@ -1,37 +1,20 @@
 import { Team as typeTeam } from '@/types/static';
-import {
-  ActionIcon,
-  Card,
-  Group,
-  Image,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
-import NextImage from 'next/image';
 import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Team({ props }: { props: typeTeam }) {
   return (
     <Card padding={0} bg={'transparent'}>
       <Stack gap={'lg'}>
-        <Stack
-          h={270}
-          style={{
-            overflow: 'hidden',
-            borderRadius: 'var(--mantine-radius-sm)',
-          }}
-        >
-          <Image
-            src={props.image}
-            alt={props.name}
-            component={NextImage}
-            width={1920}
-            height={1080}
-            priority
-          />
-        </Stack>
+        <ImageDefault
+          src={props.image}
+          alt={props.name}
+          height={{ base: 320, xs: 240, sm: 280, md: 200, lg: 280 }}
+          radius={'sm'}
+          mode="grid"
+        />
 
         <Stack gap={'xs'}>
           <Title order={3}>{props.name}</Title>

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import NextImage from 'next/image';
 import { Metadata } from 'next';
 
 import LayoutPage from '@/components/layout/page';
@@ -12,6 +11,7 @@ import CarouselPartners from '@/components/common/carousels/partners';
 import CarouselTestimonials from '@/components/common/carousels/testimonials';
 import CardCtaInquiry from '@/components/common/cards/cta/inquiry';
 import CardGenericPurpose from '@/components/common/cards/generic/purpose';
+import ImageDefault from '@/components/common/images/default';
 
 import appData from '@/data/app';
 import { images } from '@/assets/images';
@@ -23,16 +23,7 @@ import {
   IconRocket,
   IconTarget,
 } from '@tabler/icons-react';
-import {
-  Grid,
-  GridCol,
-  Stack,
-  Text,
-  Image,
-  Group,
-  Title,
-  Flex,
-} from '@mantine/core';
+import { Grid, GridCol, Stack, Text, Title, Flex } from '@mantine/core';
 
 export const metadata: Metadata = { title: 'About' };
 
@@ -92,63 +83,37 @@ export default async function About() {
           </GridCol>
 
           <GridCol span={{ base: 12, md: 6 }}>
-            <Grid gutter={'xl'}>
-              <GridCol span={{ md: 6 }}>
+            <Grid gutter={'xl'} justify="center">
+              <GridCol span={{ base: 12, md: 6 }}>
                 <Grid gutter={'xl'}>
-                  <GridCol span={{ md: 12 }}>
-                    <Stack
-                      style={{
-                        overflow: 'hidden',
-                        borderRadius: 'var(--mantine-radius-sm)',
-                      }}
-                    >
-                      <Image
-                        src={images.about.team2}
-                        alt={'about us'}
-                        component={NextImage}
-                        width={1920}
-                        height={1080}
-                        priority
-                      />
-                    </Stack>
+                  <GridCol span={{ md: 12, xs: 6 }}>
+                    <ImageDefault
+                      src={images.about.team2}
+                      decorative
+                      height={{ base: 240, xs: 160, md: 200 }}
+                      mode="grid"
+                      radius={'sm'}
+                    />
                   </GridCol>
-                  <GridCol span={{ md: 12 }}>
-                    <Stack
-                      style={{
-                        overflow: 'hidden',
-                        borderRadius: 'var(--mantine-radius-sm)',
-                      }}
-                    >
-                      <Image
-                        src={images.about.team3}
-                        alt={'about us'}
-                        component={NextImage}
-                        width={1920}
-                        height={1080}
-                        priority
-                      />
-                    </Stack>
+                  <GridCol span={{ md: 12, xs: 6 }}>
+                    <ImageDefault
+                      src={images.about.team3}
+                      decorative
+                      height={{ base: 240, xs: 160, md: 240 }}
+                      mode="grid"
+                      radius={'sm'}
+                    />
                   </GridCol>
                 </Grid>
               </GridCol>
-              <GridCol span={{ md: 6 }}>
-                <Group
-                  h={'100%'}
-                  style={{
-                    overflow: 'hidden',
-                    borderRadius: 'var(--mantine-radius-sm)',
-                  }}
-                >
-                  <Image
-                    src={images.about.team1}
-                    alt={'about us'}
-                    component={NextImage}
-                    h={'100%'}
-                    width={1920}
-                    height={1080}
-                    priority
-                  />
-                </Group>
+              <GridCol span={{ base: 12, xs: 6 }}>
+                <ImageDefault
+                  src={images.about.team1}
+                  decorative
+                  height={{ base: 240, xs: 160, md: '100%' }}
+                  mode="grid"
+                  radius={'sm'}
+                />
               </GridCol>
             </Grid>
           </GridCol>
@@ -200,7 +165,7 @@ export default async function About() {
 
         <Grid gutter={'xl'}>
           {team.map((member) => (
-            <GridCol key={member.name} span={{ base: 12, md: 3 }}>
+            <GridCol key={member.name} span={{ base: 12, xs: 6, md: 3 }}>
               <CardTeam props={member} />
             </GridCol>
           ))}

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import NextImage from 'next/image';
-
 import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
 
@@ -18,7 +16,6 @@ import {
   Grid,
   GridCol,
   Group,
-  Image,
   Stack,
   Text,
   Title,
@@ -33,6 +30,8 @@ import IntroPage from '@/components/layout/intro/page';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
 import CardBlogAuthor from '@/components/common/cards/blog/author';
 import WrapperComments from '@/components/wrapper/comments';
+import ImageDefault from '@/components/common/images/default';
+
 export default async function Post({ params }: { params: typeParams }) {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 
@@ -92,23 +91,13 @@ export default async function Post({ params }: { params: typeParams }) {
             </Group>
           </Flex>
 
-          <Stack
-            style={{
-              overflow: 'hidden',
-              borderRadius: 'var(--mantine-radius-sm)',
-            }}
-            justify="center"
-          >
-            <Image
-              src={post.image}
-              alt={post.title}
-              mah={480}
-              component={NextImage}
-              width={1920}
-              height={1080}
-              priority
-            />
-          </Stack>
+          <ImageDefault
+            src={post.image}
+            alt={post.title}
+            height={{ base: 240, xs: 320, md: 360, lg: 400 }}
+            radius={'sm'}
+            priority
+          />
 
           <Text>{post.content}</Text>
 

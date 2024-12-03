@@ -2,15 +2,14 @@
 
 import React, { useState } from 'react';
 
-import NextImage from 'next/image';
-
-import { Button, Grid, GridCol, Group, Image } from '@mantine/core';
+import { Button, Grid, GridCol } from '@mantine/core';
 
 import images from '@/data/images';
 import { capitalizeWords } from '@/utilities/formatters/string';
 import { useOs } from '@mantine/hooks';
 import { signIn } from '@/handlers/events/auth';
 import { Provider } from '@prisma/client';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Providers() {
   const [loading, setLoading] = useState('');
@@ -27,17 +26,13 @@ export default function Providers() {
       }}
       loading={loading == provider.provider}
       leftSection={
-        <Group>
-          <Image
-            src={provider.image}
-            alt={provider.provider}
-            h={{ base: 24 }}
-            component={NextImage}
-            width={1920}
-            height={1080}
-            priority
-          />
-        </Group>
+        <ImageDefault
+          src={provider.image}
+          alt={provider.provider}
+          height={24}
+          width={24}
+          mode="grid"
+        />
       }
     >
       {provider.provider != Provider.CREDENTIALS

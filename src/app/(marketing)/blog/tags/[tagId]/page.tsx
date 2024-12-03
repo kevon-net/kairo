@@ -34,7 +34,10 @@ export default async function Tag({ params }: { params: typeParams }) {
           {posts
             .filter((p) => getTag(p, params.tagId))
             .map((post) => (
-              <GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
+              <GridCol
+                key={post.title}
+                span={{ base: 12, sm: 6, md: 4, xl: 3 }}
+              >
                 <CardBlogMain post={post} />
               </GridCol>
             ))}

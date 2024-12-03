@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Link from 'next/link';
-import NextImage from 'next/image';
 
 import {
   Anchor,
@@ -9,7 +8,6 @@ import {
   Card,
   CardSection,
   Group,
-  Image,
   Stack,
   Text,
   Title,
@@ -22,6 +20,7 @@ import { PostRelations } from '@/types/models/post';
 import { linkify } from '@/utilities/formatters/string';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { IconCircleFilled } from '@tabler/icons-react';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Main({ post }: { post: PostRelations }) {
   const path = `/blog/${linkify(post.title)}`;
@@ -43,16 +42,12 @@ export default function Main({ post }: { post: PostRelations }) {
             title={post.title}
             pos={'relative'}
           >
-            <Stack>
-              <Image
-                src={post.image}
-                alt={post.title}
-                component={NextImage}
-                width={1920}
-                height={1080}
-                priority
-              />
-            </Stack>
+            <ImageDefault
+              src={post.image}
+              alt={post.title}
+              height={200}
+              mode="grid"
+            />
 
             <Group gap={'xs'} align="start" className={classes.overlay}>
               {post.tags.map((t) => (

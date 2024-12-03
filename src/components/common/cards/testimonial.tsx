@@ -1,7 +1,7 @@
 import { Testimonial as typeTestimonial } from '@/types/static';
-import { Card, Flex, Group, Image, Stack, Text, Title } from '@mantine/core';
+import { Card, Flex, Group, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
-import NextImage from 'next/image';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Testimonial({ props }: { props: typeTestimonial }) {
   return (
@@ -13,31 +13,25 @@ export default function Testimonial({ props }: { props: typeTestimonial }) {
         h={'100%'}
       >
         <Stack gap={'lg'}>
-          <Group>
-            <Image
-              src={props.cite.company.image}
-              alt={props.cite.company.name}
-              h={32}
-              component={NextImage}
-              width={1920}
-              height={1080}
-              priority
-            />
-          </Group>
+          <ImageDefault
+            src={props.cite.company.image}
+            alt={props.cite.company.name}
+            height={32}
+            width={80}
+            mode="grid"
+          />
 
           <Text>&quot;{props.content}&quot;</Text>
         </Stack>
 
         <Group>
           <Group style={{ borderRadius: 99, overflow: 'hidden' }}>
-            <Image
+            <ImageDefault
               src={props.cite.person.image}
               alt={props.cite.person.name}
-              h={48}
-              component={NextImage}
-              width={1920}
-              height={1080}
-              priority
+              height={48}
+              width={48}
+              mode="grid"
             />
           </Group>
 

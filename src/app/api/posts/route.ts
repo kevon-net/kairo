@@ -8,7 +8,7 @@ export async function GET() {
         category: true,
         tags: true,
         user: { include: { profile: true } },
-        comments: { include: { replies: { include: { replies: true } } } },
+        comments: { include: { replies: true } },
       },
     });
 

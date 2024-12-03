@@ -6,13 +6,30 @@ const nextConfig = {
   },
 
   images: {
-    unoptimized: true,
-
-    dangerouslyAllowSVG: true,
+    // unoptimized: true,
+    // dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'placehold.co',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.githubusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.icons8.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.unsplash.com',
         port: '',
         pathname: '/**',
       },

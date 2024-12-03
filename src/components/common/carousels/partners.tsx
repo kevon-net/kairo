@@ -3,11 +3,10 @@
 import React, { useRef } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 
-import NextImage from 'next/image';
-
 import { Carousel, CarouselSlide } from '@mantine/carousel';
 import { images } from '@/assets/images';
-import { Stack, Image, Anchor } from '@mantine/core';
+import { Anchor, Center } from '@mantine/core';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Partners() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
@@ -64,18 +63,16 @@ const partners = [
 
 const slides = partners.concat(partners).map((partner, index) => (
   <CarouselSlide key={index}>
-    <Anchor href={partner.link} target="_blank" title={partner.name}>
-      <Stack justify="center" align="center" h={'100%'}>
-        <Image
+    <Center>
+      <Anchor href={partner.link} target="_blank" title={partner.name}>
+        <ImageDefault
           src={partner.image}
           alt={partner.name}
-          w={'50%'}
-          component={NextImage}
-          width={1920}
-          height={1080}
-          priority
+          height={32}
+          width={96}
+          mode="grid"
         />
-      </Stack>
-    </Anchor>
+      </Anchor>
+    </Center>
   </CarouselSlide>
 ));

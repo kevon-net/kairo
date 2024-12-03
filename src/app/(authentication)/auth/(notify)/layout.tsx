@@ -1,12 +1,12 @@
 import React from 'react';
 
-import NextImage from 'next/image';
 import Link from 'next/link';
 
-import { Anchor, Grid, GridCol, Group, Image, Stack } from '@mantine/core';
+import { Anchor, Center, Grid, GridCol, Stack } from '@mantine/core';
 
 import LayoutBody from '@/components/layout/body';
 import LayoutSection from '@/components/layout/section';
+import ImageDefault from '@/components/common/images/default';
 
 import images from '@/data/images';
 import appData from '@/data/app';
@@ -31,27 +31,17 @@ export default function Notify({
             pos={'sticky'}
             top={0}
           >
-            <Stack
-              gap={'xl'}
-              align="center"
-              justify="center"
-              h={'100vh'}
-              px={{ xs: 32 }}
-            >
+            <Center h={'100vh'} px={{ xs: 32 }}>
               <Anchor component={Link} href={'/'}>
-                <Group>
-                  <Image
-                    src={images.brand.logo.light}
-                    alt={appData.name.app}
-                    h={{ base: 48 }}
-                    component={NextImage}
-                    width={1920}
-                    height={1080}
-                    priority
-                  />
-                </Group>
+                <ImageDefault
+                  src={images.brand.logo.light}
+                  alt={appData.name.app}
+                  height={48}
+                  width={160}
+                  mode="grid"
+                />
               </Anchor>
-            </Stack>
+            </Center>
           </LayoutSection>
         </GridCol>
 

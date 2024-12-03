@@ -1,12 +1,10 @@
 import React from 'react';
 
-import NextImage from 'next/image';
 import Link from 'next/link';
 
 import {
   Flex,
   Grid,
-  Image,
   Text,
   Title,
   List,
@@ -35,26 +33,24 @@ import {
 import SegmentedControlTheme from '@/components/common/segmented-control/theme';
 import { IconCircleFilled } from '@tabler/icons-react';
 import FormNewsletter from '@/components/form/newsletter';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Main() {
   return (
     <LayoutSection id={'partial-footer-main'} padded className={classes.footer}>
       <Stack gap={sectionSpacing}>
-        <Flex
-          direction={'column'}
-          align={{ base: 'center', md: 'start' }}
-          gap={'md'}
-        >
-          <Image
-            src={images.brand.logo.light}
-            alt="next logo"
-            w={{ base: 96 }}
-            component={NextImage}
-            width={1920}
-            height={1080}
-            loading="lazy"
-          />
-        </Flex>
+        <Group>
+          <Anchor component={Link} href={'/'}>
+            <ImageDefault
+              src={images.brand.logo.light}
+              alt={appData.name.app}
+              height={{ base: 40 }}
+              width={{ base: 96 }}
+              fit="contain"
+              mode="grid"
+            />
+          </Anchor>
+        </Group>
 
         <Grid gutter={{ base: 'xl', md: 'md' }}>
           {linkSets.map((linkSet) => (

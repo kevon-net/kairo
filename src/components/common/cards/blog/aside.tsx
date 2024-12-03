@@ -1,14 +1,12 @@
 import React from 'react';
 
 import Link from 'next/link';
-import NextImage from 'next/image';
 
 import {
   Anchor,
   Grid,
   GridCol,
   Group,
-  Image,
   Stack,
   Text,
   Title,
@@ -19,6 +17,7 @@ import { PostRelations } from '@/types/models/post';
 import { linkify } from '@/utilities/formatters/string';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { IconCircleFilled } from '@tabler/icons-react';
+import ImageDefault from '@/components/common/images/default';
 
 export default function Aside({ post }: { post: PostRelations }) {
   const path = `/blog/${linkify(post.title)}`;
@@ -33,23 +32,13 @@ export default function Aside({ post }: { post: PostRelations }) {
           href={path}
           title={post.title}
         >
-          <Group
-            style={{
-              overflow: 'hidden',
-              borderRadius: 'var(--mantine-radius-sm)',
-            }}
-            h={'100%'}
-          >
-            <Image
-              src={post.image}
-              alt={post.title}
-              h={'100%'}
-              component={NextImage}
-              width={1920}
-              height={1080}
-              priority
-            />
-          </Group>
+          <ImageDefault
+            src={post.image}
+            alt={post.title}
+            height={80}
+            radius={'sm'}
+            mode="grid"
+          />
         </Anchor>
       </GridCol>
 

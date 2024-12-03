@@ -6,7 +6,7 @@ import FooterMain from '@/components/layout/footers/main';
 import LayoutSection from '@/components/layout/section';
 import CardCtaNewsletter from '@/components/common/cards/cta/newsletter';
 // import LayoutBarMain from '@/components/layout/bars/main';
-import LayoutHeroHome from '@/components/layout/hero/Home';
+import LayoutHeroHome from '@/components/layout/hero/home';
 
 import AffixTop from '@/components/common/affixi/top';
 import AffixNavbar from '@/components/common/affixi/navbar';

@@ -11,5 +11,29 @@ export type CommentGet = Comment;
 
 // Type for fetched comment with relations
 export type CommentRelations = Prisma.CommentGetPayload<{
-  include: { post: true; replies: true; user: true };
+  include: {
+    post: true;
+
+    _count: { select: { replies: true } };
+
+    user: {
+      include: { profile: { select: { name: true; avatar: true } } };
+    };
+
+    replies: {
+      select: {
+        id: true;
+        name: true;
+        content: true;
+        createdAt: true;
+        postId: true;
+
+        _count: { select: { replies: true } };
+
+        user: {
+          include: { profile: { select: { name: true; avatar: true } } };
+        };
+      };
+    };
+  };
 }>;

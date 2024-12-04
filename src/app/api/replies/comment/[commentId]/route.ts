@@ -4,6 +4,93 @@ import { ReplyUpdate } from '@/types/models/reply';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { commentId: string } }
+) {
+  try {
+    let getResolvedCommentReplies;
+
+    try {
+      getResolvedCommentReplies = await prisma.$transaction(async () => {
+        const commentRecord = await prisma.comment.findUnique({
+          where: { id: params.commentId },
+          include: {
+            replies: {
+              select: {
+                id: true,
+                name: true,
+                content: true,
+                createdAt: true,
+                commentId: true,
+
+                user: {
+                  include: {
+                    profile: { select: { name: true, avatar: true } },
+                  },
+                },
+              },
+
+              orderBy: { createdAt: 'desc' },
+            },
+          },
+        });
+
+        if (!commentRecord) {
+          throw new Error('404');
+        }
+
+        // Collect IDs for comment replies
+        const commentReplyIds = commentRecord.replies.flatMap(
+          (reply) => reply.id
+        );
+
+        // Fetch all reply replies in a single query
+        const replyReplies = await prisma.reply.findMany({
+          where: { replyId: { in: commentReplyIds } },
+          select: { replyId: true },
+        });
+
+        return {
+          ...commentRecord,
+
+          replies: commentRecord.replies.map((commentReply) => {
+            return {
+              ...commentReply,
+
+              _count: {
+                replies: replyReplies.filter(
+                  (replyReply) => replyReply.replyId == commentReply.id
+                ).length,
+              },
+            };
+          }),
+        };
+      });
+    } catch (error) {
+      if ((error as Error).message == '404') {
+        return NextResponse.json(
+          { error: "Comment doesn't exist" },
+          { status: 404, statusText: 'Not Found' }
+        );
+      }
+
+      throw new Error((error as Error).message);
+    }
+
+    return NextResponse.json(
+      { replies: getResolvedCommentReplies.replies },
+      { status: 200, statusText: 'Replies Retrieved' }
+    );
+  } catch (error) {
+    console.error('---> route handler error (get replies):', error);
+    return NextResponse.json(
+      { error: 'Something went wrong on our end' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { commentId: string } }

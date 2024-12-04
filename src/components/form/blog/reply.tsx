@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
 import {
   Box,
@@ -17,21 +17,21 @@ import TooltipInputInfo from '@/components/common/tooltips/input/info';
 export default function Reply({
   commentId,
   replyId,
-  setMounted,
+  close,
 }: {
   commentId?: string;
   replyId?: string;
-  setMounted?: Dispatch<SetStateAction<boolean>>;
+  close?: () => void;
 }) {
   const { form, submitted, handleSubmit } = useFormBlogReply({
     commentId,
     replyId,
-    setMounted,
+    close,
   });
 
   return (
     <Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
-      <Grid pb={'md'}>
+      <Grid>
         <GridCol span={{ base: 12, xs: 6 }}>
           <TextInput
             required

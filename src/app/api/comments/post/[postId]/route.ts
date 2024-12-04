@@ -1,6 +1,4 @@
-import { Order } from '@/enums/sort';
 import prisma from '@/libraries/prisma';
-import { sortArray } from '@/utilities/helpers/array';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -8,68 +6,39 @@ export async function GET(
   { params }: { params: { postId: string } }
 ) {
   try {
-    let getResolvedPostComments;
+    const postRecord = await prisma.post.findUnique({
+      where: { id: params.postId },
 
-    try {
-      getResolvedPostComments = await prisma.$transaction(async () => {
-        // Fetch the post with its immediate comments and replies
-        const postRecord = await prisma.post.findUnique({
-          where: { id: params.postId },
-          include: { comments: { include: { replies: true, user: true } } },
-        });
+      include: {
+        comments: {
+          select: {
+            id: true,
+            name: true,
+            content: true,
+            createdAt: true,
+            postId: true,
 
-        if (!postRecord) {
-          throw new Error('404');
-        }
+            _count: { select: { replies: true } },
 
-        // Collect IDs for nested comment replies
-        const commentReplyIds = postRecord.comments.flatMap((comment) =>
-          comment.replies.map((reply) => reply.id)
-        );
+            user: {
+              include: { profile: { select: { name: true, avatar: true } } },
+            },
+          },
 
-        // Fetch all nested reply replies in a single query
-        const replyReplies = await prisma.reply.findMany({
-          where: { replyId: { in: commentReplyIds } },
-        });
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
 
-        // Construct the final structure
-        const resolvedComments = sortArray(
-          postRecord.comments,
-          'createdAt',
-          Order.DESCENDING
-        ).map((comment) => ({
-          ...comment,
-
-          replies: sortArray(
-            comment.replies,
-            'createdAt',
-            Order.DESCENDING
-          ).map((reply) => ({
-            ...reply,
-
-            replies: sortArray(
-              replyReplies,
-              'createdAt',
-              Order.DESCENDING
-            ).filter((replyReply) => replyReply.replyId === reply.id),
-          })),
-        }));
-
-        return resolvedComments;
-      });
-    } catch (error) {
-      if ((error as Error).message == '404') {
-        return NextResponse.json(
-          { error: "Post doesn't exist" },
-          { status: 404, statusText: 'Not Found' }
-        );
-      }
-
-      throw new Error((error as Error).message);
+    if (!postRecord) {
+      return NextResponse.json(
+        { error: "Post doesn't exist" },
+        { status: 404, statusText: 'Not Found' }
+      );
     }
 
     return NextResponse.json(
-      { comments: getResolvedPostComments },
+      { comments: postRecord.comments },
       { status: 200, statusText: 'Comments Retrieved' }
     );
   } catch (error) {

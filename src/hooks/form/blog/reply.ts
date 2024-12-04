@@ -8,13 +8,13 @@ import email from '@/utilities/validators/special/email';
 import text from '@/utilities/validators/special/text';
 import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { updateComments } from '@/libraries/redux/slices/comments';
 
 export const useFormBlogReply = (params: {
   commentId?: string;
   replyId?: string;
-  setMounted?: Dispatch<SetStateAction<boolean>>;
+  close?: () => void;
 }) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();
@@ -134,8 +134,8 @@ export const useFormBlogReply = (params: {
             );
           }
 
-          if (params.setMounted) {
-            params.setMounted(false);
+          if (params.close) {
+            params.close();
           }
 
           return;

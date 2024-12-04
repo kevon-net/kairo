@@ -6,9 +6,9 @@ import { ReplyUpdate } from '@/types/models/reply';
 
 const baseRequestUrl = `${apiUrl}/replies/comment`;
 
-export const repliesCommentGet = async () => {
+export const repliesCommentGet = async (slug: { commentId: string }) => {
   try {
-    const request = new Request(baseRequestUrl, {
+    const request = new Request(`${baseRequestUrl}/${slug.commentId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: await authHeaders(headers.withoutBody),

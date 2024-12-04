@@ -4,6 +4,70 @@ import { ReplyUpdate } from '@/types/models/reply';
 import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { replyId: string } }
+) {
+  try {
+    let getResolvedReplyReplies;
+
+    try {
+      getResolvedReplyReplies = await prisma.$transaction(async () => {
+        const replyRecord = await prisma.reply.findUnique({
+          where: { id: params.replyId },
+          select: { id: true },
+        });
+
+        if (!replyRecord) {
+          throw new Error('404');
+        }
+
+        const replyRecords = await prisma.reply.findMany({
+          where: { replyId: params.replyId },
+
+          select: {
+            id: true,
+            name: true,
+            content: true,
+            createdAt: true,
+            commentId: true,
+
+            user: {
+              include: {
+                profile: { select: { name: true, avatar: true } },
+              },
+            },
+          },
+
+          orderBy: { createdAt: 'desc' },
+        });
+
+        return replyRecords;
+      });
+    } catch (error) {
+      if ((error as Error).message == '404') {
+        return NextResponse.json(
+          { error: "Reply doesn't exist" },
+          { status: 404, statusText: 'Not Found' }
+        );
+      }
+
+      throw new Error((error as Error).message);
+    }
+
+    return NextResponse.json(
+      { replies: getResolvedReplyReplies },
+      { status: 200, statusText: 'Replies Retrieved' }
+    );
+  } catch (error) {
+    console.error('---> route handler error (get replies):', error);
+    return NextResponse.json(
+      { error: 'Something went wrong on our end' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { replyId: string } }

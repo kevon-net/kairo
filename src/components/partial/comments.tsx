@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 
 import LayoutSection from '../layout/section';
 import {
@@ -14,11 +14,11 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { commentsGet } from '@/handlers/requests/database/comment';
-import { PostRelations } from '@/types/models/post';
 import FormBlogComment from '@/components/form/blog/comment';
 import CardBlogComment from '@/components/common/cards/blog/comment';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useFetchComments } from '@/hooks/fetch/comments';
+import { PostRelations } from '@/types/static';
+import { useAppDispatch } from '@/hooks/redux';
 import { updateComments } from '@/libraries/redux/slices/comments';
 
 export default function Comments({
@@ -26,59 +26,51 @@ export default function Comments({
 }: {
   props: { post: PostRelations };
 }) {
-  const comments = useAppSelector((state) => state.comments.value);
   const dispatch = useAppDispatch();
 
-  const [status, setStatus] = useState<'loading' | 'success' | null>(null);
+  const { loading, fetch, comments } = useFetchComments({
+    postId: props.post.id,
+  });
 
-  const fetchComments = async () => {
-    setStatus('loading');
-
-    const result = await commentsGet({ postId: props.post.id });
-
-    dispatch(updateComments(result.comments));
-
-    setStatus('success');
-  };
+  useEffect(() => {
+    dispatch(updateComments([]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
-      {(status == null || status == 'loading') &&
-        props.post._count.comments > 0 && (
-          <LayoutSection id={'page-post-comment'} padded containerized={'sm'}>
-            <Button
-              variant="default"
-              fullWidth
-              onClick={fetchComments}
-              loading={status == 'loading'}
-            >
-              Show Comments (
-              <NumberFormatter
-                value={props.post._count.comments}
-                thousandSeparator
-              />
-              )
-            </Button>
-          </LayoutSection>
-        )}
+      {(props.post._count.comments > 0 || loading) && !comments.length && (
+        <LayoutSection id={'page-post-comment'} padded containerized={'sm'}>
+          <Button variant="default" fullWidth onClick={fetch} loading={loading}>
+            Show Comments (
+            <NumberFormatter
+              value={props.post._count.comments}
+              thousandSeparator
+            />
+            )
+          </Button>
+        </LayoutSection>
+      )}
 
-      {status == 'success' && (
-        <LayoutSection
-          id={'page-post-comment'}
-          margined
-          mb={'md'}
-          containerized={'sm'}
-        >
+      {((props.post._count.comments > 0 && comments.length > 0) ||
+        comments.length > 0) && (
+        <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
           <Title order={2}>Comments</Title>
 
-          <Grid gutter={0}>
+          <Grid gutter={0} mt={'xl'}>
             {comments.map((comment) => (
               <GridCol key={comment.id} span={12}>
                 <Stack gap={0}>
-                  <CardBlogComment props={comment} />
+                  <CardBlogComment
+                    props={{
+                      ...comment,
+                      replies: comment.replies,
+                      user: comment.user!,
+                    }}
+                  />
 
                   {comments.indexOf(comment) != comments.length - 1 && (
-                    <Divider />
+                    <Divider my={'lg'} />
                   )}
                 </Stack>
               </GridCol>
@@ -87,10 +79,10 @@ export default function Comments({
         </LayoutSection>
       )}
 
-      {(status == 'success' || props.post._count.comments < 1) && (
+      {(!props.post._count.comments || comments.length > 0) && (
         <LayoutSection
           id={'page-post-comment-form'}
-          mt={props.post._count.comments < 1 ? undefined : 'md'}
+          mt={comments.length < 1 ? undefined : undefined}
           margined
           containerized={'sm'}
         >
@@ -103,10 +95,7 @@ export default function Comments({
             <Stack gap={'xl'}>
               <Stack gap={'xs'}>
                 <Title order={2} lh={1} fz={'xl'}>
-                  {props.post._count.comments < 1
-                    ? 'Be the first to'
-                    : 'Leave a'}{' '}
-                  Comment
+                  {comments.length < 1 ? 'Be the first to' : 'Leave a'} Comment
                 </Title>
                 <Text>Your email address will not be published.</Text>
               </Stack>

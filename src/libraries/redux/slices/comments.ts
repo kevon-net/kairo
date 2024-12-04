@@ -1,10 +1,10 @@
-import { PostComments } from '@/types/static';
+import { PostComment } from '@/types/static';
 import { createSlice } from '@reduxjs/toolkit';
 
 export const sliceComments = createSlice({
   name: 'comments',
   initialState: {
-    value: [] satisfies PostComments[] as PostComments[],
+    value: [] satisfies PostComment[] as PostComment[],
   },
   reducers: {
     update: (state, action) => {

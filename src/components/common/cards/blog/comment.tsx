@@ -1,104 +1,99 @@
 'use client';
 
-import { CommentRelations } from '@/types/models/comment';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { initialize } from '@/utilities/formatters/string';
 import {
-  Anchor,
   Avatar,
+  Button,
   Card,
   Divider,
   Grid,
   GridCol,
   Group,
+  NumberFormatter,
   Stack,
   Text,
   Title,
 } from '@mantine/core';
-import React, { useState } from 'react';
+import React from 'react';
 import CardBlogReplyComment from './reply/comment';
-import { ReplyGet } from '@/types/models/reply';
-import FormBlogReply from '@/components/form/blog/reply';
-import { UserRelations } from '@/types/models/user';
+import ModalReply from '@/components/common/modals/reply';
+import { IconCircleFilled } from '@tabler/icons-react';
+import { useFetchRepliesComment } from '@/hooks/fetch/replies/comment';
+import { PostComment } from '@/types/static';
 
-interface Replies extends ReplyGet {
-  replies?: ReplyGet[];
-}
-
-export default function Comment({
-  props,
-}: {
-  props: Omit<CommentRelations, 'replies' | 'user' | 'post'> & {
-    replies?: Replies[];
-    user?: UserRelations;
-  };
-}) {
-  const [mounted, setMounted] = useState(false);
+export default function Comment({ props }: { props: PostComment }) {
+  const { loading, fetch, comments } = useFetchRepliesComment({
+    commentId: props.id,
+  });
 
   const name = props.user?.profile?.name || props.name || 'Anonymous';
 
+  const comment = comments.find((comment) => comment.id == props.id);
+  const replies = comment?.replies;
+
   return (
-    <Card bg={'transparent'} padding={0} py={'xl'}>
-      <Stack>
-        <Group gap={'xs'}>
-          <Avatar size={32}>{initialize(name)}</Avatar>
+    <Card bg={'transparent'} padding={0}>
+      <Stack gap={'lg'}>
+        <Stack>
+          <Group gap={'xs'}>
+            <Avatar size={32}>{initialize(name)}</Avatar>
 
-          <Title order={3} fz={'md'}>
-            {name}{' '}
-            <Text component="span" fw={'normal'}>
-              on {getRegionalDate(props.createdAt)}
-            </Text>
-          </Title>
-        </Group>
+            <Title order={3} fz={'md'}>
+              {name}{' '}
+              <Text component="span" fw={'normal'}>
+                on {getRegionalDate(props.createdAt)}
+              </Text>
+            </Title>
+          </Group>
 
-        <Text fw={'normal'}>{props.content}</Text>
+          <Text fw={'normal'}>{props.content}</Text>
 
-        <Group>
-          <Anchor
-            fw={'bold'}
-            underline="always"
-            onClick={() => setMounted(!mounted)}
-          >
-            {mounted ? 'Close' : 'Reply'}
-          </Anchor>
-        </Group>
+          <Group fz={'sm'} gap={4}>
+            <ModalReply props={{ name, commentId: props.id }}>
+              <Button size="compact-xs" variant="transparent" color="pri.6">
+                Reply
+              </Button>
+            </ModalReply>
 
-        {mounted && (
-          <Card
-            p={{ base: 'xs', xs: 'xl' }}
-            bg={'transparent'}
-            withBorder
-            shadow="xs"
-          >
-            <Stack gap={'xl'}>
-              <Stack gap={'xs'}>
-                <Title order={2} lh={1} fz={'xl'}>
-                  Reply to {name}
-                </Title>
-                <Text>Your email address will not be published.</Text>
-              </Stack>
+            {props._count && props._count.replies > 0 && !replies?.length && (
+              <>
+                <IconCircleFilled size={4} />
 
-              <FormBlogReply commentId={props.id} setMounted={setMounted} />
-            </Stack>
-          </Card>
-        )}
+                <Button
+                  size="compact-xs"
+                  variant="transparent"
+                  color="gray"
+                  rightSection={
+                    <Text component="span" inherit>
+                      (
+                      <NumberFormatter
+                        value={props._count.replies}
+                        thousandSeparator
+                      />
+                      )
+                    </Text>
+                  }
+                  onClick={fetch}
+                  loading={loading}
+                >
+                  View Replies
+                </Button>
+              </>
+            )}
+          </Group>
+        </Stack>
 
-        {props.replies && (
+        {props.replies && props.replies.length > 0 && (
           <Grid gutter={0} pl={'xl'}>
             {props.replies.map((reply) => (
               <GridCol key={reply.id} span={12}>
                 <Stack gap={0}>
-                  <CardBlogReplyComment
-                    props={{
-                      ...reply,
-                      user: props.user,
-                      replies: reply.replies,
-                    }}
-                  />
+                  <CardBlogReplyComment props={reply} />
 
                   {props.replies &&
                     props.replies.indexOf(reply) !=
-                      props.replies.length! - 1 && <Divider />}
+                      props.replies.length! - 1 && <Divider my={'lg'} />}
                 </Stack>
               </GridCol>
             ))}

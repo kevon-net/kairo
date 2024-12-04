@@ -6,9 +6,9 @@ import { ReplyReplyCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/replies/reply`;
 
-export const repliesReplyGet = async () => {
+export const repliesReplyGet = async (slug: { replyId: string }) => {
   try {
-    const request = new Request(baseRequestUrl, {
+    const request = new Request(`${baseRequestUrl}/${slug.replyId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: await authHeaders(headers.withoutBody),

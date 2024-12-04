@@ -4,12 +4,10 @@ import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
 
 import { typeParams } from '../layout';
-import { PostRelations } from '@/types/models/post';
 import { postGet } from '@/handlers/requests/database/post';
 import {
   Anchor,
   Center,
-  Divider,
   Flex,
   Group,
   NumberFormatter,
@@ -25,6 +23,7 @@ import { iconSize, iconStrokeWidth } from '@/data/constants';
 import CardBlogAuthor from '@/components/common/cards/blog/author';
 import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
+import { PostRelations } from '@/types/static';
 
 export default async function Post({ params }: { params: typeParams }) {
   const [postId] = params['postId-postTitle'].split('-');
@@ -118,8 +117,6 @@ export default async function Post({ params }: { params: typeParams }) {
               </Text>
             </Text>
           </Group>
-
-          <Divider />
         </Stack>
       </LayoutSection>
 

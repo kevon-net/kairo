@@ -13,11 +13,44 @@ export type PostGet = Post;
 export type PostRelations = Prisma.PostGetPayload<{
   include: {
     _count: { select: { comments: true } };
+
     category: { select: { id: true; title: true } };
+
     tags: { select: { id: true; title: true } };
+
     user: {
       select: { id: true };
       include: { profile: { select: { name: true; avatar: true } } };
+    };
+
+    comments: {
+      select: {
+        id: true;
+        name: true;
+        content: true;
+        createdAt: true;
+        postId: true;
+
+        _count: { select: { replies: true } };
+
+        user: {
+          include: { profile: { select: { name: true; avatar: true } } };
+        };
+
+        replies: {
+          select: {
+            id: true;
+            name: true;
+            content: true;
+            createdAt: true;
+            commentId: true;
+
+            user: {
+              include: { profile: { select: { name: true; avatar: true } } };
+            };
+          };
+        };
+      };
     };
   };
 }>;

@@ -1,7 +1,7 @@
 import { Icon } from '@tabler/icons-react';
-import { ReplyGet } from './models/reply';
+import { ReplyRelations } from './models/reply';
 import { CommentRelations } from './models/comment';
-import { UserRelations } from './models/user';
+import { PostRelations as typePostRelations } from './models/post';
 
 export interface Team {
   name: string;
@@ -34,12 +34,15 @@ export interface Discount {
   current: number;
 }
 
-interface PostCommentReplies extends ReplyGet {
-  replies?: ReplyGet[];
+export interface PostCommentReply extends ReplyRelations {
+  replies?: ReplyRelations[];
+  _count?: { replies: number };
 }
 
-export interface PostComments
-  extends Omit<CommentRelations, 'replies' | 'user' | 'post'> {
-  replies?: PostCommentReplies[];
-  user?: UserRelations;
+export interface PostComment extends Omit<CommentRelations, 'replies'> {
+  replies?: PostCommentReply[];
+}
+
+export interface PostRelations extends Omit<typePostRelations, 'comments'> {
+  comments: PostComment[];
 }

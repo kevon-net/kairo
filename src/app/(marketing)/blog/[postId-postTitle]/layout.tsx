@@ -3,10 +3,9 @@ import React from 'react';
 import { Metadata } from 'next';
 
 import LayoutBody from '@/components/layout/body';
-import AsideBlog from '@/components/layout/asides/blog';
+// import AsideBlog from '@/components/layout/asides/blog';
 
 import { typeParams } from '../layout';
-import { linkify } from '@/utilities/formatters/string';
 import { PostRelations } from '@/types/models/post';
 import { postsGet } from '@/handlers/requests/database/post';
 
@@ -17,27 +16,29 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 
+  const [postId] = params['postId-postTitle'].split('-');
+
   return {
-    title: posts.find((p) => linkify(p.title) == params.title)?.title,
+    title: posts.find((p) => p.id == postId)?.title,
   };
 };
 
 export default function Post({
   children, // will be a page or nested layout
-  params,
+  // params,
 }: {
   children: React.ReactNode;
   params: typeParams;
 }) {
   return (
     <LayoutBody
-      aside={{
-        gap: 32,
-        right: {
-          component: <AsideBlog params={params} />,
-          width: { md: 33, lg: 33 },
-        },
-      }}
+    // aside={{
+    //   gap: 32,
+    //   right: {
+    //     component: <AsideBlog params={params} />,
+    //     width: { md: 33, lg: 33 },
+    //   },
+    // }}
     >
       {children}
     </LayoutBody>

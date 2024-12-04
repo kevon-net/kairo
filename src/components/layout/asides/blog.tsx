@@ -11,6 +11,7 @@ import {
   Grid,
   GridCol,
   Group,
+  NumberFormatter,
   Stack,
   Text,
   Title,
@@ -18,18 +19,19 @@ import {
 import Link from 'next/link';
 import { CategoryRelations } from '@/types/models/category';
 import { categoriesGet } from '@/handlers/requests/database/category';
-import { linkify } from '@/utilities/formatters/string';
 import { TagRelations } from '@/types/models/tag';
 import { tagsGet } from '@/handlers/requests/database/tag';
+import { typeParams } from '@/app/(marketing)/blog/layout';
 
-export default async function Blog({ params }: { params: { title: string } }) {
+export default async function Blog({ params }: { params: typeParams }) {
+  const [postId] = params['postId-postTitle'].split('-');
+
   const { posts }: { posts: PostRelations[] } = await postsGet();
-
   const { tags }: { tags: TagRelations[] } = await tagsGet();
   const { categories }: { categories: CategoryRelations[] } =
     await categoriesGet();
 
-  const postsTrimmed = posts.filter((p) => linkify(p.title) != params.title);
+  const postsFiltered = posts.filter((p) => p.id != postId);
 
   return (
     <LayoutSection
@@ -60,7 +62,10 @@ export default async function Blog({ params }: { params: { title: string } }) {
                     <Text inherit>{c.title}</Text>
 
                     <Text inherit ta={'end'}>
-                      {c.posts.length}
+                      <NumberFormatter
+                        value={c._count.posts}
+                        thousandSeparator
+                      />
                     </Text>
                   </Group>
                 </Anchor>
@@ -75,12 +80,12 @@ export default async function Blog({ params }: { params: { title: string } }) {
           </Title>
 
           <Grid>
-            {postsTrimmed.map(
+            {postsFiltered.map(
               (post) =>
-                postsTrimmed.indexOf(post) < 3 && (
+                postsFiltered.indexOf(post) < 3 && (
                   <GridCol key={post.id} span={12}>
                     <Stack>
-                      {postsTrimmed.indexOf(post) != 0 && <Divider />}
+                      {postsFiltered.indexOf(post) != 0 && <Divider />}
                       <CardBlogAside post={post} />
                     </Stack>
                   </GridCol>
@@ -106,6 +111,16 @@ export default async function Blog({ params }: { params: { title: string } }) {
                   style={{ cursor: 'inherit' }}
                   radius={'sm'}
                   tt={'capitalize'}
+                  rightSection={
+                    <Text component="span" inherit>
+                      (
+                      <NumberFormatter
+                        value={t._count.posts}
+                        thousandSeparator
+                      />
+                      )
+                    </Text>
+                  }
                 >
                   {t.title}
                 </Badge>

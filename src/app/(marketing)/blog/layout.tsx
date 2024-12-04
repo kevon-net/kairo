@@ -7,7 +7,7 @@ import LayoutBody from '@/components/layout/body';
 import appData from '@/data/app';
 
 export interface typeParams {
-  title: string;
+  'postId-postTitle': string;
   categoryId: string;
   tagId: string;
 }

@@ -1,7 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 // npx prisma migrate dev --name init -> sync database
@@ -167,16 +167,18 @@ model Address {
 }
 
 model Post {
-  id            String   @id @default(cuid())
+  id            String  @id @default(cuid())
   image         String
   title         String
+  excerpt       String
   content       String
-  allowComments Boolean? @default(true) @map(name: "allow_comments")
+  allowComments Boolean @default(true) @map(name: "allow_comments")
+  viewCount     Int     @default(0) @map(name: "view_count")
 
   user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String?   @map("user_id")
-  category   Category  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  categoryId String    @map("category_id")
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String?   @map("category_id")
   tags       Tag[]
   comments   Comment[]
 

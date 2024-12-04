@@ -1,9 +1,7 @@
 import { Request as EnumRequest } from '@/enums/request';
-import { Order } from '@/enums/sort';
 import { apiUrl, headers } from '@/data/constants';
 import { PostCreate, PostUpdate } from '@/types/models/post';
 import { authHeaders } from '@/utilities/helpers/auth';
-import { sortArray } from '@/utilities/helpers/array';
 
 const baseRequestUrl = `${apiUrl}/posts`;
 
@@ -19,14 +17,28 @@ export const postsGet = async () => {
 
     const result = await response.json();
 
-    return {
-      ...result,
-      posts: !result.posts
-        ? undefined
-        : sortArray(result.posts, 'createdAt', Order.DESCENDING),
-    };
+    return result;
   } catch (error) {
     console.error('---> handler error - (get posts):', error);
+    throw error;
+  }
+};
+
+export const postGet = async (slug: { postId: string }) => {
+  try {
+    const request = new Request(`${baseRequestUrl}/${slug.postId}`, {
+      method: EnumRequest.GET,
+      credentials: 'include',
+      headers: await authHeaders(headers.withoutBody),
+    });
+
+    const response = await fetch(request);
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error('---> handler error - (get post):', error);
     throw error;
   }
 };

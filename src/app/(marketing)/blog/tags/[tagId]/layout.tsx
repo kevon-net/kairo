@@ -5,8 +5,7 @@ import { Metadata } from 'next';
 import LayoutBody from '@/components/layout/body';
 
 import { typeParams } from '../../layout';
-import { linkify } from '@/utilities/formatters/string';
-import { TagRelations } from '@/types/models/tag';
+import { TagGet } from '@/types/models/tag';
 import { tagsGet } from '@/handlers/requests/database/tag';
 
 export const generateMetadata = async ({
@@ -14,11 +13,10 @@ export const generateMetadata = async ({
 }: {
   params: typeParams;
 }): Promise<Metadata> => {
-  const { tags }: { tags: TagRelations[] } = await tagsGet();
+  const { tags }: { tags: TagGet[] } = await tagsGet();
 
   return {
-    title:
-      tags.find((t) => linkify(t.id || '') == params.tagId)?.title || 'Title',
+    title: tags.find((t) => t.id == params.tagId)?.title,
   };
 };
 

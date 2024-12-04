@@ -5,21 +5,18 @@ import { Metadata } from 'next';
 import LayoutBody from '@/components/layout/body';
 
 import { typeParams } from '../../layout';
-import { linkify } from '@/utilities/formatters/string';
-import { PostRelations } from '@/types/models/post';
-import { postsGet } from '@/handlers/requests/database/post';
+import { categoriesGet } from '@/handlers/requests/database/category';
+import { CategoryGet } from '@/types/models/category';
 
 export const generateMetadata = async ({
   params,
 }: {
   params: typeParams;
 }): Promise<Metadata> => {
-  const { posts }: { posts: PostRelations[] } = await postsGet();
+  const { categories }: { categories: CategoryGet[] } = await categoriesGet();
 
   return {
-    title:
-      posts.find((p) => linkify(p.category?.id || '') == params.categoryId)
-        ?.category?.title || 'Category',
+    title: categories.find((p) => p.id == params.categoryId)?.title,
   };
 };
 

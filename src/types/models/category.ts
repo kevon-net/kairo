@@ -11,5 +11,19 @@ export type CategoryGet = Category;
 
 // Type for fetched category with relations
 export type CategoryRelations = Prisma.CategoryGetPayload<{
-  include: { posts: true };
+  include: {
+    _count: { select: { posts: true } };
+
+    posts: {
+      include: {
+        _count: { select: { comments: true } };
+        category: { select: { id: true; title: true } };
+        tags: { select: { id: true; title: true } };
+        user: {
+          select: { id: true };
+          include: { profile: { select: { name: true; avatar: true } } };
+        };
+      };
+    };
+  };
 }>;

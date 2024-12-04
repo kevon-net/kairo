@@ -9,6 +9,7 @@ import {
   Divider,
   Grid,
   GridCol,
+  NumberFormatter,
   Stack,
   Text,
   Title,
@@ -51,7 +52,12 @@ export default function Comments({
               onClick={fetchComments}
               loading={status == 'loading'}
             >
-              Show Comments ({props.post._count.comments || 0})
+              Show Comments (
+              <NumberFormatter
+                value={props.post._count.comments}
+                thousandSeparator
+              />
+              )
             </Button>
           </LayoutSection>
         )}

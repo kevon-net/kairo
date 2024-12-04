@@ -7,6 +7,7 @@ import {
   Grid,
   GridCol,
   Group,
+  NumberFormatter,
   Stack,
   Text,
   Title,
@@ -16,11 +17,12 @@ import { PostRelations } from '@/types/models/post';
 
 import { linkify } from '@/utilities/formatters/string';
 import { getRegionalDate } from '@/utilities/formatters/date';
-import { IconCircleFilled } from '@tabler/icons-react';
+import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
+import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function Aside({ post }: { post: PostRelations }) {
-  const path = `/blog/${linkify(post.title)}`;
+  const path = `/blog/${post.id}-${linkify(post.title)}`;
 
   return (
     <Grid>
@@ -59,7 +61,7 @@ export default function Aside({ post }: { post: PostRelations }) {
             </Title>
 
             <Text lineClamp={1} fz={'sm'}>
-              {post.content}
+              {post.excerpt}
             </Text>
           </Stack>
 
@@ -76,6 +78,24 @@ export default function Aside({ post }: { post: PostRelations }) {
             >
               {post.category?.title}
             </Anchor>
+
+            {post._count.comments && (
+              <>
+                <IconCircleFilled size={4} />
+
+                <Group gap={4}>
+                  <IconMessageCircle
+                    size={iconSize - 4}
+                    stroke={iconStrokeWidth}
+                  />
+
+                  <NumberFormatter
+                    thousandSeparator
+                    value={post._count.comments}
+                  />
+                </Group>
+              </>
+            )}
           </Group>
         </Stack>
       </GridCol>

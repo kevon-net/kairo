@@ -25,7 +25,7 @@ import ImageDefault from '@/components/common/images/default';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
 
 export default function Main({ post }: { post: PostRelations }) {
-  const path = `/blog/${linkify(post.title)}`;
+  const path = `/blog/${post.id}-${linkify(post.title)}`;
 
   return (
     <Card className={classes.card} bg={'transparent'}>
@@ -82,7 +82,7 @@ export default function Main({ post }: { post: PostRelations }) {
                 </Anchor>
               </Title>
               <Text className={classes.desc} lineClamp={3}>
-                {post.content}
+                {post.excerpt}
               </Text>
             </Stack>
 
@@ -108,6 +108,7 @@ export default function Main({ post }: { post: PostRelations }) {
                     size={iconSize - 4}
                     stroke={iconStrokeWidth}
                   />
+
                   <NumberFormatter
                     thousandSeparator
                     value={post._count.comments}

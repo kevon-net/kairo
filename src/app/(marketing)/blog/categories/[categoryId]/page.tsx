@@ -7,21 +7,21 @@ import LayoutSection from '@/components/layout/section';
 import CardBlogMain from '@/components/common/cards/blog/main';
 import IntroPage from '@/components/layout/intro/page';
 
-import { postsGet } from '@/handlers/requests/database/post';
-import { PostRelations } from '@/types/models/post';
 import { typeParams } from '../../layout';
+import { categoryGet } from '@/handlers/requests/database/category';
+import { CategoryRelations } from '@/types/models/category';
 
 export default async function Category({ params }: { params: typeParams }) {
-  const { posts }: { posts: PostRelations[] } = await postsGet();
+  const { category }: { category: CategoryRelations } = await categoryGet({
+    categoryId: params.categoryId,
+  });
 
   return (
     <LayoutPage>
       <IntroPage
         props={{
           path: `Categories`,
-          title:
-            posts.find((p) => p.category?.id == params.categoryId)?.category
-              ?.title || 'Category',
+          title: category.title,
           desc: `Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit
               phasellus mollis sit aliquam sit nullam.`,
         }}
@@ -29,16 +29,11 @@ export default async function Category({ params }: { params: typeParams }) {
 
       <LayoutSection id={'page-blog'} margined>
         <Grid gutter={'xl'}>
-          {posts
-            .filter((p) => p.category?.id == params.categoryId)
-            .map((post) => (
-              <GridCol
-                key={post.title}
-                span={{ base: 12, sm: 6, md: 4, xl: 3 }}
-              >
-                <CardBlogMain post={post} />
-              </GridCol>
-            ))}
+          {category.posts.map((post) => (
+            <GridCol key={post.title} span={{ base: 12, sm: 6, md: 4, xl: 3 }}>
+              <CardBlogMain post={post} />
+            </GridCol>
+          ))}
         </Grid>
       </LayoutSection>
     </LayoutPage>

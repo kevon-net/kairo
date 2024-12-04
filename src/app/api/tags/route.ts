@@ -3,7 +3,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const tagRecords = await prisma.tag.findMany({ include: { posts: true } });
+    const tagRecords = await prisma.tag.findMany({
+      include: { _count: { select: { posts: true } } },
+    });
 
     return NextResponse.json(
       { tags: tagRecords },

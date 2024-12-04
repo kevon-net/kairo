@@ -10,4 +10,20 @@ export type TagUpdate = Prisma.TagUpdateInput;
 export type TagGet = Tag;
 
 // Type for fetched tag with relations
-export type TagRelations = Prisma.TagGetPayload<{ include: { posts: true } }>;
+export type TagRelations = Prisma.TagGetPayload<{
+  include: {
+    _count: { select: { posts: true } };
+
+    posts: {
+      include: {
+        _count: { select: { comments: true } };
+        category: { select: { id: true; title: true } };
+        tags: { select: { id: true; title: true } };
+        user: {
+          select: { id: true };
+          include: { profile: { select: { name: true; avatar: true } } };
+        };
+      };
+    };
+  };
+}>;

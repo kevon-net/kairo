@@ -22,3 +22,22 @@ export const tagsGet = async () => {
     throw error;
   }
 };
+
+export const tagGet = async (slug: { tagId: string }) => {
+  try {
+    const request = new Request(`${baseRequestUrl}/${slug.tagId}`, {
+      method: EnumRequest.GET,
+      credentials: 'include',
+      headers: await authHeaders(headers.withoutBody),
+    });
+
+    const response = await fetch(request);
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error('---> handler error - (get tag):', error);
+    throw error;
+  }
+};

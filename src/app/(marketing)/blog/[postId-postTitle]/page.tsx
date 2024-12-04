@@ -5,14 +5,14 @@ import LayoutSection from '@/components/layout/section';
 
 import { typeParams } from '../layout';
 import { PostRelations } from '@/types/models/post';
-import { postsGet } from '@/handlers/requests/database/post';
-import { linkify } from '@/utilities/formatters/string';
+import { postGet } from '@/handlers/requests/database/post';
 import {
   Anchor,
   Center,
   Divider,
   Flex,
   Group,
+  NumberFormatter,
   Stack,
   Text,
 } from '@mantine/core';
@@ -27,15 +27,13 @@ import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
 
 export default async function Post({ params }: { params: typeParams }) {
-  const { posts }: { posts: PostRelations[] } = await postsGet();
+  const [postId] = params['postId-postTitle'].split('-');
 
-  const post: (PostRelations & { user: any }) | undefined = posts.find(
-    (p) => linkify(p.title) == params.title
-  );
+  const { post }: { post: PostRelations } = await postGet({ postId: postId });
 
-  return !post ? null : (
+  return (
     <LayoutPage>
-      <IntroPage props={{ title: post.title || '' }} />
+      <IntroPage props={{ title: post.title }} />
 
       <LayoutSection id={'page-post'} margined mb={0} containerized={'sm'}>
         <Stack gap={'xl'}>
@@ -78,7 +76,10 @@ export default async function Post({ params }: { params: typeParams }) {
                   />
 
                   <Text component="span" inherit>
-                    {post._count.comments}
+                    <NumberFormatter
+                      value={post._count.comments}
+                      thousandSeparator
+                    />
                   </Text>
                 </Group>
               </Anchor>
@@ -93,12 +94,16 @@ export default async function Post({ params }: { params: typeParams }) {
             priority
           />
 
+          <Text>{post.excerpt}</Text>
+
           <Text>{post.content}</Text>
 
           <Group justify="space-between" mt={'xl'}>
             <CardBlogAuthor
               props={{
-                name: !post.user ? 'Anonymous' : post.user.profile.name,
+                name: !post.user
+                  ? 'Anonymous'
+                  : post.user.profile?.name || 'No Name',
                 date: post.createdAt,
               }}
             />

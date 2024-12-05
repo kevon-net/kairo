@@ -25,6 +25,7 @@ export interface Session {
     remember: boolean;
     withPassword: boolean;
   };
+
   expires: Date;
   iat: number;
   exp: Date;

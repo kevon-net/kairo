@@ -22,10 +22,10 @@ import AvatarMain from '../avatars/main';
 
 import classes from './avatar.module.scss';
 import { navLinkItems } from '@/components/layout/asides/account';
-// import { getRegionalDate } from '@/utilities/formatters/date';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
 import { useAppSelector } from '@/hooks/redux';
 import { usePathname } from 'next/navigation';
+// import { getRegionalDate } from '@/utilities/formatters/date';
 
 export default function Avatar() {
   const session = useAppSelector((state) => state.session.value);
@@ -75,9 +75,9 @@ export default function Avatar() {
                 {session.user.email}
               </Text>
 
-              {/* <Text fz={"xs"} ta={"center"}>
-									({getRegionalDate(session.expires)})
-								</Text> */}
+              {/* <Text fz={'xs'} ta={'center'}>
+                ({getRegionalDate(session.expires).date})
+              </Text> */}
             </Stack>
           )
         )}

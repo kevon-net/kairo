@@ -30,7 +30,7 @@ import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
 import { PostRelations } from '@/types/static';
 import Link from 'next/link';
-import TextDate from '@/components/common/text/date';
+import { getRegionalDate } from '@/utilities/formatters/date';
 
 export default async function Post({ params }: { params: typeParams }) {
   const [postId] = params['postId-postTitle'].split('-');
@@ -75,7 +75,7 @@ export default async function Post({ params }: { params: typeParams }) {
           fz={'sm'}
         >
           <Group justify="center">
-            <TextDate date={post.createdAt} inherit/>
+            <Text inherit>{getRegionalDate(post.createdAt).date}</Text>
           </Group>
 
           <Center visibleFrom="xs">

@@ -37,10 +37,11 @@ import { linkify } from '@/utilities/formatters/string';
 import { getSession } from '@/libraries/auth';
 
 import AffixOffline from '@/components/common/affixi/offline';
-import { getCookie } from '@/utilities/helpers/cookie-server';
 import { cookieName } from '@/data/constants';
 
 import ProviderStore from '@/components/providers/store';
+import { cookies } from 'next/headers';
+import { getGeoData } from '@/libraries/geolocation';
 
 const noto = DM_Sans({ subsets: ['latin'] });
 
@@ -57,7 +58,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const colorScheme = await getCookie(cookieName.colorScheme);
+  const colorScheme = cookies().get(cookieName.colorScheme)?.value;
+  const colorSchemeState = cookies().get(cookieName.colorSchemeState)?.value;
 
   return (
     <html
@@ -72,10 +74,9 @@ export default async function RootLayout({
 
       <body className={noto.className}>
         <ProviderStore
-          colorScheme={
-            (await getCookie(cookieName.colorSchemeState)) || 'light'
-          }
+          colorScheme={colorSchemeState || 'light'}
           session={await getSession()}
+          geoData={await getGeoData()}
         >
           <MantineProvider
             theme={appTheme}

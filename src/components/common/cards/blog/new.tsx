@@ -20,7 +20,7 @@ import classes from './new.module.scss';
 
 import { linkify } from '@/utilities/formatters/string';
 import { PostRelations } from '@/types/models/post';
-import TextDate from '@/components/common/text/date';
+import { getRegionalDate } from '@/utilities/formatters/date';
 import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
@@ -98,7 +98,7 @@ export default function New({ post }: { post: PostRelations }) {
 
               <Group justify="space-between" fz={'sm'}>
                 <Group gap={'xs'}>
-                  <TextDate date={post.createdAt} inherit />
+                  <Text inherit>{getRegionalDate(post.createdAt).date}</Text>
 
                   <IconCircleFilled size={4} />
 

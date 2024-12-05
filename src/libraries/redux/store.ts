@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import reducerColorScheme from './slices/color-scheme';
 import reducerSession from './slices/session';
 import reducerComments from './slices/comments';
+import reducerGeoData from './slices/geolocation';
 
 export const makeStore = () => {
   return configureStore({
@@ -12,6 +13,7 @@ export const makeStore = () => {
       colorScheme: reducerColorScheme,
       session: reducerSession,
       comments: reducerComments,
+      geoData: reducerGeoData,
     },
 
     devTools: process.env.NODE_ENV !== 'production',

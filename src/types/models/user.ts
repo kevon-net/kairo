@@ -16,10 +16,7 @@ export type UserRelations = Prisma.UserGetPayload<{
     sessions: true;
     authenticator: true;
     role: true;
-    status: true;
     posts: true;
-    otps: true;
-    otls: true;
     profile: true;
   };
 }>;

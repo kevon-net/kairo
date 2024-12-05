@@ -20,7 +20,7 @@ import ModalReply from '@/components/common/modals/reply';
 import { useFetchRepliesReply } from '@/hooks/fetch/replies/reply';
 import { IconCircleFilled } from '@tabler/icons-react';
 import { PostCommentReply } from '@/types/static';
-import TextDate from '@/components/common/text/date';
+import { getRegionalDate } from '@/utilities/formatters/date';
 
 export default function Comment({ props }: { props: PostCommentReply }) {
   const { loading, fetch, replies } = useFetchRepliesReply({
@@ -47,12 +47,8 @@ export default function Comment({ props }: { props: PostCommentReply }) {
               </Title>
 
               <Text fz={'sm'} c={'dimmed'}>
-                <TextDate date={props.createdAt} inherit /> at{' '}
-                <TextDate
-                  date={props.createdAt}
-                  options={{ return: 'time' }}
-                  inherit
-                />
+                <Text inherit>{getRegionalDate(props.createdAt).date}</Text> at{' '}
+                <Text inherit>{getRegionalDate(props.createdAt).time}</Text>
               </Text>
             </Stack>
           </Group>

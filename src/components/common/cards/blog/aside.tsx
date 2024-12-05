@@ -16,7 +16,7 @@ import {
 import { PostRelations } from '@/types/models/post';
 
 import { linkify } from '@/utilities/formatters/string';
-import TextDate from '@/components/common/text/date';
+import { getRegionalDate } from '@/utilities/formatters/date';
 import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
@@ -66,7 +66,7 @@ export default function Aside({ post }: { post: PostRelations }) {
           </Stack>
 
           <Group gap={'xs'} fz={'xs'}>
-            <TextDate date={post.createdAt} inherit />
+            <Text inherit>{getRegionalDate(post.createdAt).date}</Text>
 
             <IconCircleFilled size={4} />
 

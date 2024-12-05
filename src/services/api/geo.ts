@@ -1,12 +1,12 @@
-'use client';
-
 import { geoDataUrl, headers } from '@/data/constants';
 import { Request } from '@/enums/request';
-import { IpInfo } from '@/types/bodies/response';
+import { GeoInfo } from '@/types/bodies/response';
 
-export const getGeoData = async (): Promise<IpInfo> => {
+export const fetchGeoData = async (ip?: string): Promise<GeoInfo> => {
   try {
-    const getGeoData = await fetch(geoDataUrl, {
+    const url = `${geoDataUrl}/${ip}/json`;
+
+    const getGeoData = await fetch(url, {
       method: Request.GET,
       headers: headers.withoutBody,
     });

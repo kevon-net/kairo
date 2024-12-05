@@ -3,7 +3,7 @@ import React from 'react';
 import { ReplyRelations } from '@/types/models/reply';
 import { initialize } from '@/utilities/formatters/string';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
-import TextDate from '@/components/common/text/date';
+import { getRegionalDate } from '@/utilities/formatters/date';
 
 export default function Reply({ props }: { props: ReplyRelations }) {
   const name = props.user?.profile?.name || props.name || 'Anonymous';
@@ -20,12 +20,8 @@ export default function Reply({ props }: { props: ReplyRelations }) {
             </Title>
 
             <Text fz={'sm'} c={'dimmed'}>
-              <TextDate date={props.createdAt} inherit /> at{' '}
-              <TextDate
-                date={props.createdAt}
-                options={{ return: 'time' }}
-                inherit
-              />
+              <Text inherit>{getRegionalDate(props.createdAt).date}</Text> at{' '}
+              <Text inherit>{getRegionalDate(props.createdAt).time}</Text>
             </Text>
           </Stack>
         </Group>

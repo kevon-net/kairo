@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authUrls, baseUrl, cookieName } from './data/constants';
 import { updateSession } from './libraries/auth';
+import { setGeoData, updateGeoData } from './libraries/geolocation';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
+  let response = NextResponse.next();
+
+  const geoData = request.cookies.get(cookieName.geo)?.value;
+
+  if (!geoData) {
+    response = (await setGeoData(request, response)) as NextResponse;
+  } else {
+    response = await updateGeoData(request, response, geoData);
+  }
+
   const session = request.cookies.get(cookieName.session)?.value;
 
   if (session) {
@@ -15,17 +26,18 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(baseUrl, request.url));
     }
 
-    const response = NextResponse.next();
-    return await updateSession(session, response);
+    response = await updateSession(response, session);
+  } else {
+    const isProtectedRoute = routes.protected.some((route) =>
+      request.nextUrl.pathname.startsWith(route)
+    );
+
+    if (isProtectedRoute) {
+      response = NextResponse.redirect(new URL(authUrls.signIn, request.url));
+    }
   }
 
-  const isProtectedRoute = routes.protected.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
-
-  if (isProtectedRoute) {
-    return NextResponse.redirect(new URL(authUrls.signIn, request.url));
-  }
+  return response;
 }
 
 export const config = {

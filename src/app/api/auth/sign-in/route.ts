@@ -8,6 +8,10 @@ import { cookieName } from '@/data/constants';
 import { getExpiry } from '@/utilities/helpers/time';
 import { signIn } from '@/libraries/auth';
 import { SignIn } from '@/types/bodies/request';
+import { decrypt, encrypt } from '@/utilities/helpers/token';
+import { isProduction } from '@/utilities/helpers/environment';
+import { GeoInfo } from '@/types/bodies/response';
+import { setGeoData } from '@/libraries/geolocation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -65,11 +69,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const deviceGeoCookie = cookies().get(cookieName.device.geo)?.value;
-    const deviceGeo = deviceGeoCookie
-      ? await JSON.parse(decodeURIComponent(deviceGeoCookie))
-      : null;
-
     const expires = new Date(
       Date.now() + getExpiry(credentials.remember).millisec
     );
@@ -84,16 +83,30 @@ export async function POST(request: NextRequest) {
         data: { status: Status.ACTIVE },
       });
 
+      const osCookie = request.cookies.get(cookieName.device.os)?.value;
+      const { os } = osCookie ? JSON.parse(osCookie) : null;
+
+      const geoDataCookie = cookies().get(cookieName.geo)?.value;
+      let geoData: GeoInfo;
+
+      try {
+        geoData = geoDataCookie ? await decrypt(geoDataCookie) : null;
+      } catch (error) {
+        await setGeoData(request);
+        const newGeoDataCookie = cookies().get(cookieName.geo)?.value;
+        geoData = newGeoDataCookie ? await decrypt(newGeoDataCookie) : null;
+      }
+
       const createSession = await prisma.session.create({
         data: {
           id: generateId(),
           expiresAt: expires,
-          ip: deviceGeo.ip,
-          city: deviceGeo.city,
-          country: deviceGeo.country,
-          loc: deviceGeo.loc,
-          os: deviceGeo.os,
           userId: userRecord.id,
+          ip: geoData?.ip || '',
+          city: geoData?.city,
+          country: geoData?.country_name,
+          loc: `${geoData?.latitude}, ${geoData?.longitude}`,
+          os,
         },
       });
 

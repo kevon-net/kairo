@@ -1,9 +1,8 @@
 'use client';
 
 import { cookieName } from '@/data/constants';
-import { getGeoData } from '@/services/api/geo';
 import { Credentials } from '@/types/auth';
-import { setCookie } from '@/utilities/helpers/cookie-client';
+import { setCookie } from '@/utilities/helpers/cookie';
 import { Provider } from '@prisma/client';
 import { signIn as handleRequestSignIn } from '../requests/auth/sign-in';
 import { signOut as handleRequestSignOut } from '../requests/auth/sign-out';
@@ -13,12 +12,11 @@ export const signIn = async (
   credentials?: Credentials,
   device?: { os?: string }
 ) => {
-  // create cookie with device info
-  const geoData = await getGeoData();
+  // do something before sign in
   setCookie(
-    cookieName.device.geo,
-    { ...geoData, os: device?.os },
-    { expiryInSeconds: 30 }
+    cookieName.device.os,
+    { os: device?.os },
+    { sameSite: 'Strict', expiryInSeconds: 60 }
   );
 
   return await handleRequestSignIn({ provider, credentials });

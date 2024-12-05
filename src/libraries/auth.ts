@@ -12,6 +12,7 @@ import { SessionGet } from '@/types/models/session';
 import { UserGet } from '@/types/models/user';
 import { Provider } from '@prisma/client';
 import { ProfileGet } from '@/types/models/profile';
+import { isProduction } from '@/utilities/helpers/environment';
 
 export const getSessionCookie = async (): Promise<string | null> => {
   const sessionCookieValue = cookies().get(cookieName.session)?.value;
@@ -33,27 +34,14 @@ export const signIn = async (
   userObject: UserGet & { profile: ProfileGet | null },
   credentials?: Credentials
 ) => {
-  const {
-    userId: userIdCreateSession,
-    createdAt: createdAtCreateSession,
-    updatedAt: updatedAtCreateSession,
-    expiresAt: expiresAtCreateSession,
-    ...restSessionObject
-  } = sessionObject;
-
-  const {
-    password: passwordUserRecord,
-    createdAt: createdAtUserRecord,
-    updatedAt: updatedAtUserRecord,
-    profile: profileUserRecord,
-    ...restUserObject
-  } = userObject;
-
   const session = await encrypt(
     {
-      ...restSessionObject,
+      id: sessionObject.id,
       user: {
-        ...restUserObject,
+        id: userObject.id,
+        email: userObject.email,
+        verified: userObject.verified,
+        role: userObject.role,
         name: userObject.profile?.name,
         image: userObject.profile?.avatar,
         remember: credentials?.remember ?? true,
@@ -67,6 +55,7 @@ export const signIn = async (
   // save session in cookie
   return cookies().set(cookieName.session, session, {
     expires: sessionObject.expiresAt,
+    secure: isProduction(),
     httpOnly: true,
   });
 };
@@ -74,8 +63,8 @@ export const signIn = async (
 export const signOut = async () => cookies().delete(cookieName.session);
 
 export const updateSession = async (
-  session: string,
-  response: NextResponse
+  response: NextResponse,
+  session: string
 ) => {
   const parsed: Session = await decrypt(session);
   const remember = parsed.user.remember;
@@ -96,8 +85,8 @@ export const updateSession = async (
   const expiryDifference = expires.getTime() - expiresFormer.getTime();
 
   if (expiryDifference > expiry / 2) {
-    await sessionUpdate(
-      {
+    await sessionUpdate({
+      session: {
         id: parsed.id,
         ip: parsed.ip,
         os: parsed.os,
@@ -107,8 +96,8 @@ export const updateSession = async (
         status: parsed.status,
         expiresAt: parsed.expires,
       },
-      { create: true, userId: parsed.user.id }
-    );
+      options: { create: true, userId: parsed.user.id },
+    });
   }
 
   return response;

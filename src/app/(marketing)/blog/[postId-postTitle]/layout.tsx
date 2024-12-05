@@ -18,8 +18,12 @@ export const generateMetadata = async ({
 
   const [postId] = params['postId-postTitle'].split('-');
 
+  const post = posts.find((p) => p.id == postId);
+
   return {
-    title: posts.find((p) => p.id == postId)?.title,
+    title: post?.title,
+    description: post?.excerpt,
+    category: post?.category?.title,
   };
 };
 

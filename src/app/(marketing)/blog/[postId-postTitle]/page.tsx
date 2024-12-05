@@ -8,22 +8,29 @@ import { postGet } from '@/handlers/requests/database/post';
 import {
   Anchor,
   Center,
+  Divider,
   Flex,
   Group,
   NumberFormatter,
   Stack,
   Text,
+  Tooltip,
 } from '@mantine/core';
-import { getRegionalDate } from '@/utilities/formatters/date';
-import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
+import {
+  IconCircleFilled,
+  IconEye,
+  IconMessageCircle,
+  IconSlash,
+} from '@tabler/icons-react';
 import MenuShare from '@/components/common/menus/share';
-import Link from 'next/link';
 import IntroPage from '@/components/layout/intro/page';
 import { iconSize, iconStrokeWidth } from '@/data/constants';
 import CardBlogAuthor from '@/components/common/cards/blog/author';
 import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
 import { PostRelations } from '@/types/static';
+import Link from 'next/link';
+import TextDate from '@/components/common/text/date';
 
 export default async function Post({ params }: { params: typeParams }) {
   const [postId] = params['postId-postTitle'].split('-');
@@ -32,42 +39,67 @@ export default async function Post({ params }: { params: typeParams }) {
 
   return (
     <LayoutPage>
-      <IntroPage props={{ title: post.title }} />
+      <IntroPage
+        props={{
+          path: (
+            <Anchor
+              component={Link}
+              href={`/blog/categories/${post.category?.id}`}
+              underline="never"
+              inherit
+              ta={'center'}
+              fw={'bold'}
+              c={'pri.6'}
+              tt={'uppercase'}
+              fz={'sm'}
+            >
+              {post.category?.title}
+            </Anchor>
+          ),
+          title: post.title,
+          desc: post.excerpt,
+        }}
+      />
 
-      <LayoutSection id={'page-post'} margined mb={0} containerized={'sm'}>
-        <Stack gap={'xl'}>
-          <Flex
-            direction={{ base: 'column', xs: 'row' }}
-            align={'center'}
-            justify={{ xs: 'center' }}
-            gap={'md'}
-            fz={'sm'}
-          >
-            <Group justify="center">
-              <Text inherit>{getRegionalDate(post.createdAt)}</Text>
+      <LayoutSection
+        id={'page-post-links'}
+        margined
+        mb={'xl'}
+        containerized={'sm'}
+      >
+        <Flex
+          direction={{ base: 'column', xs: 'row' }}
+          align={'center'}
+          justify={{ xs: 'center' }}
+          gap={'md'}
+          fz={'sm'}
+        >
+          <Group justify="center">
+            <TextDate date={post.createdAt} inherit/>
+          </Group>
 
-              <IconCircleFilled size={4} />
+          <Center visibleFrom="xs">
+            <IconSlash size={iconSize} stroke={iconStrokeWidth} />
+          </Center>
 
-              <Anchor
-                component={Link}
-                href={`/blog/categories/${post.category?.id}`}
-                underline="never"
-                inherit
-              >
-                {post.category?.title}
-              </Anchor>
-            </Group>
+          <Group justify="center">
+            <Tooltip label={'Views'} withArrow>
+              <Group gap={6}>
+                <IconEye size={iconSize - 2} stroke={iconStrokeWidth} />
 
-            <Center visibleFrom="xs">
-              <IconCircleFilled size={4} />
-            </Center>
+                <Text component="span" inherit>
+                  <NumberFormatter
+                    value={post._count.comments}
+                    thousandSeparator
+                  />
+                </Text>
+              </Group>
+            </Tooltip>
 
-            <Group justify="center">
-              <MenuShare props={{ postTitle: post.title }} />
+            <IconCircleFilled size={4} />
 
-              <IconCircleFilled size={4} />
-
-              <Anchor inherit href="#page-post-comment">
+            <Anchor inherit href="#page-post-comment">
+              <Tooltip label={'Comments'} withArrow>
                 <Group gap={6}>
                   <IconMessageCircle
                     size={iconSize - 4}
@@ -81,10 +113,19 @@ export default async function Post({ params }: { params: typeParams }) {
                     />
                   </Text>
                 </Group>
-              </Anchor>
-            </Group>
-          </Flex>
+              </Tooltip>
+            </Anchor>
+          </Group>
+        </Flex>
+      </LayoutSection>
 
+      <LayoutSection
+        id={'page-post-content'}
+        margined
+        mt={'xl'}
+        containerized={'sm'}
+      >
+        <Stack gap={'xl'}>
           <ImageDefault
             src={post.image}
             alt={post.title}
@@ -96,28 +137,36 @@ export default async function Post({ params }: { params: typeParams }) {
           <Text>{post.excerpt}</Text>
 
           <Text>{post.content}</Text>
-
-          <Group justify="space-between" mt={'xl'}>
-            <CardBlogAuthor
-              props={{
-                name: !post.user
-                  ? 'Anonymous'
-                  : post.user.profile?.name || 'No Name',
-                date: post.createdAt,
-              }}
-            />
-
-            <Text fw={'bold'}>
-              Tags:{' '}
-              <Text component="span" inherit fw={'normal'}>
-                {post.tags.map(
-                  (t) =>
-                    `${t.title}${post.tags.indexOf(t) == post.tags.length - 1 ? '' : ', '}`
-                )}
-              </Text>
-            </Text>
-          </Group>
         </Stack>
+      </LayoutSection>
+
+      <LayoutSection id={'page-post-author'} margined containerized={'sm'}>
+        <Divider my={'lg'} />
+
+        <Group justify="space-between">
+          <CardBlogAuthor
+            props={{
+              name: !post.user
+                ? 'Anonymous'
+                : post.user.profile?.name || 'No Name',
+              date: post.createdAt,
+            }}
+          />
+
+          {/* <Text fw={'bold'}>
+            Tags:{' '}
+            <Text component="span" inherit fw={'normal'}>
+              {post.tags.map(
+                (t) =>
+                  `${t.title}${post.tags.indexOf(t) == post.tags.length - 1 ? '' : ', '}`
+              )}
+            </Text>
+          </Text> */}
+
+          <MenuShare props={{ postTitle: post.title }} />
+        </Group>
+
+        <Divider my={'lg'} />
       </LayoutSection>
 
       <PartialComments props={{ post }} />

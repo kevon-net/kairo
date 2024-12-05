@@ -40,7 +40,7 @@ export default function Comments({
   return (
     <div>
       {(props.post._count.comments > 0 || loading) && !comments.length && (
-        <LayoutSection id={'page-post-comment'} padded containerized={'sm'}>
+        <LayoutSection id={'page-post-comment'} margined containerized={'sm'}>
           <Button variant="default" fullWidth onClick={fetch} loading={loading}>
             Show Comments (
             <NumberFormatter
@@ -82,15 +82,15 @@ export default function Comments({
       {(!props.post._count.comments || comments.length > 0) && (
         <LayoutSection
           id={'page-post-comment-form'}
-          mt={comments.length < 1 ? undefined : undefined}
           margined
           containerized={'sm'}
         >
           <Card
-            p={{ base: 'xs', xs: 'xl' }}
+            padding={0}
+            // p={{ base: 'xs', xs: 'xl' }}
             bg={'transparent'}
-            withBorder
-            shadow="xs"
+            // withBorder
+            // shadow="xs"
           >
             <Stack gap={'xl'}>
               <Stack gap={'xs'}>

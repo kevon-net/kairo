@@ -1,6 +1,5 @@
 'use client';
 
-import { getRegionalDate } from '@/utilities/formatters/date';
 import { initialize } from '@/utilities/formatters/string';
 import {
   Avatar,
@@ -21,6 +20,7 @@ import ModalReply from '@/components/common/modals/reply';
 import { useFetchRepliesReply } from '@/hooks/fetch/replies/reply';
 import { IconCircleFilled } from '@tabler/icons-react';
 import { PostCommentReply } from '@/types/static';
+import TextDate from '@/components/common/text/date';
 
 export default function Comment({ props }: { props: PostCommentReply }) {
   const { loading, fetch, replies } = useFetchRepliesReply({
@@ -39,21 +39,29 @@ export default function Comment({ props }: { props: PostCommentReply }) {
       <Stack gap={'lg'}>
         <Stack>
           <Group gap={'xs'}>
-            <Avatar size={32}>{initialize(name)}</Avatar>
+            <Avatar size={40}>{initialize(name)}</Avatar>
 
-            <Title order={3} fz={'md'}>
-              {name}{' '}
-              <Text component="span" fw={'normal'}>
-                on {getRegionalDate(props.createdAt)}
+            <Stack gap={0}>
+              <Title order={3} fz={'md'}>
+                {name}
+              </Title>
+
+              <Text fz={'sm'} c={'dimmed'}>
+                <TextDate date={props.createdAt} inherit /> at{' '}
+                <TextDate
+                  date={props.createdAt}
+                  options={{ return: 'time' }}
+                  inherit
+                />
               </Text>
-            </Title>
+            </Stack>
           </Group>
 
           <Text fw={'normal'}>{props.content}</Text>
 
           <Group fz={'sm'} gap={4}>
             <ModalReply props={{ name, replyId: props.id }}>
-              <Button size="compact-xs" variant="transparent" color="pri.6">
+              <Button size="compact-sm" variant="transparent" color="pri.6">
                 Reply
               </Button>
             </ModalReply>
@@ -65,7 +73,7 @@ export default function Comment({ props }: { props: PostCommentReply }) {
                   <IconCircleFilled size={4} />
 
                   <Button
-                    size="compact-xs"
+                    size="compact-sm"
                     variant="transparent"
                     color="gray"
                     rightSection={

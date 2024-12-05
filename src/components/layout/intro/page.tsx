@@ -16,7 +16,7 @@ export default function Page({
   props,
   options,
 }: {
-  props: { path?: string; title: string; desc?: string };
+  props: { path?: string | React.ReactNode; title: string; desc?: string };
   options?: { spacing?: 'margin' | 'padding' };
 }) {
   const pathname = usePathname();
@@ -33,9 +33,19 @@ export default function Page({
           <BreadcrumbMain props={segments} />
         </Group> */}
 
-        <Text fw={'bold'} ta={'center'} c={'pri.6'} tt={'uppercase'} fz={'sm'}>
-          {props.path ? props.path : segments[segments.length - 1].label}
-        </Text>
+        {typeof props.path == 'string' ? (
+          <Text
+            fw={'bold'}
+            ta={'center'}
+            c={'pri.6'}
+            tt={'uppercase'}
+            fz={'sm'}
+          >
+            {props.path ? props.path : segments[segments.length - 1].label}
+          </Text>
+        ) : (
+          props.path
+        )}
 
         <Container size={'sm'}>
           <Stack>

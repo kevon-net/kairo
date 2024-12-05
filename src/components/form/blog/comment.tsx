@@ -56,7 +56,7 @@ export default function Comment({ postId }: { postId: string }) {
         <GridCol span={12}>
           <Group>
             <Button type="submit" loading={submitted}>
-              {submitted ? 'Sending' : 'Send'}
+              {submitted ? 'Commenting' : 'Comment'}
             </Button>
           </Group>
         </GridCol>

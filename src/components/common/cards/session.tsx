@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import ModalDeleteSession from '../modals/delete/session';
 import { useAppSelector } from '@/hooks/redux';
-import { getRegionalDate } from '@/utilities/formatters/date';
+import TextDate from '@/components/common/text/date';
 
 export default function Session({ props }: { props: SessionGet }) {
   const session = useAppSelector((state) => state.session.value);
@@ -103,9 +103,7 @@ export default function Session({ props }: { props: SessionGet }) {
 
             <Divider variant="dashed" w={'100%'} pb={5} />
 
-            <Text component="span" inherit fw={'normal'} ta={'end'}>
-              {getRegionalDate(props.updatedAt)}
-            </Text>
+            <TextDate date={props.updatedAt} inherit fw={'normal'} ta={'end'} />
           </Group>
         </Stack>
       </Stack>

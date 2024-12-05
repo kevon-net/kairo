@@ -1,6 +1,5 @@
 'use client';
 
-import { getRegionalDate } from '@/utilities/formatters/date';
 import { initialize } from '@/utilities/formatters/string';
 import {
   Avatar,
@@ -21,6 +20,7 @@ import ModalReply from '@/components/common/modals/reply';
 import { IconCircleFilled } from '@tabler/icons-react';
 import { useFetchRepliesComment } from '@/hooks/fetch/replies/comment';
 import { PostComment } from '@/types/static';
+import TextDate from '../../text/date';
 
 export default function Comment({ props }: { props: PostComment }) {
   const { loading, fetch, comments } = useFetchRepliesComment({
@@ -37,21 +37,39 @@ export default function Comment({ props }: { props: PostComment }) {
       <Stack gap={'lg'}>
         <Stack>
           <Group gap={'xs'}>
-            <Avatar size={32}>{initialize(name)}</Avatar>
+            <Avatar size={40}>{initialize(name)}</Avatar>
 
-            <Title order={3} fz={'md'}>
-              {name}{' '}
-              <Text component="span" fw={'normal'}>
-                on {getRegionalDate(props.createdAt)}
+            <Stack gap={0}>
+              <Title order={3} fz={'md'}>
+                {name}
+              </Title>
+
+              <Text fz={'sm'} c={'dimmed'}>
+                <TextDate
+                  date={props.createdAt}
+                  options={{ format: 'short' }}
+                  inherit
+                />{' '}
+                at{' '}
+                <TextDate
+                  date={props.createdAt}
+                  options={{ return: 'time' }}
+                  inherit
+                />
               </Text>
-            </Title>
+            </Stack>
           </Group>
 
           <Text fw={'normal'}>{props.content}</Text>
 
-          <Group fz={'sm'} gap={4}>
+          <Group fz={'sm'} gap={'xs'}>
             <ModalReply props={{ name, commentId: props.id }}>
-              <Button size="compact-xs" variant="transparent" color="pri.6">
+              <Button
+                size="compact-sm"
+                px={0}
+                variant="transparent"
+                color="pri.6"
+              >
                 Reply
               </Button>
             </ModalReply>
@@ -61,7 +79,8 @@ export default function Comment({ props }: { props: PostComment }) {
                 <IconCircleFilled size={4} />
 
                 <Button
-                  size="compact-xs"
+                  size="compact-sm"
+                  px={0}
                   variant="transparent"
                   color="gray"
                   rightSection={

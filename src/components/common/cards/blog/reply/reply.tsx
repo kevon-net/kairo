@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { ReplyRelations } from '@/types/models/reply';
-import { getRegionalDate } from '@/utilities/formatters/date';
 import { initialize } from '@/utilities/formatters/string';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
+import TextDate from '@/components/common/text/date';
 
 export default function Reply({ props }: { props: ReplyRelations }) {
   const name = props.user?.profile?.name || props.name || 'Anonymous';
@@ -12,14 +12,22 @@ export default function Reply({ props }: { props: ReplyRelations }) {
     <Card bg={'transparent'} padding={0}>
       <Stack gap={'xs'}>
         <Group gap={'xs'}>
-          <Avatar size={32}>{initialize(name)}</Avatar>
+          <Avatar size={40}>{initialize(name)}</Avatar>
 
-          <Title order={3} fz={'md'}>
-            {name}{' '}
-            <Text component="span" fw={'normal'}>
-              on {getRegionalDate(props.createdAt)}
+          <Stack gap={0}>
+            <Title order={3} fz={'md'}>
+              {name}
+            </Title>
+
+            <Text fz={'sm'} c={'dimmed'}>
+              <TextDate date={props.createdAt} inherit /> at{' '}
+              <TextDate
+                date={props.createdAt}
+                options={{ return: 'time' }}
+                inherit
+              />
             </Text>
-          </Title>
+          </Stack>
         </Group>
 
         <Text fw={'normal'}>{props.content}</Text>

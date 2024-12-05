@@ -1,5 +1,5 @@
-import { getRegionalDate } from '@/utilities/formatters/date';
-import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
+import TextDate from '@/components/common/text/date';
+import { Avatar, Card, Group, Stack, Title } from '@mantine/core';
 import React from 'react';
 
 export default function Author({
@@ -21,9 +21,8 @@ export default function Author({
           <Title order={3} fz={'md'}>
             {props.name}
           </Title>
-          <Text fz={'sm'} c={'dimmed'}>
-            {getRegionalDate(props.date)}
-          </Text>
+
+          <TextDate date={props.date} fz={'sm'} c={'dimmed'} />
         </Stack>
       </Group>
     </Card>

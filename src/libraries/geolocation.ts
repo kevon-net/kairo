@@ -1,7 +1,7 @@
 'use server';
 
-import { fetchGeoData } from '@/services/api/geo';
-import { GeoInfo } from '@/types/bodies/response';
+import { fetchIp } from '@/services/api/geo';
+import { IpData } from '@/types/bodies/response';
 import { NextRequest, NextResponse } from 'next/server';
 import { isProduction } from '../utilities/helpers/environment';
 import { cookies } from 'next/headers';
@@ -14,7 +14,7 @@ const getGeoDataCookie = async (): Promise<string | null> => {
   return geoDataCookieValue || null;
 };
 
-export const getGeoData = async (): Promise<GeoInfo | null> => {
+export const getGeoData = async (): Promise<IpData | null> => {
   const geoDataCookieValue = await getGeoDataCookie();
   const geoData = !geoDataCookieValue
     ? null
@@ -30,7 +30,7 @@ export const setGeoData = async (
   const forwarded = request.headers.get('x-forwarded-for');
   const ip = forwarded ? forwarded.split(',')[0] : request.ip;
 
-  const geoData = await fetchGeoData(
+  const geoData = await fetchIp(
     isProduction() ? ip : process.env.NEXT_PUBLIC_SAMPLE_IP
   );
 
@@ -70,7 +70,7 @@ export const updateGeoData = async (
     return (await setGeoData(request, response)) as NextResponse;
   }
 
-  const parsed: GeoInfo = await decrypt(geoData);
+  const parsed: IpData = await decrypt(geoData);
 
   const expiry = getExpiry(true).millisec;
   const expires = new Date(Date.now() + expiry);

@@ -9,7 +9,7 @@ import { getExpiry } from '@/utilities/helpers/time';
 import { signIn } from '@/libraries/auth';
 import { SignIn } from '@/types/bodies/request';
 import { decrypt } from '@/utilities/helpers/token';
-import { GeoInfo } from '@/types/bodies/response';
+import { IpData } from '@/types/bodies/response';
 import { setGeoData } from '@/libraries/geolocation';
 
 export async function POST(request: NextRequest) {
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       const { os } = osCookie ? JSON.parse(osCookie) : null;
 
       const geoDataCookie = cookies().get(cookieName.geo)?.value;
-      let geoData: GeoInfo;
+      let geoData: IpData;
 
       try {
         geoData = geoDataCookie ? await decrypt(geoDataCookie) : null;

@@ -1,10 +1,10 @@
-import { GeoInfo } from '@/types/bodies/response';
+import { IpData } from '@/types/bodies/response';
 import { createSlice } from '@reduxjs/toolkit';
 
 export const sliceGeoData = createSlice({
   name: 'geolocation',
   initialState: {
-    value: null satisfies GeoInfo | null as GeoInfo | null,
+    value: null satisfies IpData | null as IpData | null,
   },
   reducers: {
     update: (state, action) => {

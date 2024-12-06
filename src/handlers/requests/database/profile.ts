@@ -5,6 +5,25 @@ import { authHeaders } from '@/utilities/helpers/auth';
 
 const baseRequestUrl = `${apiUrl}/profiles`;
 
+export const profileGet = async (slug: { userId: string }) => {
+  try {
+    const request = new Request(`${baseRequestUrl}/${slug.userId}`, {
+      method: EnumRequest.GET,
+      credentials: 'include',
+      headers: await authHeaders(headers.withoutBody),
+    });
+
+    const response = await fetch(request);
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error('---> handler error - (get profile):', error);
+    throw error;
+  }
+};
+
 export const profileCreate = async (profile: ProfileCreate) => {
   try {
     const request = new Request(`${baseRequestUrl}/create`, {

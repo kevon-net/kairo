@@ -7,6 +7,35 @@ import { getExpiry } from '@/utilities/helpers/time';
 import { cookieName } from '@/data/constants';
 import { cookies } from 'next/headers';
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const profileRecord = await prisma.profile.findUnique({
+      where: { userId: params.userId },
+    });
+
+    if (!profileRecord) {
+      return NextResponse.json(
+        { error: 'Profile not found' },
+        { status: 404, statusText: 'Not Found' }
+      );
+    }
+
+    return NextResponse.json(
+      { profile: profileRecord },
+      { status: 200, statusText: 'Profile Retrieved' }
+    );
+  } catch (error) {
+    console.error('---> route handler error (get profile):', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
@@ -78,15 +107,17 @@ export async function PUT(
       data: profile,
     });
 
-    const sessionToken = await encrypt(
-      { ...session, user: { ...session.user, name: profile.name } },
-      getExpiry(session.user.remember).sec
-    );
+    if (profileRecord.name != profile.name) {
+      const sessionToken = await encrypt(
+        { ...session, user: { ...session.user, name: profile.name } },
+        getExpiry(session.user.remember).sec
+      );
 
-    cookies().set(cookieName.session, sessionToken, {
-      expires: new Date(session.expires),
-      httpOnly: true,
-    });
+      cookies().set(cookieName.session, sessionToken, {
+        expires: new Date(session.expires),
+        httpOnly: true,
+      });
+    }
 
     return NextResponse.json(
       { message: 'Your profile has been updated' },

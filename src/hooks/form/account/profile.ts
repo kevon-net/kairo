@@ -1,4 +1,3 @@
-import phone from '@/utilities/validators/special/phone';
 import text from '@/utilities/validators/special/text';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
@@ -16,8 +15,9 @@ import {
 import { useNetwork } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateSession } from '@/libraries/redux/slices/session';
+import { ProfileGet } from '@/types/models/profile';
 
-export const useFormUserProfile = () => {
+export const useFormUserProfile = (profileData: ProfileGet) => {
   const router = useRouter();
   const networkStatus = useNetwork();
   const pathname = usePathname();
@@ -28,15 +28,16 @@ export const useFormUserProfile = () => {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const name = session?.user.name;
-
   const form = useForm({
     initialValues: {
       name: {
-        first: !name ? '' : segmentFullName(name).first,
-        last: !name ? '' : segmentFullName(name).last,
+        first: segmentFullName(profileData.name || '').first,
+        last: segmentFullName(profileData.name || '').last,
       },
-      phone: '',
+      phone: {
+        code: profileData.phone?.split(' ')[0] || '',
+        number: profileData.phone?.split(' ')[1] || '',
+      },
     },
 
     validate: {
@@ -50,16 +51,25 @@ export const useFormUserProfile = () => {
             ? text(value, 2, 48)
             : 'Please fill out this field.',
       },
-      phone: (value) => value.trim().length > 0 && phone(value),
+      phone: {
+        code: (value, values) =>
+          values.phone.number.trim().length > 0 && value?.trim().length < 1,
+        number: (value) =>
+          value.trim().length > 0 &&
+          (value.trim().length < 7 || value.trim().length > 15),
+      },
     },
   });
 
   const parseValues = () => {
+    const firstName = form.values.name.first.trim();
+    const lastName = form.values.name.last.trim();
+    const code = form.values.phone.code.trim();
+    const number = form.values.phone.number.trim();
+
     return {
-      name: capitalizeWords(
-        `${form.values.name.first.trim()} ${form.values.name.last.trim()}`
-      ),
-      // phone: form.values.phone?.trim() ? (form.values.phone.trim().length > 0 ? form.values.phone : "") : "",
+      name: capitalizeWords(`${firstName} ${lastName}`),
+      phone: number && number.length > 0 ? `${code} ${number}` : '',
     };
   };
 
@@ -95,10 +105,8 @@ export const useFormUserProfile = () => {
 
         const result = await response.json();
 
-        form.reset();
-
         if (response.ok) {
-          if (session) {
+          if (session && session.user.name != parseValues().name) {
             dispatch(
               updateSession({
                 ...session,
@@ -107,9 +115,11 @@ export const useFormUserProfile = () => {
             );
           }
 
-          showNotification({ variant: Variant.SUCCESS }, response, result);
+          window.location.reload();
           return;
         }
+
+        form.reset();
 
         if (response.status === 401) {
           // redirect to sign in

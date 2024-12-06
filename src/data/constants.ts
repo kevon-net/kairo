@@ -17,7 +17,10 @@ export const authUrls = {
   passwordForgot: `${baseUrl}/auth/password/forgot`,
 };
 
-export const geoDataUrl = `${process.env.NEXT_PUBLIC_IP_API_URL}`;
+export const geoDataUrl = {
+  ip: `${process.env.NEXT_PUBLIC_IP_API_URL}`,
+  countries: `${process.env.NEXT_PUBLIC_REST_COUNTRIES_API_URL}`,
+};
 
 export const iconSize = 20;
 
@@ -47,9 +50,15 @@ export const timeout = { redirect: 5000 };
 export const cookieName = {
   geo: 'geo',
   device: { os: 'device.os' },
+  local: { country: 'local.country', countries: 'local.countries' },
   session: 'auth.session',
   colorScheme: 'theme.color-scheme',
   colorSchemeState: 'theme.color-scheme-state',
+};
+
+export const localStorageName = {
+  country: 'country',
+  countries: 'countries',
 };
 
 const withoutBody: HeadersInit = {

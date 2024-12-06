@@ -137,6 +137,7 @@ model Profile {
   name   String?
   bio    String?
   avatar String?
+  phone  String?
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique @map("user_id")

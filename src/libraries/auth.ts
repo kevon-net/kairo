@@ -85,7 +85,7 @@ export const updateSession = async (
   const expiryDifference = expires.getTime() - expiresFormer.getTime();
 
   if (expiryDifference > expiry / 2) {
-    await sessionUpdate({
+    sessionUpdate({
       session: {
         id: parsed.id,
         ip: parsed.ip,

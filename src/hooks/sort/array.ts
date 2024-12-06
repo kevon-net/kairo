@@ -2,8 +2,9 @@ import { Order } from '@/enums/sort';
 import { useState } from 'react';
 import { sortArray } from '@/utilities/helpers/array';
 
-export const useSort = <T>(
-  setList: React.Dispatch<React.SetStateAction<T[]>>
+export const useSortArray = <T>(
+  setList: React.Dispatch<React.SetStateAction<T[]>>,
+  getField: (item: T) => any | undefined // (item) => item
 ) => {
   const [orderMap, setOrderMap] = useState<Record<string, Order>>({});
 
@@ -15,7 +16,7 @@ export const useSort = <T>(
           ? Order.ASCENDING
           : Order.DESCENDING;
 
-      setList((list) => sortArray([...list], field, nextOrder)); // Create a copy
+      setList((list) => sortArray([...list], getField, nextOrder)); // Create a copy
 
       return { ...orderMap, [field]: nextOrder };
     });

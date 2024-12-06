@@ -8,7 +8,7 @@ import { makeStore, AppStore } from '@/libraries/redux/store';
 import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
 import { Session } from '@/types/auth';
 import { updateSession } from '@/libraries/redux/slices/session';
-import { GeoInfo } from '@/types/bodies/response';
+import { IpData } from '@/types/bodies/response';
 import { updateGeoData } from '@/libraries/redux/slices/geolocation';
 
 export default function Store({
@@ -19,7 +19,7 @@ export default function Store({
 }: {
   colorScheme: string;
   session: Session | null;
-  geoData: GeoInfo | null;
+  geoData: IpData | null;
   children: React.ReactNode;
 }) {
   const storeRef = useRef<AppStore>();

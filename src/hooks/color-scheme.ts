@@ -19,7 +19,6 @@ export const useColorSchemeHandler = () => {
 
     // update scheme state cookie
     setCookie(cookieName.colorSchemeState, value, {
-      sameSite: 'Strict',
       expiryInSeconds: getExpiry(session?.user.remember ?? false).sec,
     });
 
@@ -28,7 +27,6 @@ export const useColorSchemeHandler = () => {
 
     // update scheme cookie
     setCookie(cookieName.colorScheme, scheme, {
-      sameSite: 'Strict',
       expiryInSeconds: getExpiry(session?.user.remember ?? false).sec,
     });
 

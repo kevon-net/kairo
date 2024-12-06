@@ -2,11 +2,22 @@
 
 import React from 'react';
 
-import { Box, Button, Grid, GridCol, TextInput } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useFormUserProfile } from '@/hooks/form/account/profile';
+import InputComboboxCountryCode from '@/components/common/inputs/combobox/country-code';
+import { ProfileGet } from '@/types/models/profile';
 
-export default function Profile() {
-  const { form, submitted, handleSubmit, session } = useFormUserProfile();
+export default function Profile({ data }: { data: ProfileGet }) {
+  const { form, submitted, handleSubmit, session } = useFormUserProfile(data);
 
   return (
     <Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
@@ -30,11 +41,31 @@ export default function Profile() {
           />
         </GridCol>
         <GridCol span={{ base: 12 }}>
-          <TextInput
-            label={'Phone'}
-            placeholder="Your Phone"
-            {...form.getInputProps('phone')}
-          />
+          <Stack gap={'xs'}>
+            <Text component="label" htmlFor="phone-number">
+              Phone
+            </Text>
+
+            <Group gap={0} grow preventGrowOverflow={false}>
+              <InputComboboxCountryCode
+                formValue={form.values.phone.code}
+                onChange={(value) => form.setFieldValue('phone.code', value)}
+                error={form.getInputProps('phone.code').error}
+              />
+
+              <TextInput
+                id={'phone-number'}
+                placeholder="Your Phone"
+                {...form.getInputProps('phone.number')}
+                styles={{
+                  input: {
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                  },
+                }}
+              />
+            </Group>
+          </Stack>
         </GridCol>
         <GridCol span={{ base: 6 }}>
           <Button type="submit" loading={submitted} mt={'md'}>

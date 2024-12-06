@@ -20,7 +20,7 @@ export const setCookie = (
   // calculates expiration date by adding given seconds to current time
   date.setTime(date.getTime() + options.expiryInSeconds * 1000);
 
-  document.cookie = `${name}=${cookieValue}; expires=${date.toUTCString()}; SameSite=${options.sameSite || 'Lax'}; path=${options.path || '/'}`;
+  document.cookie = `${name}=${cookieValue}; expires=${date.toUTCString()}; SameSite=${options.sameSite || 'Strict'}; path=${options.path || '/'}`;
 };
 
 export const getCookie = (cookieName: string): string | null => {

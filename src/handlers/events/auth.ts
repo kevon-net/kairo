@@ -13,11 +13,7 @@ export const signIn = async (
   device?: { os?: string }
 ) => {
   // do something before sign in
-  setCookie(
-    cookieName.device.os,
-    { os: device?.os },
-    { sameSite: 'Strict', expiryInSeconds: 60 }
-  );
+  setCookie(cookieName.device.os, { os: device?.os }, { expiryInSeconds: 60 });
 
   return await handleRequestSignIn({ provider, credentials });
 };

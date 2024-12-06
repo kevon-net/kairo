@@ -10,22 +10,22 @@ export const isLastItem = <T>(array: T[], item: T): boolean => {
 
 export const sortArray = <T>(
   array: T[],
-  property: keyof T,
+  getField: (item: T) => any | undefined,
   order: Order
 ): T[] => {
   const items = {
     valid: array.filter(
-      (item) => item[property] !== null && item[property] !== undefined
+      (item) => getField(item) !== null && getField(item) !== undefined
     ),
     null: array.filter(
-      (item) => item[property] === null || item[property] === undefined
+      (item) => getField(item) === null || getField(item) === undefined
     ),
   };
 
   const itemsValidSorted = items.valid.sort((a, b) => {
     try {
-      const aValue = a[property];
-      const bValue = b[property];
+      const aValue = getField(a);
+      const bValue = getField(b);
 
       if (typeof aValue === 'string' && typeof bValue === 'string') {
         return order === Order.ASCENDING
@@ -45,7 +45,7 @@ export const sortArray = <T>(
 
       // Handle cases where types are inconsistent or not comparable
       throw new Error(
-        `Comparison not supported between ${typeof aValue} and ${typeof bValue} for property ${property as string}`
+        `Comparison not supported between ${typeof aValue} and ${typeof bValue} for the selcted property`
       );
     } catch (error) {
       console.error(`---> utility error (sort array):`, error);

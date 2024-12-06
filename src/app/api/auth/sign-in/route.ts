@@ -8,8 +8,7 @@ import { cookieName } from '@/data/constants';
 import { getExpiry } from '@/utilities/helpers/time';
 import { signIn } from '@/libraries/auth';
 import { SignIn } from '@/types/bodies/request';
-import { decrypt, encrypt } from '@/utilities/helpers/token';
-import { isProduction } from '@/utilities/helpers/environment';
+import { decrypt } from '@/utilities/helpers/token';
 import { GeoInfo } from '@/types/bodies/response';
 import { setGeoData } from '@/libraries/geolocation';
 
@@ -91,7 +90,7 @@ export async function POST(request: NextRequest) {
 
       try {
         geoData = geoDataCookie ? await decrypt(geoDataCookie) : null;
-      } catch (error) {
+      } catch {
         await setGeoData(request);
         const newGeoDataCookie = cookies().get(cookieName.geo)?.value;
         geoData = newGeoDataCookie ? await decrypt(newGeoDataCookie) : null;

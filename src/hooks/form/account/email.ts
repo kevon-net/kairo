@@ -57,8 +57,12 @@ export const useFormUserEmail = (close: () => void) => {
 
       setSubmitted(true);
 
-      const response = await verifyResend(session?.user.id || '', null, {
-        verified: true,
+      const response = await verifyResend({
+        userId: session?.user.id || '',
+        token: null,
+        options: {
+          verified: true,
+        },
       });
 
       if (!response) throw new Error('No response from server');
@@ -180,9 +184,13 @@ export const useFormUserEmail = (close: () => void) => {
 
         setSubmitted(true);
 
-        const response = await verifyResend(session?.user.id || '', null, {
-          verified: true,
-          email: formEmail.values.email.trim().toLowerCase(),
+        const response = await verifyResend({
+          userId: session?.user.id || '',
+          token: null,
+          options: {
+            verified: true,
+            email: formEmail.values.email.trim().toLowerCase(),
+          },
         });
 
         if (!response) throw new Error('No response from server');
@@ -243,13 +251,13 @@ export const useFormUserEmail = (close: () => void) => {
         const result = await response.json();
 
         if (response.ok) {
-          const response = await userUpdate(
-            {
+          const response = await userUpdate({
+            user: {
               email: formEmail.values.email.trim().toLowerCase(),
               id: session?.user.id,
             },
-            { email: session?.user.email }
-          );
+            options: { email: session?.user.email },
+          });
 
           if (!response) throw new Error('No response from server');
 

@@ -17,6 +17,7 @@ export default async function Pricing() {
     <LayoutPage>
       <IntroPage
         props={{
+          path: 'Billing',
           title: 'Pricing that grows with you',
           desc: "Choose an affordable plan that's packed with the best features for engaging your audience, creating customer loyalty, and driving sales.",
         }}
@@ -36,7 +37,7 @@ export default async function Pricing() {
         <CarouselPartners />
       </LayoutSection>
 
-      <LayoutSection id={'page-pricing-faq'} padded containerized={'md'}>
+      <LayoutSection id={'page-pricing-faq'} padded containerized={'sm'}>
         <IntroSection
           props={{
             title: `Frequently Asked Questions`,

@@ -18,6 +18,7 @@ export default async function Blog() {
     <LayoutPage>
       <IntroPage
         props={{
+          path: 'News',
           title: 'Expert Web Design Advice',
           desc: 'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam. Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam.',
         }}

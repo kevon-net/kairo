@@ -4,6 +4,7 @@ import { FormatOptions } from '@/types/date-time';
 export function getRegionalDate(
   date: Date,
   options: FormatOptions = {
+    locale: 'en-GB',
     format: 'short',
   }
 ): { date: string; time: string } {

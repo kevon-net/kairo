@@ -52,7 +52,7 @@ const partners = [
   {
     name: 'Google',
     image: images.partners.partner4,
-    link: 'http://office.com',
+    link: 'http://google.com',
   },
   {
     name: 'Facebook',

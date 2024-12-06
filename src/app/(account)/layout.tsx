@@ -42,7 +42,6 @@ export default function LayoutAccount({
         containerized={false}
         id={'layout-account'}
         component={'main'}
-        padded
       >
         {children}
       </LayoutSection>

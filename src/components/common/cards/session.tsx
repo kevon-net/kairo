@@ -20,6 +20,21 @@ import { getRegionalDate } from '@/utilities/formatters/date';
 export default function Session({ props }: { props: SessionGet }) {
   const session = useAppSelector((state) => state.session.value);
 
+  const data = [
+    {
+      label: 'IP',
+      value: props.ip,
+    },
+    {
+      label: 'Location',
+      value: `${props.city}, ${props.country}`,
+    },
+    {
+      label: 'Last Active',
+      value: getRegionalDate(props.updatedAt).date,
+    },
+  ];
+
   return (
     <Card withBorder bg={'transparent'} shadow="xs">
       <Stack>
@@ -44,69 +59,24 @@ export default function Session({ props }: { props: SessionGet }) {
         </CardSection>
 
         <Stack gap={4} fz={'sm'} fw={'bold'}>
-          <Group
-            grow
-            preventGrowOverflow={false}
-            wrap="nowrap"
-            align="end"
-            gap={'xs'}
-          >
-            <Text inherit>IP:</Text>
+          {data.map((item) => (
+            <Group
+              key={item.label}
+              grow
+              preventGrowOverflow={false}
+              wrap="nowrap"
+              align="end"
+              gap={'xs'}
+            >
+              <Text inherit>{item.label}:</Text>
 
-            <Divider variant="dashed" w={'100%'} pb={5} />
+              <Divider variant="dashed" pb={5} />
 
-            <Text component="span" inherit fw={'normal'} ta={'end'}>
-              {props.ip}
-            </Text>
-          </Group>
-
-          <Group
-            grow
-            preventGrowOverflow={false}
-            wrap="nowrap"
-            align="end"
-            gap={'xs'}
-          >
-            <Text inherit>Location:</Text>
-
-            <Divider variant="dashed" w={'100%'} pb={5} />
-
-            <Text component="span" inherit fw={'normal'} ta={'end'}>
-              {`${props.city}(${props.country})`}
-            </Text>
-          </Group>
-
-          <Group
-            grow
-            preventGrowOverflow={false}
-            wrap="nowrap"
-            align="end"
-            gap={'xs'}
-          >
-            <Text inherit>GPS:</Text>
-
-            <Divider variant="dashed" w={'100%'} pb={5} />
-
-            <Text component="span" inherit fw={'normal'} ta={'end'}>
-              {props.loc}
-            </Text>
-          </Group>
-
-          <Group
-            grow
-            preventGrowOverflow={false}
-            wrap="nowrap"
-            align="end"
-            gap={'xs'}
-          >
-            <Text inherit>LastActive:</Text>
-
-            <Divider variant="dashed" w={'100%'} pb={5} />
-
-            <Text inherit fw={'normal'} ta={'end'}>
-              {getRegionalDate(props.updatedAt).date}
-            </Text>
-          </Group>
+              <Text component="span" inherit fw={'normal'} ta={'end'}>
+                {item.value}
+              </Text>
+            </Group>
+          ))}
         </Stack>
       </Stack>
     </Card>

@@ -142,7 +142,7 @@ export default async function About() {
 
         <Grid>
           {purpose.map((item) => (
-            <GridCol key={item.title} span={{ base: 12, xs: 6, sm: 4 }}>
+            <GridCol key={item.title} span={{ base: 12, xs: 6, md: 4 }}>
               <CardGenericPurpose props={item} />
             </GridCol>
           ))}

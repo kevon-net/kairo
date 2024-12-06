@@ -39,7 +39,7 @@ export default function Main() {
   return (
     <LayoutSection id={'partial-footer-main'} padded className={classes.footer}>
       <Stack gap={sectionSpacing}>
-        <Group>
+        <Flex align={'center'} justify={{ base: 'center', md: 'start' }}>
           <Anchor component={Link} href={'/'}>
             <ImageDefault
               src={images.brand.logo.light}
@@ -50,7 +50,7 @@ export default function Main() {
               mode="grid"
             />
           </Anchor>
-        </Group>
+        </Flex>
 
         <Grid gutter={{ base: 'xl', md: 'md' }}>
           {linkSets.map((linkSet) => (

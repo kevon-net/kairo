@@ -19,7 +19,7 @@ export default async function Faq() {
     <LayoutPage>
       <IntroPage
         props={{
-          path: `FAQ`,
+          path: `Q & A`,
           title: 'Frequently Asked Questions',
           desc: `Need a help with something? Here are our most frequently asked questions.`,
         }}

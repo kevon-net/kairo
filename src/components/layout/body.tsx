@@ -47,7 +47,11 @@ export default function Body({
       {nav && nav}
       {hero && hero}
       {aside ? (
-        <LayoutSection component={'article'} id="layout-body-section">
+        <LayoutSection
+          component={'article'}
+          id="layout-body-section"
+          margined={aside.left?.withBorder || aside.right?.withBorder}
+        >
           <Flex gap={aside.gap ? aside.gap : 'xl'}>
             {aside.left && handleAside(aside.left.component, aside.left.width)}
             {aside.left?.withBorder && (

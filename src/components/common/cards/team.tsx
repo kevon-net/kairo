@@ -26,7 +26,7 @@ export default function Team({ props }: { props: typeTeam }) {
             <ActionIcon
               key={social.link}
               size={iconWrapperSize}
-              // color="gray"
+              color="pri.6"
               variant="light"
             >
               <social.icon size={iconSize} stroke={iconStrokeWidth} />

@@ -22,7 +22,12 @@ import {
 import LayoutSection from '@/components/layout/section';
 import PartialUser from '@/components/partial/user';
 
-import { authUrls, iconSize, iconStrokeWidth } from '@/data/constants';
+import {
+  authUrls,
+  iconSize,
+  iconStrokeWidth,
+  sectionSpacing,
+} from '@/data/constants';
 import { usePathname } from 'next/navigation';
 
 import classes from './account.module.scss';
@@ -35,7 +40,12 @@ export default function Account() {
   };
 
   return (
-    <LayoutSection containerized={false} id={'partial-aside-user'} padded>
+    <LayoutSection
+      containerized={false}
+      id={'partial-aside-user'}
+      pos={'sticky'}
+      top={sectionSpacing}
+    >
       <Stack gap={48} align="center">
         <PartialUser />
 

@@ -41,6 +41,7 @@ export default async function Contact() {
     <LayoutPage>
       <IntroPage
         props={{
+          path: 'Reach Out',
           title: 'Contact Us',
           desc: 'Please reach out to us if you have questions about our enterprise offerings, or anything else.',
         }}
@@ -52,19 +53,16 @@ export default async function Contact() {
             'linear-gradient(-60deg, var(--mantine-color-pri-4) 0%, var(--mantine-color-pri-7) 100%)'
           }
           c={'var(--mantine-color-body)'}
-          p={{ base: 'xs', xs: 32, md: 64 }}
+          p={{ base: 'xs', xs: 32, lg: 64 }}
         >
           <SimpleGrid cols={{ base: 1, md: 2 }}>
             <Stack gap={'xl'}>
               <Stack gap={'xs'} pt={{ base: 'xl', xs: 0 }}>
-                <Title order={2} ta={{ base: 'center', md: 'start' }}>
+                <Title order={2} ta={'start'}>
                   Drop Us A Line
                 </Title>
 
-                <Text
-                  ta={{ base: 'center', md: 'start' }}
-                  w={{ md: '80%', lg: '90%' }}
-                >
+                <Text ta={'start'} w={{ md: '80%', lg: '90%' }}>
                   Leave your email and we will get back to you within 24 hours.
                 </Text>
               </Stack>
@@ -102,11 +100,7 @@ export default async function Contact() {
                 ))}
               </SimpleGrid>
 
-              <Flex
-                align={'center'}
-                gap={'md'}
-                justify={{ xs: 'center', md: 'start' }}
-              >
+              <Flex align={'center'} gap={'md'}>
                 {dataSocials.map((social) => (
                   <Anchor
                     key={social.link}

@@ -9,7 +9,7 @@ import CardBlogMain from '@/components/common/cards/blog/main';
 import IntroPage from '@/components/layout/intro/page';
 
 import { postsGet } from '@/handlers/requests/database/post';
-import { PostRelations } from '@/types/models/post';
+import { PostRelations } from '@repo/types/models';
 
 export default async function Blog() {
   const { posts }: { posts: PostRelations[] } = await postsGet();

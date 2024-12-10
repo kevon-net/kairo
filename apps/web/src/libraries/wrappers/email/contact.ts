@@ -1,8 +1,8 @@
 import appData from '@/data/app';
 import resend from '@/libraries/resend';
 import { EmailContactCreate, EmailInquiry } from '@/types/email';
-import { segmentFullName } from '@/utilities/formatters/string';
-import { isProduction } from '@/utilities/helpers/environment';
+import { segmentFullName } from '@repo/utils/formatters';
+import { isProduction } from '@repo/utils/helpers';
 import { render } from '@react-email/render';
 
 import EmailTransactionalOnboardNewsletter from '@/components/email/transactional/onboard/newsletter';

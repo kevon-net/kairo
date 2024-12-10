@@ -10,7 +10,7 @@ import { Container, Stack, Text, Title } from '@mantine/core';
 
 // import BreadcrumbMain from '@/components/common/breadcrumbs/main';
 
-import { crumbify } from '@/utilities/formatters/string';
+import { crumbify } from '@repo/utils/formatters';
 
 export default function Page({
   props,

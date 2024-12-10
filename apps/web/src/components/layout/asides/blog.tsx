@@ -2,7 +2,6 @@ import React from 'react';
 
 import LayoutSection from '@/components/layout/section';
 import CardBlogAside from '@/components/common/cards/blog/aside';
-import { PostRelations } from '@/types/models/post';
 import { postsGet } from '@/handlers/requests/database/post';
 import {
   Anchor,
@@ -17,9 +16,12 @@ import {
   Title,
 } from '@mantine/core';
 import Link from 'next/link';
-import { CategoryRelations } from '@/types/models/category';
+import {
+  PostRelations,
+  CategoryRelations,
+  TagRelations,
+} from '@repo/types/models';
 import { categoriesGet } from '@/handlers/requests/database/category';
-import { TagRelations } from '@/types/models/tag';
 import { tagsGet } from '@/handlers/requests/database/tag';
 import { typeParams } from '@/app/(marketing)/blog/layout';
 

@@ -1,14 +1,13 @@
 import prisma from '@/libraries/prisma';
-import { compareHashes } from '@/utilities/helpers/hasher';
-import { generateId } from '@/utilities/generators/id';
+import { compareHashes, decrypt } from '@repo/utils/helpers';
+import { generateId } from '@repo/utils/generators';
 import { Provider, Status, Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { cookieName } from '@/data/constants';
-import { getExpiry } from '@/utilities/helpers/time';
+import { cookieName, key } from '@/data/constants';
+import { getExpiry } from '@/utilities/time';
 import { signIn } from '@/libraries/auth';
 import { SignIn } from '@/types/bodies/request';
-import { decrypt } from '@/utilities/helpers/token';
 import { IpData } from '@/types/bodies/response';
 import { setGeoData } from '@/libraries/geolocation';
 
@@ -89,11 +88,13 @@ export async function POST(request: NextRequest) {
       let geoData: IpData;
 
       try {
-        geoData = geoDataCookie ? await decrypt(geoDataCookie) : null;
+        geoData = geoDataCookie ? await decrypt(geoDataCookie, key) : null;
       } catch {
         await setGeoData(request);
         const newGeoDataCookie = cookies().get(cookieName.geo)?.value;
-        geoData = newGeoDataCookie ? await decrypt(newGeoDataCookie) : null;
+        geoData = newGeoDataCookie
+          ? await decrypt(newGeoDataCookie, key)
+          : null;
       }
 
       const createSession = await prisma.session.create({

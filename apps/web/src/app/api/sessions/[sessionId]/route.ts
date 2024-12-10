@@ -1,6 +1,6 @@
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { SessionCreate } from '@/types/models/session';
+import { SessionCreate } from '@repo/types/models';
 import { cookies } from 'next/headers';
 import { cookieName } from '@/data/constants';
 import { Status } from '@prisma/client';

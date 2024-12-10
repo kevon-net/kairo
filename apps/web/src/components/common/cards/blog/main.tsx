@@ -16,10 +16,9 @@ import {
 
 import classes from './main.module.scss';
 
-import { PostRelations } from '@/types/models/post';
+import { PostRelations } from '@repo/types/models';
 
-import { linkify } from '@/utilities/formatters/string';
-import { getRegionalDate } from '@/utilities/formatters/date';
+import { linkify, getRegionalDate } from '@repo/utils/formatters';
 import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
 import { iconSize, iconStrokeWidth } from '@/data/constants';

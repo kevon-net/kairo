@@ -6,7 +6,7 @@ import LayoutBody from '@/components/layout/body';
 // import AsideBlog from '@/components/layout/asides/blog';
 
 import { typeParams } from '../layout';
-import { PostRelations } from '@/types/models/post';
+import { PostRelations } from '@repo/types/models';
 import { postsGet } from '@/handlers/requests/database/post';
 
 export const generateMetadata = async ({

@@ -1,5 +1,5 @@
 import { iconSize, iconStrokeWidth } from '@/data/constants';
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 import { IconCheck, IconExclamationMark, IconX } from '@tabler/icons-react';
 import React from 'react';
 

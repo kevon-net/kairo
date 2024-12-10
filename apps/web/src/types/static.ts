@@ -1,7 +1,9 @@
 import { Icon } from '@tabler/icons-react';
-import { ReplyRelations } from './models/reply';
-import { CommentRelations } from './models/comment';
-import { PostRelations as typePostRelations } from './models/post';
+import {
+  ReplyRelations,
+  CommentRelations,
+  PostRelations as typePostRelations,
+} from '@repo/types/models';
 
 export interface Team {
   name: string;

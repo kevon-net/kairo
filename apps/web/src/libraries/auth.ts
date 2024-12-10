@@ -2,17 +2,14 @@
 'use server';
 
 import { NextResponse } from 'next/server';
-import { decrypt, encrypt } from '../utilities/helpers/token';
-import { cookieName } from '@/data/constants';
+import { cookieName, key } from '@/data/constants';
 import { cookies } from 'next/headers';
-import { getExpiry } from '../utilities/helpers/time';
 import { sessionUpdate } from '@/handlers/requests/database/session';
-import { Credentials, Session } from '@/types/auth';
-import { SessionGet } from '@/types/models/session';
-import { UserGet } from '@/types/models/user';
+import { Credentials, Session } from '@repo/types';
+import { SessionGet,UserGet,ProfileGet  } from '@repo/types/models';
 import { Provider } from '@prisma/client';
-import { ProfileGet } from '@/types/models/profile';
-import { isProduction } from '@/utilities/helpers/environment';
+import { decrypt, encrypt,isProduction } from '@repo/utils/helpers';
+import { getExpiry } from '@/utilities/time';
 
 export const getSessionCookie = async (): Promise<string | null> => {
   const sessionCookieValue = cookies().get(cookieName.session)?.value;
@@ -23,7 +20,7 @@ export const getSession = async (): Promise<Session | null> => {
   const sessionCookieValue = await getSessionCookie();
   const session = !sessionCookieValue
     ? null
-    : await decrypt(sessionCookieValue);
+    : await decrypt(sessionCookieValue,key);
 
   return session;
 };
@@ -48,7 +45,7 @@ export const signIn = async (
         withPassword: userObject.password ? true : false,
       },
       expires: sessionObject.expiresAt,
-    },
+    },key,
     getExpiry(credentials?.remember ?? true).sec
   );
 
@@ -66,7 +63,7 @@ export const updateSession = async (
   response: NextResponse,
   session: string
 ) => {
-  const parsed: Session = await decrypt(session);
+  const parsed: Session = await decrypt(session,key);
   const remember = parsed.user.remember;
 
   const expiry = getExpiry(remember).millisec;
@@ -76,7 +73,7 @@ export const updateSession = async (
 
   response.cookies.set({
     name: cookieName.session,
-    value: await encrypt(parsed, getExpiry(remember).sec),
+    value: await encrypt(parsed,key, getExpiry(remember).sec),
     expires: expires,
     httpOnly: true,
   });
@@ -101,4 +98,20 @@ export const updateSession = async (
   }
 
   return response;
+};
+
+export const authHeaders = async (headers: any) => {
+  // Check if running in the client-side (browser)
+  const isClient = typeof window !== 'undefined';
+
+  if (!isClient) {
+    // In server-side, manually pass the session cookie if it's available
+    const sessionCookieValue = await getSessionCookie();
+
+    if (sessionCookieValue) {
+      headers['Cookie'] = `${cookieName.session}=${sessionCookieValue}`;
+    }
+  }
+
+  return headers;
 };

@@ -1,4 +1,4 @@
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 import { commentsGet } from '@/handlers/requests/database/comment';
 import { updateComments } from '@/libraries/redux/slices/comments';
 import { showNotification } from '@/utilities/notifications';

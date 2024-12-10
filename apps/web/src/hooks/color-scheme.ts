@@ -1,8 +1,7 @@
 import { useMantineColorScheme } from '@mantine/core';
-import { setCookie } from '@/utilities/helpers/cookie';
 import { cookieName } from '@/data/constants';
-import { getExpiry } from '@/utilities/helpers/time';
-import { getOSTheme } from '@/utilities/helpers/theme';
+import { setCookie, getOSTheme } from '@repo/utils/helpers';
+import { getExpiry } from '@/utilities/time';
 import { useAppDispatch, useAppSelector } from './redux';
 import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
 

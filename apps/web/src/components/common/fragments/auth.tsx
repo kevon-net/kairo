@@ -3,16 +3,26 @@
 import React from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { setRedirectUrl } from '@/utilities/helpers/url';
+import { setRedirectUrl } from '@repo/utils/helpers';
 import { useSignOut } from '@/hooks/auth';
 import { Box, LoadingOverlay } from '@mantine/core';
+import { authUrls, baseUrl } from '@/data/constants';
 
 export function SignIn({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
   return (
-    <span onClick={() => router.push(setRedirectUrl(pathname))}>
+    <span
+      onClick={() =>
+        router.push(
+          setRedirectUrl({
+            targetUrl: authUrls.signIn,
+            redirectUrl: `${baseUrl}/${pathname}`,
+          })
+        )
+      }
+    >
       {children}
     </span>
   );

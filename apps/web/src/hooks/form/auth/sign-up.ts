@@ -1,16 +1,13 @@
 import { signUp as handleSignUp } from '@/handlers/requests/auth/sign-up';
-import { capitalizeWords } from '@/utilities/formatters/string';
-import compare from '@/utilities/validators/special/compare';
-import email from '@/utilities/validators/special/email';
-import password from '@/utilities/validators/special/password';
-import text from '@/utilities/validators/special/text';
+import { capitalizeWords } from '@repo/utils/formatters';
+import { compare, email, password, text } from '@repo/utils/validators';
+import { setRedirectUrl } from '@repo/utils/helpers';
 import { useForm } from '@mantine/form';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { timeout } from '@/data/constants';
+import { authUrls, baseUrl, timeout } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
-import { Variant } from '@/enums/notification';
-import { setRedirectUrl } from '@/utilities/helpers/url';
+import { Variant } from '@repo/enums';
 import { useNetwork } from '@mantine/hooks';
 
 export const useFormAuthSignUp = () => {
@@ -94,7 +91,13 @@ export const useFormAuthSignUp = () => {
 
             // redirect to sign in
             setTimeout(
-              async () => router.push(setRedirectUrl(pathname)),
+              async () =>
+                router.push(
+                  setRedirectUrl({
+                    targetUrl: authUrls.signIn,
+                    redirectUrl: `${baseUrl}/${pathname}`,
+                  })
+                ),
               timeout.redirect
             );
           }, timeout.redirect);

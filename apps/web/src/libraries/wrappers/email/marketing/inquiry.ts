@@ -1,6 +1,6 @@
 import resend from '@/libraries/resend';
 import EmailTransactionalInquiry from '@/components/email/transactional/inquiry';
-import { isProduction } from '@/utilities/helpers/environment';
+import { isProduction } from '@repo/utils/helpers';
 import { EmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 

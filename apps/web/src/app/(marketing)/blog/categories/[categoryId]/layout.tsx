@@ -6,7 +6,7 @@ import LayoutBody from '@/components/layout/body';
 
 import { typeParams } from '../../layout';
 import { categoriesGet } from '@/handlers/requests/database/category';
-import { CategoryGet } from '@/types/models/category';
+import { CategoryGet } from '@repo/types/models';
 
 export const generateMetadata = async ({
   params,

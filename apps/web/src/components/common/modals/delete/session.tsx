@@ -1,12 +1,12 @@
 'use client';
 
 import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
-import { SessionGet } from '@/types/models/session';
+import { SessionGet } from '@repo/types/models';
 import { Modal, Button, Stack, Text, ActionIcon, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconLogout } from '@tabler/icons-react';
 import LayoutModal from '@/components/layout/modal';
-import { Alert } from '@/enums/notification';
+import { Alert } from '@repo/enums';
 
 export default function Session({ props }: { props: SessionGet }) {
   const [opened, { open, close }] = useDisclosure(false);

@@ -2,11 +2,11 @@
 
 import { sectionSpacing } from '@/data/constants';
 import { useSwitchPricing } from '@/hooks/switch/pricing';
-import { Pricing as SwitchPricing } from '@/enums/switch';
+import { Pricing as SwitchPricing } from '@repo/enums';
 import { Grid, GridCol, Group, SegmentedControl, Stack } from '@mantine/core';
 import React from 'react';
 import CardPricingMain from '@/components/common/cards/pricing/main';
-import { capitalizeWord } from '@/utilities/formatters/string';
+import { capitalizeWord } from '@repo/utils/formatters';
 import CardPricingEnterprise from '../common/cards/pricing/enterprise';
 
 export default function Pricing() {

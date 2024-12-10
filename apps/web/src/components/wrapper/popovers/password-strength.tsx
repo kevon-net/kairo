@@ -9,7 +9,7 @@ import {
   PopoverDropdown,
   PasswordInputProps,
 } from '@mantine/core';
-import { getPasswordStrength } from '@/utilities/helpers/string';
+import { getPasswordStrength } from '@repo/utils/helpers';
 import { passwordRequirements } from '@/data/constants';
 
 export default function PasswordStrength({

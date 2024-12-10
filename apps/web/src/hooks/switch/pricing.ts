@@ -1,4 +1,4 @@
-import { Pricing as SwitchPricing } from '@/enums/switch';
+import { Pricing as SwitchPricing } from '@repo/enums';
 import { Discount } from '@/types/static';
 import { useState } from 'react';
 

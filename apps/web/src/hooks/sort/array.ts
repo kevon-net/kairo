@@ -1,6 +1,6 @@
-import { Order } from '@/enums/sort';
+import { Order } from '@repo/enums';
 import { useState } from 'react';
-import { sortArray } from '@/utilities/helpers/array';
+import { sortArray } from '@repo/utils/helpers';
 
 export const useSortArray = <T>(
   setList: React.Dispatch<React.SetStateAction<T[]>>,

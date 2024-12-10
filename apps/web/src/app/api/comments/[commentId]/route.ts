@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { CommentCreate } from '@/types/bodies/request';
-import { CommentUpdate } from '@/types/models/comment';
-import { generateId } from '@/utilities/generators/id';
+import { CommentUpdate } from '@repo/types/models';
+import { generateId } from '@repo/utils/generators';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {

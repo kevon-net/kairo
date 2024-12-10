@@ -1,7 +1,7 @@
 'use client';
 
 import { useAppSelector } from '@/hooks/redux';
-import { initialize } from '@/utilities/formatters/string';
+import { initialize } from '@repo/utils/formatters';
 import { Avatar, MantineStyleProps } from '@mantine/core';
 import React from 'react';
 

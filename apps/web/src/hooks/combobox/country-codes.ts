@@ -1,5 +1,5 @@
 import { CountryData } from '@/types/bodies/response';
-import { filterSearch } from '@/utilities/helpers/string';
+import { filterSearch } from '@repo/utils/helpers';
 import { useCombobox } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useSortCountryCodes } from '../sort/country-codes';
@@ -25,7 +25,7 @@ export const useComboboxCountryCodes = (
 
   const sortedData = useSortCountryCodes(list);
 
-  const getSearchResults = () => {
+  const getSearchResults = (): CountryData[] => {
     const fieldSelector = (item: CountryData) => item.name?.common;
     const searchResults = filterSearch(sortedData, search, fieldSelector);
     return searchResults;

@@ -1,9 +1,9 @@
-import { baseUrl } from '@/data/constants';
+import { baseUrl, key } from '@/data/constants';
 import prisma from '@/libraries/prisma';
 
 import { sendEmailTransactionalAuthPasswordForgot } from '@/libraries/wrappers/email/transactional/auth/password';
-import { generateId } from '@/utilities/generators/id';
-import { encrypt } from '@/utilities/helpers/token';
+import { generateId } from '@repo/utils/generators';
+import { encrypt } from '@repo/utils/helpers';
 import { Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     const id = generateId();
 
-    const token = await encrypt({ id, userId: userRecord.id }, 60 * 60);
+    const token = await encrypt({ id, userId: userRecord.id }, key, 60 * 60);
 
     const tokens = await prisma.$transaction(async () => {
       if (userRecord.tokens.length > 1) {

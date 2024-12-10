@@ -1,7 +1,7 @@
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 import { apiUrl, headers } from '@/data/constants';
-import { SessionCreate } from '@/types/models/session';
-import { authHeaders } from '@/utilities/helpers/auth';
+import { SessionCreate } from '@repo/types/models';
+import { authHeaders } from '@/libraries/auth';
 import { SessionUpdate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/sessions`;

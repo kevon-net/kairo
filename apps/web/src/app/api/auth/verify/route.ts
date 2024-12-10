@@ -1,12 +1,12 @@
 import { getSession } from '@/libraries/auth';
 import prisma from '@/libraries/prisma';
 import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
-import { compareHashes } from '@/utilities/helpers/hasher';
-import { decrypt } from '@/utilities/helpers/token';
+import { compareHashes, decrypt } from '@repo/utils/helpers';
 import { Type } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { contactCreate } from '@/libraries/wrappers/email/contact';
 import { Verify } from '@/types/bodies/request';
+import { key } from '@/data/constants';
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
 
     try {
       if (token) {
-        parsed = await decrypt(token);
+        parsed = await decrypt(token, key);
       } else if (tokenDatabase) {
-        parsed = await decrypt(tokenDatabase.token);
+        parsed = await decrypt(tokenDatabase.token, key);
       }
 
       const tokenRecord = await prisma.token.findUnique({

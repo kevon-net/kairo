@@ -13,9 +13,8 @@
 /.next/
 /out/
 
-# production (change 'app.zip' to the app's name)
+# production
 /build
-app.zip
 
 # misc
 .DS_Store

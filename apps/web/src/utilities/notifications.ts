@@ -1,7 +1,7 @@
 import IconNotification from '@/components/common/icons/notification';
 import { notifications } from '@mantine/notifications';
-import { capitalizeWord, linkify } from './formatters/string';
-import { Variant } from '@/enums/notification';
+import { capitalizeWord, linkify } from '@repo/utils/formatters';
+import { Variant } from '@repo/enums';
 import { timeout } from '@/data/constants';
 
 export const showNotification = (

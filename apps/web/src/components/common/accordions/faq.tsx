@@ -10,7 +10,7 @@ import {
 import sample from '@/data/sample';
 
 import classes from './faq.module.scss';
-import { isFirstItem } from '@/utilities/helpers/array';
+import { isFirstItem } from '@repo/utils/helpers';
 
 export default function Faq() {
   const items = faqs.map((item) => (

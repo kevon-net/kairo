@@ -1,14 +1,13 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import password from '@/utilities/validators/special/password';
-import compare from '@/utilities/validators/special/compare';
 import { userUpdate } from '@/handlers/requests/database/user';
-import { timeout } from '@/data/constants';
-import { Variant } from '@/enums/notification';
+import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
-import { setRedirectUrl } from '@/utilities/helpers/url';
+import { password, compare } from '@repo/utils/validators';
+import { setRedirectUrl } from '@repo/utils/helpers';
 import { useNetwork } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateSession } from '@/libraries/redux/slices/session';
@@ -103,7 +102,13 @@ export const useFormUserAccountPassword = (params: {
         if (response.status === 401) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl(pathname)),
+            async () =>
+              router.push(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 

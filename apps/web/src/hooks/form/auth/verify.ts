@@ -1,4 +1,3 @@
-import { millToMinSec, MinSec } from '@/utilities/formatters/number';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import {
@@ -6,10 +5,11 @@ import {
   verifyResend as handleVerifyResend,
 } from '@/handlers/requests/auth/verify';
 import { usePathname, useRouter } from 'next/navigation';
-import { timeout } from '@/data/constants';
-import { Variant } from '@/enums/notification';
+import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
-import { getUrlParam, setRedirectUrl } from '@/utilities/helpers/url';
+import { millToMinSec, MinSec } from '@repo/utils/formatters';
+import { getUrlParam, setRedirectUrl } from '@repo/utils/helpers';
 import { useNetwork } from '@mantine/hooks';
 
 export const useFormAuthVerify = () => {
@@ -60,7 +60,13 @@ export const useFormAuthVerify = () => {
         if (response.ok) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl(pathname)),
+            async () =>
+              router.push(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 
@@ -81,7 +87,13 @@ export const useFormAuthVerify = () => {
         if (response.statusText === 'Already Verified') {
           // redirect to sign in
           setTimeout(
-            async () => router.replace(setRedirectUrl(pathname)),
+            async () =>
+              router.replace(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 
@@ -154,7 +166,13 @@ export const useFormAuthVerify = () => {
       if (response.statusText === 'Already Verified') {
         // redirect to sign in
         setTimeout(
-          async () => router.replace(setRedirectUrl(pathname)),
+          async () =>
+            router.replace(
+              setRedirectUrl({
+                targetUrl: authUrls.signIn,
+                redirectUrl: `${baseUrl}/${pathname}`,
+              })
+            ),
           timeout.redirect
         );
 

@@ -7,7 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useSignOut } from '@/hooks/auth';
 import { authUrls } from '@/data/constants';
 import LayoutModal from '@/components/layout/modal';
-import { Alert } from '@/enums/notification';
+import { Alert } from '@repo/enums';
 
 export default function PasswordReset({
   children,

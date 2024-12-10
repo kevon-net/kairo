@@ -1,7 +1,7 @@
 import { apiUrl, headers } from '@/data/constants';
-import { Request as EnumRequest } from '@/enums/request';
-import { UserCreate } from '@/types/models/user';
-import { authHeaders } from '@/utilities/helpers/auth';
+import { Request as EnumRequest } from '@repo/enums';
+import { UserCreate } from '@repo/types/models';
+import { authHeaders } from '@/libraries/auth';
 import { UserDelete, UserUpdate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/users`;

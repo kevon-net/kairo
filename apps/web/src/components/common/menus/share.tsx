@@ -3,7 +3,6 @@
 import React from 'react';
 
 import { Platform } from '@/enums/social';
-import { getShareLink } from '@/utilities/helpers/link';
 import {
   ActionIconProps,
   Group,
@@ -21,8 +20,8 @@ import {
   IconShare,
 } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
-import { capitalizeWord } from '@/utilities/formatters/string';
+import { baseUrl, iconSize, iconStrokeWidth } from '@/data/constants';
+import { capitalizeWord } from '@repo/utils/formatters';
 
 import classes from './share.module.scss';
 
@@ -86,3 +85,29 @@ const shareLinks = [
     title: Platform.WHATSAPP,
   },
 ];
+
+export const getShareLink = (
+  platform: Platform,
+  pathname: string,
+  title: string
+) => {
+  const currentUrl = `${baseUrl}${pathname}`;
+
+  switch (platform) {
+    case Platform.TWITTER:
+      return `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(
+        title
+      )}`;
+    case Platform.FACEBOOK:
+      return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    case Platform.LINKEDIN:
+      return `https://www.linkedin.com/shareArticle?url=${encodeURIComponent(
+        currentUrl
+      )}&title=${encodeURIComponent(title)}`;
+    case Platform.WHATSAPP:
+      return `https://wa.me/?text=${encodeURIComponent(`${title} - ${currentUrl}`)}`;
+
+    default:
+      return currentUrl;
+  }
+};

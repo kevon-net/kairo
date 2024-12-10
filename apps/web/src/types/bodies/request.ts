@@ -1,9 +1,11 @@
 import { Provider } from '@prisma/client';
-import { Credentials } from '../auth';
-import { CommentCreate as typeCommentCreate } from '../models/comment';
-import { ReplyCreate } from '../models/reply';
-import { SessionUpdate as typeSessionUpdate } from '../models/session';
-import { UserUpdate as typeUserUpdate } from '../models/user';
+import {
+  UserUpdate as typeUserUpdate,
+  SessionUpdate as typeSessionUpdate,
+  Credentials,
+  CommentCreate as typeCommentCreate,
+  ReplyCreate,
+} from '@repo/types';
 
 export type SignUp = {
   name: string;

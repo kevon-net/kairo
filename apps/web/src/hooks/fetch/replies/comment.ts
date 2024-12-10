@@ -1,8 +1,8 @@
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 import { repliesCommentGet } from '@/handlers/requests/database/reply/comment';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateComments } from '@/libraries/redux/slices/comments';
-import { ReplyRelations } from '@/types/models/reply';
+import { ReplyRelations } from '@repo/types/models';
 import { showNotification } from '@/utilities/notifications';
 import { useState } from 'react';
 

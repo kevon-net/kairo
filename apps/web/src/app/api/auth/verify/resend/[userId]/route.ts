@@ -1,12 +1,11 @@
 import { sendTransactionalEmailAuthVerify } from '@/libraries/wrappers/email/transactional/auth/email';
-import { generateOtpCode } from '@/utilities/generators/otp';
+import { generateOtpCode, generateId } from '@repo/utils/generators';
 import prisma from '@/libraries/prisma';
-import { hashValue } from '@/utilities/helpers/hasher';
-import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 import { Type } from '@prisma/client';
-import { decrypt, encrypt } from '@/utilities/helpers/token';
+import { decrypt, encrypt, hashValue } from '@repo/utils/helpers';
 import { VerifyResend } from '@/types/bodies/request';
+import { key } from '@/data/constants';
 
 export async function POST(
   request: NextRequest,
@@ -44,7 +43,7 @@ export async function POST(
         throw new Error('Token not included');
       }
 
-      parsed = await decrypt(token);
+      parsed = await decrypt(token, key);
 
       const expiry = new Date(parsed.exp * 1000).getTime() - now.getTime();
 
@@ -91,6 +90,7 @@ export async function POST(
 
       const token = await encrypt(
         { id: tokenId, otp: otpHash, userId: userRecord.id },
+        key,
         60 * 60
       );
 

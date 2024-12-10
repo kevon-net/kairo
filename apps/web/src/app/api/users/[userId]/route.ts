@@ -1,14 +1,18 @@
 import prisma from '@/libraries/prisma';
-import { generateId } from '@/utilities/generators/id';
+import { generateId } from '@repo/utils/generators';
+import {
+  compareHashes,
+  hashValue,
+  decrypt,
+  encrypt,
+} from '@repo/utils/helpers';
+import { getExpiry } from '@/utilities/time';
 import { NextRequest, NextResponse } from 'next/server';
-import { compareHashes, hashValue } from '@/utilities/helpers/hasher';
-import { UserCreate } from '@/types/models/user';
+import { UserCreate } from '@repo/types/models';
 import { getSession } from '@/libraries/auth';
 import { Status, Type } from '@prisma/client';
-import { decrypt, encrypt } from '@/utilities/helpers/token';
-import { getExpiry } from '@/utilities/helpers/time';
 import { cookies } from 'next/headers';
-import { baseUrl, cookieName } from '@/data/constants';
+import { baseUrl, cookieName, key } from '@/data/constants';
 import { sendEmailTransactionalAuthPasswordChanged } from '@/libraries/wrappers/email/transactional/auth/password';
 import { sendEmailTransactionalAuthEmailChanged } from '@/libraries/wrappers/email/transactional/auth/email';
 import { sendEmailTransactionalOffboardConfirm } from '@/libraries/wrappers/email/transactional/off-board';
@@ -86,7 +90,7 @@ export async function PUT(
     if (options?.password) {
       if (options.token) {
         try {
-          parsed = await decrypt(options.token);
+          parsed = await decrypt(options.token, key);
 
           const tokenExists = await prisma.token.findUnique({
             where: { id: parsed.id },
@@ -132,6 +136,7 @@ export async function PUT(
       if (session && !session.user.withPassword) {
         const sessionToken = await encrypt(
           { ...session, user: { ...session.user, withPassword: true } },
+          key,
           getExpiry(session.user.remember).sec
         );
 
@@ -174,6 +179,7 @@ export async function PUT(
     if (options?.email && session) {
       const sessionToken = await encrypt(
         { ...session, user: { ...session.user, email: user.email } },
+        key,
         getExpiry(session.user.remember).sec
       );
 
@@ -275,6 +281,7 @@ export async function DELETE(
       // create token
       const token = await encrypt(
         { id: tokenId, userId: userRecord.id },
+        key,
         60 * 60
       );
 

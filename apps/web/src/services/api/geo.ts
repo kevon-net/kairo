@@ -1,5 +1,5 @@
 import { geoDataUrl, headers } from '@/data/constants';
-import { Request } from '@/enums/request';
+import { Request } from '@repo/enums';
 import {
   CountryData,
   CountryDataOptions,

@@ -1,17 +1,14 @@
 import { passwordForgot } from '@/handlers/requests/auth/password';
-import { millToMinSec, MinSec } from '@/utilities/formatters/number';
-import email from '@/utilities/validators/special/email';
 import { useForm } from '@mantine/form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { authUrls, timeout } from '@/data/constants';
-import password from '@/utilities/validators/special/password';
-import compare from '@/utilities/validators/special/compare';
-import { Variant } from '@/enums/notification';
+import { authUrls, key, timeout } from '@/data/constants';
+import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { userUpdate } from '@/handlers/requests/database/user';
-import { getUrlParam, setRedirectUrl } from '@/utilities/helpers/url';
-import { decrypt } from '@/utilities/helpers/token';
+import { millToMinSec, MinSec } from '@repo/utils/formatters';
+import { email, password, compare } from '@repo/utils/validators';
+import { getUrlParam, setRedirectUrl, decrypt } from '@repo/utils/helpers';
 import { useNetwork } from '@mantine/hooks';
 
 export const useFormAuthPasswordForgot = () => {
@@ -115,7 +112,7 @@ export const useFormAuthPasswordReset = () => {
       if (form.isValid()) {
         setSending(true);
 
-        const parsed = await decrypt(getUrlParam('token')).catch(() => {
+        const parsed = await decrypt(getUrlParam('token'), key).catch(() => {
           throw new Error('Link is broken, expired or already used');
         });
 
@@ -136,7 +133,8 @@ export const useFormAuthPasswordReset = () => {
         if (response.ok) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl()),
+            async () =>
+              router.push(setRedirectUrl({ targetUrl: authUrls.signIn })),
             timeout.redirect
           );
 

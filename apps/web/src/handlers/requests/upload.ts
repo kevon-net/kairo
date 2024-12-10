@@ -1,4 +1,4 @@
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 
 const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/upload`;
 

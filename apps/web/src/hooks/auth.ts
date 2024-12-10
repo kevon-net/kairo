@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { signOut } from '@/handlers/events/auth';
 import { showNotification } from '@/utilities/notifications';
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 
 export const useSignOut = (redirectUrl?: string, close?: () => void) => {
   const [submitted, setSubmitted] = useState(false);

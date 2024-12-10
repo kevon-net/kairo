@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { ReplyRelations } from '@/types/models/reply';
-import { initialize } from '@/utilities/formatters/string';
+import { ReplyRelations } from '@repo/types/models';
+import { initialize,getRegionalDate } from '@repo/utils/formatters';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
-import { getRegionalDate } from '@/utilities/formatters/date';
 
 export default function Reply({ props }: { props: ReplyRelations }) {
   const name = props.user?.profile?.name || props.name || 'Anonymous';

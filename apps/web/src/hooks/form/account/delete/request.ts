@@ -1,15 +1,15 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
-import { timeout } from '@/data/constants';
+import { authUrls, baseUrl, timeout } from '@/data/constants';
 import { userDelete } from '@/handlers/requests/database/user';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
-import { setRedirectUrl } from '@/utilities/helpers/url';
+import { setRedirectUrl } from '@repo/utils/helpers';
+import { millToMinSec, MinSec } from '@repo/utils/formatters';
 import { useNetwork } from '@mantine/hooks';
 import { useAppSelector } from '@/hooks/redux';
-import { millToMinSec, MinSec } from '@/utilities/formatters/number';
 
 export const useFormUserAccountDeleteRequest = (close?: () => void) => {
   const pathname = usePathname();
@@ -71,7 +71,13 @@ export const useFormUserAccountDeleteRequest = (close?: () => void) => {
         if (response.status === 401) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl(pathname)),
+            async () =>
+              router.push(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 

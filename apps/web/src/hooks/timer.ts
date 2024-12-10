@@ -1,6 +1,6 @@
-import { TimerDirection } from '@/enums/date-time';
-import { Timer } from '@/types/date-time';
-import { getTimeElapsed, getTimeRemaining } from '@/utilities/helpers/time';
+import { TimerDirection } from '@repo/enums';
+import { Timer } from '@repo/types';
+import { getTimeElapsed, getTimeRemaining } from '@repo/utils/helpers';
 import { useEffect, useState } from 'react';
 
 /**

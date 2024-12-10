@@ -1,6 +1,6 @@
 import { apiUrl, headers } from '@/data/constants';
-import { Request as EnumRequest } from '@/enums/request';
-import { authHeaders } from '@/utilities/helpers/auth';
+import { Request as EnumRequest } from '@repo/enums';
+import { authHeaders } from '@/libraries/auth';
 
 export const signOut = async () => {
   try {

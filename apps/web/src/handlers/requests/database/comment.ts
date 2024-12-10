@@ -1,7 +1,7 @@
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 import { apiUrl, headers } from '@/data/constants';
-import { CommentUpdate } from '@/types/models/comment';
-import { authHeaders } from '@/utilities/helpers/auth';
+import { CommentUpdate } from '@repo/types/models';
+import { authHeaders } from '@/libraries/auth';
 import { CommentCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/comments`;

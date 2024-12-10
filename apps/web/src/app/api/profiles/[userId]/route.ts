@@ -1,10 +1,10 @@
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { ProfileCreate, ProfileUpdate } from '@/types/models/profile';
+import { ProfileCreate, ProfileUpdate } from '@repo/types/models';
 import { getSession } from '@/libraries/auth';
-import { encrypt } from '@/utilities/helpers/token';
-import { getExpiry } from '@/utilities/helpers/time';
-import { cookieName } from '@/data/constants';
+import { encrypt } from '@repo/utils/helpers';
+import { getExpiry } from '@/utilities/time';
+import { cookieName, key } from '@/data/constants';
 import { cookies } from 'next/headers';
 
 export async function GET(
@@ -110,6 +110,7 @@ export async function PUT(
     if (profileRecord.name != profile.name) {
       const sessionToken = await encrypt(
         { ...session, user: { ...session.user, name: profile.name } },
+        key,
         getExpiry(session.user.remember).sec
       );
 

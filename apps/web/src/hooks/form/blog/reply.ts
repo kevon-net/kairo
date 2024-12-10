@@ -1,11 +1,10 @@
 import { replyCommentCreate } from '@/handlers/requests/database/reply/comment';
 import { replyReplyCreate } from '@/handlers/requests/database/reply/reply';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { Variant } from '@/enums/notification';
-import { capitalizeWords } from '@/utilities/formatters/string';
+import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
-import email from '@/utilities/validators/special/email';
-import text from '@/utilities/validators/special/text';
+import { capitalizeWords } from '@repo/utils/formatters';
+import { email, text } from '@repo/utils/validators';
 import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';

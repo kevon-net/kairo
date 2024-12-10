@@ -1,12 +1,6 @@
 {
-  "extends": [
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "next/core-web-vitals"
-  ],
-  "plugins": ["prettier"],
+  "extends": ["../../.eslintrc.base.json", "next"],
   "rules": {
-    "@typescript-eslint/no-explicit-any": "off",
-    "prettier/prettier": "warn"
+    "@next/next/no-img-element": "warn"
   }
 }

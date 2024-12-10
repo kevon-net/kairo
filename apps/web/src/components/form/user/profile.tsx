@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { useFormUserProfile } from '@/hooks/form/account/profile';
 import InputComboboxCountryCode from '@/components/common/inputs/combobox/country-code';
-import { ProfileGet } from '@/types/models/profile';
+import { ProfileGet } from '@repo/types/models';
 
 export default function Profile({ data }: { data: ProfileGet }) {
   const { form, submitted, handleSubmit, session } = useFormUserProfile(data);

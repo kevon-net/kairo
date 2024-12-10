@@ -1,11 +1,11 @@
-import { getUrlParam } from '@/utilities/helpers/url';
-import email from '@/utilities/validators/special/email';
+import { getUrlParam } from '@repo/utils/helpers';
+import { email } from '@repo/utils/validators';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { timeout } from '@/data/constants';
+import { name, timeout } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 import { useNetwork, useOs } from '@mantine/hooks';
 import { signIn } from '@/handlers/events/auth';
 import { Provider } from '@prisma/client';
@@ -60,7 +60,7 @@ export const useFormAuthSignIn = () => {
 
         if (!result.error) {
           // apply redirect url
-          window.location.replace(getUrlParam());
+          window.location.replace(getUrlParam(name.urlParam.redirect));
           return;
         }
 

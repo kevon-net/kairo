@@ -1,6 +1,6 @@
 import { apiUrl, headers } from '@/data/constants';
 import { SignUp } from '@/types/bodies/request';
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 
 export const signUp = async (params: SignUp) => {
   try {

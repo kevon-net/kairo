@@ -9,7 +9,7 @@ import IntroPage from '@/components/layout/intro/page';
 
 import { typeParams } from '../../layout';
 import { tagGet } from '@/handlers/requests/database/tag';
-import { TagRelations } from '@/types/models/tag';
+import { TagRelations } from '@repo/types/models';
 
 export default async function Tag({ params }: { params: typeParams }) {
   const { tag }: { tag: TagRelations } = await tagGet({

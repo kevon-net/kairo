@@ -1,7 +1,7 @@
 // import { Pool } from "pg";
 // import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from '@prisma/client';
-import { isProduction } from '@/utilities/helpers/environment';
+import { isProduction } from '@repo/utils/helpers';
 
 // const connectionString = process.env.NEXT_DATABASE_URL;
 

@@ -1,12 +1,11 @@
 import { sendTransactionalEmailAuthVerify } from '@/libraries/wrappers/email/transactional/auth/email';
-import { generateOtpCode } from '@/utilities/generators/otp';
+import { generateOtpCode,generateId } from '@repo/utils/generators';
+import { hashValue,encrypt } from '@repo/utils/helpers';
 import prisma from '@/libraries/prisma';
-import { hashValue } from '@/utilities/helpers/hasher';
-import { generateId } from '@/utilities/generators/id';
 import { NextRequest, NextResponse } from 'next/server';
 import { Type } from '@prisma/client';
-import { encrypt } from '@/utilities/helpers/token';
 import { SignUp } from '@/types/bodies/request';
+import { key } from '@/data/constants';
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,7 +43,11 @@ export async function POST(request: NextRequest) {
     const otpValue = generateOtpCode();
     const otpHash = await hashValue(otpValue);
 
-    const token = await encrypt({ id: tokenId, otp: otpHash, userId }, 60 * 60);
+    const token = await encrypt(
+      { id: tokenId, otp: otpHash, userId },
+      key,
+      60 * 60
+    );
 
     const transactions = await prisma.$transaction(async () => {
       const createUser = await prisma.user.create({

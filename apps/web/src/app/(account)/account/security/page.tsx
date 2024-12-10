@@ -22,7 +22,7 @@ import ModalEmailChange from '@/components/common/modals/email-change';
 import { Metadata } from 'next';
 import appData from '@/data/app';
 import { sessionsGet } from '@/handlers/requests/database/session';
-import { SessionRelations } from '@/types/models/session';
+import { SessionRelations } from '@repo/types/models';
 
 export const metadata: Metadata = { title: 'Security' };
 

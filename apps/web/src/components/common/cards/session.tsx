@@ -1,7 +1,5 @@
 'use client';
 
-import { SessionGet } from '@/types/models/session';
-import { capitalizeWord } from '@/utilities/formatters/string';
 import {
   Badge,
   Card,
@@ -15,7 +13,8 @@ import {
 import React from 'react';
 import ModalDeleteSession from '../modals/delete/session';
 import { useAppSelector } from '@/hooks/redux';
-import { getRegionalDate } from '@/utilities/formatters/date';
+import { SessionGet } from '@repo/types/models';
+import { capitalizeWord, getRegionalDate } from '@repo/utils/formatters';
 
 export default function Session({ props }: { props: SessionGet }) {
   const session = useAppSelector((state) => state.session.value);

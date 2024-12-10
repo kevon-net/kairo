@@ -30,7 +30,7 @@ import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
 import { PostRelations } from '@/types/static';
 import Link from 'next/link';
-import { getRegionalDate } from '@/utilities/formatters/date';
+import { getRegionalDate } from '@repo/utils/formatters';
 
 export default async function Post({ params }: { params: typeParams }) {
   const [postId] = params['postId-postTitle'].split('-');

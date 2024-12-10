@@ -3,11 +3,10 @@
 import { fetchIp } from '@/services/api/geo';
 import { IpData } from '@/types/bodies/response';
 import { NextRequest, NextResponse } from 'next/server';
-import { isProduction } from '../utilities/helpers/environment';
 import { cookies } from 'next/headers';
-import { cookieName } from '@/data/constants';
-import { getExpiry } from '../utilities/helpers/time';
-import { decrypt, encrypt } from '../utilities/helpers/token';
+import { cookieName, key } from '@/data/constants';
+import { isProduction, decrypt, encrypt } from '@repo/utils/helpers';
+import { getExpiry } from '@/utilities/time';
 
 const getGeoDataCookie = async (): Promise<string | null> => {
   const geoDataCookieValue = cookies().get(cookieName.geo)?.value;
@@ -18,7 +17,7 @@ export const getGeoData = async (): Promise<IpData | null> => {
   const geoDataCookieValue = await getGeoDataCookie();
   const geoData = !geoDataCookieValue
     ? null
-    : await decrypt(geoDataCookieValue);
+    : await decrypt(geoDataCookieValue, key);
 
   return geoData;
 };
@@ -36,20 +35,23 @@ export const setGeoData = async (
 
   (response ? response.cookies : cookies()).set(
     cookieName.geo,
-    await encrypt({
-      ip: geoData.ip,
-      city: geoData.city,
-      country_name: geoData.country_name,
-      country_code: geoData.country_code,
-      latitude: geoData.latitude,
-      longitude: geoData.longitude,
-      timezone: geoData.timezone,
-      utc_offset: geoData.utc_offset,
-      country_calling_code: geoData.country_calling_code,
-      currency: geoData.currency,
-      currency_name: geoData.currency_name,
-      languages: geoData.languages,
-    }),
+    await encrypt(
+      {
+        ip: geoData.ip,
+        city: geoData.city,
+        country_name: geoData.country_name,
+        country_code: geoData.country_code,
+        latitude: geoData.latitude,
+        longitude: geoData.longitude,
+        timezone: geoData.timezone,
+        utc_offset: geoData.utc_offset,
+        country_calling_code: geoData.country_calling_code,
+        currency: geoData.currency,
+        currency_name: geoData.currency_name,
+        languages: geoData.languages,
+      },
+      key
+    ),
     {
       expires: getExpiry(true).millisec,
       sameSite: 'strict',
@@ -70,7 +72,7 @@ export const updateGeoData = async (
     return (await setGeoData(request, response)) as NextResponse;
   }
 
-  const parsed: IpData = await decrypt(geoData);
+  const parsed: IpData = await decrypt(geoData, key);
 
   const expiry = getExpiry(true).millisec;
   const expires = new Date(Date.now() + expiry);
@@ -79,7 +81,7 @@ export const updateGeoData = async (
 
   response.cookies.set(cookieName.geo, geoData, {
     name: cookieName.geo,
-    value: await encrypt(parsed, getExpiry(true).sec),
+    value: await encrypt(parsed, key, getExpiry(true).sec),
     expires: expires,
     sameSite: 'strict',
     secure: isProduction(),

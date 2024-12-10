@@ -19,7 +19,7 @@ import { IconCheck } from '@tabler/icons-react';
 import React from 'react';
 import TooltipInfo from '../../tooltips/input/info';
 import { Discount, Pricing } from '@/types/static';
-import { roundAndTruncate } from '@/utilities/helpers/number';
+import { roundAndTruncate } from '@repo/utils/helpers';
 
 export default function Main({
   props,

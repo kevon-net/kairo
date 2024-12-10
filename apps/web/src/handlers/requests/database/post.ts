@@ -1,7 +1,7 @@
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 import { apiUrl, headers } from '@/data/constants';
-import { PostCreate, PostUpdate } from '@/types/models/post';
-import { authHeaders } from '@/utilities/helpers/auth';
+import { PostCreate, PostUpdate } from '@repo/types/models';
+import { authHeaders } from '@/libraries/auth';
 
 const baseRequestUrl = `${apiUrl}/posts`;
 

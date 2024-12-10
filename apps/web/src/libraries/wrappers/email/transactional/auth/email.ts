@@ -3,7 +3,7 @@ import resend from '@/libraries/resend';
 
 import EmailTransactionalEmailChanged from '@/components/email/transactional/auth/email-changed';
 import EmailTransactionalAuthVerify from '@/components/email/transactional/auth/verify';
-import { isProduction } from '@/utilities/helpers/environment';
+import { isProduction } from '@repo/utils/helpers';
 import { EmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 

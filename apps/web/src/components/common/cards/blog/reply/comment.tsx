@@ -1,6 +1,5 @@
 'use client';
 
-import { initialize } from '@/utilities/formatters/string';
 import {
   Avatar,
   Button,
@@ -20,7 +19,7 @@ import ModalReply from '@/components/common/modals/reply';
 import { useFetchRepliesReply } from '@/hooks/fetch/replies/reply';
 import { IconCircleFilled } from '@tabler/icons-react';
 import { PostCommentReply } from '@/types/static';
-import { getRegionalDate } from '@/utilities/formatters/date';
+import { initialize, getRegionalDate } from '@repo/utils/formatters';
 
 export default function Comment({ props }: { props: PostCommentReply }) {
   const { loading, fetch, replies } = useFetchRepliesReply({

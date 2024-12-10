@@ -1,7 +1,7 @@
 import { contactCreate } from '@/handlers/requests/email/contact';
-import { Variant } from '@/enums/notification';
+import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
-import email from '@/utilities/validators/special/email';
+import { email } from '@repo/utils/validators';
 import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';

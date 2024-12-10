@@ -1,6 +1,6 @@
 import { apiUrl, headers } from '@/data/constants';
 import { SignIn } from '@/types/bodies/request';
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 import { Provider } from '@prisma/client';
 
 export const signIn = async (

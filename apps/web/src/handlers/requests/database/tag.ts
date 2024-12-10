@@ -1,6 +1,6 @@
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 import { apiUrl, headers } from '@/data/constants';
-import { authHeaders } from '@/utilities/helpers/auth';
+import { authHeaders } from '@/libraries/auth';
 
 const baseRequestUrl = `${apiUrl}/tags`;
 

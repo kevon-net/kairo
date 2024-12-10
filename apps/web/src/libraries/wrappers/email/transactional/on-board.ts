@@ -2,7 +2,7 @@ import appData from '@/data/app';
 import resend from '@/libraries/resend';
 
 import EmailTransactionalOnboardWelcome from '@/components/email/transactional/onboard/welcome';
-import { isProduction } from '@/utilities/helpers/environment';
+import { isProduction } from '@repo/utils/helpers';
 import { EmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 

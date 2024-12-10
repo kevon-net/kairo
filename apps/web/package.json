@@ -1,5 +1,5 @@
 {
-  "name": "next",
+  "name": "web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -32,6 +32,9 @@
     "@react-email/render": "^1.0.2",
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "@repo/enums": "^1.0.0",
+    "@repo/types": "^1.0.0",
+    "@repo/utils": "^1.0.0",
     "@tabler/icons-react": "^3.19.0",
     "@tiptap/extension-link": "^2.8.0",
     "@tiptap/pm": "^2.8.0",
@@ -60,7 +63,6 @@
     "postcss": "^8.4.47",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "3.4.1",
     "prisma": "^5.21.1",
     "react-email": "3.0.2",
     "sass": "^1.81.0",

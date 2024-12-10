@@ -32,7 +32,7 @@ import appTheme from '@/styles/theme';
 import appResolver from '@/styles/resolver';
 
 import appData from '@/data/app';
-import { linkify } from '@/utilities/formatters/string';
+import { linkify } from '@repo/utils/formatters';
 
 import { getSession } from '@/libraries/auth';
 

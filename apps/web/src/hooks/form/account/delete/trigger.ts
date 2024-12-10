@@ -1,10 +1,10 @@
 import { userDelete } from '@/handlers/requests/database/user';
 import { DeleteAccountRequest } from '@/types/token';
-import { decrypt } from '@/utilities/helpers/token';
-import { getUrlParam } from '@/utilities/helpers/url';
+import { decrypt, getUrlParam } from '@repo/utils/helpers';
 import { useEffect, useState } from 'react';
 import { signOut } from '@/handlers/events/auth';
 import { useAppSelector } from '@/hooks/redux';
+import { key } from '@/data/constants';
 
 export const useFormUserAccountDeleteTrigger = () => {
   const [status, setStatus] = useState<{
@@ -20,7 +20,7 @@ export const useFormUserAccountDeleteTrigger = () => {
       let parsed: DeleteAccountRequest;
 
       try {
-        parsed = await decrypt(getUrlParam('token'));
+        parsed = await decrypt(getUrlParam('token'), key);
       } catch {
         setStatus({
           state: 'error',

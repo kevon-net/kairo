@@ -1,6 +1,6 @@
 import { apiUrl, headers } from '@/data/constants';
 import { Verify, VerifyResend } from '@/types/bodies/request';
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 
 export const verify = async (requestBody: Verify) => {
   try {

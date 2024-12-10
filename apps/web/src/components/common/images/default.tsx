@@ -1,6 +1,6 @@
 import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import { Image, Center, ImageProps, MantineStyleProps } from '@mantine/core';
-import { getFallbackSrc } from '@/utilities/helpers/image';
+import { getFallbackSrc } from '@repo/utils/helpers';
 
 type DefaultImageProps = {
   src: string;

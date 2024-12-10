@@ -1,21 +1,18 @@
-import text from '@/utilities/validators/special/text';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { profileUpdate } from '@/handlers/requests/database/profile';
-import { Variant } from '@/enums/notification';
-import { showNotification } from '@/utilities/notifications';
-import { timeout } from '@/data/constants';
+import { Variant } from '@repo/enums';
+import { authUrls, baseUrl, timeout } from '@/data/constants';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
-import { setRedirectUrl } from '@/utilities/helpers/url';
-import {
-  capitalizeWords,
-  segmentFullName,
-} from '@/utilities/formatters/string';
+import { showNotification } from '@/utilities/notifications';
+import { text } from '@repo/utils/validators';
+import { setRedirectUrl } from '@repo/utils/helpers';
+import { capitalizeWords, segmentFullName } from '@repo/utils/formatters';
+import { ProfileGet } from '@repo/types/models';
 import { useNetwork } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateSession } from '@/libraries/redux/slices/session';
-import { ProfileGet } from '@/types/models/profile';
 
 export const useFormUserProfile = (profileData: ProfileGet) => {
   const router = useRouter();
@@ -124,7 +121,13 @@ export const useFormUserProfile = (profileData: ProfileGet) => {
         if (response.status === 401) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl(pathname)),
+            async () =>
+              router.push(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 

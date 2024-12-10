@@ -1,6 +1,6 @@
 import { apiUrl } from '@/data/constants';
 import { EmailContactCreate } from '@/types/email';
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 
 const baseRequestUrl = `${apiUrl}/email/contact`;
 

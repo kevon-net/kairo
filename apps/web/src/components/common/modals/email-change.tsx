@@ -17,7 +17,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useFormUserEmail } from '@/hooks/form/account/email';
 import TooltipInputInfo from '../tooltips/input/info';
 import LayoutModal from '@/components/layout/modal';
-import { Alert } from '@/enums/notification';
+import { Alert } from '@repo/enums';
 
 export default function EmailChange() {
   const [opened, { open, close }] = useDisclosure(false);

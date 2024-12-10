@@ -9,7 +9,7 @@ import IntroPage from '@/components/layout/intro/page';
 
 import { typeParams } from '../../layout';
 import { categoryGet } from '@/handlers/requests/database/category';
-import { CategoryRelations } from '@/types/models/category';
+import { CategoryRelations } from '@repo/types/models';
 
 export default async function Category({ params }: { params: typeParams }) {
   const { category }: { category: CategoryRelations } = await categoryGet({

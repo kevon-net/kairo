@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import LayoutBody from '@/components/layout/body';
 
 import { typeParams } from '../../layout';
-import { TagGet } from '@/types/models/tag';
+import { TagGet } from '@repo/types/models';
 import { tagsGet } from '@/handlers/requests/database/tag';
 
 export const generateMetadata = async ({

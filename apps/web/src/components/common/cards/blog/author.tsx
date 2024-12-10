@@ -1,4 +1,4 @@
-import { getRegionalDate } from '@/utilities/formatters/date';
+import { getRegionalDate } from '@repo/utils/formatters';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
 

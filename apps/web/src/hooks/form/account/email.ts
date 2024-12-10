@@ -1,16 +1,16 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { Variant } from '@/enums/notification';
-import { showNotification } from '@/utilities/notifications';
-import { timeout } from '@/data/constants';
+import { Variant } from '@repo/enums';
+import { authUrls, baseUrl, timeout } from '@/data/constants';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
-import { setRedirectUrl } from '@/utilities/helpers/url';
 import { useNetwork } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateSession } from '@/libraries/redux/slices/session';
 import { verify, verifyResend } from '@/handlers/requests/auth/verify';
-import email from '@/utilities/validators/special/email';
+import { showNotification } from '@/utilities/notifications';
+import { setRedirectUrl } from '@repo/utils/helpers';
+import { email } from '@repo/utils/validators';
 import { userUpdate } from '@/handlers/requests/database/user';
 
 export const useFormUserEmail = (close: () => void) => {
@@ -135,7 +135,13 @@ export const useFormUserEmail = (close: () => void) => {
         if (response.status === 401) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl(pathname)),
+            async () =>
+              router.push(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 
@@ -146,7 +152,13 @@ export const useFormUserEmail = (close: () => void) => {
         if (response.statusText === 'Already Verified') {
           // redirect to sign in
           setTimeout(
-            async () => router.replace(setRedirectUrl(pathname)),
+            async () =>
+              router.replace(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 
@@ -294,7 +306,13 @@ export const useFormUserEmail = (close: () => void) => {
         if (response.status === 401) {
           // redirect to sign in
           setTimeout(
-            async () => router.push(setRedirectUrl(pathname)),
+            async () =>
+              router.push(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 
@@ -305,7 +323,13 @@ export const useFormUserEmail = (close: () => void) => {
         if (response.statusText === 'Already Verified') {
           // redirect to sign in
           setTimeout(
-            async () => router.replace(setRedirectUrl(pathname)),
+            async () =>
+              router.replace(
+                setRedirectUrl({
+                  targetUrl: authUrls.signIn,
+                  redirectUrl: `${baseUrl}/${pathname}`,
+                })
+              ),
             timeout.redirect
           );
 

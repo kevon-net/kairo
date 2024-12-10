@@ -8,7 +8,7 @@ import FormUserProfile from '@/components/form/user/profile';
 import { Metadata } from 'next';
 import { profileGet } from '@/handlers/requests/database/profile';
 import { getSession } from '@/libraries/auth';
-import { ProfileGet } from '@/types/models/profile';
+import { ProfileGet } from '@repo/types/models';
 
 export const metadata: Metadata = { title: 'Profile' };
 

@@ -10,7 +10,7 @@ import EmailTransactionalOffBoardConfirm from '@/components/email/transactional/
 import EmailTransactionalOffBoarded from '@/components/email/transactional/off-board/off-boarded';
 
 import { baseUrl } from '@/data/constants';
-import { generateOtpCode } from '@/utilities/generators/otp';
+import { generateOtpCode } from '@repo/utils/generators';
 import sample from '@/data/sample';
 
 const emails: Record<string, any> = {

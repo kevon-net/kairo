@@ -19,8 +19,13 @@ export default function Reply({ props }: { props: ReplyRelations }) {
             </Title>
 
             <Text fz={'sm'} c={'dimmed'}>
-              <Text inherit>{getRegionalDate(props.createdAt).date}</Text> at{' '}
-              <Text inherit>{getRegionalDate(props.createdAt).time}</Text>
+              <Text inherit component="span">
+                {getRegionalDate(props.createdAt).date}
+              </Text>{' '}
+              at{' '}
+              <Text inherit component="span">
+                {getRegionalDate(props.createdAt).time}
+              </Text>
             </Text>
           </Stack>
         </Group>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import LayoutSection from '../layout/section';
 import {
@@ -18,24 +18,15 @@ import FormBlogComment from '@/components/form/blog/comment';
 import CardBlogComment from '@/components/common/cards/blog/comment';
 import { useFetchComments } from '@/hooks/fetch/comments';
 import { PostRelations } from '@/types/static';
-import { useAppDispatch } from '@/hooks/redux';
-import { updateComments } from '@/libraries/redux/slices/comments';
 
 export default function Comments({
   props,
 }: {
   props: { post: PostRelations };
 }) {
-  const dispatch = useAppDispatch();
-
   const { loading, fetch, comments } = useFetchComments({
     postId: props.post.id,
   });
-
-  useEffect(() => {
-    dispatch(updateComments([]));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div>

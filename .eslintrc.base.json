@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "prettier/prettier": "warn"
+  },
+  "ignorePatterns": ["dist/"]
+}

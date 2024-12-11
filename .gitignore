@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -13,9 +14,8 @@
 /.next/
 /out/
 
-# production (change 'app.zip' to the app's name)
+# production
 /build
-app.zip
 
 # misc
 .DS_Store
@@ -35,3 +35,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# turbo
+.turbo
+
+# output
+dist

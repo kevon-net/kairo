@@ -1,63 +1,44 @@
 import { Hashing } from '@repo/enums';
-import bcryptjs from 'bcryptjs';
-import crypto from 'crypto';
 
-const SALT_ROUNDS = 10;
+// Utility function to convert an ArrayBuffer to a hex string
+const arrayBufferToHex = (buffer: ArrayBuffer): string => {
+  return Array.from(new Uint8Array(buffer))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+};
 
-// create hashing function
+// Create hashing function
 export const hashValue = async (
   rawValue: string | number,
-  algorithm: Hashing = Hashing.BCRYPT
+  algorithm: Hashing = Hashing.SHA256 // Default to SHA256
 ): Promise<string | undefined> => {
   try {
-    // handle different hashing algorithms
-    switch (algorithm) {
-      case Hashing.BCRYPT:
-        return await bcryptjs.hash(`${rawValue}`, SALT_ROUNDS);
-      case Hashing.SHA256:
-        return crypto
-          .createHash('sha256')
-          .update(rawValue.toString())
-          .digest('hex');
-      case Hashing.SHA512:
-        return crypto
-          .createHash('sha512')
-          .update(rawValue.toString())
-          .digest('hex');
-      default:
-        throw new Error('Unsupported hashing algorithm');
-    }
+    const encoder = new TextEncoder();
+    const data = encoder.encode(rawValue.toString());
+    const hashBuffer = await crypto.subtle.digest(algorithm, data);
+    return arrayBufferToHex(hashBuffer);
   } catch (error) {
     console.error('---> utility error (hash value):', error);
     throw error;
   }
 };
 
-// create hash comparison function
+// Create hash comparison function
 export const compareHashes = async (
   rawValue: string | number,
   hashedValue: string | null,
-  algorithm: Hashing = Hashing.BCRYPT
+  algorithm: Hashing = Hashing.SHA256 // Default to SHA256
 ): Promise<boolean> => {
   try {
     if (!hashedValue) {
       return false;
     }
 
-    // handle different hashing algorithms
-    switch (algorithm) {
-      case Hashing.BCRYPT:
-        return await bcryptjs.compare(rawValue.toString(), hashedValue);
-      case Hashing.SHA256:
-      case Hashing.SHA512:
-        const hash = crypto
-          .createHash(algorithm)
-          .update(rawValue.toString())
-          .digest('hex');
-        return hash === hashedValue;
-      default:
-        throw new Error('Unsupported hashing algorithm');
-    }
+    const encoder = new TextEncoder();
+    const data = encoder.encode(rawValue.toString());
+    const hashBuffer = await crypto.subtle.digest(algorithm, data);
+    const hashHex = arrayBufferToHex(hashBuffer);
+    return hashHex === hashedValue;
   } catch (error) {
     console.error('---> utility error (compare values):', error);
     throw error;

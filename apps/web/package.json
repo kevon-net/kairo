@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "check-types": "tsc --noEmit",
     "format": "prettier --write .",
-    "check-format": "prettier --check .",
-    "check-types": "tsc --noEmit"
+    "check-format": "prettier --check ."
   },
   "dependencies": {
     "@mantine/carousel": "^7.13.2",
@@ -26,13 +26,13 @@
     "@mantine/spotlight": "^7.13.2",
     "@mantine/tiptap": "^7.13.2",
     "@paralleldrive/cuid2": "^2.2.2",
-    "@prisma/client": "^5.21.1",
     "@react-email/components": "0.0.28",
     "@react-email/preview": "^0.0.11",
     "@react-email/render": "^1.0.2",
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.3.0",
     "@repo/enums": "^1.0.0",
+    "@repo/schemas": "^1.0.0",
     "@repo/types": "^1.0.0",
     "@repo/utils": "^1.0.0",
     "@tabler/icons-react": "^3.19.0",
@@ -63,7 +63,6 @@
     "postcss": "^8.4.47",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
-    "prisma": "^5.21.1",
     "react-email": "3.0.2",
     "sass": "^1.81.0",
     "typescript": "^5"

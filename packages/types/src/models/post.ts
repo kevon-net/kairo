@@ -1,4 +1,4 @@
-import { Post, Prisma } from '@prisma/client';
+import { Post, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a post (without id and relations)
 export type PostCreate = Prisma.PostCreateInput;

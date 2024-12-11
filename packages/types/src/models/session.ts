@@ -1,4 +1,4 @@
-import { Session, Prisma } from '@prisma/client';
+import { Session, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a session (without id and relations)
 export type SessionCreate = Prisma.SessionCreateInput;

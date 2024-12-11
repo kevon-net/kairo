@@ -1,4 +1,4 @@
-import { Comment, Prisma } from '@prisma/client';
+import { Comment, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a comment (without id and relations)
 export type CommentCreate = Prisma.CommentCreateInput;

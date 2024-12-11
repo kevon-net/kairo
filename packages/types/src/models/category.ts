@@ -1,4 +1,4 @@
-import { Category, Prisma } from '@prisma/client';
+import { Category, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a category (without id and relations)
 export type CategoryCreate = Prisma.CategoryCreateInput;

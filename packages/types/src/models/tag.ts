@@ -1,4 +1,4 @@
-import { Tag, Prisma } from '@prisma/client';
+import { Tag, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a tag (without id and relations)
 export type TagCreate = Prisma.TagCreateInput;

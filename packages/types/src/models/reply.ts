@@ -1,4 +1,4 @@
-import { Reply, Prisma } from '@prisma/client';
+import { Reply, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a reply_comment (without id and relations)
 export type ReplyCreate = Prisma.ReplyCreateInput;

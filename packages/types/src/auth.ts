@@ -1,4 +1,4 @@
-import { Role, Status } from '@prisma/client';
+import { Role, Status } from '@repo/schemas/node_modules/@prisma/client';
 
 export interface Credentials {
   email: string;

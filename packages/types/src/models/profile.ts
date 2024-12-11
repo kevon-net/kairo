@@ -1,4 +1,4 @@
-import { Profile, Prisma } from '@prisma/client';
+import { Profile, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a profile (without id and relations)
 export type ProfileCreate = Prisma.ProfileCreateInput;

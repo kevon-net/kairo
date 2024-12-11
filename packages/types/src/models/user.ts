@@ -1,4 +1,4 @@
-import { User, Prisma } from '@prisma/client';
+import { User, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating a user (without id and relations)
 export type UserCreate = Prisma.UserCreateInput;

@@ -1,4 +1,4 @@
-import { Account, Prisma } from '@prisma/client';
+import { Account, Prisma } from '@repo/schemas/node_modules/@prisma/client';
 
 // Type for creating an account (without id and relations)
 export type AccountCreate = Prisma.AccountCreateInput;

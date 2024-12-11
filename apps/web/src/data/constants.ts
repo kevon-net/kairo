@@ -1,6 +1,9 @@
 // Dynamically set the URL prefix based on the environment
 const urlPrefix =
-  process.env.NODE_ENV === 'production' ? 'https://' : 'http://';
+  process.env.NODE_ENV === 'production' &&
+  process.env.NEXT_PUBLIC_HOST != 'localhost:3000'
+    ? 'https://'
+    : 'http://';
 
 export const hostName = process.env.NEXT_PUBLIC_HOST;
 

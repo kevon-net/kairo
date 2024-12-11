@@ -1,7 +1,6 @@
 import { Request as EnumRequest } from '@repo/enums';
 import { apiUrl, headers } from '@/data/constants';
 import { CommentUpdate } from '@repo/types/models';
-import { authHeaders } from '@/libraries/auth';
 import { CommentCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${apiUrl}/comments`;
@@ -11,7 +10,7 @@ export const commentsGet = async (slug: { postId?: string }) => {
     const request = new Request(`${baseRequestUrl}/post/${slug.postId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: headers.withoutBody,
     });
 
     const response = await fetch(request);
@@ -30,7 +29,7 @@ export const commentCreate = async (comment: CommentCreate) => {
     const request = new Request(`${baseRequestUrl}/create`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: headers.withBody,
       body: JSON.stringify(comment),
     });
 
@@ -48,7 +47,7 @@ export const commentUpdate = async (comment: CommentUpdate) => {
     const request = new Request(`${baseRequestUrl}/${comment.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: headers.withBody,
       body: JSON.stringify(comment),
     });
 
@@ -66,7 +65,7 @@ export const commentDelete = async (commentId: string) => {
     const request = new Request(`${baseRequestUrl}/${commentId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: headers.withoutBody,
     });
 
     const response = await fetch(request);

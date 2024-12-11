@@ -1,6 +1,5 @@
 import { Request as EnumRequest } from '@repo/enums';
 import { apiUrl, headers } from '@/data/constants';
-import { authHeaders } from '@/libraries/auth';
 
 const baseRequestUrl = `${apiUrl}/tags`;
 
@@ -9,7 +8,7 @@ export const tagsGet = async () => {
     const request = new Request(baseRequestUrl, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: headers.withoutBody,
     });
 
     const response = await fetch(request);
@@ -28,7 +27,7 @@ export const tagGet = async (slug: { tagId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.tagId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: headers.withoutBody,
     });
 
     const response = await fetch(request);

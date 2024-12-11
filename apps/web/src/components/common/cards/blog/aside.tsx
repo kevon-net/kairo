@@ -15,7 +15,7 @@ import {
 
 import { PostRelations } from '@repo/types/models';
 
-import { linkify,getRegionalDate } from '@repo/utils/formatters';
+import { linkify, getRegionalDate } from '@repo/utils/formatters';
 import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
 import { iconSize, iconStrokeWidth } from '@/data/constants';

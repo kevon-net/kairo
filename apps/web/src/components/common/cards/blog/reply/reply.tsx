@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ReplyRelations } from '@repo/types/models';
-import { initialize,getRegionalDate } from '@repo/utils/formatters';
+import { initialize, getRegionalDate } from '@repo/utils/formatters';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
 
 export default function Reply({ props }: { props: ReplyRelations }) {

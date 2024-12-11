@@ -19,7 +19,7 @@ import ModalReply from '@/components/common/modals/reply';
 import { IconCircleFilled } from '@tabler/icons-react';
 import { useFetchRepliesComment } from '@/hooks/fetch/replies/comment';
 import { PostComment } from '@/types/static';
-  import { initialize,getRegionalDate } from '@repo/utils/formatters';
+import { initialize, getRegionalDate } from '@repo/utils/formatters';
 
 export default function Comment({ props }: { props: PostComment }) {
   const { loading, fetch, comments } = useFetchRepliesComment({

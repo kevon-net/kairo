@@ -1,4 +1,9 @@
+import { fileURLToPath } from 'url';
+import path from 'node:path';
+
 /** @type {import('next').NextConfig} */
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   sassOptions: {
@@ -50,6 +55,12 @@ const nextConfig = {
 
   webpack: (config) => {
     config.externals = [...config.externals, 'bcrypt'];
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@repo/enums': path.resolve(__dirname, '../../packages/enums/src'),
+    };
+
     return config;
   },
 };

@@ -1,5 +1,5 @@
 import { apiUrl, headers } from '@/data/constants';
-import { Request as EnumRequest } from '@/enums/request';
+import { Request as EnumRequest } from '@repo/enums';
 
 export const passwordForgot = async (requestBody: { email: string }) => {
   try {

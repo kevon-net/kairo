@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Container } from '@mantine/core';
 
-import { Section as typeSection } from '@/types/layout';
+import { Section as typeSection } from '@repo/types';
 
 import classes from './section.module.scss';
 import { sectionSpacing } from '@/data/constants';

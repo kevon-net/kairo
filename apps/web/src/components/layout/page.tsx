@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Stack } from '@mantine/core';
 
-import { Page as typePage } from '@/types/layout';
+import { Page as typePage } from '@repo/types';
 import { sectionSpacing } from '@/data/constants';
 
 export default function Page({

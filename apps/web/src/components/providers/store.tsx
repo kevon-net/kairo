@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import { makeStore, AppStore } from '@/libraries/redux/store';
 import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
-import { Session } from '@/types/auth';
+import { Session } from '@repo/types';
 import { updateSession } from '@/libraries/redux/slices/session';
 import { IpData } from '@/types/bodies/response';
 import { updateGeoData } from '@/libraries/redux/slices/geolocation';

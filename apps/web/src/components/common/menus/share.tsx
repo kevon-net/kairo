@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Platform } from '@/enums/social';
+import { Platform } from '@repo/enums';
 import {
   ActionIconProps,
   Group,

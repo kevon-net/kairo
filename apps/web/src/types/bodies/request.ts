@@ -1,4 +1,4 @@
-import { Provider } from '@prisma/client';
+import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 import {
   UserUpdate as typeUserUpdate,
   SessionUpdate as typeSessionUpdate,

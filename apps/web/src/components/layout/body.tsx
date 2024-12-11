@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Box, Divider, Flex } from '@mantine/core';
 
-import { Body as typeBody } from '@/types/layout';
-import { Widths } from '@/types/mantine';
+import { Body as typeBody, Widths } from '@repo/types';
 import LayoutSection from './section';
 
 export default function Body({

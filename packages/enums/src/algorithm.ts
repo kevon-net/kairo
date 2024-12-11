@@ -1,7 +1,6 @@
 export enum Hashing {
-  BCRYPT = 'bcrypt',
-  SHA256 = 'sha256',
-  SHA512 = 'sha512',
+  SHA256 = 'SHA-256',
+  SHA512 = 'SHA-512',
 }
 
 export enum Jwt {

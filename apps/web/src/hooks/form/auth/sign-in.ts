@@ -8,7 +8,7 @@ import { showNotification } from '@/utilities/notifications';
 import { Variant } from '@repo/enums';
 import { useNetwork, useOs } from '@mantine/hooks';
 import { signIn } from '@/handlers/events/auth';
-import { Provider } from '@prisma/client';
+import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 
 export const useFormAuthSignIn = () => {
   const router = useRouter();

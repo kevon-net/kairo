@@ -1,7 +1,11 @@
 import prisma from '@/libraries/prisma';
 import { compareHashes, decrypt } from '@repo/utils/helpers';
 import { generateId } from '@repo/utils/generators';
-import { Provider, Status, Type } from '@prisma/client';
+import {
+  Provider,
+  Status,
+  Type,
+} from '@repo/schemas/node_modules/@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { cookieName, key } from '@/data/constants';

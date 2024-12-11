@@ -10,7 +10,7 @@ import { getExpiry } from '@/utilities/time';
 import { NextRequest, NextResponse } from 'next/server';
 import { UserCreate } from '@repo/types/models';
 import { getSession } from '@/libraries/auth';
-import { Status, Type } from '@prisma/client';
+import { Status, Type } from '@repo/schemas/node_modules/@prisma/client';
 import { cookies } from 'next/headers';
 import { baseUrl, cookieName, key } from '@/data/constants';
 import { sendEmailTransactionalAuthPasswordChanged } from '@/libraries/wrappers/email/transactional/auth/password';

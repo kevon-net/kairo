@@ -4,7 +4,7 @@ import prisma from '@/libraries/prisma';
 import { sendEmailTransactionalAuthPasswordForgot } from '@/libraries/wrappers/email/transactional/auth/password';
 import { generateId } from '@repo/utils/generators';
 import { encrypt } from '@repo/utils/helpers';
-import { Type } from '@prisma/client';
+import { Type } from '@repo/schemas/node_modules/@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {

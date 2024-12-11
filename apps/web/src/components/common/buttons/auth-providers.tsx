@@ -8,7 +8,7 @@ import images from '@/data/images';
 import { capitalizeWords } from '@repo/utils/formatters';
 import { useOs } from '@mantine/hooks';
 import { signIn } from '@/handlers/events/auth';
-import { Provider } from '@prisma/client';
+import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 import ImageDefault from '@/components/common/images/default';
 
 export default function Providers() {

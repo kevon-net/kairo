@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SessionCreate } from '@repo/types/models';
 import { cookies } from 'next/headers';
 import { cookieName } from '@/data/constants';
-import { Status } from '@prisma/client';
+import { Status } from '@repo/schemas/node_modules/@prisma/client';
 import { SessionUpdate } from '@/types/bodies/request';
 
 export async function GET(

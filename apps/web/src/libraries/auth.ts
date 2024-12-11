@@ -6,9 +6,9 @@ import { cookieName, key } from '@/data/constants';
 import { cookies } from 'next/headers';
 import { sessionUpdate } from '@/handlers/requests/database/session';
 import { Credentials, Session } from '@repo/types';
-import { SessionGet,UserGet,ProfileGet  } from '@repo/types/models';
-import { Provider } from '@prisma/client';
-import { decrypt, encrypt,isProduction } from '@repo/utils/helpers';
+import { SessionGet, UserGet, ProfileGet } from '@repo/types/models';
+import { Provider } from '@repo/schemas/node_modules/@prisma/client';
+import { decrypt, encrypt, isProduction } from '@repo/utils/helpers';
 import { getExpiry } from '@/utilities/time';
 
 export const getSessionCookie = async (): Promise<string | null> => {
@@ -20,7 +20,7 @@ export const getSession = async (): Promise<Session | null> => {
   const sessionCookieValue = await getSessionCookie();
   const session = !sessionCookieValue
     ? null
-    : await decrypt(sessionCookieValue,key);
+    : await decrypt(sessionCookieValue, key);
 
   return session;
 };
@@ -45,7 +45,8 @@ export const signIn = async (
         withPassword: userObject.password ? true : false,
       },
       expires: sessionObject.expiresAt,
-    },key,
+    },
+    key,
     getExpiry(credentials?.remember ?? true).sec
   );
 
@@ -63,7 +64,7 @@ export const updateSession = async (
   response: NextResponse,
   session: string
 ) => {
-  const parsed: Session = await decrypt(session,key);
+  const parsed: Session = await decrypt(session, key);
   const remember = parsed.user.remember;
 
   const expiry = getExpiry(remember).millisec;
@@ -73,7 +74,7 @@ export const updateSession = async (
 
   response.cookies.set({
     name: cookieName.session,
-    value: await encrypt(parsed,key, getExpiry(remember).sec),
+    value: await encrypt(parsed, key, getExpiry(remember).sec),
     expires: expires,
     httpOnly: true,
   });

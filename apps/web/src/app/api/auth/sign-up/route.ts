@@ -1,9 +1,9 @@
 import { sendTransactionalEmailAuthVerify } from '@/libraries/wrappers/email/transactional/auth/email';
-import { generateOtpCode,generateId } from '@repo/utils/generators';
-import { hashValue,encrypt } from '@repo/utils/helpers';
+import { generateOtpCode, generateId } from '@repo/utils/generators';
+import { hashValue, encrypt } from '@repo/utils/helpers';
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { Type } from '@prisma/client';
+import { Type } from '@repo/schemas/node_modules/@prisma/client';
 import { SignUp } from '@/types/bodies/request';
 import { key } from '@/data/constants';
 

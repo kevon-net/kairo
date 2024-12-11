@@ -1,9 +1,9 @@
 'use client';
 
 import { cookieName } from '@/data/constants';
-import { Credentials } from '@/types/auth';
+import { Credentials } from '@repo/types';
 import { setCookie } from '@repo/utils/helpers';
-import { Provider } from '@prisma/client';
+import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 import { signIn as handleRequestSignIn } from '../requests/auth/sign-in';
 import { signOut as handleRequestSignOut } from '../requests/auth/sign-out';
 

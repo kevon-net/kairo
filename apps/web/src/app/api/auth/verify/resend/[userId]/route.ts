@@ -2,7 +2,7 @@ import { sendTransactionalEmailAuthVerify } from '@/libraries/wrappers/email/tra
 import { generateOtpCode, generateId } from '@repo/utils/generators';
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import { Type } from '@prisma/client';
+import { Type } from '@repo/schemas/node_modules/@prisma/client';
 import { decrypt, encrypt, hashValue } from '@repo/utils/helpers';
 import { VerifyResend } from '@/types/bodies/request';
 import { key } from '@/data/constants';

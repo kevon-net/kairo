@@ -30,7 +30,7 @@ export default function Contact({
       subject: props?.subject,
       message: props?.message,
     },
-    { close }
+    { close: options?.close }
   );
 
   return (

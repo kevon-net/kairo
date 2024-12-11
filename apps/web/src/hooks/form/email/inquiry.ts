@@ -12,7 +12,7 @@ export const useFormEmailInquiry = (
     subject?: string;
     message?: string;
   },
-  options?: { close: () => void }
+  options?: { close?: () => void }
 ) => {
   const [submitted, setSubmitted] = useState(false);
   const networkStatus = useNetwork();

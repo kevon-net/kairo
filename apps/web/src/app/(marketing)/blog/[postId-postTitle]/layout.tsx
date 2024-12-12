@@ -27,7 +27,7 @@ export const generateMetadata = async ({
   };
 };
 
-export default function Post({
+export default function LayoutPost({
   children, // will be a page or nested layout
   // params,
 }: {

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: { default: 'Confirm', template: `%s - Confirm - ${appData.name.app}` },
 };
 
-export default function LayoutConfirm({
+export default function LayoutConfirmConfirm({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;

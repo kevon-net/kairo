@@ -12,9 +12,9 @@ import { SignIn as FragmentSignIn } from '@/components/common/fragments/auth';
 import { IconArrowRight } from '@tabler/icons-react';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
-export const metadata: Metadata = { title: 'Authentication Error' };
+export const metadata: Metadata = { title: 'Error' };
 
-export default async function AuthenticationError() {
+export default async function Error() {
   return (
     <LayoutPage>
       <LayoutSection id={'page-sign-out'} containerized={false} margined>

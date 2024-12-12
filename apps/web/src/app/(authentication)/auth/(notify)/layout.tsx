@@ -12,7 +12,7 @@ import images from '@/data/images';
 import appData from '@/data/app';
 import { SECTION_SPACING } from '@/data/constants';
 
-export default function Notify({
+export default function LayoutNotify({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;

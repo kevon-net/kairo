@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Categories({
+export default function LayoutCategories({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;

@@ -6,7 +6,7 @@ import { AUTH_URLS, BASE_URL, TIMEOUT } from '@/data/constants';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { showNotification } from '@/utilities/notifications';
-import { text } from '@repo/utils/validators';
+import { errors, text } from '@repo/utils/validators';
 import { setRedirectUrl } from '@repo/utils/helpers';
 import { capitalizeWords, segmentFullName } from '@repo/utils/formatters';
 import { ProfileGet } from '@repo/types/models';
@@ -40,13 +40,9 @@ export const useFormUserProfile = (profileData: ProfileGet) => {
     validate: {
       name: {
         first: (value) =>
-          value?.trim().length > 0
-            ? text(value, 2, 48)
-            : 'Please fill out this field.',
+          value?.trim().length > 0 ? text(value, 2, 48) : errors.isEmpty,
         last: (value) =>
-          value?.trim().length > 0
-            ? text(value, 2, 48)
-            : 'Please fill out this field.',
+          value?.trim().length > 0 ? text(value, 2, 48) : errors.isEmpty,
       },
       phone: {
         code: (value, values) =>

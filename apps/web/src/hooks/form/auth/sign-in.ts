@@ -1,5 +1,5 @@
 import { getUrlParam } from '@repo/utils/helpers';
-import { email } from '@repo/utils/validators';
+import { email, errors } from '@repo/utils/validators';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,7 +23,7 @@ export const useFormAuthSignIn = () => {
     validate: {
       email: (value) => email(value.trim()),
       password: (value) =>
-        value.trim().length > 0 ? null : 'Please fill out this field',
+        value.trim().length > 0 ? null : errors.isEmpty,
     },
   });
 

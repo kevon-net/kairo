@@ -5,3 +5,4 @@ export * from './length';
 export * from './password';
 export * from './phone';
 export * from './text';
+export * from './errors';

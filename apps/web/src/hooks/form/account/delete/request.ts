@@ -10,6 +10,7 @@ import { setRedirectUrl } from '@repo/utils/helpers';
 import { millToMinSec, MinSec } from '@repo/utils/formatters';
 import { useNetwork } from '@mantine/hooks';
 import { useAppSelector } from '@/hooks/redux';
+import { errors } from '@repo/utils/validators';
 
 export const useFormUserAccountDeleteRequest = (close?: () => void) => {
   const pathname = usePathname();
@@ -29,8 +30,7 @@ export const useFormUserAccountDeleteRequest = (close?: () => void) => {
     validate: {
       confirmation: (value) =>
         value.trim() != 'DELETE' && 'Please enter the confirmation phrase',
-      password: (value) =>
-        value.trim().length < 1 && 'Please fill in this field',
+      password: (value) => value.trim().length < 1 && errors.isEmpty,
     },
   });
 

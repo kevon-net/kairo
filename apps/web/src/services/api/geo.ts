@@ -1,4 +1,4 @@
-import { geoDataUrl, headers } from '@/data/constants';
+import { GEO_DATA_URL, headers } from '@/data/constants';
 import { Request } from '@repo/enums';
 import {
   CountryData,
@@ -8,11 +8,11 @@ import {
 
 export const fetchIp = async (ip?: string): Promise<IpData> => {
   try {
-    const urlIp = `${geoDataUrl.ip}/${ip}/json`;
+    const urlIp = `${GEO_DATA_URL.IP}/${ip}/json`;
 
     const getIpData = await fetch(urlIp, {
       method: Request.GET,
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const ipData = await getIpData.json();
@@ -53,13 +53,13 @@ export const fetchCountryData = async (
 
     const country = countryName ? `name/${countryName || 'Kenya'}` : 'all';
 
-    const urlCountry = `${geoDataUrl.countries}/${country}?${queryParams}`;
+    const urlCountry = `${GEO_DATA_URL.COUNTRIES}/${country}?${queryParams}`;
 
     console.log('urlCountry', urlCountry);
 
     const getCountryData = await fetch(urlCountry, {
       method: Request.GET,
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     console.log('getCountryData.url', getCountryData.url);

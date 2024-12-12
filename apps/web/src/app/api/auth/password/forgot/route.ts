@@ -1,4 +1,4 @@
-import { baseUrl, key } from '@/data/constants';
+import { BASE_URL, KEY } from '@/data/constants';
 import prisma from '@/libraries/prisma';
 
 import { sendEmailTransactionalAuthPasswordForgot } from '@/libraries/wrappers/email/transactional/auth/password';
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     const id = generateId();
 
-    const token = await encrypt({ id, userId: userRecord.id }, key, 60 * 60);
+    const token = await encrypt({ id, userId: userRecord.id }, KEY, 60 * 60);
 
     const tokens = await prisma.$transaction(async () => {
       if (userRecord.tokens.length > 1) {
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       return { createNew };
     });
 
-    const otlValue = `${baseUrl}/auth/password/reset?token=${token}`;
+    const otlValue = `${BASE_URL}/auth/password/reset?token=${token}`;
 
     return NextResponse.json(
       {

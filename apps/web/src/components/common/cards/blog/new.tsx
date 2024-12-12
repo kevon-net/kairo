@@ -22,7 +22,7 @@ import { linkify, getRegionalDate } from '@repo/utils/formatters';
 import { PostRelations } from '@repo/types/models';
 import { IconCircleFilled, IconMessageCircle } from '@tabler/icons-react';
 import ImageDefault from '@/components/common/images/default';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function New({ post }: { post: PostRelations }) {
   const path = `/blog/${post.id}-${linkify(post.title)}`;
@@ -114,8 +114,8 @@ export default function New({ post }: { post: PostRelations }) {
                 {post._count.comments && (
                   <Group gap={4}>
                     <IconMessageCircle
-                      size={iconSize - 4}
-                      stroke={iconStrokeWidth}
+                      size={ICON_SIZE - 4}
+                      stroke={ICON_STROKE_WIDTH}
                     />
 
                     <NumberFormatter

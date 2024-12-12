@@ -11,7 +11,7 @@ import { SignIn as FragmentSignIn } from '../../fragments/auth';
 import classes from './main.module.scss';
 
 import { typeMenuNavbar } from '@/types/components/menu';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { useAppSelector } from '@/hooks/redux';
 import { usePathname } from 'next/navigation';
 
@@ -56,12 +56,12 @@ export default function Main({
         fw={pathname == link.link ? 500 : undefined}
         leftSection={
           link.leftSection ? (
-            <link.leftSection size={iconSize} stroke={iconStrokeWidth} />
+            <link.leftSection size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           ) : undefined
         }
         rightSection={
           link.rightSection ? (
-            <link.rightSection size={iconSize} stroke={iconStrokeWidth} />
+            <link.rightSection size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           ) : undefined
         }
         className={`${classes.link} ${
@@ -83,12 +83,12 @@ export default function Main({
         }
         leftSection={
           link.leftSection ? (
-            <link.leftSection size={iconSize} stroke={iconStrokeWidth} />
+            <link.leftSection size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           ) : undefined
         }
         rightSection={
           link.rightSection ? (
-            <link.rightSection size={iconSize} stroke={iconStrokeWidth} />
+            <link.rightSection size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           ) : undefined
         }
         className={`${classes.link} ${

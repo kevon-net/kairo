@@ -8,7 +8,7 @@ import { images } from '@/assets/images';
 import CardTestimonial from '../cards/testimonial';
 
 import classes from './testimonial.module.scss';
-import { sectionSpacing } from '@/data/constants';
+import { SECTION_SPACING } from '@/data/constants';
 
 export default function Testimonials() {
   const autoplay = useRef(Autoplay({ delay: 2000 }));
@@ -101,7 +101,7 @@ const testimonials = [
 ];
 
 const slides = testimonials.concat(testimonials).map((testimonial, index) => (
-  <CarouselSlide key={index} mb={sectionSpacing / 1.5}>
+  <CarouselSlide key={index} mb={SECTION_SPACING / 1.5}>
     <CardTestimonial props={testimonial} />
   </CarouselSlide>
 ));

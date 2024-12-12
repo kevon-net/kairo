@@ -10,7 +10,7 @@ import AccordionFaq from '@/components/common/accordions/faq';
 import CardCtaFaq from '@/components/common/cards/cta/faq';
 
 import { Box, Grid, GridCol } from '@mantine/core';
-import { sectionSpacing } from '@/data/constants';
+import { SECTION_SPACING } from '@/data/constants';
 
 export const metadata: Metadata = { title: 'FAQ' };
 
@@ -28,7 +28,7 @@ export default async function Faq() {
       <LayoutSection id={'page-faq'} margined>
         <Grid>
           <GridCol span={{ base: 12, sm: 4.5 }}>
-            <Box pos={'sticky'} top={sectionSpacing} pr={{ md: 'xl' }}>
+            <Box pos={'sticky'} top={SECTION_SPACING} pr={{ md: 'xl' }}>
               <IntroSection
                 props={{
                   title: `General`,
@@ -48,7 +48,7 @@ export default async function Faq() {
       <LayoutSection id={'page-faq-billing'} margined>
         <Grid>
           <GridCol span={{ base: 12, sm: 4.5 }}>
-            <Box pos={'sticky'} top={sectionSpacing} pr={{ md: 'xl' }}>
+            <Box pos={'sticky'} top={SECTION_SPACING} pr={{ md: 'xl' }}>
               <IntroSection
                 props={{
                   title: `Billing`,

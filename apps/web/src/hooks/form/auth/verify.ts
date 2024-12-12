@@ -5,7 +5,7 @@ import {
   verifyResend as handleVerifyResend,
 } from '@/handlers/requests/auth/verify';
 import { usePathname, useRouter } from 'next/navigation';
-import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { AUTH_URLS, BASE_URL, TIMEOUT } from '@/data/constants';
 import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { millToMinSec, MinSec } from '@repo/utils/formatters';
@@ -63,11 +63,11 @@ export const useFormAuthVerify = () => {
             async () =>
               router.push(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.SUCCESS }, response, result);
@@ -77,7 +77,7 @@ export const useFormAuthVerify = () => {
         if (response.status === 404) {
           if (response.statusText.includes('User')) {
             // redirect to home page
-            setTimeout(() => router.replace('/'), timeout.redirect);
+            setTimeout(() => router.replace('/'), TIMEOUT.REDIRECT);
           }
 
           showNotification({ variant: Variant.FAILED }, response, result);
@@ -90,11 +90,11 @@ export const useFormAuthVerify = () => {
             async () =>
               router.replace(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);
@@ -139,7 +139,7 @@ export const useFormAuthVerify = () => {
             window.location.replace(
               `/auth/verify?token=${result.token}&userId=${result.user.id}`
             ),
-          timeout.redirect
+          TIMEOUT.REDIRECT
         );
 
         showNotification({ variant: Variant.SUCCESS }, response, result);
@@ -157,7 +157,7 @@ export const useFormAuthVerify = () => {
 
       if (response.status === 404) {
         // redirect to home page
-        setTimeout(() => router.replace('/'), timeout.redirect);
+        setTimeout(() => router.replace('/'), TIMEOUT.REDIRECT);
 
         showNotification({ variant: Variant.FAILED }, response, result);
         return;
@@ -169,11 +169,11 @@ export const useFormAuthVerify = () => {
           async () =>
             router.replace(
               setRedirectUrl({
-                targetUrl: authUrls.signIn,
-                redirectUrl: `${baseUrl}/${pathname}`,
+                targetUrl: AUTH_URLS.SIGN_IN,
+                redirectUrl: `${BASE_URL}/${pathname}`,
               })
             ),
-          timeout.redirect
+          TIMEOUT.REDIRECT
         );
 
         showNotification({ variant: Variant.WARNING }, response, result);

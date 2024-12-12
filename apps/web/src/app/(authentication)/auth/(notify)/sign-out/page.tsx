@@ -11,7 +11,7 @@ import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
 
 import { SignOut as FragmentSignOut } from '@/components/common/fragments/auth';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export const metadata: Metadata = { title: 'Sign Out' };
 
@@ -50,7 +50,7 @@ export default async function SignOut() {
               href={'/'}
               variant="light"
               rightSection={
-                <IconArrowRight size={iconSize} stroke={iconStrokeWidth} />
+                <IconArrowRight size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               }
             >
               Go Home

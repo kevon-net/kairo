@@ -2,7 +2,7 @@ import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { SessionCreate } from '@repo/types/models';
 import { cookies } from 'next/headers';
-import { cookieName } from '@/data/constants';
+import { COOKIE_NAME } from '@/data/constants';
 import { Status } from '@repo/schemas/node_modules/@prisma/client';
 import { SessionUpdate } from '@/types/bodies/request';
 
@@ -156,7 +156,7 @@ export async function DELETE({ params }: { params: { sessionId: string } }) {
 
     await prisma.session.delete({ where: { id: params.sessionId } });
 
-    cookies().delete(cookieName.session);
+    cookies().delete(COOKIE_NAME.SESSION);
 
     return NextResponse.json(
       { message: 'Your session has been deleted' },

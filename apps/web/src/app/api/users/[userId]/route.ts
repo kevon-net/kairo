@@ -12,7 +12,7 @@ import { UserCreate } from '@repo/types/models';
 import { getSession } from '@/libraries/auth';
 import { Status, Type } from '@repo/schemas/node_modules/@prisma/client';
 import { cookies } from 'next/headers';
-import { baseUrl, cookieName, key } from '@/data/constants';
+import { BASE_URL, COOKIE_NAME, KEY } from '@/data/constants';
 import { sendEmailTransactionalAuthPasswordChanged } from '@/libraries/wrappers/email/transactional/auth/password';
 import { sendEmailTransactionalAuthEmailChanged } from '@/libraries/wrappers/email/transactional/auth/email';
 import { sendEmailTransactionalOffboardConfirm } from '@/libraries/wrappers/email/transactional/off-board';
@@ -90,7 +90,7 @@ export async function PUT(
     if (options?.password) {
       if (options.token) {
         try {
-          parsed = await decrypt(options.token, key);
+          parsed = await decrypt(options.token, KEY);
 
           const tokenExists = await prisma.token.findUnique({
             where: { id: parsed.id },
@@ -136,11 +136,11 @@ export async function PUT(
       if (session && !session.user.withPassword) {
         const sessionToken = await encrypt(
           { ...session, user: { ...session.user, withPassword: true } },
-          key,
+          KEY,
           getExpiry(session.user.remember).sec
         );
 
-        cookies().set(cookieName.session, sessionToken, {
+        cookies().set(COOKIE_NAME.SESSION, sessionToken, {
           expires: new Date(session.expires),
           httpOnly: true,
         });
@@ -179,11 +179,11 @@ export async function PUT(
     if (options?.email && session) {
       const sessionToken = await encrypt(
         { ...session, user: { ...session.user, email: user.email } },
-        key,
+        KEY,
         getExpiry(session.user.remember).sec
       );
 
-      cookies().set(cookieName.session, sessionToken, {
+      cookies().set(COOKIE_NAME.SESSION, sessionToken, {
         expires: new Date(session.expires),
         httpOnly: true,
       });
@@ -281,7 +281,7 @@ export async function DELETE(
       // create token
       const token = await encrypt(
         { id: tokenId, userId: userRecord.id },
-        key,
+        KEY,
         60 * 60
       );
 
@@ -297,7 +297,7 @@ export async function DELETE(
       });
 
       // create link
-      const link = `${baseUrl}/confirm/delete-account?token=${token}`;
+      const link = `${BASE_URL}/confirm/delete-account?token=${token}`;
 
       // send confirmation email containing link
       await sendEmailTransactionalOffboardConfirm(userRecord.email, link);

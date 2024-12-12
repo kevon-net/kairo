@@ -3,7 +3,7 @@ import { email } from '@repo/utils/validators';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { name, timeout } from '@/data/constants';
+import { URL_PARAM, TIMEOUT } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
 import { Variant } from '@repo/enums';
 import { useNetwork, useOs } from '@mantine/hooks';
@@ -60,7 +60,7 @@ export const useFormAuthSignIn = () => {
 
         if (!result.error) {
           // apply redirect url
-          window.location.replace(getUrlParam(name.urlParam.redirect));
+          window.location.replace(getUrlParam(URL_PARAM.REDIRECT));
           return;
         }
 
@@ -80,7 +80,7 @@ export const useFormAuthSignIn = () => {
               router.push(
                 `/auth/verify/?token=${result.token}&userId=${result.user.id}`
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification(

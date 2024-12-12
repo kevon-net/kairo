@@ -2,7 +2,7 @@ import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { profileUpdate } from '@/handlers/requests/database/profile';
 import { Variant } from '@repo/enums';
-import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { AUTH_URLS, BASE_URL, TIMEOUT } from '@/data/constants';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { showNotification } from '@/utilities/notifications';
@@ -124,11 +124,11 @@ export const useFormUserProfile = (profileData: ProfileGet) => {
             async () =>
               router.push(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);
@@ -137,7 +137,7 @@ export const useFormUserProfile = (profileData: ProfileGet) => {
 
         if (response.status === 404) {
           // sign out
-          setTimeout(async () => await signOut(), timeout.redirect);
+          setTimeout(async () => await signOut(), TIMEOUT.REDIRECT);
 
           showNotification({ variant: Variant.FAILED }, response, result);
           return;

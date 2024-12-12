@@ -1,12 +1,12 @@
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { Request as EnumRequest } from '@repo/enums';
 
 export const passwordForgot = async (requestBody: { email: string }) => {
   try {
-    const request = new Request(`${apiUrl}/auth/password/forgot`, {
+    const request = new Request(`${API_URL}/auth/password/forgot`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: headers.withBody,
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(requestBody),
     });
 

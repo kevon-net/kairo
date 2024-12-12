@@ -37,7 +37,7 @@ import { linkify } from '@repo/utils/formatters';
 import { getSession } from '@/libraries/auth';
 
 import AffixOffline from '@/components/common/affixi/offline';
-import { cookieName } from '@/data/constants';
+import { COOKIE_NAME } from '@/data/constants';
 
 import ProviderStore from '@/components/providers/store';
 import { cookies } from 'next/headers';
@@ -58,8 +58,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const colorScheme = cookies().get(cookieName.colorScheme)?.value;
-  const colorSchemeState = cookies().get(cookieName.colorSchemeState)?.value;
+  const colorScheme = cookies().get(COOKIE_NAME.COLOR_SCHEME)?.value;
+  const colorSchemeState = cookies().get(COOKIE_NAME.COLOR_SCHEME_STATE)?.value;
 
   return (
     <html

@@ -9,7 +9,7 @@ import { IconChevronRight } from '@tabler/icons-react';
 import classes from './main.module.scss';
 
 import { Link as typeLink } from '@/types/link';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function Main({ props }: { props: typeLink[] }) {
   const active = (breadcrumb: typeLink) =>
@@ -18,7 +18,7 @@ export default function Main({ props }: { props: typeLink[] }) {
   return (
     <Breadcrumbs
       separator={
-        <IconChevronRight size={iconSize - 4} stroke={iconStrokeWidth} />
+        <IconChevronRight size={ICON_SIZE - 4} stroke={ICON_STROKE_WIDTH} />
       }
     >
       {props.map((item) => (

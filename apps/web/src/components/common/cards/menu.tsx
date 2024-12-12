@@ -1,4 +1,8 @@
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 import { typeMenuNavbar } from '@/types/components/menu';
 import {
   Card,
@@ -20,13 +24,13 @@ export default function Menu({ props }: { props: typeMenuNavbar }) {
           {props.leftSection && (
             <Center>
               <ThemeIcon
-                size={iconWrapperSize + 4}
+                size={ICON_WRAPPER_SIZE + 4}
                 variant="default"
                 color="pri.6"
               >
                 <props.leftSection
-                  size={iconSize + 4}
-                  stroke={iconStrokeWidth}
+                  size={ICON_SIZE + 4}
+                  stroke={ICON_STROKE_WIDTH}
                   color="var(--mantine-color-pri-6)"
                 />
               </ThemeIcon>

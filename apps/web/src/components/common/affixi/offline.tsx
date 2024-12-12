@@ -7,7 +7,7 @@ import { Affix, AffixBaseProps, Alert } from '@mantine/core';
 import WrapperTransition from '@/components/wrapper/transition';
 import { IconWifi, IconWifiOff } from '@tabler/icons-react';
 import { useNetwork } from '@mantine/hooks';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function Offline({
   position = {
@@ -40,9 +40,9 @@ export default function Offline({
           }}
           icon={
             networkStatus.online ? (
-              <IconWifi size={iconSize} stroke={iconStrokeWidth} />
+              <IconWifi size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
             ) : (
-              <IconWifiOff size={iconSize} stroke={iconStrokeWidth} />
+              <IconWifiOff size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
             )
           }
         />

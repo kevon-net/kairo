@@ -10,7 +10,7 @@ import ImageDefault from '@/components/common/images/default';
 
 import images from '@/data/images';
 import appData from '@/data/app';
-import { sectionSpacing } from '@/data/constants';
+import { SECTION_SPACING } from '@/data/constants';
 
 export default function Notify({
   children, // will be a page or nested layout
@@ -52,7 +52,7 @@ export default function Notify({
               justify="center"
               mih={'100vh'}
               px={{ xs: 32 }}
-              py={sectionSpacing}
+              py={SECTION_SPACING}
             >
               {children}
             </Stack>

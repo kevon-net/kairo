@@ -23,7 +23,7 @@ import {
 import { typeMenuNavbar } from '@/types/components/menu';
 
 import classes from './navbar.module.scss';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import CardMenu from '../cards/menu';
 
 export default function Navbar({
@@ -47,13 +47,13 @@ export default function Navbar({
         leftSection={
           item.leftSection &&
           !megaMenu && (
-            <item.leftSection size={iconSize} stroke={iconStrokeWidth} />
+            <item.leftSection size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           )
         }
         rightSection={
           item.rightSection &&
           !megaMenu && (
-            <item.rightSection size={iconSize} stroke={iconStrokeWidth} />
+            <item.rightSection size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           )
         }
         className={`${classes.item} ${pathname == item.link ? classes.itemActive : ''}`}

@@ -1,15 +1,15 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { PostCreate, PostUpdate } from '@repo/types/models';
 
-const baseRequestUrl = `${apiUrl}/posts`;
+const baseRequestUrl = `${API_URL}/posts`;
 
 export const postsGet = async () => {
   try {
     const request = new Request(baseRequestUrl, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);
@@ -28,7 +28,7 @@ export const postGet = async (slug: { postId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.postId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);
@@ -47,7 +47,7 @@ export const postCreate = async (post: PostCreate) => {
     const request = new Request(`${baseRequestUrl}/create`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: headers.withBody,
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(post),
     });
 
@@ -65,7 +65,7 @@ export const postUpdate = async (post: PostUpdate) => {
     const request = new Request(`${baseRequestUrl}/${post.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
-      headers: headers.withBody,
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(post),
     });
 
@@ -83,7 +83,7 @@ export const postDelete = async (postId: string) => {
     const request = new Request(`${baseRequestUrl}/${postId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);

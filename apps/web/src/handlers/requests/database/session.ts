@@ -1,17 +1,17 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { SessionCreate } from '@repo/types/models';
 import { authHeaders } from '@/libraries/auth';
 import { SessionUpdate } from '@/types/bodies/request';
 
-const baseRequestUrl = `${apiUrl}/sessions`;
+const baseRequestUrl = `${API_URL}/sessions`;
 
 export const sessionsGet = async () => {
   try {
     const request = new Request(baseRequestUrl, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);
@@ -30,7 +30,7 @@ export const sessionGet = async (slug: { sessionToken: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.sessionToken}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);
@@ -49,7 +49,7 @@ export const sessionCreate = async (session: SessionCreate) => {
     const request = new Request(`${baseRequestUrl}/create`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: await authHeaders(HEADERS.WITH_BODY),
       body: JSON.stringify(session),
     });
 
@@ -67,7 +67,7 @@ export const sessionUpdate = async (requestBody: SessionUpdate) => {
     const request = new Request(`${baseRequestUrl}/${requestBody.session.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: await authHeaders(HEADERS.WITH_BODY),
       body: JSON.stringify(requestBody),
     });
 
@@ -85,7 +85,7 @@ export const sessionDelete = async (slug: { sessionId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.sessionId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);

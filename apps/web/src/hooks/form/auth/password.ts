@@ -2,7 +2,7 @@ import { passwordForgot } from '@/handlers/requests/auth/password';
 import { useForm } from '@mantine/form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { authUrls, key, timeout } from '@/data/constants';
+import { AUTH_URLS, KEY, TIMEOUT } from '@/data/constants';
 import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { userUpdate } from '@/handlers/requests/database/user';
@@ -53,7 +53,7 @@ export const useFormAuthPasswordForgot = () => {
           setTime(null);
 
           // redirect to notification page
-          router.push(authUrls.verifyRequest);
+          router.push(AUTH_URLS.VERIFY_REQUEST);
           return;
         }
 
@@ -67,7 +67,7 @@ export const useFormAuthPasswordForgot = () => {
 
         if (response.status === 404) {
           // redirect to notification page
-          setTimeout(() => router.replace('/'), timeout.redirect);
+          setTimeout(() => router.replace('/'), TIMEOUT.REDIRECT);
 
           showNotification({ variant: Variant.WARNING }, response, result);
           return;
@@ -112,7 +112,7 @@ export const useFormAuthPasswordReset = () => {
       if (form.isValid()) {
         setSending(true);
 
-        const parsed = await decrypt(getUrlParam('token'), key).catch(() => {
+        const parsed = await decrypt(getUrlParam('token'), KEY).catch(() => {
           throw new Error('Link is broken, expired or already used');
         });
 
@@ -134,8 +134,8 @@ export const useFormAuthPasswordReset = () => {
           // redirect to sign in
           setTimeout(
             async () =>
-              router.push(setRedirectUrl({ targetUrl: authUrls.signIn })),
-            timeout.redirect
+              router.push(setRedirectUrl({ targetUrl: AUTH_URLS.SIGN_IN })),
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.SUCCESS }, response, result);

@@ -12,7 +12,11 @@ import {
   Title,
 } from '@mantine/core';
 import LayoutSection from '@/components/layout/section';
-import { iconSize, iconStrokeWidth, sectionSpacing } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  SECTION_SPACING,
+} from '@/data/constants';
 import { IconArrowRight } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -36,8 +40,8 @@ export default function Home() {
         <Stack
           justify="center"
           mih={'100vh'}
-          pt={sectionSpacing * 2}
-          pb={sectionSpacing}
+          pt={SECTION_SPACING * 2}
+          pb={SECTION_SPACING}
           ta={'center'}
           gap={'xl'}
         >
@@ -62,7 +66,10 @@ export default function Home() {
                   </Text>
 
                   <Center visibleFrom="xs">
-                    <IconArrowRight size={iconSize} stroke={iconStrokeWidth} />
+                    <IconArrowRight
+                      size={ICON_SIZE}
+                      stroke={ICON_STROKE_WIDTH}
+                    />
                   </Center>
                 </Group>
               </Paper>
@@ -89,7 +96,7 @@ export default function Home() {
               variant="transparent"
               color={'white'}
               rightSection={
-                <IconArrowRight size={iconSize} stroke={iconStrokeWidth} />
+                <IconArrowRight size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               }
             >
               Learn More

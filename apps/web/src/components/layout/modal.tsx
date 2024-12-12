@@ -1,4 +1,8 @@
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 import { Alert } from '@repo/enums';
 import {
   ActionIcon,
@@ -54,7 +58,7 @@ export default function Modal({
   return (
     <Grid>
       <ActionIcon
-        size={iconWrapperSize}
+        size={ICON_WRAPPER_SIZE}
         onClick={props.close}
         variant="light"
         color="gray"
@@ -62,7 +66,7 @@ export default function Modal({
         top={'var(--mantine-spacing-xs)'}
         right={'var(--mantine-spacing-xs)'}
       >
-        <IconX size={iconSize} stroke={iconStrokeWidth} />
+        <IconX size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
       </ActionIcon>
 
       {variant && (
@@ -70,11 +74,11 @@ export default function Modal({
           {options.icon && (
             <Center mt={{ xs: 'sm' }}>
               <ThemeIcon
-                size={iconWrapperSize * 2}
+                size={ICON_WRAPPER_SIZE * 2}
                 variant="light"
                 color={options.color || undefined}
               >
-                <options.icon size={iconSize * 2} stroke={iconStrokeWidth} />
+                <options.icon size={ICON_SIZE * 2} stroke={ICON_STROKE_WIDTH} />
               </ThemeIcon>
             </Center>
           )}

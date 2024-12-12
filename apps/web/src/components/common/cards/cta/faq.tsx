@@ -1,4 +1,4 @@
-import { font, sectionSpacing } from '@/data/constants';
+import { FONT, SECTION_SPACING } from '@/data/constants';
 import {
   Button,
   Card,
@@ -22,9 +22,9 @@ export default function Faq() {
       pos={'relative'}
     >
       <Container size={'sm'}>
-        <Stack gap={'xl'} py={sectionSpacing}>
+        <Stack gap={'xl'} py={SECTION_SPACING}>
           <Stack>
-            <Title order={2} fz={font.ctaTitle} ta={'center'}>
+            <Title order={2} fz={FONT.CTA_TITLE} ta={'center'}>
               Still have a question?
             </Title>
 

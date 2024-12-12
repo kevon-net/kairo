@@ -31,7 +31,7 @@ import {
   IconFingerprint,
   IconNotification,
 } from '@tabler/icons-react';
-import { authUrls, iconSize, iconStrokeWidth } from '@/data/constants';
+import { AUTH_URLS, ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { useMediaQuery } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/hooks/redux';
@@ -76,8 +76,8 @@ export default function Main({
           <Group gap={4}>
             <span>{link.label}</span>
             <IconChevronDown
-              size={iconSize}
-              stroke={iconStrokeWidth}
+              size={ICON_SIZE}
+              stroke={ICON_STROKE_WIDTH}
               style={{ marginTop: 2 }}
             />
           </Group>
@@ -152,7 +152,7 @@ export default function Main({
                 <Button
                   size="xs"
                   component={Link}
-                  href={authUrls.signUp}
+                  href={AUTH_URLS.SIGN_UP}
                   visibleFrom="md"
                 >
                   Sign Up

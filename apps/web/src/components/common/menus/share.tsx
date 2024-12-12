@@ -20,7 +20,7 @@ import {
   IconShare,
 } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
-import { baseUrl, iconSize, iconStrokeWidth } from '@/data/constants';
+import { BASE_URL, ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { capitalizeWord } from '@repo/utils/formatters';
 
 import classes from './share.module.scss';
@@ -40,7 +40,7 @@ export default function Share({
     >
       <MenuTarget>
         <Group gap={6} c={'pri.6'} className={classes.target}>
-          <IconShare size={iconSize - 4} stroke={iconStrokeWidth} />
+          <IconShare size={ICON_SIZE - 4} stroke={ICON_STROKE_WIDTH} />
           <Text component="span" inherit>
             Share
           </Text>
@@ -52,7 +52,7 @@ export default function Share({
           <MenuItem
             key={link.title}
             leftSection={
-              <link.icon size={iconSize - 6} stroke={iconStrokeWidth} />
+              <link.icon size={ICON_SIZE - 6} stroke={ICON_STROKE_WIDTH} />
             }
             component={'a'}
             href={getShareLink(link.title, pathname, props.postTitle)}
@@ -91,7 +91,7 @@ export const getShareLink = (
   pathname: string,
   title: string
 ) => {
-  const currentUrl = `${baseUrl}${pathname}`;
+  const currentUrl = `${BASE_URL}${pathname}`;
 
   switch (platform) {
     case Platform.TWITTER:

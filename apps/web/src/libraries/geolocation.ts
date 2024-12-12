@@ -4,12 +4,12 @@ import { fetchIp } from '@/services/api/geo';
 import { IpData } from '@/types/bodies/response';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { cookieName, key } from '@/data/constants';
+import { COOKIE_NAME, KEY } from '@/data/constants';
 import { isProduction, decrypt, encrypt } from '@repo/utils/helpers';
 import { getExpiry } from '@/utilities/time';
 
 const getGeoDataCookie = async (): Promise<string | null> => {
-  const geoDataCookieValue = cookies().get(cookieName.geo)?.value;
+  const geoDataCookieValue = cookies().get(COOKIE_NAME.GEO)?.value;
   return geoDataCookieValue || null;
 };
 
@@ -17,7 +17,7 @@ export const getGeoData = async (): Promise<IpData | null> => {
   const geoDataCookieValue = await getGeoDataCookie();
   const geoData = !geoDataCookieValue
     ? null
-    : await decrypt(geoDataCookieValue, key);
+    : await decrypt(geoDataCookieValue, KEY);
 
   return geoData;
 };
@@ -34,7 +34,7 @@ export const setGeoData = async (
   );
 
   (response ? response.cookies : cookies()).set(
-    cookieName.geo,
+    COOKIE_NAME.GEO,
     await encrypt(
       {
         ip: geoData.ip,
@@ -50,7 +50,7 @@ export const setGeoData = async (
         currency_name: geoData.currency_name,
         languages: geoData.languages,
       },
-      key
+      KEY
     ),
     {
       expires: getExpiry(true).millisec,
@@ -72,16 +72,16 @@ export const updateGeoData = async (
     return (await setGeoData(request, response)) as NextResponse;
   }
 
-  const parsed: IpData = await decrypt(geoData, key);
+  const parsed: IpData = await decrypt(geoData, KEY);
 
   const expiry = getExpiry(true).millisec;
   const expires = new Date(Date.now() + expiry);
 
   parsed.expires = expires;
 
-  response.cookies.set(cookieName.geo, geoData, {
-    name: cookieName.geo,
-    value: await encrypt(parsed, key, getExpiry(true).sec),
+  response.cookies.set(COOKIE_NAME.GEO, geoData, {
+    name: COOKIE_NAME.GEO,
+    value: await encrypt(parsed, KEY, getExpiry(true).sec),
     expires: expires,
     sameSite: 'strict',
     secure: isProduction(),

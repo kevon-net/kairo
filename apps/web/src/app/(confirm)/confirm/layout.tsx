@@ -8,7 +8,7 @@ import LayoutSection from '@/components/layout/section';
 import { Stack } from '@mantine/core';
 
 import appData from '@/data/app';
-import { sectionSpacing } from '@/data/constants';
+import { SECTION_SPACING } from '@/data/constants';
 
 export const metadata: Metadata = {
   title: { default: 'Confirm', template: `%s - Confirm - ${appData.name.app}` },
@@ -22,7 +22,7 @@ export default function LayoutConfirm({
   return (
     <LayoutBody>
       <LayoutSection id={'layout-confirm'} containerized="sm">
-        <Stack justify="center" mih={'100vh'} pb={sectionSpacing}>
+        <Stack justify="center" mih={'100vh'} pb={SECTION_SPACING}>
           {children}
         </Stack>
       </LayoutSection>

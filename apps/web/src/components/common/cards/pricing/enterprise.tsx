@@ -1,6 +1,10 @@
 'use client';
 
-import { iconSize, iconStrokeWidth, sectionSpacing } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  SECTION_SPACING,
+} from '@/data/constants';
 import { Pricing as SwitchPricing } from '@repo/enums';
 
 import {
@@ -82,8 +86,8 @@ export default function Enterprise({
                   <GridCol key={index} span={{ base: 12, md: 6 }}>
                     <Group>
                       <IconCheck
-                        size={iconSize}
-                        stroke={iconStrokeWidth}
+                        size={ICON_SIZE}
+                        stroke={ICON_STROKE_WIDTH}
                         color="var(--mantine-color-pri-6)"
                       />
 
@@ -106,7 +110,7 @@ export default function Enterprise({
             bg={'var(--mantine-color-gray-light)'}
             withBorder
             h={'100%'}
-            px={{ md: 56, lg: sectionSpacing * 1.5 }}
+            px={{ md: 56, lg: SECTION_SPACING * 1.5 }}
           >
             <Stack justify="center" h={'100%'}>
               <Group justify="space-between" align="end">

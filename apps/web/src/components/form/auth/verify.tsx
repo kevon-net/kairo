@@ -15,7 +15,7 @@ import {
 import { useFormAuthVerify } from '@/hooks/form/auth/verify';
 import WrapperTransition from '@/components/wrapper/transition';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function Verify() {
   const { form, handleSubmit, handleRequest, submitted, requested, time } =
@@ -59,7 +59,7 @@ export default function Verify() {
           <Alert
             color="yellow"
             icon={
-              <IconAlertTriangle size={iconSize} stroke={iconStrokeWidth} />
+              <IconAlertTriangle size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
             }
             fz={'sm'}
           >

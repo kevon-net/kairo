@@ -1,6 +1,6 @@
 'use client';
 
-import { sectionSpacing } from '@/data/constants';
+import { SECTION_SPACING } from '@/data/constants';
 import { useSwitchPricing } from '@/hooks/switch/pricing';
 import { Pricing as SwitchPricing } from '@repo/enums';
 import { Grid, GridCol, Group, SegmentedControl, Stack } from '@mantine/core';
@@ -13,7 +13,7 @@ export default function Pricing() {
   const { period, setPeriod, getDiscount } = useSwitchPricing();
 
   return (
-    <Stack gap={sectionSpacing / 2}>
+    <Stack gap={SECTION_SPACING / 2}>
       <Group justify="center">
         <SegmentedControl
           color="pri"

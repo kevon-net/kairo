@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Type } from '@repo/schemas/node_modules/@prisma/client';
 import { decrypt, encrypt, hashValue } from '@repo/utils/helpers';
 import { VerifyResend } from '@/types/bodies/request';
-import { key } from '@/data/constants';
+import { KEY } from '@/data/constants';
 
 export async function POST(
   request: NextRequest,
@@ -43,7 +43,7 @@ export async function POST(
         throw new Error('Token not included');
       }
 
-      parsed = await decrypt(token, key);
+      parsed = await decrypt(token, KEY);
 
       const expiry = new Date(parsed.exp * 1000).getTime() - now.getTime();
 
@@ -90,7 +90,7 @@ export async function POST(
 
       const token = await encrypt(
         { id: tokenId, otp: otpHash, userId: userRecord.id },
-        key,
+        KEY,
         60 * 60
       );
 

@@ -1,8 +1,8 @@
 import {
-  font,
-  iconSize,
-  iconStrokeWidth,
-  sectionSpacing,
+  FONT,
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  SECTION_SPACING,
 } from '@/data/constants';
 import {
   Button,
@@ -28,9 +28,9 @@ export default function Inquiry() {
       pos={'relative'}
     >
       <Container size={'sm'}>
-        <Stack gap={'xl'} py={sectionSpacing}>
+        <Stack gap={'xl'} py={SECTION_SPACING}>
           <Stack>
-            <Title order={2} fz={font.ctaTitle} ta={'center'}>
+            <Title order={2} fz={FONT.CTA_TITLE} ta={'center'}>
               Want to speak with an expert?
             </Title>
 
@@ -55,7 +55,7 @@ export default function Inquiry() {
               color="var(--mantine-color-body)"
               variant="transparent"
               rightSection={
-                <IconArrowRight size={iconSize} stroke={iconStrokeWidth} />
+                <IconArrowRight size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               }
             >
               Learn More

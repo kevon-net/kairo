@@ -1,7 +1,7 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { userUpdate } from '@/handlers/requests/database/user';
-import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { AUTH_URLS, BASE_URL, TIMEOUT } from '@/data/constants';
 import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { useSignOut } from '@/hooks/auth';
@@ -89,7 +89,7 @@ export const useFormUserAccountPassword = (params: {
             );
 
             // refresh the page
-            setTimeout(() => router.refresh(), timeout.redirect);
+            setTimeout(() => router.refresh(), TIMEOUT.REDIRECT);
 
             showNotification({ variant: Variant.SUCCESS }, response, result);
             return;
@@ -105,11 +105,11 @@ export const useFormUserAccountPassword = (params: {
             async () =>
               router.push(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);
@@ -118,7 +118,7 @@ export const useFormUserAccountPassword = (params: {
 
         if (response.status === 404) {
           // sign out
-          setTimeout(async () => await signOut(), timeout.redirect);
+          setTimeout(async () => await signOut(), TIMEOUT.REDIRECT);
 
           showNotification({ variant: Variant.FAILED }, response, result);
           return;

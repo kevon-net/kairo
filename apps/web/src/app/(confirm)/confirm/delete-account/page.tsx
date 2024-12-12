@@ -10,7 +10,11 @@ import LayoutPage from '@/components/layout/page';
 import IntroPage from '@/components/layout/intro/page';
 
 import { useFormUserAccountDeleteTrigger } from '@/hooks/form/account/delete/trigger';
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
 // export const metadata: Metadata = { title: 'Delete Account' };
@@ -33,16 +37,16 @@ export default function DeleteAccount() {
 
       <Group justify="center">
         {!status.state || status.state == 'loading' ? (
-          <Center h={iconWrapperSize * 2}>
+          <Center h={ICON_WRAPPER_SIZE * 2}>
             <Loader type="dots" size={40} />
           </Center>
         ) : status.state == 'error' ? (
-          <ThemeIcon size={iconWrapperSize * 2} color="red" radius={999}>
-            <IconX size={iconSize * 2} stroke={iconStrokeWidth} />
+          <ThemeIcon size={ICON_WRAPPER_SIZE * 2} color="red" radius={999}>
+            <IconX size={ICON_SIZE * 2} stroke={ICON_STROKE_WIDTH} />
           </ThemeIcon>
         ) : (
-          <ThemeIcon size={iconWrapperSize * 2} color="green" radius={999}>
-            <IconCheck size={iconSize * 2} stroke={iconStrokeWidth} />
+          <ThemeIcon size={ICON_WRAPPER_SIZE * 2} color="green" radius={999}>
+            <IconCheck size={ICON_SIZE * 2} stroke={ICON_STROKE_WIDTH} />
           </ThemeIcon>
         )}
       </Group>

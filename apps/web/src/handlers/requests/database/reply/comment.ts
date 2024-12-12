@@ -1,17 +1,17 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { ReplyCommentCreate } from '@/types/bodies/request';
 import { ReplyUpdate } from '@repo/types';
 import { authHeaders } from '@/libraries/auth';
 
-const baseRequestUrl = `${apiUrl}/replies/comment`;
+const baseRequestUrl = `${API_URL}/replies/comment`;
 
 export const repliesCommentGet = async (slug: { commentId: string }) => {
   try {
     const request = new Request(`${baseRequestUrl}/${slug.commentId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);
@@ -30,7 +30,7 @@ export const replyCommentCreate = async (requestBody: ReplyCommentCreate) => {
     const request = new Request(`${baseRequestUrl}/${requestBody.commentId}`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: await authHeaders(HEADERS.WITH_BODY),
       body: JSON.stringify(requestBody),
     });
 
@@ -50,7 +50,7 @@ export const replyCommentUpdate = async (
     const request = new Request(`${baseRequestUrl}/${requestBody.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: await authHeaders(HEADERS.WITH_BODY),
       body: JSON.stringify(requestBody),
     });
 
@@ -68,7 +68,7 @@ export const replyCommentDelete = async (slug: { replyId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.replyId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);

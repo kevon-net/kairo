@@ -32,7 +32,11 @@ import FormContact from '@/components/form/contact';
 import IntroPage from '@/components/layout/intro/page';
 
 import appData from '@/data/app';
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 
 export const metadata: Metadata = { title: 'Contact' };
 
@@ -71,11 +75,14 @@ export default async function Contact() {
                 {dataContact.map((item) => (
                   <Group key={item.link} wrap="nowrap">
                     <ThemeIcon
-                      size={iconWrapperSize + 8}
+                      size={ICON_WRAPPER_SIZE + 8}
                       color={'var(--mantine-color-body)'}
                       c={'var(--mantine-color-pri-6)'}
                     >
-                      <item.icon size={iconSize + 8} stroke={iconStrokeWidth} />
+                      <item.icon
+                        size={ICON_SIZE + 8}
+                        stroke={ICON_STROKE_WIDTH}
+                      />
                     </ThemeIcon>
 
                     <Stack gap={0}>
@@ -109,11 +116,14 @@ export default async function Contact() {
                   >
                     <Center>
                       <ThemeIcon
-                        size={iconWrapperSize}
+                        size={ICON_WRAPPER_SIZE}
                         variant="transparent"
                         c={'var(--mantine-color-body)'}
                       >
-                        <social.icon size={iconSize} stroke={iconStrokeWidth} />
+                        <social.icon
+                          size={ICON_SIZE}
+                          stroke={ICON_STROKE_WIDTH}
+                        />
                       </ThemeIcon>
                     </Center>
                   </Anchor>

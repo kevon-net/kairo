@@ -15,7 +15,7 @@ import {
 import { useFormUserAccountDeleteRequest } from '@/hooks/form/account/delete/request';
 import WrapperTransition from '@/components/wrapper/transition';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function Delete({ close }: { close?: () => void }) {
   const { form, submitted, handleSubmit, time } =
@@ -28,7 +28,7 @@ export default function Delete({ close }: { close?: () => void }) {
           <Alert
             color="yellow"
             icon={
-              <IconAlertTriangle size={iconSize} stroke={iconStrokeWidth} />
+              <IconAlertTriangle size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
             }
             fz={'sm'}
           >

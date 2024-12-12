@@ -6,7 +6,11 @@ import { ActionIcon, Affix, AffixBaseProps } from '@mantine/core';
 import { useHeadroom, useWindowScroll } from '@mantine/hooks';
 
 import WrapperTransition from '@/components/wrapper/transition';
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 import { IconChevronUp } from '@tabler/icons-react';
 
 export default function Top({
@@ -28,8 +32,8 @@ export default function Top({
         transition={'slide-left'}
         mounted={scroll.y > 0 && !pinned}
       >
-        <ActionIcon size={iconWrapperSize} onClick={() => scrollTo({ y: 0 })}>
-          <IconChevronUp size={iconSize} stroke={iconStrokeWidth} />
+        <ActionIcon size={ICON_WRAPPER_SIZE} onClick={() => scrollTo({ y: 0 })}>
+          <IconChevronUp size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
         </ActionIcon>
       </WrapperTransition>
     </Affix>

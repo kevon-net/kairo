@@ -1,9 +1,9 @@
-import { apiUrl } from '@/data/constants';
+import { API_URL } from '@/data/constants';
 import { EmailInquiry } from '@/types/email';
 import { Request as EnumRequest } from '@repo/enums';
 import { contactCreate } from './contact';
 
-const baseRequestUrl = `${apiUrl}/email`;
+const baseRequestUrl = `${API_URL}/email`;
 
 export const emailSend = async (
   options: Omit<EmailInquiry, 'to'> & { phone: string; message: string }

@@ -1,13 +1,13 @@
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { Request as EnumRequest } from '@repo/enums';
 import { authHeaders } from '@/libraries/auth';
 
 export const signOut = async () => {
   try {
-    const request = new Request(`${apiUrl}/auth/sign-out`, {
+    const request = new Request(`${API_URL}/auth/sign-out`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);

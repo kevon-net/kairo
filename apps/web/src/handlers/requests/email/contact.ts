@@ -1,8 +1,8 @@
-import { apiUrl } from '@/data/constants';
+import { API_URL } from '@/data/constants';
 import { EmailContactCreate } from '@/types/email';
 import { Request as EnumRequest } from '@repo/enums';
 
-const baseRequestUrl = `${apiUrl}/email/contact`;
+const baseRequestUrl = `${API_URL}/email/contact`;
 
 export const contactCreate = async (contactOptions: EmailContactCreate) => {
   try {

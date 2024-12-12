@@ -1,5 +1,5 @@
 import { useMantineColorScheme } from '@mantine/core';
-import { cookieName } from '@/data/constants';
+import { COOKIE_NAME } from '@/data/constants';
 import { setCookie, getOSTheme } from '@repo/utils/helpers';
 import { getExpiry } from '@/utilities/time';
 import { useAppDispatch, useAppSelector } from './redux';
@@ -17,7 +17,7 @@ export const useColorSchemeHandler = () => {
     dispatch(updateColorScheme(value));
 
     // update scheme state cookie
-    setCookie(cookieName.colorSchemeState, value, {
+    setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, value, {
       expiryInSeconds: getExpiry(session?.user.remember ?? false).sec,
     });
 
@@ -25,7 +25,7 @@ export const useColorSchemeHandler = () => {
       value == 'light' ? 'light' : value == 'dark' ? 'dark' : getOSTheme();
 
     // update scheme cookie
-    setCookie(cookieName.colorScheme, scheme, {
+    setCookie(COOKIE_NAME.COLOR_SCHEME, scheme, {
       expiryInSeconds: getExpiry(session?.user.remember ?? false).sec,
     });
 

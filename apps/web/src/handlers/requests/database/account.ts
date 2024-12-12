@@ -1,16 +1,16 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { AccountCreate, AccountUpdate } from '@repo/types/models';
 import { authHeaders } from '@/libraries/auth';
 
-const baseRequestUrl = `${apiUrl}/accounts`;
+const baseRequestUrl = `${API_URL}/accounts`;
 
 export const accountCreate = async (account: AccountCreate) => {
   try {
     const request = new Request(`${baseRequestUrl}/create`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: await authHeaders(HEADERS.WITH_BODY),
       body: JSON.stringify(account),
     });
 
@@ -28,7 +28,7 @@ export const accountUpdate = async (account: AccountUpdate) => {
     const request = new Request(`${baseRequestUrl}/${account.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
-      headers: await authHeaders(headers.withBody),
+      headers: await authHeaders(HEADERS.WITH_BODY),
       body: JSON.stringify(account),
     });
 
@@ -46,7 +46,7 @@ export const accountDelete = async (accountId: string) => {
     const request = new Request(`${baseRequestUrl}/${accountId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
-      headers: await authHeaders(headers.withoutBody),
+      headers: await authHeaders(HEADERS.WITHOUT_BODY),
     });
 
     const response = await fetch(request);

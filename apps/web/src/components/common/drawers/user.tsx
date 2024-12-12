@@ -12,7 +12,7 @@ import classes from './user.module.scss';
 import { navLinkItems } from '@/components/layout/asides/account';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function User() {
   const [opened, { toggle, close }] = useDisclosure(false);
@@ -46,7 +46,7 @@ export default function User() {
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
-                  <link.icon size={iconSize} stroke={iconStrokeWidth} />
+                  <link.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                 }
                 className={
                   matchesPath(link.link) ? classes.linkActive : classes.link
@@ -63,7 +63,7 @@ export default function User() {
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
-                  <link.icon size={iconSize} stroke={iconStrokeWidth} />
+                  <link.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                 }
                 className={
                   matchesPath(link.link) ? classes.linkActive : classes.link
@@ -80,7 +80,7 @@ export default function User() {
                 onClick={close}
                 fw={pathname == link.link ? 500 : undefined}
                 leftSection={
-                  <link.icon size={iconSize} stroke={iconStrokeWidth} />
+                  <link.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                 }
                 className={
                   matchesPath(link.link)

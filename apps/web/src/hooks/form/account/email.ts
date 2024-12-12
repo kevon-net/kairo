@@ -1,7 +1,7 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { Variant } from '@repo/enums';
-import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { AUTH_URLS, BASE_URL, TIMEOUT } from '@/data/constants';
 import { useSignOut } from '@/hooks/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { useNetwork } from '@mantine/hooks';
@@ -81,7 +81,7 @@ export const useFormUserEmail = (close: () => void) => {
 
       if (response.status === 404) {
         // sign out
-        setTimeout(async () => await signOut(), timeout.redirect);
+        setTimeout(async () => await signOut(), TIMEOUT.REDIRECT);
 
         showNotification({ variant: Variant.FAILED }, response, result);
         return;
@@ -138,11 +138,11 @@ export const useFormUserEmail = (close: () => void) => {
             async () =>
               router.push(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);
@@ -155,11 +155,11 @@ export const useFormUserEmail = (close: () => void) => {
             async () =>
               router.replace(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);
@@ -216,7 +216,7 @@ export const useFormUserEmail = (close: () => void) => {
 
         if (response.status === 404) {
           // sign out
-          setTimeout(async () => await signOut(), timeout.redirect);
+          setTimeout(async () => await signOut(), TIMEOUT.REDIRECT);
 
           showNotification({ variant: Variant.FAILED }, response, result);
           return;
@@ -286,7 +286,7 @@ export const useFormUserEmail = (close: () => void) => {
               })
             );
 
-            setTimeout(async () => router.refresh(), timeout.redirect);
+            setTimeout(async () => router.refresh(), TIMEOUT.REDIRECT);
 
             close();
 
@@ -309,11 +309,11 @@ export const useFormUserEmail = (close: () => void) => {
             async () =>
               router.push(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);
@@ -326,11 +326,11 @@ export const useFormUserEmail = (close: () => void) => {
             async () =>
               router.replace(
                 setRedirectUrl({
-                  targetUrl: authUrls.signIn,
-                  redirectUrl: `${baseUrl}/${pathname}`,
+                  targetUrl: AUTH_URLS.SIGN_IN,
+                  redirectUrl: `${BASE_URL}/${pathname}`,
                 })
               ),
-            timeout.redirect
+            TIMEOUT.REDIRECT
           );
 
           showNotification({ variant: Variant.WARNING }, response, result);

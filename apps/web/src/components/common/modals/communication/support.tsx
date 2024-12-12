@@ -7,7 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 
 import FormContact from '@/components/form/contact';
 import { usePathname } from 'next/navigation';
-import { baseUrl } from '@/data/constants';
+import { BASE_URL } from '@/data/constants';
 import LayoutModal from '@/components/layout/modal';
 
 export default function Support({ children }: { children: React.ReactNode }) {
@@ -38,7 +38,7 @@ export default function Support({ children }: { children: React.ReactNode }) {
             <FormContact
               props={{
                 subject: 'Technical Support',
-                message: `I just got a 404 error at ${baseUrl}${pathname}`,
+                message: `I just got a 404 error at ${BASE_URL}${pathname}`,
               }}
               options={{ modal: true, close }}
             />

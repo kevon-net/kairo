@@ -5,7 +5,7 @@ import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { Type } from '@repo/schemas/node_modules/@prisma/client';
 import { SignUp } from '@/types/bodies/request';
-import { key } from '@/data/constants';
+import { KEY } from '@/data/constants';
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     const token = await encrypt(
       { id: tokenId, otp: otpHash, userId },
-      key,
+      KEY,
       60 * 60
     );
 

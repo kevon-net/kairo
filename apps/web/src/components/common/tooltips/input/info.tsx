@@ -1,4 +1,4 @@
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { Center, Tooltip, TooltipProps } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import React from 'react';
@@ -19,7 +19,7 @@ export default function Info({
       {...restProps}
     >
       <Center style={{ cursor: 'help' }}>
-        <IconInfoCircle size={iconSize} stroke={iconStrokeWidth} />
+        <IconInfoCircle size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
       </Center>
     </Tooltip>
   );

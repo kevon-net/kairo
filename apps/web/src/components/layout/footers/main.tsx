@@ -25,10 +25,10 @@ import classes from './main.module.scss';
 import appData from '@/data/app';
 import { dataSocials } from '@/app/(marketing)/contact/page';
 import {
-  iconSize,
-  iconStrokeWidth,
-  iconWrapperSize,
-  sectionSpacing,
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+  SECTION_SPACING,
 } from '@/data/constants';
 import SegmentedControlTheme from '@/components/common/segmented-control/theme';
 import { IconCircleFilled } from '@tabler/icons-react';
@@ -38,7 +38,7 @@ import ImageDefault from '@/components/common/images/default';
 export default function Main() {
   return (
     <LayoutSection id={'partial-footer-main'} padded className={classes.footer}>
-      <Stack gap={sectionSpacing}>
+      <Stack gap={SECTION_SPACING}>
         <Flex align={'center'} justify={{ base: 'center', md: 'start' }}>
           <Anchor component={Link} href={'/'}>
             <ImageDefault
@@ -111,8 +111,8 @@ export default function Main() {
             {dataSocials.map((social) => (
               <Anchor key={social.link} title={social.label} href={social.link}>
                 <Group>
-                  <ThemeIcon size={iconWrapperSize} variant="default">
-                    <social.icon size={iconSize} stroke={iconStrokeWidth} />
+                  <ThemeIcon size={ICON_WRAPPER_SIZE} variant="default">
+                    <social.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                   </ThemeIcon>
                 </Group>
               </Anchor>
@@ -122,8 +122,8 @@ export default function Main() {
       </Stack>
 
       <Divider
-        mt={sectionSpacing}
-        mb={sectionSpacing / 2}
+        mt={SECTION_SPACING}
+        mb={SECTION_SPACING / 2}
         color="var(--mantine-color-default-border)"
       />
 

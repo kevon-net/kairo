@@ -1,4 +1,4 @@
-import { cookieName, localStorageName } from '@/data/constants';
+import { COOKIE_NAME, LOCAL_STORAGE_NAME } from '@/data/constants';
 import { fetchCountryData } from '@/services/api/geo';
 import { CountryData, CountryDataOptions } from '@/types/bodies/response';
 import {
@@ -19,7 +19,7 @@ export const useCountryData = (
   const [data, setData] = useState<CountryData[]>([]);
 
   const countriesDataInLocalStorage = getCookie(
-    !countryName ? cookieName.local.countries : cookieName.local.country
+    !countryName ? COOKIE_NAME.LOCAL.COUNTRIES : COOKIE_NAME.LOCAL.COUNTRY
   );
 
   const getData = async () => {
@@ -29,12 +29,14 @@ export const useCountryData = (
       const countryData = await fetchCountryData(countryName, options);
 
       saveToLocalStorage(
-        !countryName ? localStorageName.countries : localStorageName.country,
+        !countryName
+          ? LOCAL_STORAGE_NAME.COUNTRIES
+          : LOCAL_STORAGE_NAME.COUNTRY,
         countryData
       );
 
       setCookie(
-        !countryName ? cookieName.local.countries : cookieName.local.country,
+        !countryName ? COOKIE_NAME.LOCAL.COUNTRIES : COOKIE_NAME.LOCAL.COUNTRY,
         true,
         {
           expiryInSeconds: getExpiry(true).sec,
@@ -44,7 +46,7 @@ export const useCountryData = (
       setData(countryData);
     }
 
-    const countryData = await getFromLocalStorage(localStorageName.countries);
+    const countryData = await getFromLocalStorage(LOCAL_STORAGE_NAME.COUNTRIES);
 
     setData(countryData);
 

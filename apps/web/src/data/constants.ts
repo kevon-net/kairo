@@ -1,98 +1,94 @@
 // Dynamically set the URL prefix based on the environment
-const urlPrefix =
+const URL_PREFIX =
   process.env.NODE_ENV === 'production' &&
   process.env.NEXT_PUBLIC_HOST != 'localhost:3000'
     ? 'https://'
     : 'http://';
 
-export const hostName = process.env.NEXT_PUBLIC_HOST;
+export const HOSTNAME = process.env.NEXT_PUBLIC_HOST;
 
-export const baseUrl = `${urlPrefix}${hostName}`;
+export const BASE_URL = `${URL_PREFIX}${HOSTNAME}`;
 
-export const apiUrl = `${baseUrl}/api`;
+export const API_URL = `${BASE_URL}/api`;
 
-export const authUrls = {
-  signIn: `${baseUrl}/auth/sign-in`,
-  signUp: `${baseUrl}/auth/sign-up`,
-  verifyRequest: `${baseUrl}/auth/verify-request`,
-  error: `${baseUrl}/auth/error`,
-  signOut: `${baseUrl}/auth/sign-out`,
-  passwordForgot: `${baseUrl}/auth/password/forgot`,
+export const AUTH_URLS = {
+  SIGN_IN: `${BASE_URL}/auth/sign-in`,
+  SIGN_UP: `${BASE_URL}/auth/sign-up`,
+  VERIFY_REQUEST: `${BASE_URL}/auth/verify-request`,
+  ERROR: `${BASE_URL}/auth/error`,
+  SIGN_OUT: `${BASE_URL}/auth/sign-out`,
+  PASSWORD_FORGOT: `${BASE_URL}/auth/password/forgot`,
 };
 
-export const geoDataUrl = {
-  ip: `${process.env.NEXT_PUBLIC_IP_API_URL}`,
-  countries: `${process.env.NEXT_PUBLIC_REST_COUNTRIES_API_URL}`,
+export const GEO_DATA_URL = {
+  IP: `${process.env.NEXT_PUBLIC_IP_API_URL}`,
+  COUNTRIES: `${process.env.NEXT_PUBLIC_REST_COUNTRIES_API_URL}`,
 };
 
-export const iconSize = 20;
+export const ICON_SIZE = 20;
 
-export const iconWrapperSize = iconSize + 8;
+export const ICON_WRAPPER_SIZE = ICON_SIZE + 8;
 
-export const iconStrokeWidth = 1.5;
+export const ICON_STROKE_WIDTH = 1.5;
 
 export const transitionDuration = 250;
 
-export const sectionSpacing = 64;
+export const SECTION_SPACING = 64;
 
 export const fontCtaTitle = 40;
 
-export const font = { ctaTitle: fontCtaTitle };
+export const FONT = { CTA_TITLE: fontCtaTitle };
 
-export const passwordRequirements = [
+export const PASSWORD_REQUIREMENTS = [
   { re: /[0-9]/, label: 'number' },
   { re: /[a-z]/, label: 'lowercase letter' },
   { re: /[A-Z]/, label: 'uppercase letter' },
   { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'special symbol' },
 ];
 
-export const SALT_ROUNDS = 10;
+export const TIMEOUT = { REDIRECT: 5000 };
 
-export const timeout = { redirect: 5000 };
-
-export const cookieName = {
-  geo: 'geo',
-  device: { os: 'device.os' },
-  local: { country: 'local.country', countries: 'local.countries' },
-  session: 'auth.session',
-  colorScheme: 'theme.color-scheme',
-  colorSchemeState: 'theme.color-scheme-state',
+export const COOKIE_NAME = {
+  GEO: 'geo',
+  DEVICE: { OS: 'device.os' },
+  LOCAL: { COUNTRY: 'local.country', COUNTRIES: 'local.countries' },
+  SESSION: 'auth.session',
+  COLOR_SCHEME: 'theme.color-scheme',
+  COLOR_SCHEME_STATE: 'theme.color-scheme-state',
 };
 
-export const localStorageName = {
-  country: 'country',
-  countries: 'countries',
+export const LOCAL_STORAGE_NAME = {
+  COUNTRY: 'country',
+  COUNTRIES: 'countries',
 };
 
-const withoutBody: HeadersInit = {
+const WITHOUT_BODY: HeadersInit = {
   Accept: 'application/json',
 };
 
-const withBody: HeadersInit = {
+const WITH_BODY: HeadersInit = {
   'Content-Type': 'application/json',
-  ...withoutBody,
+  ...WITHOUT_BODY,
 };
 
-export const headers = { withBody, withoutBody };
+export const HEADERS = { WITH_BODY, WITHOUT_BODY };
 
-export const key = new TextEncoder().encode(process.env.JWT_SECRET);
+export const KEY = new TextEncoder().encode(process.env.JWT_SECRET);
 
-const expirySessionSecStandard = 60 * 60 * 24;
-const expirySessionSecExtended = 7 * expirySessionSecStandard;
+const EXPIRY_SESSION_SEC_STANDARD = 60 * 60 * 24;
+const EXPIRY_SESSION_SEC_EXTENDED = 7 * EXPIRY_SESSION_SEC_STANDARD;
 
-export const expiry = {
-  session: {
-    standard: {
-      sec: expirySessionSecStandard,
-      millisec: expirySessionSecStandard * 1000,
+export const EXPIRY = {
+  SESSION: {
+    STANDARD: {
+      SEC: EXPIRY_SESSION_SEC_STANDARD,
+      MILLISEC: EXPIRY_SESSION_SEC_STANDARD * 1000,
     },
-    extended: {
-      sec: expirySessionSecExtended,
-      millisec: expirySessionSecExtended * 1000,
+    EXTENDED: {
+      SEC: EXPIRY_SESSION_SEC_EXTENDED,
+      MILLISEC: EXPIRY_SESSION_SEC_EXTENDED * 1000,
     },
   },
 };
 
-export const name = {
-  urlParam: { redirect: 'redirect' },
-};
+export const URL_PARAM = { REDIRECT: 'redirect' };

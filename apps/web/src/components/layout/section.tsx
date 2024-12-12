@@ -5,7 +5,7 @@ import { Box, Container } from '@mantine/core';
 import { Section as typeSection } from '@repo/types';
 
 import classes from './section.module.scss';
-import { sectionSpacing } from '@/data/constants';
+import { SECTION_SPACING } from '@/data/constants';
 
 export default function Section({
   containerized = 'responsive',
@@ -23,11 +23,11 @@ export default function Section({
     <Box
       component={'section'}
       id={id}
-      py={padded ? (typeof padded == 'boolean' ? sectionSpacing : padded) : ''}
+      py={padded ? (typeof padded == 'boolean' ? SECTION_SPACING : padded) : ''}
       my={
         margined
           ? typeof margined == 'boolean'
-            ? sectionSpacing
+            ? SECTION_SPACING
             : margined
           : ''
       }

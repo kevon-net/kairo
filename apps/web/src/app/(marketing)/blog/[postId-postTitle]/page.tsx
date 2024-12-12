@@ -24,7 +24,7 @@ import {
 } from '@tabler/icons-react';
 import MenuShare from '@/components/common/menus/share';
 import IntroPage from '@/components/layout/intro/page';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import CardBlogAuthor from '@/components/common/cards/blog/author';
 import PartialComments from '@/components/partial/comments';
 import ImageDefault from '@/components/common/images/default';
@@ -79,13 +79,13 @@ export default async function Post({ params }: { params: typeParams }) {
           </Group>
 
           <Center visibleFrom="xs">
-            <IconSlash size={iconSize} stroke={iconStrokeWidth} />
+            <IconSlash size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           </Center>
 
           <Group justify="center">
             <Tooltip label={'Views'} withArrow>
               <Group gap={6}>
-                <IconEye size={iconSize - 2} stroke={iconStrokeWidth} />
+                <IconEye size={ICON_SIZE - 2} stroke={ICON_STROKE_WIDTH} />
 
                 <Text component="span" inherit>
                   <NumberFormatter
@@ -102,8 +102,8 @@ export default async function Post({ params }: { params: typeParams }) {
               <Tooltip label={'Comments'} withArrow>
                 <Group gap={6}>
                   <IconMessageCircle
-                    size={iconSize - 4}
-                    stroke={iconStrokeWidth}
+                    size={ICON_SIZE - 4}
+                    stroke={ICON_STROKE_WIDTH}
                   />
 
                   <Text component="span" inherit>

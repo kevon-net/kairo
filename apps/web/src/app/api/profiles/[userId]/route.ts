@@ -4,7 +4,7 @@ import { ProfileCreate, ProfileUpdate } from '@repo/types/models';
 import { getSession } from '@/libraries/auth';
 import { encrypt } from '@repo/utils/helpers';
 import { getExpiry } from '@/utilities/time';
-import { cookieName, key } from '@/data/constants';
+import { COOKIE_NAME, KEY } from '@/data/constants';
 import { cookies } from 'next/headers';
 
 export async function GET(
@@ -110,11 +110,11 @@ export async function PUT(
     if (profileRecord.name != profile.name) {
       const sessionToken = await encrypt(
         { ...session, user: { ...session.user, name: profile.name } },
-        key,
+        KEY,
         getExpiry(session.user.remember).sec
       );
 
-      cookies().set(cookieName.session, sessionToken, {
+      cookies().set(COOKIE_NAME.SESSION, sessionToken, {
         expires: new Date(session.expires),
         httpOnly: true,
       });

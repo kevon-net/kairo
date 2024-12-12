@@ -10,7 +10,7 @@ import LayoutSection from '@/components/layout/section';
 import { SignIn as FragmentSignIn } from '@/components/common/fragments/auth';
 
 import { IconArrowRight } from '@tabler/icons-react';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export const metadata: Metadata = { title: 'Authentication Error' };
 
@@ -48,7 +48,7 @@ export default async function AuthenticationError() {
               href={'/'}
               variant="light"
               rightSection={
-                <IconArrowRight size={iconSize} stroke={iconStrokeWidth} />
+                <IconArrowRight size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               }
             >
               Back Home

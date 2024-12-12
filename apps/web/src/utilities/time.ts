@@ -1,12 +1,12 @@
-import { expiry } from '@/data/constants';
+import { EXPIRY } from '@/data/constants';
 
 export const getExpiry = (rememberUser: boolean = false) => {
   return {
     millisec: rememberUser
-      ? expiry.session.extended.millisec
-      : expiry.session.standard.millisec,
+      ? EXPIRY.SESSION.EXTENDED.MILLISEC
+      : EXPIRY.SESSION.STANDARD.MILLISEC,
     sec: rememberUser
-      ? expiry.session.extended.sec
-      : expiry.session.standard.sec,
+      ? EXPIRY.SESSION.EXTENDED.SEC
+      : EXPIRY.SESSION.STANDARD.SEC,
   };
 };

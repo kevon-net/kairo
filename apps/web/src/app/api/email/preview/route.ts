@@ -9,7 +9,7 @@ import EmailTransactionalAuthVerify from '@/components/email/transactional/auth/
 import EmailTransactionalOffBoardConfirm from '@/components/email/transactional/off-board/confirm';
 import EmailTransactionalOffBoarded from '@/components/email/transactional/off-board/off-boarded';
 
-import { baseUrl } from '@/data/constants';
+import { BASE_URL } from '@/data/constants';
 import { generateOtpCode } from '@repo/utils/generators';
 import sample from '@/data/sample';
 
@@ -19,7 +19,7 @@ const emails: Record<string, any> = {
     message: sample.text.prose,
   }),
   passwordChanged: EmailTransactionalAuthPasswordChanged(),
-  passwordForgot: EmailTransactionalAuthPasswordForgot({ otl: baseUrl }),
+  passwordForgot: EmailTransactionalAuthPasswordForgot({ otl: BASE_URL }),
   signIn: EmailTransactionalAuthSignIn({ otp: String(generateOtpCode()) }),
   signUp: EmailTransactionalAuthVerify({
     otp: String(generateOtpCode()),

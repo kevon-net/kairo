@@ -1,6 +1,6 @@
 'use client';
 
-import { cookieName } from '@/data/constants';
+import { COOKIE_NAME } from '@/data/constants';
 import { Credentials } from '@repo/types';
 import { setCookie } from '@repo/utils/helpers';
 import { Provider } from '@repo/schemas/node_modules/@prisma/client';
@@ -13,7 +13,7 @@ export const signIn = async (
   device?: { os?: string }
 ) => {
   // do something before sign in
-  setCookie(cookieName.device.os, { os: device?.os }, { expiryInSeconds: 60 });
+  setCookie(COOKIE_NAME.DEVICE.OS, { os: device?.os }, { expiryInSeconds: 60 });
 
   return await handleRequestSignIn({ provider, credentials });
 };

@@ -22,7 +22,7 @@ import AvatarMain from '../avatars/main';
 
 import classes from './avatar.module.scss';
 import { navLinkItems } from '@/components/layout/asides/account';
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { useAppSelector } from '@/hooks/redux';
 import { usePathname } from 'next/navigation';
 // import { getRegionalDate } from '@/utilities/formatters/date';
@@ -89,7 +89,9 @@ export default function Avatar() {
         {navLinkItems.account.map((item) => (
           <MenuItem
             key={item.label}
-            leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+            leftSection={
+              <item.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            }
             component={Link}
             href={item.link}
             className={
@@ -107,7 +109,9 @@ export default function Avatar() {
         {navLinkItems.support.map((item) => (
           <MenuItem
             key={item.label}
-            leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+            leftSection={
+              <item.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            }
             component={Link}
             href={item.link}
             className={
@@ -125,7 +129,9 @@ export default function Avatar() {
         {navLinkItems.danger.map((item) => (
           <MenuItem
             key={item.label}
-            leftSection={<item.icon size={iconSize} stroke={iconStrokeWidth} />}
+            leftSection={
+              <item.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            }
             component={Link}
             href={item.link}
             className={

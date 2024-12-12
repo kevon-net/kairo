@@ -8,7 +8,7 @@ import {
 } from '@repo/schemas/node_modules/@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { cookieName, key } from '@/data/constants';
+import { COOKIE_NAME, KEY } from '@/data/constants';
 import { getExpiry } from '@/utilities/time';
 import { signIn } from '@/libraries/auth';
 import { SignIn } from '@/types/bodies/request';
@@ -85,19 +85,19 @@ export async function POST(request: NextRequest) {
         data: { status: Status.ACTIVE },
       });
 
-      const osCookie = request.cookies.get(cookieName.device.os)?.value;
+      const osCookie = request.cookies.get(COOKIE_NAME.DEVICE.OS)?.value;
       const { os } = osCookie ? JSON.parse(osCookie) : null;
 
-      const geoDataCookie = cookies().get(cookieName.geo)?.value;
+      const geoDataCookie = cookies().get(COOKIE_NAME.GEO)?.value;
       let geoData: IpData;
 
       try {
-        geoData = geoDataCookie ? await decrypt(geoDataCookie, key) : null;
+        geoData = geoDataCookie ? await decrypt(geoDataCookie, KEY) : null;
       } catch {
         await setGeoData(request);
-        const newGeoDataCookie = cookies().get(cookieName.geo)?.value;
+        const newGeoDataCookie = cookies().get(COOKIE_NAME.GEO)?.value;
         geoData = newGeoDataCookie
-          ? await decrypt(newGeoDataCookie, key)
+          ? await decrypt(newGeoDataCookie, KEY)
           : null;
       }
 

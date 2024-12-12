@@ -8,14 +8,18 @@ import { IconArrowLeft } from '@tabler/icons-react';
 
 import LayoutSection from '@/components/layout/section';
 
-import { iconSize, iconStrokeWidth, sectionSpacing } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  SECTION_SPACING,
+} from '@/data/constants';
 import ModalCommunicationSupport from '@/components/common/modals/communication/support';
 import IntroPage from '@/components/layout/intro/page';
 
 export default function NotFound() {
   return (
     <LayoutSection id={'page-not-found'}>
-      <Stack justify="center" mih={'100vh'} pb={sectionSpacing}>
+      <Stack justify="center" mih={'100vh'} pb={SECTION_SPACING}>
         <IntroPage
           props={{
             path: `404`,
@@ -34,7 +38,7 @@ export default function NotFound() {
           >
             <Button
               leftSection={
-                <IconArrowLeft size={iconSize} stroke={iconStrokeWidth} />
+                <IconArrowLeft size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               }
               component={Link}
               href={'/'}

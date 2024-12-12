@@ -1,7 +1,11 @@
 import { Team as typeTeam } from '@/types/static';
 import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 import ImageDefault from '@/components/common/images/default';
 
 export default function Team({ props }: { props: typeTeam }) {
@@ -25,11 +29,11 @@ export default function Team({ props }: { props: typeTeam }) {
           {props.socials.map((social) => (
             <ActionIcon
               key={social.link}
-              size={iconWrapperSize}
+              size={ICON_WRAPPER_SIZE}
               color="pri.6"
               variant="light"
             >
-              <social.icon size={iconSize} stroke={iconStrokeWidth} />
+              <social.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
             </ActionIcon>
           ))}
         </Group>

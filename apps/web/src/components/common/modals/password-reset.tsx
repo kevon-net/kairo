@@ -5,7 +5,7 @@ import React from 'react';
 import { Modal, Button, Stack, Text, Anchor, Flex } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useSignOut } from '@/hooks/auth';
-import { authUrls } from '@/data/constants';
+import { AUTH_URLS } from '@/data/constants';
 import LayoutModal from '@/components/layout/modal';
 import { Alert } from '@repo/enums';
 
@@ -15,7 +15,7 @@ export default function PasswordReset({
   children: React.ReactNode;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { signOut, loading } = useSignOut(authUrls.passwordForgot, close);
+  const { signOut, loading } = useSignOut(AUTH_URLS.PASSWORD_FORGOT, close);
 
   return (
     <>

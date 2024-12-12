@@ -5,7 +5,7 @@ import { setRedirectUrl } from '@repo/utils/helpers';
 import { useForm } from '@mantine/form';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { authUrls, baseUrl, timeout } from '@/data/constants';
+import { AUTH_URLS, BASE_URL, TIMEOUT } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
 import { Variant } from '@repo/enums';
 import { useNetwork } from '@mantine/hooks';
@@ -94,13 +94,13 @@ export const useFormAuthSignUp = () => {
               async () =>
                 router.push(
                   setRedirectUrl({
-                    targetUrl: authUrls.signIn,
-                    redirectUrl: `${baseUrl}/${pathname}`,
+                    targetUrl: AUTH_URLS.SIGN_IN,
+                    redirectUrl: `${BASE_URL}/${pathname}`,
                   })
                 ),
-              timeout.redirect
+              TIMEOUT.REDIRECT
             );
-          }, timeout.redirect);
+          }, TIMEOUT.REDIRECT);
 
           showNotification({ variant: Variant.WARNING }, response, result);
           return;

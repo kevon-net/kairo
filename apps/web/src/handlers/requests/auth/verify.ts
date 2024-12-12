@@ -1,13 +1,13 @@
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 import { Verify, VerifyResend } from '@/types/bodies/request';
 import { Request as EnumRequest } from '@repo/enums';
 
 export const verify = async (requestBody: Verify) => {
   try {
-    const request = new Request(`${apiUrl}/auth/verify`, {
+    const request = new Request(`${API_URL}/auth/verify`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: headers.withBody,
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(requestBody),
     });
 
@@ -23,11 +23,11 @@ export const verify = async (requestBody: Verify) => {
 export const verifyResend = async (requestBody: VerifyResend) => {
   try {
     const request = new Request(
-      `${apiUrl}/auth/verify/resend/${requestBody.userId}`,
+      `${API_URL}/auth/verify/resend/${requestBody.userId}`,
       {
         method: EnumRequest.POST,
         credentials: 'include',
-        headers: headers.withBody,
+        headers: HEADERS.WITH_BODY,
         body: JSON.stringify({
           token: requestBody.token,
           options: requestBody.options,

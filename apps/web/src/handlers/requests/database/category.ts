@@ -1,14 +1,14 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { apiUrl, headers } from '@/data/constants';
+import { API_URL, headers } from '@/data/constants';
 
-const baseRequestUrl = `${apiUrl}/categories`;
+const baseRequestUrl = `${API_URL}/categories`;
 
 export const categoriesGet = async () => {
   try {
     const request = new Request(baseRequestUrl, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);
@@ -27,7 +27,7 @@ export const categoryGet = async (slug: { categoryId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.categoryId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: headers.withoutBody,
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);

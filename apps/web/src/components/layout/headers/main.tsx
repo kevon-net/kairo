@@ -6,7 +6,11 @@ import LayoutSection from '@/components/layout/section';
 
 import classes from './main.module.scss';
 import { dataContact, dataSocials } from '@/app/(marketing)/contact/page';
-import { iconSize, iconStrokeWidth, iconWrapperSize } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 
 export default function Main() {
   return (
@@ -21,8 +25,8 @@ export default function Main() {
           {dataContact.map((item) => (
             <Group key={item.link} gap={6}>
               <item.icon
-                size={iconSize}
-                stroke={iconStrokeWidth}
+                size={ICON_SIZE}
+                stroke={ICON_STROKE_WIDTH}
                 style={{ marginTop: 2 }}
               />
               <Anchor
@@ -41,8 +45,8 @@ export default function Main() {
           {dataSocials.map((social) => (
             <Anchor key={social.link} title={social.label} href={social.link}>
               <Group>
-                <ThemeIcon size={iconWrapperSize} variant="default">
-                  <social.icon size={iconSize} stroke={iconStrokeWidth} />
+                <ThemeIcon size={ICON_WRAPPER_SIZE} variant="default">
+                  <social.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                 </ThemeIcon>
               </Group>
             </Anchor>

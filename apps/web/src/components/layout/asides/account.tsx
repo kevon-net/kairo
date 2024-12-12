@@ -23,10 +23,10 @@ import LayoutSection from '@/components/layout/section';
 import PartialUser from '@/components/partial/user';
 
 import {
-  authUrls,
-  iconSize,
-  iconStrokeWidth,
-  sectionSpacing,
+  AUTH_URLS,
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  SECTION_SPACING,
 } from '@/data/constants';
 import { usePathname } from 'next/navigation';
 
@@ -44,7 +44,7 @@ export default function Account() {
       containerized={false}
       id={'partial-aside-user'}
       pos={'sticky'}
-      top={sectionSpacing}
+      top={SECTION_SPACING}
     >
       <Stack gap={48} align="center">
         <PartialUser />
@@ -62,7 +62,7 @@ export default function Account() {
                   component={Link}
                   href={item.link}
                   label={item.label}
-                  leftSection={<item.icon size={16} stroke={iconStrokeWidth} />}
+                  leftSection={<item.icon size={16} stroke={ICON_STROKE_WIDTH} />}
                   rightSection={<IconChevronRight size={16} />}
                   active={matchesPath(item.link)}
                   style={{
@@ -89,12 +89,12 @@ export default function Account() {
                   href={item.link}
                   label={item.label}
                   leftSection={
-                    <item.icon size={iconSize} stroke={iconStrokeWidth} />
+                    <item.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                   }
                   rightSection={
                     <IconChevronRight
-                      size={iconSize}
-                      stroke={iconStrokeWidth}
+                      size={ICON_SIZE}
+                      stroke={ICON_STROKE_WIDTH}
                     />
                   }
                   active={matchesPath(item.link)}
@@ -124,12 +124,12 @@ export default function Account() {
                   href={item.link}
                   label={item.label}
                   leftSection={
-                    <item.icon size={iconSize} stroke={iconStrokeWidth} />
+                    <item.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                   }
                   rightSection={
                     <IconChevronRight
-                      size={iconSize}
-                      stroke={iconStrokeWidth}
+                      size={ICON_SIZE}
+                      stroke={ICON_STROKE_WIDTH}
                     />
                   }
                   active={matchesPath(item.link)}
@@ -156,10 +156,13 @@ export default function Account() {
                 active={matchesPath(item.link)}
                 className={classes.linkDanger}
                 leftSection={
-                  <item.icon size={iconSize} stroke={iconStrokeWidth} />
+                  <item.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
                 }
                 rightSection={
-                  <IconChevronRight size={iconSize} stroke={iconStrokeWidth} />
+                  <IconChevronRight
+                    size={ICON_SIZE}
+                    stroke={ICON_STROKE_WIDTH}
+                  />
                 }
                 style={{
                   borderRadius: 'var(--mantine-radius-md)',
@@ -238,7 +241,7 @@ export const navLinkItems = {
   danger: [
     {
       icon: IconLogout,
-      link: authUrls.signOut,
+      link: AUTH_URLS.SIGN_OUT,
       label: 'Sign Out',
     },
   ],

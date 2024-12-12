@@ -1,4 +1,4 @@
-import { font, sectionSpacing } from '@/data/constants';
+import { FONT, SECTION_SPACING } from '@/data/constants';
 import { Card, Container, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
 import FormNewsletter from '@/components/form/newsletter';
@@ -14,9 +14,9 @@ export default function Newsletter() {
       pos={'relative'}
     >
       <Container size={'sm'}>
-        <Stack gap={'xl'} py={sectionSpacing}>
+        <Stack gap={'xl'} py={SECTION_SPACING}>
           <Stack>
-            <Title order={2} fz={font.ctaTitle} ta={'center'}>
+            <Title order={2} fz={FONT.CTA_TITLE} ta={'center'}>
               Want our product updates?
             </Title>
 

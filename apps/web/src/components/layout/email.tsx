@@ -12,7 +12,7 @@ import {
   Text,
 } from '@react-email/components';
 import appData from '@/data/app';
-import { baseUrl } from '@/data/constants';
+import { BASE_URL } from '@/data/constants';
 import { images } from '@/assets/images';
 
 export default function Email({
@@ -38,7 +38,7 @@ export default function Email({
                   {/* <Heading style={{ ...h1, textAlign: "center" }}>{appData.name.company}</Heading> */}
 
                   <Img
-                    src={`${baseUrl}${images.logo.dark}`}
+                    src={`${BASE_URL}${images.logo.dark}`}
                     width={128}
                     height={64}
                     alt={appData.name.company}

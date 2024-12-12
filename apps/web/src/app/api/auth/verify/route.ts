@@ -6,7 +6,7 @@ import { Type } from '@repo/schemas/node_modules/@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { contactCreate } from '@/libraries/wrappers/email/contact';
 import { Verify } from '@/types/bodies/request';
-import { key } from '@/data/constants';
+import { KEY } from '@/data/constants';
 
 export async function POST(request: NextRequest) {
   try {
@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
 
     try {
       if (token) {
-        parsed = await decrypt(token, key);
+        parsed = await decrypt(token, KEY);
       } else if (tokenDatabase) {
-        parsed = await decrypt(tokenDatabase.token, key);
+        parsed = await decrypt(tokenDatabase.token, KEY);
       }
 
       const tokenRecord = await prisma.token.findUnique({

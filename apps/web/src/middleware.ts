@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { authUrls, baseUrl, cookieName } from './data/constants';
+import { AUTH_URLS, BASE_URL, COOKIE_NAME } from './data/constants';
 import { updateSession } from './libraries/auth';
 import { setGeoData, updateGeoData } from './libraries/geolocation';
 
@@ -7,7 +7,7 @@ import { setGeoData, updateGeoData } from './libraries/geolocation';
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next();
 
-  const geoData = request.cookies.get(cookieName.geo)?.value;
+  const geoData = request.cookies.get(COOKIE_NAME.GEO)?.value;
 
   if (!geoData) {
     response = (await setGeoData(request, response)) as NextResponse;
@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
     response = await updateGeoData(request, response, geoData);
   }
 
-  const session = request.cookies.get(cookieName.session)?.value;
+  const session = request.cookies.get(COOKIE_NAME.SESSION)?.value;
 
   if (session) {
     const isAuthRoute = routes.auth.some((route) =>
@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
     );
 
     if (isAuthRoute) {
-      return NextResponse.redirect(new URL(baseUrl, request.url));
+      return NextResponse.redirect(new URL(BASE_URL, request.url));
     }
 
     response = await updateSession(response, session);
@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
     );
 
     if (isProtectedRoute) {
-      response = NextResponse.redirect(new URL(authUrls.signIn, request.url));
+      response = NextResponse.redirect(new URL(AUTH_URLS.SIGN_IN, request.url));
     }
   }
 

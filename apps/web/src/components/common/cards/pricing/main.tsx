@@ -1,6 +1,6 @@
 'use client';
 
-import { iconSize, iconStrokeWidth } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { Pricing as SwitchPricing } from '@repo/enums';
 import {
   Badge,
@@ -142,8 +142,8 @@ export default function Main({
           spacing={'xs'}
           icon={
             <IconCheck
-              size={iconSize}
-              stroke={iconStrokeWidth}
+              size={ICON_SIZE}
+              stroke={ICON_STROKE_WIDTH}
               color="var(--mantine-color-pri-6)"
             />
           }

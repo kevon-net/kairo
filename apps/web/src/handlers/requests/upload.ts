@@ -1,13 +1,13 @@
 import { Request as EnumRequest } from '@repo/enums';
 
-const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/upload`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/upload`;
 
 export const uploadFile = async (file: File) => {
   try {
     const formData = new FormData();
     formData.append('file', file);
 
-    const request = new Request(apiUrl, {
+    const request = new Request(API_URL, {
       method: EnumRequest.POST,
       body: formData,
     });

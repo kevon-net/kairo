@@ -1,5 +1,5 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { API_URL, headers } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 import { PostCreate, PostUpdate } from '@repo/types/models';
 
 const baseRequestUrl = `${API_URL}/posts`;
@@ -10,6 +10,7 @@ export const postsGet = async () => {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
+      cache: 'no-cache',
     });
 
     const response = await fetch(request);

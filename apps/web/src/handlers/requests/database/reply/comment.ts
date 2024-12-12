@@ -1,5 +1,5 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { API_URL, headers } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 import { ReplyCommentCreate } from '@/types/bodies/request';
 import { ReplyUpdate } from '@repo/types';
 import { authHeaders } from '@/libraries/auth';

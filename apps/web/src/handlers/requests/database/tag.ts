@@ -1,5 +1,5 @@
 import { Request as EnumRequest } from '@repo/enums';
-import { API_URL, headers } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 
 const baseRequestUrl = `${API_URL}/tags`;
 

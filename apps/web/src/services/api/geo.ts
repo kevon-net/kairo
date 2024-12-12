@@ -1,4 +1,4 @@
-import { GEO_DATA_URL, headers } from '@/data/constants';
+import { GEO_DATA_URL, HEADERS } from '@/data/constants';
 import { Request } from '@repo/enums';
 import {
   CountryData,

@@ -1,4 +1,4 @@
-import { API_URL, headers } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 import { Request as EnumRequest } from '@repo/enums';
 import { UserCreate } from '@repo/types/models';
 import { authHeaders } from '@/libraries/auth';

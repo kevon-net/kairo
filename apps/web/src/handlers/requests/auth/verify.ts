@@ -1,4 +1,4 @@
-import { API_URL, headers } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 import { Verify, VerifyResend } from '@/types/bodies/request';
 import { Request as EnumRequest } from '@repo/enums';
 

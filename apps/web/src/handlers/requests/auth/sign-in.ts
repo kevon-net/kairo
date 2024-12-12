@@ -1,4 +1,4 @@
-import { API_URL, headers } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 import { SignIn } from '@/types/bodies/request';
 import { Request as EnumRequest } from '@repo/enums';
 import { Provider } from '@repo/schemas/node_modules/@prisma/client';

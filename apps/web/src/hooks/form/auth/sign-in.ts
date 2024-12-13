@@ -22,8 +22,7 @@ export const useFormAuthSignIn = () => {
 
     validate: {
       email: (value) => email(value.trim()),
-      password: (value) =>
-        value.trim().length > 0 ? null : errors.isEmpty,
+      password: (value) => (value.trim().length > 0 ? null : errors.isEmpty),
     },
   });
 
@@ -49,9 +48,14 @@ export const useFormAuthSignIn = () => {
 
         setSubmitted(true);
 
-        const response = await signIn(Provider.CREDENTIALS, parseValues(), {
-          os,
+        const response = await signIn({
+          provider: Provider.CREDENTIALS,
+          credentials: parseValues(),
+          device: {
+            os,
+          },
         });
+
         const result = await response.json();
 
         if (!result) throw new Error('No response from server');

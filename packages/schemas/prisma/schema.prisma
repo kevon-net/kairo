@@ -134,7 +134,7 @@ model Session {
 
 model Profile {
   id     String  @id @default(cuid())
-  name   String?
+  name   String
   bio    String?
   avatar String?
   phone  String?

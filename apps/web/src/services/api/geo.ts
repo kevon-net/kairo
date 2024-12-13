@@ -6,7 +6,7 @@ import {
   IpData,
 } from '@/types/bodies/response';
 
-export const fetchIp = async (ip?: string): Promise<IpData> => {
+export const fetchIp = async (ip?: string): Promise<IpData | null> => {
   try {
     const urlIp = `${GEO_DATA_URL.IP}/${ip}/json`;
 
@@ -20,7 +20,7 @@ export const fetchIp = async (ip?: string): Promise<IpData> => {
     return ipData;
   } catch (error) {
     console.error('---> service error (get ip data):', error);
-    throw error;
+    return null;
   }
 };
 
@@ -55,14 +55,10 @@ export const fetchCountryData = async (
 
     const urlCountry = `${GEO_DATA_URL.COUNTRIES}/${country}?${queryParams}`;
 
-    console.log('urlCountry', urlCountry);
-
     const getCountryData = await fetch(urlCountry, {
       method: Request.GET,
       headers: HEADERS.WITHOUT_BODY,
     });
-
-    console.log('getCountryData.url', getCountryData.url);
 
     const countryData = await getCountryData.json();
 

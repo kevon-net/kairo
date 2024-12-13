@@ -18,7 +18,7 @@ export function SignIn({ children }: { children: React.ReactNode }) {
         router.push(
           setRedirectUrl({
             targetUrl: AUTH_URLS.SIGN_IN,
-            redirectUrl: `${BASE_URL}/${pathname}`,
+            redirectUrl: `${BASE_URL}${pathname}`,
           })
         )
       }

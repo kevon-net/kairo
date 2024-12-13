@@ -26,10 +26,11 @@ export const getSession = async (): Promise<Session | null> => {
 };
 
 export const signIn = async (
-  provider: Provider,
+  provider: Provider = Provider.CREDENTIALS,
   sessionObject: SessionGet,
   userObject: UserGet & { profile: ProfileGet | null },
-  credentials?: Credentials
+  credentials?: Credentials,
+  response?: NextResponse
 ) => {
   const session = await encrypt(
     {
@@ -50,12 +51,25 @@ export const signIn = async (
     getExpiry(credentials?.remember ?? true).sec
   );
 
-  // save session in cookie
-  return cookies().set(COOKIE_NAME.SESSION, session, {
-    expires: sessionObject.expiresAt,
-    secure: isProduction(),
-    httpOnly: true,
-  });
+  if (provider != Provider.CREDENTIALS) {
+    response?.cookies.set({
+      name: COOKIE_NAME.SESSION,
+      value: session,
+      expires: sessionObject.expiresAt,
+      secure: isProduction(),
+      httpOnly: true,
+      sameSite: 'lax',
+    });
+  } else {
+    cookies().set(COOKIE_NAME.SESSION, session, {
+      name: COOKIE_NAME.SESSION,
+      value: session,
+      expires: sessionObject.expiresAt,
+      secure: isProduction(),
+      httpOnly: true,
+      sameSite: 'lax',
+    });
+  }
 };
 
 export const signOut = async () => cookies().delete(COOKIE_NAME.SESSION);

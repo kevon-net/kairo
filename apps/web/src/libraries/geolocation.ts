@@ -33,32 +33,31 @@ export const setGeoData = async (
     isProduction() ? ip : process.env.NEXT_PUBLIC_SAMPLE_IP
   );
 
-  (response ? response.cookies : cookies()).set(
-    COOKIE_NAME.GEO,
-    await encrypt(
-      {
-        ip: geoData.ip,
-        city: geoData.city,
-        country_name: geoData.country_name,
-        country_code: geoData.country_code,
-        latitude: geoData.latitude,
-        longitude: geoData.longitude,
-        timezone: geoData.timezone,
-        utc_offset: geoData.utc_offset,
-        country_calling_code: geoData.country_calling_code,
-        currency: geoData.currency,
-        currency_name: geoData.currency_name,
-        languages: geoData.languages,
-      },
-      KEY
-    ),
-    {
-      expires: getExpiry(true).millisec,
+  const geoObject = {
+    ip: geoData?.ip,
+    city: geoData?.city,
+    country_name: geoData?.country_name,
+    country_code: geoData?.country_code,
+    latitude: geoData?.latitude,
+    longitude: geoData?.longitude,
+    timezone: geoData?.timezone,
+    utc_offset: geoData?.utc_offset,
+    country_calling_code: geoData?.country_calling_code,
+    currency: geoData?.currency,
+    currency_name: geoData?.currency_name,
+    languages: geoData?.languages,
+  };
+
+  if (geoData) {
+    response?.cookies.set(COOKIE_NAME.GEO, await encrypt(geoObject, KEY), {
+      name: COOKIE_NAME.GEO,
+      value: await encrypt(geoObject, KEY, getExpiry(true).sec),
+      maxAge: getExpiry(true).millisec,
       sameSite: 'strict',
       secure: isProduction(),
       httpOnly: true,
-    }
-  );
+    });
+  }
 
   return response;
 };

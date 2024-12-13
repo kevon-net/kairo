@@ -14,7 +14,9 @@ import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export const metadata: Metadata = { title: 'Error' };
 
-export default async function Error() {
+export default async function Error({ searchParams }: { searchParams: any }) {
+  const message = searchParams.message;
+
   return (
     <LayoutPage>
       <LayoutSection id={'page-sign-out'} containerized={false} margined>
@@ -32,9 +34,14 @@ export default async function Error() {
               <Text ta={{ base: 'center', md: 'start' }}>
                 Seems we can&apos;t sign you in.
               </Text>
-              <Text ta={{ base: 'center', md: 'start' }}>
-                Perhaps it&apos;s a temporary issue... Try again later.
-              </Text>
+
+              {message ? (
+                <Text ta={{ base: 'center', md: 'start' }}>{message}.</Text>
+              ) : (
+                <Text ta={{ base: 'center', md: 'start' }}>
+                  Perhaps it&apos;s a temporary issue... Try again later.
+                </Text>
+              )}
             </Stack>
           </Stack>
 

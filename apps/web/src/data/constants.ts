@@ -50,6 +50,7 @@ export const TIMEOUT = { REDIRECT: 5000 };
 
 export const COOKIE_NAME = {
   GEO: 'geo',
+  OAUTH: { UUID: 'oauth.uuid' },
   DEVICE: { OS: 'device.os' },
   LOCAL: { COUNTRY: 'local.country', COUNTRIES: 'local.countries' },
   SESSION: 'auth.session',

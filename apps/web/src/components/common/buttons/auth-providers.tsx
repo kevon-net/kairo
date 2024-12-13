@@ -7,9 +7,10 @@ import { Button, Grid, GridCol } from '@mantine/core';
 import images from '@/data/images';
 import { capitalizeWords } from '@repo/utils/formatters';
 import { useOs } from '@mantine/hooks';
-import { signIn } from '@/handlers/events/auth';
 import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 import ImageDefault from '@/components/common/images/default';
+import { COOKIE_NAME } from '@/data/constants';
+import { getUrlParam, setCookie } from '@repo/utils/helpers';
 
 export default function Providers() {
   const [loading, setLoading] = useState('');
@@ -22,7 +23,8 @@ export default function Providers() {
       variant="default"
       onClick={async () => {
         setLoading(provider.provider);
-        await signIn(provider.provider, undefined, { os });
+        setCookie(COOKIE_NAME.DEVICE.OS, { os }, { expiryInSeconds: 15 * 60 });
+        window.location.href = `/api/auth/sign-in/google?redirect=${encodeURIComponent(getUrlParam('redirect'))}`;
       }}
       loading={loading == provider.provider}
       leftSection={

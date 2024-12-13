@@ -14,8 +14,8 @@ export type SignUp = {
 };
 
 export type SignIn = {
-  provider?: Provider;
-  credentials?: Credentials;
+  provider: Provider;
+  credentials: Credentials;
 };
 
 export type Verify = {

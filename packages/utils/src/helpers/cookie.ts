@@ -23,13 +23,13 @@ export const setCookie = (
   document.cookie = `${name}=${cookieValue}; expires=${date.toUTCString()}; SameSite=${options.sameSite || 'Strict'}; path=${options.path || '/'}`;
 };
 
-export const getCookie = (COOKIE_NAME: string): string | null => {
+export const getCookie = (cookieName: string): string | null => {
   if (typeof document === 'undefined') {
     return null;
   }
 
   const cookies = document.cookie.split('; ');
-  const cookie = cookies.find((c) => c.startsWith(`${COOKIE_NAME}=`));
+  const cookie = cookies.find((c) => c.startsWith(`${cookieName}=`));
 
   return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
 };

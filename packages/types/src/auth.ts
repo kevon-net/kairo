@@ -1,5 +1,14 @@
 import { Role, Status } from '@repo/schemas/node_modules/@prisma/client';
 
+export interface UserInfo {
+  accessToken: string;
+  accountId: string;
+  name: string;
+  picture: string;
+  email: string;
+  email_verified: boolean;
+}
+
 export interface Credentials {
   email: string;
   password: string;

@@ -42,6 +42,7 @@ import { COOKIE_NAME } from '@/data/constants';
 import ProviderStore from '@/components/providers/store';
 import { cookies } from 'next/headers';
 import { getGeoData } from '@/libraries/geolocation';
+import AffixiCookies from '@/components/common/affixi/cookies';
 
 const noto = DM_Sans({ subsets: ['latin'] });
 
@@ -94,6 +95,7 @@ export default async function RootLayout({
             <Notifications limit={3} />
 
             <AffixOffline />
+            <AffixiCookies />
           </MantineProvider>
         </ProviderStore>
 

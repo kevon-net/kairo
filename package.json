@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build",
     "start": "turbo run start",
-    "lint": "turbo run lint",
     "check-types": "turbo run check-types",
+    "build": "turbo run build",
     "format": "turbo run format",
-    "check-format": "turbo run check-format"
+    "check-format": "turbo run check-format",
+    "lint": "turbo run lint"
   },
   "workspaces": [
     "apps/*",

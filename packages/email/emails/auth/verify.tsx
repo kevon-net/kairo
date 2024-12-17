@@ -1,24 +1,28 @@
 import * as React from 'react';
 
-import { Heading, Section, Text } from '@react-email/components';
+import { CodeInline, Heading, Section, Text } from '@react-email/components';
 
-import appData from '@/data/app';
+import appData from '../../src/data/app';
 
-import LayoutEmail, { h1, section, text } from '../../layout';
+import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Verify(params: {
+export default function Verify(props: {
   otp: string;
   options?: { signUp?: boolean };
+  userName: string;
 }) {
-  const message = `${!params.options?.signUp ? '' : `Thanks creating an account with ${appData.name.app}. `}We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
+  const message = `${!props.options?.signUp ? '' : `Thanks creating an account with ${appData.name.app}. `}We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
 
   return (
     <LayoutEmail props={{ preview: message }}>
       <Section style={section}>
-        <Heading style={{ ...h1, marginBottom: '12px', textAlign: 'center' }}>
+        <Heading style={{ ...h1, marginBottom: '32px' }}>
           Verify Your Email Address
         </Heading>
-        <Text style={text}>{message}</Text>
+        <Text style={text}>
+          Hi {props.userName || 'John'},<br />
+          {message}
+        </Text>
       </Section>
 
       <Section style={{ ...section, margin: '40px 0px' }}>
@@ -30,7 +34,7 @@ export default function Verify(params: {
             fontSize: 24,
           }}
         >
-          {params.otp}
+          <CodeInline>{props.otp || '638923'}</CodeInline>
         </Text>
         <Text style={{ ...text, textAlign: 'center', marginTop: '8px' }}>
           (this code is valid for 1 hour)

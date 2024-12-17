@@ -2,20 +2,22 @@ import * as React from 'react';
 
 import { Heading, Section, Text } from '@react-email/components';
 
-import appData from '@/data/app';
+import appData from '../../src/data/app';
 
-import LayoutEmail, { h2, section, text } from '../../layout';
+import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Welcome() {
+export default function Welcome(props: { userName: string }) {
   const message = `Thanks creating an account with ${appData.name.app}.`;
 
   return (
     <LayoutEmail props={{ preview: message }}>
       <Section style={section}>
-        <Heading style={{ ...h2, marginBottom: '12px', textAlign: 'center' }}>
+        <Heading style={{ ...h1, marginBottom: '32px' }}>
           Welcome To {appData.name.company}
         </Heading>
+
         <Text style={text}>
+          Hi {props.userName || 'John'},<br />
           Thanks creating an account with {appData.name.app}.
         </Text>
       </Section>

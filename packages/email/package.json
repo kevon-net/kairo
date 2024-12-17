@@ -1,0 +1,20 @@
+{
+  "name": "@repo/email",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "email dev",
+    "lint": "eslint .",
+    "check-types": "tsc --noEmit",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
+  },
+  "devDependencies": {
+    "react-email": "3.0.4"
+  },
+  "dependencies": {
+    "@react-email/components": "0.0.31",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

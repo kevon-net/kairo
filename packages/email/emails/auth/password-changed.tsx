@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { Heading, Link, Section, Text } from '@react-email/components';
 
-import appData from '@/data/app';
+import appData from '../../src/data/app';
 
-import LayoutEmail, { h2, section, text } from '../../layout';
+import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function PasswordChanged() {
+export default function PasswordChanged(props: { userName: string }) {
   const message = `You have successfully changed your password. If you didn't initiate this process, contact support immediately via the link provided below.`;
 
   const supportEmail = appData.emails.info;
@@ -14,10 +14,12 @@ export default function PasswordChanged() {
   return (
     <LayoutEmail props={{ preview: message }}>
       <Section style={section}>
-        <Heading style={{ ...h2, marginBottom: '12px', textAlign: 'center' }}>
+        <Heading style={{ ...h1, marginBottom: '32px' }}>
           Password Updated
         </Heading>
+
         <Text style={text}>
+          Hi {props.userName || 'John'},<br />
           {message} If this was not you,{' '}
           <Link href={`mailto:${supportEmail}`} style={{ fontWeight: 'bold' }}>
             contact support

@@ -2,21 +2,26 @@ import * as React from 'react';
 
 import { Text } from '@react-email/components';
 
-import LayoutEmail, { text } from '../../layout';
-import appData from '@/data/app';
+import appData from '../src/data/app';
 
-export default function Inquiry(params: { name: string; message: string }) {
+import LayoutEmail, { text } from '../src/layout';
+import sample from '../src/data/sample';
+
+export default function Inquiry(props: {
+  userName: string;
+  userMessage: string;
+}) {
   return (
     <LayoutEmail
-      props={{ preview: params.message }}
+      props={{ preview: props.userMessage }}
       options={{ withHeader: false, withFooter: false }}
     >
       <Text style={text}>
         {appData.name.company}, <br />
-        {params.message} <br />
+        {props.userMessage || sample.text.prose} <br />
         <br />
         Regards, <br />
-        {params.name}
+        {props.userName || 'John Doe'}
       </Text>
     </LayoutEmail>
   );

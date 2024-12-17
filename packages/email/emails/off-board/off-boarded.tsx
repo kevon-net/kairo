@@ -2,27 +2,24 @@ import * as React from 'react';
 
 import { Heading, Section, Text } from '@react-email/components';
 
-import appData from '@/data/app';
+import appData from '../../src/data/app';
 
-import LayoutEmail, { h2, section, text } from '../../layout';
+import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Offboarded() {
+export default function Offboarded(props: { userName: string }) {
   const message = `${appData.name.app} is sorry to see you go.`;
 
   return (
     <LayoutEmail props={{ preview: message }}>
       <Section style={section}>
-        <Heading style={{ ...h2, marginBottom: '12px', textAlign: 'center' }}>
+        <Heading style={{ ...h1, marginBottom: '32px' }}>
           We&apos;ve Had a Great Run
         </Heading>
-        <Text style={text}>Thanks for being a part of {appData.name.app}.</Text>
-      </Section>
 
-      <Section style={section}>
         <Text style={text}>
-          {appData.name.app} will never email you and ask you to disclose or
-          verify your password, credit card, banking account number or any other
-          sensitive personal information.
+          Hi {props.userName || 'John'},<br />
+          Thanks for being a part of {appData.name.app}. This is to notify you
+          that your account, and all its related data has been deleted.
         </Text>
       </Section>
     </LayoutEmail>

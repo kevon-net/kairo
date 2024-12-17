@@ -68,7 +68,10 @@ export async function PUT(
 
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
-      include: { tokens: { where: { type: Type.PASSWORD_RESET } } },
+      include: {
+        tokens: { where: { type: Type.PASSWORD_RESET } },
+        profile: true,
+      },
     });
 
     if (!userRecord) {
@@ -168,9 +171,10 @@ export async function PUT(
       return NextResponse.json(
         {
           message: 'Password changed successfully',
-          resend: await sendEmailTransactionalAuthPasswordChanged(
-            userRecord.email
-          ),
+          resend: await sendEmailTransactionalAuthPasswordChanged({
+            options: userRecord.email,
+            userName: userRecord.profile?.name || userRecord.email,
+          }),
         },
         { status: 200, statusText: 'Password Changed' }
       );
@@ -196,7 +200,10 @@ export async function PUT(
         message: `Your ${options?.email ? 'email has' : 'details have'} been updated`,
         resend: !options?.email
           ? undefined
-          : await sendEmailTransactionalAuthEmailChanged(user.email as string),
+          : await sendEmailTransactionalAuthEmailChanged({
+              options: user.email as string,
+              userName: userRecord.profile?.name || userRecord.email,
+            }),
       },
       {
         status: 200,
@@ -219,7 +226,10 @@ export async function DELETE(
   try {
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
-      include: { tokens: { where: { type: Type.DELETE_ACCOUNT } } },
+      include: {
+        tokens: { where: { type: Type.DELETE_ACCOUNT } },
+        profile: true,
+      },
     });
 
     if (!userRecord) {
@@ -300,7 +310,11 @@ export async function DELETE(
       const link = `${BASE_URL}/confirm/delete-account?token=${token}`;
 
       // send confirmation email containing link
-      await sendEmailTransactionalOffboardConfirm(userRecord.email, link);
+      await sendEmailTransactionalOffboardConfirm({
+        to: userRecord.email,
+        link,
+        userName: userRecord.profile?.name || userRecord.email,
+      });
 
       return NextResponse.json(
         { message: 'An email to confirm deletion has been sent' },

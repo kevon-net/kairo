@@ -7,10 +7,7 @@ import appData from '../src/data/app';
 import LayoutEmail, { text } from '../src/layout';
 import sample from '../src/data/sample';
 
-export default function Inquiry(props: {
-  userName: string;
-  userMessage: string;
-}) {
+export function Inquiry(props: { userName: string; userMessage: string }) {
   return (
     <LayoutEmail
       props={{ preview: props.userMessage }}

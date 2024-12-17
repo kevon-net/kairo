@@ -58,6 +58,9 @@ export async function POST(request: NextRequest) {
 
           profile: { create: { id: generateId(), name } },
         },
+        include: {
+          profile: true,
+        },
       });
 
       await prisma.token.create({
@@ -78,8 +81,14 @@ export async function POST(request: NextRequest) {
         message: 'Your account has been created',
         user: { id: transactions.createUser.id },
         token,
-        resend: await sendTransactionalEmailAuthVerify(otpValue.toString(), {
-          to: email,
+        resend: await sendTransactionalEmailAuthVerify({
+          otp: otpValue.toString(),
+          options: {
+            to: email,
+          },
+          userName:
+            transactions.createUser.profile?.name ||
+            transactions.createUser.email,
         }),
       },
       { status: 200, statusText: `Account Created` }

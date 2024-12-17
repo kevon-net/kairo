@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function SignIn(props: { otp: string; userName: string }) {
+export function SignIn(props: { otp: string; userName: string }) {
   const message = `We want to make sure it's really you. Please use the following code for two-factor authentication. If you didn't attempt to sign in to your ${appData.name.app} account, you can ignore this message.`;
 
   return (

@@ -5,7 +5,7 @@ import { segmentFullName } from '@repo/utils/formatters';
 import { isProduction } from '@repo/utils/helpers';
 import { render } from '@react-email/render';
 
-import EmailTransactionalOnboardNewsletter from '@/components/email/transactional/onboard/newsletter';
+import { Newsletter as EmailOnboardNewsletter } from '@repo/email';
 
 export const contactsGet = async (audienceId: string) => {
   const { data, error } = await resend.general.contacts.list({ audienceId });
@@ -48,7 +48,7 @@ export const contactCreate = async (contactOptions: EmailContactCreate) => {
         dataEmail:
           contactOptions.options?.notify == false
             ? null
-            : await contactCreateWelcome(contactOptions.params.email),
+            : await contactCreateWelcome({ to: contactOptions.params.email }),
       };
     } else {
       console.error(
@@ -62,9 +62,9 @@ export const contactCreate = async (contactOptions: EmailContactCreate) => {
   return { exists: true };
 };
 
-export const contactCreateWelcome = async (
-  to: Omit<EmailInquiry['from'], 'name'>['email']
-) => {
+export const contactCreateWelcome = async (params: {
+  to: Omit<EmailInquiry['from'], 'name'>['email'];
+}) => {
   // switch to 'resend.general' when your domain is configured
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
@@ -72,9 +72,9 @@ export const contactCreateWelcome = async (
         ? process.env.NEXT_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? to : process.env.NEXT_EMAIL_INFO!],
+    to: [isProduction() ? params.to : process.env.NEXT_EMAIL_INFO!],
     subject: `Welcome To ${appData.name.company} Newsletter`,
-    html: await render(EmailTransactionalOnboardNewsletter()),
+    html: await render(EmailOnboardNewsletter()),
     replyTo: process.env.NEXT_EMAIL_NOREPLY!,
   });
 

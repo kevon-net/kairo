@@ -2,12 +2,22 @@
   "name": "@repo/email",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "dev": "email dev",
+    "build": "tsc",
+    "export": "email export",
     "lint": "eslint .",
     "check-types": "tsc --noEmit",
     "format": "prettier --write .",
     "check-format": "prettier --check ."
+  },
+  "exports": {
+    ".": {
+      "types": "./emails/index.ts",
+      "import": "./dist/emails/index.js",
+      "default": "./dist/emails/index.js"
+    }
   },
   "devDependencies": {
     "react-email": "3.0.4"

@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Welcome(props: { userName: string }) {
+export function Welcome(props: { userName: string }) {
   const message = `Thanks creating an account with ${appData.name.app}.`;
 
   return (

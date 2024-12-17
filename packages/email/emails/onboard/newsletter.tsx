@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Newsletter() {
+export function Newsletter() {
   const message = `You have successfully subscribed to the ${appData.name.company} newsletter. You will be recieving occational marketing and news emails.`;
 
   return (

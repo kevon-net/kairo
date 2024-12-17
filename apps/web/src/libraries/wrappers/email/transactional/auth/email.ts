@@ -1,28 +1,32 @@
 import appData from '@/data/app';
 import resend from '@/libraries/resend';
 
-import EmailTransactionalEmailChanged from '@/components/email/transactional/auth/email-changed';
-import EmailTransactionalAuthVerify from '@/components/email/transactional/auth/verify';
+import {
+  EmailChanged as EmailEmailChanged,
+  Verify as EmailVerify,
+} from '@repo/email';
 import { isProduction } from '@repo/utils/helpers';
 import { EmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 
-export const sendTransactionalEmailAuthVerify = async (
-  otp: string,
-  options: { to: EmailInquiry['to']; signUp?: boolean }
-) => {
+export const sendTransactionalEmailAuthVerify = async (params: {
+  otp: string;
+  options: { to: EmailInquiry['to']; signUp?: boolean };
+  userName: string;
+}) => {
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
       isProduction()
         ? process.env.NEXT_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? options.to : process.env.NEXT_EMAIL_INFO!],
+    to: [isProduction() ? params.options.to : process.env.NEXT_EMAIL_INFO!],
     subject: `Verify Your Email Address`,
     html: await render(
-      EmailTransactionalAuthVerify({
-        otp,
-        options: { signUp: options.signUp ?? true },
+      EmailVerify({
+        otp: params.otp,
+        options: { signUp: params.options.signUp ?? true },
+        userName: params.userName,
       })
     ),
     replyTo: process.env.NEXT_EMAIL_NOREPLY!,
@@ -35,18 +39,19 @@ export const sendTransactionalEmailAuthVerify = async (
   }
 };
 
-export const sendEmailTransactionalAuthEmailChanged = async (
-  options: EmailInquiry['to']
-) => {
+export const sendEmailTransactionalAuthEmailChanged = async (params: {
+  options: EmailInquiry['to'];
+  userName: string;
+}) => {
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
       isProduction()
         ? process.env.NEXT_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? options : process.env.NEXT_EMAIL_NOREPLY!],
+    to: [isProduction() ? params.options : process.env.NEXT_EMAIL_NOREPLY!],
     subject: `Email Changed`,
-    html: await render(EmailTransactionalEmailChanged()),
+    html: await render(EmailEmailChanged({ userName: params.userName })),
     replyTo: process.env.NEXT_EMAIL_NOREPLY!,
   });
   if (!error) {

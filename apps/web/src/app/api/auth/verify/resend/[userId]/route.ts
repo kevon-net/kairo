@@ -14,7 +14,10 @@ export async function POST(
   try {
     const userRecord = await prisma.user.findUnique({
       where: { id: params.userId },
-      include: { tokens: { where: { type: Type.CONFIRM_EMAIL } } },
+      include: {
+        tokens: { where: { type: Type.CONFIRM_EMAIL } },
+        profile: true,
+      },
     });
 
     if (!userRecord) {
@@ -121,9 +124,13 @@ export async function POST(
           message: 'A new OTP has been sent',
           user: { id: userRecord.id },
           token,
-          resend: await sendTransactionalEmailAuthVerify(otpValue.toString(), {
-            to: options?.email || userRecord.email,
-            signUp: false,
+          resend: await sendTransactionalEmailAuthVerify({
+            otp: otpValue.toString(),
+            options: {
+              to: options?.email || userRecord.email,
+              signUp: false,
+            },
+            userName: userRecord.profile?.name || userRecord.email,
           }),
         },
         { status: 200, statusText: 'OTP Sent' }

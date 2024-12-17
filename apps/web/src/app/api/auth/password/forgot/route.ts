@@ -13,7 +13,10 @@ export async function POST(request: NextRequest) {
 
     const userRecord = await prisma.user.findUnique({
       where: { email },
-      include: { tokens: { where: { type: Type.PASSWORD_RESET } } },
+      include: {
+        tokens: { where: { type: Type.PASSWORD_RESET } },
+        profile: true,
+      },
     });
 
     if (!userRecord) {
@@ -72,10 +75,11 @@ export async function POST(request: NextRequest) {
       {
         message: 'An OTL has been sent',
         token: tokens.createNew,
-        resend: await sendEmailTransactionalAuthPasswordForgot(
-          otlValue,
-          userRecord.email
-        ),
+        resend: await sendEmailTransactionalAuthPasswordForgot({
+          otl: otlValue,
+          options: userRecord.email,
+          userName: userRecord.profile?.name || userRecord.email,
+        }),
       },
       { status: 200, statusText: 'OTL Sent' }
     );

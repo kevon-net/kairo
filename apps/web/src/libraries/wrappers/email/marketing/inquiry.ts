@@ -1,31 +1,28 @@
 import resend from '@/libraries/resend';
-import EmailTransactionalInquiry from '@/components/email/transactional/inquiry';
+import { Inquiry as EmailInquiry } from '@repo/email';
 import { isProduction } from '@repo/utils/helpers';
-import { EmailInquiry } from '@/types/email';
+import { EmailInquiry as TypeEmailInquiry } from '@/types/email';
 import { render } from '@react-email/render';
 
-export const sendEmailMarketingInquiry = async (options: {
-  from: EmailInquiry['from'];
-  to: EmailInquiry['to'];
-  subject: EmailInquiry['subject'];
+export const sendEmailMarketingInquiry = async (params: {
+  from: TypeEmailInquiry['from'];
+  to: TypeEmailInquiry['to'];
+  subject: TypeEmailInquiry['subject'];
   message: string;
 }) => {
   // switch to 'resend.general' when your domain is configured
   const { data, error } = await resend.general.emails.send({
-    from: `${options.from.name} <${
+    from: `${params.from.name} <${
       isProduction()
         ? process.env.NEXT_EMAIL_INFO!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
     to: [process.env.NEXT_EMAIL_INFO!],
-    subject: options.subject,
+    subject: params.subject,
     html: await render(
-      EmailTransactionalInquiry({
-        name: options.from.name,
-        message: options.message,
-      })
+      EmailInquiry({ userName: params.from.name, userMessage: params.message })
     ),
-    replyTo: options.to,
+    replyTo: params.to,
   });
 
   if (!error) {

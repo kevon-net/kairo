@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function EmailChanged(props: { userName: string }) {
+export function EmailChanged(props: { userName: string }) {
   const message = `You have successfully changed your email. If you didn't initiate this process, contact support immediately via the link provided below.`;
 
   const supportEmail = appData.emails.info;

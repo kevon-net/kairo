@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Offboarded(props: { userName: string }) {
+export function Offboarded(props: { userName: string }) {
   const message = `${appData.name.app} is sorry to see you go.`;
 
   return (

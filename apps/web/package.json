@@ -31,6 +31,7 @@
     "@react-email/render": "^1.0.2",
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "@repo/email": "^1.0.0",
     "@repo/enums": "^1.0.0",
     "@repo/schemas": "^1.0.0",
     "@repo/types": "^1.0.0",

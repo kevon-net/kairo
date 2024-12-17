@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Verify(props: {
+export function Verify(props: {
   otp: string;
   options?: { signUp?: boolean };
   userName: string;

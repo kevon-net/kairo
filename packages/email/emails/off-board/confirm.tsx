@@ -6,7 +6,7 @@ import appData from '../../src/data/app';
 
 import LayoutEmail, { h1, section, text } from '../../src/layout';
 
-export default function Confirm(props: { link: string; userName: string }) {
+export function Confirm(props: { link: string; userName: string }) {
   const message = `We want to make sure it's really you. Please click the following link to confirm the account deletion request. If you didn't request to delete your ${appData.name.app} account, you can ignore this message.`;
 
   return (

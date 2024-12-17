@@ -115,7 +115,10 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      await sendEmailTransactionalOnboard(userRecord.email);
+      await sendEmailTransactionalOnboard({
+        to: userRecord.email,
+        userName: userRecord.profile?.name || userRecord.email,
+      });
     }
 
     await prisma.$transaction(async () => {

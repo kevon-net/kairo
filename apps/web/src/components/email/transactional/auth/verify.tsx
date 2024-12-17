@@ -4,7 +4,7 @@ import { Heading, Section, Text } from '@react-email/components';
 
 import appData from '@/data/app';
 
-import LayoutEmail, { h1, section, text } from '@/components/layout/email';
+import LayoutEmail, { h1, section, text } from '../../layout';
 
 export default function Verify(params: {
   otp: string;

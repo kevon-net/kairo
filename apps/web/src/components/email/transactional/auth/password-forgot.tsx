@@ -4,7 +4,7 @@ import { Heading, Link, Section, Text } from '@react-email/components';
 
 import appData from '@/data/app';
 
-import LayoutEmail, { h1, section, text } from '@/components/layout/email';
+import LayoutEmail, { h1, section, text } from '../../layout';
 
 export default function PasswordForgot(params: { otl: string }) {
   const message = `Please use the following link to reset your password. If you don't want to reset your password or didn't request this email, you can ignore this message.`;

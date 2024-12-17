@@ -4,7 +4,7 @@ import { Heading, Link, Section, Text } from '@react-email/components';
 
 import appData from '@/data/app';
 
-import LayoutEmail, { h2, section, text } from '@/components/layout/email';
+import LayoutEmail, { h2, section, text } from '../../layout';
 
 export default function EmailChanged() {
   const message = `You have successfully changed your email. If you didn't initiate this process, contact support immediately via the link provided below.`;

@@ -4,7 +4,7 @@ import { Heading, Section, Text } from '@react-email/components';
 
 import appData from '@/data/app';
 
-import LayoutEmail, { h1, section, text } from '@/components/layout/email';
+import LayoutEmail, { h1, section, text } from '../../layout';
 
 export default function SignIn(params: { otp: string }) {
   const message = `We want to make sure it's really you. Please use the following code for two-factor authentication. If you didn't attempt to sign in to your ${appData.name.app} account, you can ignore this message.`;

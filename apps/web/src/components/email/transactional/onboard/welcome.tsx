@@ -4,7 +4,7 @@ import { Heading, Section, Text } from '@react-email/components';
 
 import appData from '@/data/app';
 
-import LayoutEmail, { h2, section, text } from '@/components/layout/email';
+import LayoutEmail, { h2, section, text } from '../../layout';
 
 export default function Welcome() {
   const message = `Thanks creating an account with ${appData.name.app}.`;

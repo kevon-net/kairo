@@ -34,15 +34,15 @@
 }
 
 .title {
-  color: var(--mantine-color-white);
+  color: var(--mantine-color-white) !important;
 }
 
 .description {
-  color: var(--mantine-color-white);
+  color: var(--mantine-color-white) !important;
 }
 
 .closeButton {
-  color: var(--mantine-color-white);
+  color: var(--mantine-color-white) !important;
 
   @include hover {
     background-color: rgba(0, 0, 0, 0.1);

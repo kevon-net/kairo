@@ -55,7 +55,7 @@ export default function Verify() {
           </Grid>
         </Stack>
 
-        <WrapperTransition mounted={time != undefined || requested}>
+        <WrapperTransition mounted={time != undefined}>
           <Alert
             color="yellow"
             icon={

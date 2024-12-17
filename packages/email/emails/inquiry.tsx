@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Text } from '@react-email/components';
 
-import LayoutEmail, { text } from '@/components/layout/email';
+import LayoutEmail, { text } from '../../layout';
 import appData from '@/data/app';
 
 export default function Inquiry(params: { name: string; message: string }) {

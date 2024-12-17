@@ -4,19 +4,16 @@ import { Heading, Section, Text } from '@react-email/components';
 
 import appData from '@/data/app';
 
-import LayoutEmail, { h1, section, text } from '@/components/layout/email';
+import LayoutEmail, { h1, section, text } from '../../layout';
 
-export default function Verify(params: {
-  otp: string;
-  options?: { signUp?: boolean };
-}) {
-  const message = `${!params.options?.signUp ? '' : `Thanks creating an account with ${appData.name.app}. `}We want to make sure it's really you. Please enter the following verification code to verify your account. If you don't want to create an account or didn't request this email, you can ignore this message.`;
+export default function SignIn(params: { otp: string }) {
+  const message = `We want to make sure it's really you. Please use the following code for two-factor authentication. If you didn't attempt to sign in to your ${appData.name.app} account, you can ignore this message.`;
 
   return (
     <LayoutEmail props={{ preview: message }}>
       <Section style={section}>
         <Heading style={{ ...h1, marginBottom: '12px', textAlign: 'center' }}>
-          Verify Your Email Address
+          Welcome Back!
         </Heading>
         <Text style={text}>{message}</Text>
       </Section>
@@ -33,7 +30,7 @@ export default function Verify(params: {
           {params.otp}
         </Text>
         <Text style={{ ...text, textAlign: 'center', marginTop: '8px' }}>
-          (this code is valid for 1 hour)
+          (this code is valid for 5 minutes)
         </Text>
       </Section>
 

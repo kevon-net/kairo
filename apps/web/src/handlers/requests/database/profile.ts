@@ -59,3 +59,21 @@ export const profileUpdate = async (profile: ProfileUpdate) => {
     throw error;
   }
 };
+
+export const avatarUpload = async (formData: FormData) => {
+  try {
+    const request = new Request(`${API_URL}/upload/avatar`, {
+      method: EnumRequest.PUT,
+      credentials: 'include',
+      headers: await authHeaders({}),
+      body: formData,
+    });
+
+    const response = await fetch(request);
+
+    return response;
+  } catch (error) {
+    console.error('---> handler error - (upload avatar):', error);
+    throw error;
+  }
+};

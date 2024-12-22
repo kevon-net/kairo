@@ -9,6 +9,7 @@ import { Metadata } from 'next';
 import { profileGet } from '@/handlers/requests/database/profile';
 import { getSession } from '@/libraries/auth';
 import { ProfileGet } from '@repo/types/models';
+import DropzoneAvatar from '@/components/common/dropzones/avatar';
 
 export const metadata: Metadata = { title: 'Profile' };
 
@@ -21,6 +22,20 @@ export default async function Profile() {
 
   return (
     <LayoutPage stacked>
+      <LayoutSection id="page-profile-picture" containerized={false}>
+        <Grid>
+          <GridCol span={{ base: 12 }}>
+            <Title order={2} fz={'xl'}>
+              Profile Picture
+            </Title>
+          </GridCol>
+
+          <GridCol span={{ base: 12, md: 8 }}>
+            <DropzoneAvatar profile={profile} />
+          </GridCol>
+        </Grid>
+      </LayoutSection>
+
       <LayoutSection id="page-profile-personal" containerized={false}>
         <Grid>
           <GridCol span={{ base: 12 }}>

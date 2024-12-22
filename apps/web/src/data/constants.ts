@@ -48,6 +48,10 @@ export const PASSWORD_REQUIREMENTS = [
 
 export const TIMEOUT = { REDIRECT: 5000 };
 
+export const FILE_NAME = {
+  avatar: 'avatar',
+};
+
 export const COOKIE_NAME = {
   GEO: 'geo',
   OAUTH: { UUID: 'oauth.uuid' },

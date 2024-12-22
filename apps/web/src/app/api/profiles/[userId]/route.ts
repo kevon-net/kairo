@@ -107,18 +107,19 @@ export async function PUT(
       data: profile,
     });
 
-    if (profileRecord.name != profile.name) {
-      const sessionToken = await encrypt(
-        { ...session, user: { ...session.user, name: profile.name } },
-        KEY,
-        getExpiry(session.user.remember).sec
-      );
+    const sessionToken = await encrypt(
+      {
+        ...session,
+        user: { ...session.user, name: profile.name, image: profile.avatar },
+      },
+      KEY,
+      getExpiry(session.user.remember).sec
+    );
 
-      cookies().set(COOKIE_NAME.SESSION, sessionToken, {
-        expires: new Date(session.expires),
-        httpOnly: true,
-      });
-    }
+    cookies().set(COOKIE_NAME.SESSION, sessionToken, {
+      expires: new Date(session.expires),
+      httpOnly: true,
+    });
 
     return NextResponse.json(
       { message: 'Your profile has been updated' },

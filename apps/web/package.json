@@ -42,6 +42,7 @@
     "bcryptjs": "^2.4.3",
     "embla-carousel-autoplay": "^7.1.0",
     "embla-carousel-react": "^7.1.0",
+    "formidable": "^3.5.2",
     "jose": "^5.9.6",
     "next": "^14.2.17",
     "react": "^18",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

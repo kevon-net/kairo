@@ -41,8 +41,8 @@ import { COOKIE_NAME } from '@/data/constants';
 
 import ProviderStore from '@/components/providers/store';
 import { cookies } from 'next/headers';
-import { getGeoData } from '@/libraries/geolocation';
 import AffixiCookies from '@/components/common/affixi/cookies';
+import ButtonAuthGoogle from '@/components/common/buttons/auth-google';
 
 const noto = DM_Sans({ subsets: ['latin'] });
 
@@ -82,7 +82,6 @@ export default async function RootLayout({
         <ProviderStore
           colorScheme={colorSchemeState || 'light'}
           session={await getSession()}
-          geoData={await getGeoData()}
         >
           <MantineProvider
             theme={appTheme}
@@ -96,6 +95,7 @@ export default async function RootLayout({
 
             <AffixOffline />
             <AffixiCookies />
+            <ButtonAuthGoogle />
           </MantineProvider>
         </ProviderStore>
 

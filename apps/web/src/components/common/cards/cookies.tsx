@@ -3,13 +3,12 @@ import { Anchor, Button, Card, Group, Stack, Text } from '@mantine/core';
 import Link from 'next/link';
 import classes from './cookies.module.scss';
 import { setCookie } from '@repo/utils/helpers';
-import { COOKIE_NAME } from '@/data/constants';
-import { getExpiry } from '@/utilities/time';
+import { COOKIE_NAME, EXPIRY } from '@/data/constants';
 
 export default function Cookies({ close }: { close: () => void }) {
   const handleConsentCookie = () => {
     setCookie(COOKIE_NAME.CONSENT.COOKIES, true, {
-      expiryInSeconds: getExpiry(true).sec,
+      expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
     });
     close();
   };
@@ -18,10 +17,9 @@ export default function Cookies({ close }: { close: () => void }) {
     <Card className={classes.card}>
       <Stack>
         <Text fz={'sm'}>
-          This website uses cookies to supplement a balanced diet and provide a
-          much deserved reward to the senses after consuming bland but
-          nutritious meals. Accepting our cookies is optional but recommended,
-          as they are delicious. See our{' '}
+          This website uses cookies to provide a seamless user experience.
+          Accepting our cookies is optional but recommended, as they are
+          delicious. See our{' '}
           <Anchor inherit component={Link} href="/legal/cookie-policy">
             cookie policy
           </Anchor>

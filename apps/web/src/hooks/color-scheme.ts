@@ -1,14 +1,12 @@
 import { useMantineColorScheme } from '@mantine/core';
-import { COOKIE_NAME } from '@/data/constants';
+import { COOKIE_NAME, EXPIRY } from '@/data/constants';
 import { setCookie, getOSTheme } from '@repo/utils/helpers';
-import { getExpiry } from '@/utilities/time';
 import { useAppDispatch, useAppSelector } from './redux';
 import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
 
 export const useColorSchemeHandler = () => {
   const { setColorScheme } = useMantineColorScheme({ keepTransitions: true });
 
-  const session = useAppSelector((state) => state.session.value);
   const colorScheme = useAppSelector((state) => state.colorScheme.value);
   const dispatch = useAppDispatch();
 
@@ -18,7 +16,7 @@ export const useColorSchemeHandler = () => {
 
     // update scheme state cookie
     setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, value, {
-      expiryInSeconds: getExpiry(session?.user.remember ?? false).sec,
+      expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
     });
 
     const scheme =
@@ -26,7 +24,7 @@ export const useColorSchemeHandler = () => {
 
     // update scheme cookie
     setCookie(COOKIE_NAME.COLOR_SCHEME, scheme, {
-      expiryInSeconds: getExpiry(session?.user.remember ?? false).sec,
+      expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
     });
 
     // update mantine color scheme

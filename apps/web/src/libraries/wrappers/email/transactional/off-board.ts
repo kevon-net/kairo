@@ -11,7 +11,7 @@ export const sendEmailTransactionalOffboardConfirm = async (params: {
   link: string;
   userName: string;
 }) => {
-  const { data, error } = await resend.general.emails.send({
+  const { data, error } = await resend.emails.send({
     from: `${appData.name.app} <${
       isProduction()
         ? process.env.NEXT_PUBLIC_EMAIL_NOREPLY!

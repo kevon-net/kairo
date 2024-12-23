@@ -31,13 +31,13 @@ export const ICON_WRAPPER_SIZE = ICON_SIZE + 8;
 
 export const ICON_STROKE_WIDTH = 1.5;
 
-export const transitionDuration = 250;
+export const TRANSITION_DURATION = 250;
 
 export const SECTION_SPACING = 64;
 
-export const fontCtaTitle = 40;
+export const FONT_CTA_TITLE = 40;
 
-export const FONT = { CTA_TITLE: fontCtaTitle };
+export const FONT = { CTA_TITLE: FONT_CTA_TITLE };
 
 export const PASSWORD_REQUIREMENTS = [
   { re: /[0-9]/, label: 'number' },

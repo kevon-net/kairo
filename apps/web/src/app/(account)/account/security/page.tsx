@@ -2,82 +2,25 @@ export const dynamic = 'force-dynamic';
 
 import React from 'react';
 
-import {
-  Anchor,
-  Divider,
-  Grid,
-  GridCol,
-  Group,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Anchor, Divider, Stack, Text, Title } from '@mantine/core';
 
 import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
-import FormUserAccountPassword from '@/components/form/user/account/password';
 import ModalDeleteAccount from '@/components/common/modals/delete/account';
-import ButtonClearSessions from '@/components/common/buttons/clear-sessions';
-import CardSession from '@/components/common/cards/session';
-import ModalEmailChange from '@/components/common/modals/email-change';
 
 import { Metadata } from 'next';
-import appData from '@/data/app';
-import { sessionsGet } from '@/handlers/requests/database/session';
-import { SessionRelations } from '@repo/types/models';
 
 export const metadata: Metadata = { title: 'Security' };
 
 export default async function Security() {
-  const { sessions }: { sessions: SessionRelations[] } = await sessionsGet();
-
   return (
     <LayoutPage stacked>
-      <LayoutSection id="page-security-email" containerized={false}>
-        <Stack gap={'lg'}>
-          <Title order={2} fz={'xl'}>
-            Email
-          </Title>
-
-          <ModalEmailChange />
-        </Stack>
-      </LayoutSection>
-
-      <Divider />
-
       <LayoutSection id="page-security-password" containerized={false}>
         <Stack gap={'lg'}>
           <Title order={2} fz={'xl'}>
-            Password
+            Two Factor Authentication
           </Title>
-
-          <FormUserAccountPassword />
-        </Stack>
-      </LayoutSection>
-
-      <Divider />
-
-      <LayoutSection id="page-security-delete" containerized={false}>
-        <Stack gap={'lg'}>
-          <Group justify="space-between">
-            <Title order={2} fz={'xl'}>
-              Devices
-            </Title>
-
-            <ButtonClearSessions>Sign Out of All Devices</ButtonClearSessions>
-          </Group>
-
-          <Text>
-            A list of all devices signed in to your {appData.name.app} account.
-          </Text>
-
-          <Grid>
-            {sessions?.map((session) => (
-              <GridCol key={session.id} span={{ base: 12, xs: 6, lg: 4 }}>
-                <CardSession props={session} />
-              </GridCol>
-            ))}
-          </Grid>
+          form similar to notifications
         </Stack>
       </LayoutSection>
 

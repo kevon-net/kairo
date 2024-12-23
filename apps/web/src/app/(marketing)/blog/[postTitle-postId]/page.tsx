@@ -33,7 +33,7 @@ import Link from 'next/link';
 import { getRegionalDate } from '@repo/utils/formatters';
 
 export default async function Post({ params }: { params: typeParams }) {
-  const [postId] = params['postId-postTitle'].split('-');
+  const [postId] = params['postTitle-postId'].split('-');
 
   const { post }: { post: PostRelations } = await postGet({ postId: postId });
 

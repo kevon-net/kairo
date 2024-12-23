@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateSession } from './libraries/supabase/middleware';
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next({ request });
-
   return await updateSession(request, response);
 }
 

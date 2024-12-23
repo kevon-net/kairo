@@ -1,5 +1,3 @@
-'use client';
-
 export const setCookie = (
   name: string,
   value: any,

@@ -1,28 +1,6 @@
 import { GEO_DATA_URL, HEADERS } from '@/data/constants';
 import { Request } from '@repo/enums';
-import {
-  CountryData,
-  CountryDataOptions,
-  IpData,
-} from '@/types/bodies/response';
-
-export const fetchIp = async (ip?: string): Promise<IpData | null> => {
-  try {
-    const urlIp = `${GEO_DATA_URL.IP}/${ip}/json`;
-
-    const getIpData = await fetch(urlIp, {
-      method: Request.GET,
-      headers: HEADERS.WITHOUT_BODY,
-    });
-
-    const ipData = await getIpData.json();
-
-    return ipData;
-  } catch (error) {
-    console.error('---> service error (get ip data):', error);
-    return null;
-  }
-};
+import { CountryData, CountryDataOptions } from '@/types/bodies/response';
 
 export const fetchCountryData = async (
   countryName?: string,

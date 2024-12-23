@@ -1,6 +1,3 @@
-'use client';
-
-// Save an item to local storage
 export const saveToLocalStorage = (name: string, item: any): void => {
   try {
     const serializedItem = JSON.stringify(item);
@@ -10,12 +7,11 @@ export const saveToLocalStorage = (name: string, item: any): void => {
   }
 };
 
-// Get an item from local storage
 export const getFromLocalStorage = (name: string): any => {
   try {
     const serializedItem = localStorage.getItem(name);
     if (serializedItem === null) {
-      return null; // Return null if the item doesn't exist
+      return null;
     }
     return JSON.parse(serializedItem);
   } catch (error) {

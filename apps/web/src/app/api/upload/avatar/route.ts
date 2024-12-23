@@ -3,11 +3,11 @@ import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { mkdir } from 'fs/promises';
 import { FILE_NAME } from '@/data/constants';
-import { getSession } from '@/libraries/auth';
+// import { getSession } from '@/libraries/auth';
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getSession();
+    // const session = await getSession();
 
     if (!session) {
       return NextResponse.json(

@@ -26,7 +26,7 @@ import { tagsGet } from '@/handlers/requests/database/tag';
 import { typeParams } from '@/app/(marketing)/blog/layout';
 
 export default async function Blog({ params }: { params: typeParams }) {
-  const [postId] = params['postId-postTitle'].split('-');
+  const [postId] = params['postTitle-postId'].split('-');
 
   const { posts }: { posts: PostRelations[] } = await postsGet();
   const { tags }: { tags: TagRelations[] } = await tagsGet();

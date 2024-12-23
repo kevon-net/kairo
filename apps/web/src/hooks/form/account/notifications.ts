@@ -1,5 +1,4 @@
 import IconNotification from '@/components/common/icons/notification';
-// import { updateAccountNotifications } from "@/handlers/request/database/notifications";
 import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { useForm } from '@mantine/form';
@@ -26,9 +25,6 @@ export const useFormUserAccountNotifications = () => {
         }
 
         setSending(true);
-
-        // const response = await updateAccountNotifications(form.values);
-        // const result = await response.json();
       } catch (error) {
         notifications.show({
           id: 'notifications-update-failed',

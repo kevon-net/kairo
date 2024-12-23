@@ -1,19 +1,8 @@
-import { Icon } from '@tabler/icons-react';
 import {
   ReplyRelations,
   CommentRelations,
   PostRelations as typePostRelations,
 } from '@repo/types/models';
-
-export interface Team {
-  name: string;
-  title: string;
-  image: string;
-  socials: {
-    icon: Icon;
-    link: string;
-  }[];
-}
 
 export interface Testimonial {
   content: string;
@@ -21,19 +10,6 @@ export interface Testimonial {
     person: { image: string; name: string; title: string };
     company: { image: string; name: string };
   };
-}
-
-export interface Pricing {
-  title: string;
-  desc: string;
-  price: { monthly: number; annually: number };
-  specs: string[];
-  meta?: { popular: boolean };
-}
-
-export interface Discount {
-  initial: number;
-  current: number;
 }
 
 export interface PostCommentReply extends ReplyRelations {

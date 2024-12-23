@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { Burger, Button, Drawer, NavLink, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { SignIn as FragmentSignIn } from '../../fragments/auth';
+import { SignIn as FragmentSignIn } from '../../../partial/auth';
 
 import classes from './main.module.scss';
 

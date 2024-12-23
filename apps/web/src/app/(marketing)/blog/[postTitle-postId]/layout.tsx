@@ -16,7 +16,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 
-  const [postId] = params['postId-postTitle'].split('-');
+  const [postId] = params['postTitle-postId'].split('-');
 
   const post = posts.find((p) => p.id == postId);
 

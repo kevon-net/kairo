@@ -16,10 +16,10 @@ import {
 
 import LayoutSection from '@/components/layout/section';
 import DrawerNavbarMain from '@/components/common/drawers/navbar/main';
-import MenuAvatar from '@/components/common/menus/avatar';
+import MenuUser from '@/components/common/menus/user';
 import MenuNavbar from '@/components/common/menus/navbar';
 import DrawerUser from '@/components/common/drawers/user';
-import { SignIn as FragmentSignIn } from '@/components/common/fragments/auth';
+import { SignIn as FragmentSignIn } from '@/components/partial/auth';
 
 import classes from './main.module.scss';
 import {
@@ -159,7 +159,7 @@ export default function Main({
                 </Button>
               </Group>
             ) : desktop ? (
-              <MenuAvatar />
+              <MenuUser />
             ) : (
               <DrawerUser />
             )}

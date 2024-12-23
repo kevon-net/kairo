@@ -1,4 +1,4 @@
-import { COOKIE_NAME, LOCAL_STORAGE_NAME } from '@/data/constants';
+import { COOKIE_NAME, EXPIRY, LOCAL_STORAGE_NAME } from '@/data/constants';
 import { fetchCountryData } from '@/services/api/geo';
 import { CountryData, CountryDataOptions } from '@/types/bodies/response';
 import {
@@ -7,7 +7,6 @@ import {
   getFromLocalStorage,
   saveToLocalStorage,
 } from '@repo/utils/helpers';
-import { getExpiry } from '@/utilities/time';
 import { useThrottledCallback } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 
@@ -39,7 +38,7 @@ export const useCountryData = (
         !countryName ? COOKIE_NAME.LOCAL.COUNTRIES : COOKIE_NAME.LOCAL.COUNTRY,
         true,
         {
-          expiryInSeconds: getExpiry(true).sec,
+          expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
         }
       );
 

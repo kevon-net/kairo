@@ -10,8 +10,7 @@ export const sendEmailMarketingInquiry = async (params: {
   subject: TypeEmailInquiry['subject'];
   message: string;
 }) => {
-  // switch to 'resend.general' when your domain is configured
-  const { data, error } = await resend.general.emails.send({
+  const { data, error } = await resend.emails.send({
     from: `${params.from.name} <${
       isProduction()
         ? process.env.NEXT_PUBLIC_EMAIL_INFO!

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { Sizes, Widths } from './mantine';
+type Sizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+type Widths = { md?: number; lg?: number };
 
 export interface Body {
   bar?: React.ReactNode;

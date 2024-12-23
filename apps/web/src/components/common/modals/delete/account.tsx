@@ -3,7 +3,6 @@
 import { Modal, Button, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import FormUserAccountDelete from '@/components/form/user/account/delete';
 import LayoutModal from '@/components/layout/modal';
 import { Alert } from '@repo/enums';
 
@@ -38,8 +37,7 @@ export default function Account() {
                 deletion process will be canceled.
               </Text>
             </Stack>
-
-            <FormUserAccountDelete close={close} />
+            action
           </Stack>
         </LayoutModal>
       </Modal>

@@ -8,7 +8,7 @@ import { render } from '@react-email/render';
 import { Newsletter as EmailOnboardNewsletter } from '@repo/email';
 
 export const contactsGet = async (audienceId: string) => {
-  const { data, error } = await resend.general.contacts.list({ audienceId });
+  const { data, error } = await resend.contacts.list({ audienceId });
 
   if (!error) {
     return data;
@@ -28,9 +28,8 @@ export const contactCreate = async (contactOptions: EmailContactCreate) => {
   );
 
   if (!contactExists) {
-    // switch to 'resend.general' when your domain is configured
     const { data: dataContact, error: errorContact } =
-      await resend.general.contacts.create({
+      await resend.contacts.create({
         email: contactOptions.params.email,
         firstName: contactOptions.params.name
           ? segmentFullName(contactOptions.params.name).first
@@ -65,8 +64,7 @@ export const contactCreate = async (contactOptions: EmailContactCreate) => {
 export const contactCreateWelcome = async (params: {
   to: Omit<EmailInquiry['from'], 'name'>['email'];
 }) => {
-  // switch to 'resend.general' when your domain is configured
-  const { data, error } = await resend.general.emails.send({
+  const { data, error } = await resend.emails.send({
     from: `${appData.name.app} <${
       isProduction()
         ? process.env.NEXT_PUBLIC_EMAIL_NOREPLY!

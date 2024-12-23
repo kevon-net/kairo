@@ -19,7 +19,7 @@ import {
 
 import LayoutSection from '@/components/layout/section';
 
-import images from '@/data/images';
+import { images } from '@/assets/images';
 
 import classes from './main.module.scss';
 import appData from '@/data/app';

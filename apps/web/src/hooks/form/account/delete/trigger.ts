@@ -2,8 +2,7 @@ import { userDelete } from '@/handlers/requests/database/user';
 import { DeleteAccountRequest } from '@/types/token';
 import { decrypt, getUrlParam } from '@repo/utils/helpers';
 import { useEffect, useState } from 'react';
-import { signOut } from '@/handlers/events/auth';
-import { useAppSelector } from '@/hooks/redux';
+// import { useAppSelector } from '@/hooks/redux';
 import { KEY } from '@/data/constants';
 
 export const useFormUserAccountDeleteTrigger = () => {
@@ -11,7 +10,7 @@ export const useFormUserAccountDeleteTrigger = () => {
     state: 'loading' | 'error' | 'success' | null;
     message?: string;
   }>({ state: null, message: 'Validating deletion request...' });
-  const session = useAppSelector((state) => state.session.value);
+  // const session = useAppSelector((state) => state.session.value);
 
   const handleTrigger = async () => {
     try {
@@ -42,9 +41,9 @@ export const useFormUserAccountDeleteTrigger = () => {
         throw new Error(result.error);
       }
 
-      if (session) {
-        await signOut();
-      }
+      // if (session) {
+      //   await signOut();
+      // }
 
       setStatus({ state: 'success', message: result.message });
       return;

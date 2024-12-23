@@ -34,7 +34,7 @@ import appResolver from '@/styles/resolver';
 import appData from '@/data/app';
 import { linkify } from '@repo/utils/formatters';
 
-import { getSession } from '@/libraries/auth';
+// import { getSession } from '@/libraries/auth';
 
 import AffixOffline from '@/components/common/affixi/offline';
 import { COOKIE_NAME } from '@/data/constants';
@@ -42,7 +42,6 @@ import { COOKIE_NAME } from '@/data/constants';
 import ProviderStore from '@/components/providers/store';
 import { cookies } from 'next/headers';
 import AffixiCookies from '@/components/common/affixi/cookies';
-import ButtonAuthGoogle from '@/components/common/buttons/auth-google';
 
 const noto = DM_Sans({ subsets: ['latin'] });
 
@@ -61,6 +60,8 @@ export default async function RootLayout({
 }>) {
   const colorScheme = cookies().get(COOKIE_NAME.COLOR_SCHEME)?.value;
   const colorSchemeState = cookies().get(COOKIE_NAME.COLOR_SCHEME_STATE)?.value;
+
+  // const session=await getSession()
 
   return (
     <html
@@ -81,7 +82,7 @@ export default async function RootLayout({
       <body className={noto.className}>
         <ProviderStore
           colorScheme={colorSchemeState || 'light'}
-          session={await getSession()}
+          session={session}
         >
           <MantineProvider
             theme={appTheme}
@@ -95,7 +96,6 @@ export default async function RootLayout({
 
             <AffixOffline />
             <AffixiCookies />
-            <ButtonAuthGoogle />
           </MantineProvider>
         </ProviderStore>
 

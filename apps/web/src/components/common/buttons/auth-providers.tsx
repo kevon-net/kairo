@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import { Button, Grid, GridCol } from '@mantine/core';
 
-import images from '@/data/images';
+import { images } from '@/assets/images';
 import { capitalizeWords } from '@repo/utils/formatters';
 import { useOs } from '@mantine/hooks';
 import { Provider } from '@repo/schemas/node_modules/@prisma/client';

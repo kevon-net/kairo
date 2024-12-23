@@ -7,14 +7,13 @@ import LayoutSection from '@/components/layout/section';
 import FormUserProfile from '@/components/form/user/profile';
 import { Metadata } from 'next';
 import { profileGet } from '@/handlers/requests/database/profile';
-import { getSession } from '@/libraries/auth';
 import { ProfileGet } from '@repo/types/models';
 import DropzoneAvatar from '@/components/common/dropzones/avatar';
 
 export const metadata: Metadata = { title: 'Profile' };
 
 export default async function Profile() {
-  const session = await getSession();
+  // const session = await getSession();
 
   const { profile }: { profile: ProfileGet } = await profileGet({
     userId: session?.user.id || '',

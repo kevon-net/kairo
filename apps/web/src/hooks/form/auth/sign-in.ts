@@ -1,19 +1,19 @@
-import { getUrlParam } from '@repo/utils/helpers';
+// import { getUrlParam } from '@repo/utils/helpers';
 import { email, errors } from '@repo/utils/validators';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { URL_PARAM, TIMEOUT } from '@/data/constants';
+// import { useRouter } from 'next/navigation';
+// import { URL_PARAM, TIMEOUT } from '@/data/constants';
 import { showNotification } from '@/utilities/notifications';
 import { Variant } from '@repo/enums';
-import { useNetwork, useOs } from '@mantine/hooks';
-import { signIn } from '@/handlers/events/auth';
-import { Provider } from '@repo/schemas/node_modules/@prisma/client';
-
+// import { useNetwork, useOs } from '@mantine/hooks';
+// import { signIn } from '@/handlers/events/auth';
+// import { Provider } from '@repo/schemas/node_modules/@prisma/client';
+import { signIn as supaSignin } from '@/handlers/events/auth-supa';
 export const useFormAuthSignIn = () => {
-  const router = useRouter();
-  const os = useOs();
-  const networkStatus = useNetwork();
+  // const router = useRouter();
+  // const os = useOs();
+  // const networkStatus = useNetwork();
 
   const [submitted, setSubmitted] = useState(false);
 
@@ -30,77 +30,79 @@ export const useFormAuthSignIn = () => {
     return {
       email: form.values.email.trim().toLowerCase(),
       password: form.values.password.trim(),
-      remember: form.values.remember,
+      // remember: form.values.remember,
     };
   };
 
   const handleSubmit = async () => {
     if (form.isValid()) {
       try {
-        if (!networkStatus.online) {
-          showNotification({
-            variant: Variant.WARNING,
-            title: 'Network Error',
-            desc: 'Please check your internet connection.',
-          });
-          return;
-        }
+        // if (!networkStatus.online) {
+        //   showNotification({
+        //     variant: Variant.WARNING,
+        //     title: 'Network Error',
+        //     desc: 'Please check your internet connection.',
+        //   });
+        //   return;
+        // }
 
         setSubmitted(true);
 
-        const response = await signIn({
-          provider: Provider.CREDENTIALS,
-          credentials: parseValues(),
-          device: {
-            os,
-          },
-        });
+        await supaSignin(parseValues());
 
-        const result = await response.json();
+        // const response = await signIn({
+        //   provider: Provider.CREDENTIALS,
+        //   credentials: parseValues(),
+        //   device: {
+        //     os,
+        //   },
+        // });
 
-        if (!result) throw new Error('No response from server');
+        // const result = await response.json();
 
-        form.reset();
+        // if (!result) throw new Error('No response from server');
 
-        if (!result.error) {
-          // apply redirect url
-          window.location.replace(getUrlParam(URL_PARAM.REDIRECT));
-          return;
-        }
+        // form.reset();
 
-        if (response.status == 404 || response.status == 401) {
-          showNotification({
-            variant: Variant.FAILED,
-            title: 'Authentication Error',
-            desc: 'Invalid username/password',
-          });
-          return;
-        }
+        // if (!result.error) {
+        //   // apply redirect url
+        //   window.location.replace(getUrlParam(URL_PARAM.REDIRECT));
+        //   return;
+        // }
 
-        if (response.status == 403) {
-          // redirect to verification page
-          setTimeout(
-            () =>
-              router.push(
-                `/auth/verify/?token=${result.token}&userId=${result.user.id}`
-              ),
-            TIMEOUT.REDIRECT
-          );
+        // if (response.status == 404 || response.status == 401) {
+        //   showNotification({
+        //     variant: Variant.FAILED,
+        //     title: 'Authentication Error',
+        //     desc: 'Invalid username/password',
+        //   });
+        //   return;
+        // }
 
-          showNotification(
-            {
-              variant: Variant.WARNING,
-              title: 'Not Verified',
-              desc: 'User not verified. Redirecting...',
-            },
-            undefined,
-            result
-          );
-          return;
-        }
+        // if (response.status == 403) {
+        //   // redirect to verification page
+        //   setTimeout(
+        //     () =>
+        //       router.push(
+        //         `/auth/verify/?token=${result.token}&userId=${result.user.id}`
+        //       ),
+        //     TIMEOUT.REDIRECT
+        //   );
 
-        showNotification({ variant: Variant.FAILED }, response, result);
-        return;
+        //   showNotification(
+        //     {
+        //       variant: Variant.WARNING,
+        //       title: 'Not Verified',
+        //       desc: 'User not verified. Redirecting...',
+        //     },
+        //     undefined,
+        //     result
+        //   );
+        //   return;
+        // }
+
+        // showNotification({ variant: Variant.FAILED }, response, result);
+        // return;
       } catch (error) {
         showNotification({
           variant: Variant.FAILED,

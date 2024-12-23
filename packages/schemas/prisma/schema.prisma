@@ -1,22 +1,19 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 // npx prisma migrate dev --name init -> sync database
 // npx prisma db push -> sync database
 
+// npx prisma studio -> view database
+
 generator client {
   provider = "prisma-client-js"
-  // previewFeatures = ["postgresqlExtensions"] // enables postgresql extensions
-  // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("NEXT_DATABASE_URL") // uses connection pooling
-  // directUrl = env("NEXT_DIRECT_URL") // uses a direct connection
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // uses connection pooling
+  directUrl = env("DIRECT_URL") // uses a direct connection
 }
 
 // enums

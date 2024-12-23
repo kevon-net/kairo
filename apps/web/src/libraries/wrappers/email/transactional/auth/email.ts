@@ -17,10 +17,12 @@ export const sendTransactionalEmailAuthVerify = async (params: {
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
       isProduction()
-        ? process.env.NEXT_EMAIL_NOREPLY!
+        ? process.env.NEXT_PUBLIC_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? params.options.to : process.env.NEXT_EMAIL_INFO!],
+    to: [
+      isProduction() ? params.options.to : process.env.NEXT_PUBLIC_EMAIL_INFO!,
+    ],
     subject: `Verify Your Email Address`,
     html: await render(
       EmailVerify({
@@ -29,7 +31,7 @@ export const sendTransactionalEmailAuthVerify = async (params: {
         userName: params.userName,
       })
     ),
-    replyTo: process.env.NEXT_EMAIL_NOREPLY!,
+    replyTo: process.env.NEXT_PUBLIC_EMAIL_NOREPLY!,
   });
   if (!error) {
     return data;
@@ -46,13 +48,15 @@ export const sendEmailTransactionalAuthEmailChanged = async (params: {
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
       isProduction()
-        ? process.env.NEXT_EMAIL_NOREPLY!
+        ? process.env.NEXT_PUBLIC_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? params.options : process.env.NEXT_EMAIL_NOREPLY!],
+    to: [
+      isProduction() ? params.options : process.env.NEXT_PUBLIC_EMAIL_NOREPLY!,
+    ],
     subject: `Email Changed`,
     html: await render(EmailEmailChanged({ userName: params.userName })),
-    replyTo: process.env.NEXT_EMAIL_NOREPLY!,
+    replyTo: process.env.NEXT_PUBLIC_EMAIL_NOREPLY!,
   });
   if (!error) {
     return data;

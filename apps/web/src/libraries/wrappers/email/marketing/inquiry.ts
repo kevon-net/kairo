@@ -14,10 +14,10 @@ export const sendEmailMarketingInquiry = async (params: {
   const { data, error } = await resend.general.emails.send({
     from: `${params.from.name} <${
       isProduction()
-        ? process.env.NEXT_EMAIL_INFO!
+        ? process.env.NEXT_PUBLIC_EMAIL_INFO!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [process.env.NEXT_EMAIL_INFO!],
+    to: [process.env.NEXT_PUBLIC_EMAIL_INFO!],
     subject: params.subject,
     html: await render(
       EmailInquiry({ userName: params.from.name, userMessage: params.message })

@@ -13,13 +13,13 @@ export const sendEmailTransactionalOnboard = async (params: {
   const { data, error } = await resend.general.emails.send({
     from: `${appData.name.app} <${
       isProduction()
-        ? process.env.NEXT_EMAIL_NOREPLY!
+        ? process.env.NEXT_PUBLIC_EMAIL_NOREPLY!
         : process.env.NEXT_RESEND_EMAIL!
     }>`,
-    to: [isProduction() ? params.to : process.env.NEXT_EMAIL_INFO!],
+    to: [isProduction() ? params.to : process.env.NEXT_PUBLIC_EMAIL_INFO!],
     subject: `Welcome To ${appData.name.app}`,
     html: await render(EmailOnboardWelcome({ userName: params.userName })),
-    replyTo: process.env.NEXT_EMAIL_NOREPLY!,
+    replyTo: process.env.NEXT_PUBLIC_EMAIL_NOREPLY!,
   });
   if (!error) {
     return data;

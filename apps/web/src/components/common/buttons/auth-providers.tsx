@@ -9,36 +9,53 @@ import { capitalizeWords } from '@repo/utils/formatters';
 import { useOs } from '@mantine/hooks';
 import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 import ImageDefault from '@/components/common/images/default';
-import { COOKIE_NAME } from '@/data/constants';
+import { API_URL, COOKIE_NAME } from '@/data/constants';
 import { getUrlParam, setCookie } from '@repo/utils/helpers';
+import { createClient } from '@/libraries/supabase/client';
 
 export default function Providers() {
   const [loading, setLoading] = useState('');
   const os = useOs();
 
-  const getButton = (provider: { image: string; provider: Provider }) => (
+  const supabase = createClient();
+
+  const getButton = (providerDetails: {
+    image: string;
+    provider: Provider;
+  }) => (
     <Button
-      key={provider.provider}
+      key={providerDetails.provider}
       fullWidth
       variant="default"
       onClick={async () => {
-        setLoading(provider.provider);
+        setLoading(providerDetails.provider);
         setCookie(COOKIE_NAME.DEVICE.OS, { os }, { expiryInSeconds: 15 * 60 });
-        window.location.href = `/api/auth/sign-in/google?redirect=${encodeURIComponent(getUrlParam('redirect'))}`;
+        // window.location.href = `/api/auth/sign-in/google?redirect=${encodeURIComponent(getUrlParam('redirect'))}`;
+
+        await supabase.auth.signInWithOAuth({
+          provider: providerDetails.provider.toLocaleLowerCase() as any,
+          options: {
+            redirectTo: `${API_URL}/auth/callback`,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent',
+            },
+          },
+        });
       }}
-      loading={loading == provider.provider}
+      loading={loading == providerDetails.provider}
       leftSection={
         <ImageDefault
-          src={provider.image}
-          alt={provider.provider}
+          src={providerDetails.image}
+          alt={providerDetails.provider}
           height={24}
           width={24}
           mode="grid"
         />
       }
     >
-      {provider.provider != Provider.CREDENTIALS
-        ? capitalizeWords(provider.provider)
+      {providerDetails.provider != Provider.CREDENTIALS
+        ? capitalizeWords(providerDetails.provider)
         : 'Email (SSO)'}
     </Button>
   );

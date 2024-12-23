@@ -2,6 +2,29 @@ import { API_URL, HEADERS } from '@/data/constants';
 import { Verify, VerifyResend } from '@/types/bodies/request';
 import { Request as EnumRequest } from '@repo/enums';
 
+export const verifyEmail = async (params: {
+  tokenHash: string;
+  type: string;
+  next: string;
+}) => {
+  try {
+    const request = new Request(
+      `${API_URL}/auth/confirm?token_hash=${params.tokenHash}&type=${params.type}&next=${params.next}`,
+      {
+        method: EnumRequest.GET,
+        credentials: 'include',
+      }
+    );
+
+    const response = await fetch(request);
+
+    return response;
+  } catch (error) {
+    console.error('---> handler error - (verify email):', error);
+    throw error;
+  }
+};
+
 export const verify = async (requestBody: Verify) => {
   try {
     const request = new Request(`${API_URL}/auth/verify`, {

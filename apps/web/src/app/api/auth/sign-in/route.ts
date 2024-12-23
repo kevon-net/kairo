@@ -12,7 +12,7 @@ import { IpData } from '@/types/bodies/response';
 import { setGeoData } from '@/libraries/geolocation';
 import { Provider } from '@repo/schemas/node_modules/@prisma/client';
 import { UserInfo } from '@repo/types';
-import { ParsedState } from '../callback/google/route';
+import { ParsedState } from '../callback/route';
 
 export async function POST(request: NextRequest) {
   try {

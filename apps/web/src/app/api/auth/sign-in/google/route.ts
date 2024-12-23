@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
 
   // Construct Google OAuth authorization URL params
   const params = new URLSearchParams({
-    client_id: process.env.AUTH_GOOGLE_ID || '',
-    redirect_uri: process.env.GOOGLE_REDIRECT_URI || '',
+    client_id: process.env.NEXT_PUBLIC_AUTH_GOOGLE_CLIENT_ID || '',
+    redirect_uri: process.env.AUTH_GOOGLE_REDIRECT_URI || '',
     response_type: 'code',
     scope: 'openid email profile',
     state: JSON.stringify({
@@ -37,6 +37,6 @@ export async function GET(request: NextRequest) {
   });
 
   return NextResponse.redirect(
-    `${process.env.GOOGLE_OAUTH_URI}?${params.toString()}`
+    `${process.env.AUTH_GOOGLE_OAUTH_URI}?${params.toString()}`
   );
 }

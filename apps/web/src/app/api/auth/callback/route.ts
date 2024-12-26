@@ -17,13 +17,27 @@ export async function GET(request: Request) {
     if (!error) {
       // create profile if doesn't exist
 
-      await profileCreate({
+      const profile = await profileCreate({
         id: data.user?.id,
         firstName: segmentFullName(data.user.user_metadata.name || '').first,
         lastName: segmentFullName(data.user.user_metadata.name || '').last,
         phone: data.user.phone || '',
         avatar: data.user.user_metadata.avatar_url || '',
       });
+
+      const name = `${profile?.firstName} ${profile?.lastName}`;
+
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: {
+          name,
+          full_name: name,
+          picture: profile?.avatar,
+          avatar_url: profile?.avatar,
+          userName: profile?.userName,
+        },
+      });
+
+      if (updateError) throw updateError;
 
       const forwardedHost = request.headers.get('x-forwarded-host'); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development';

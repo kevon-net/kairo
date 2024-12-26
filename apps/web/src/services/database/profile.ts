@@ -1,21 +1,44 @@
 'use server';
 
 import prisma from '@/libraries/prisma';
-import { ProfileCreate, ProfileUpdate } from '@repo/types';
+import { ProfileCreate, ProfileGet, ProfileUpdate } from '@repo/types';
+
+export const profileGet = async (id: string): Promise<ProfileGet | null> => {
+  try {
+    const transactions = await prisma.$transaction(async (prisma) => {
+      const profile = await prisma.profile.findUnique({
+        where: { id },
+      });
+
+      if (!profile) {
+        throw new Error("Profile doesn't exist");
+      }
+
+      return { profile };
+    });
+
+    return transactions.profile;
+  } catch (error) {
+    console.error('---> service error - (create profile):', error);
+    return null;
+  }
+};
 
 export const profileCreate = async (params: ProfileCreate) => {
   try {
-    await prisma.$transaction(async (prisma) => {
+    const transaction = await prisma.$transaction(async (prisma) => {
       const profile = await prisma.profile.findUnique({
         where: { id: params.id },
       });
 
       if (profile) {
-        throw new Error('Profile already exists');
+        return { profile };
       }
 
-      await prisma.profile.create({ data: params });
+      return { profile: await prisma.profile.create({ data: params }) };
     });
+
+    return transaction.profile;
   } catch (error) {
     console.error('---> service error - (create profile):', error);
   }

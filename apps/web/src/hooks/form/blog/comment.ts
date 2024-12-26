@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { capitalizeWords } from '@repo/utils/formatters';
-import { email, text } from '@repo/utils/validators';
-import { useForm } from '@mantine/form';
+import { email } from '@repo/utils/validators';
+import { hasLength, useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';
 import { updateComments } from '@/libraries/redux/slices/comments';
@@ -27,9 +27,9 @@ export const useFormBlogComment = (params: { postId: string }) => {
     },
 
     validate: {
-      name: (value) => text(value.trim(), 2, 24),
+      name: hasLength(2, 24),
       email: (value) => email(value.trim()),
-      content: (value) => text(value.trim(), 3, 2048, true),
+      content: hasLength(3, 2048),
     },
   });
 
@@ -58,7 +58,7 @@ export const useFormBlogComment = (params: { postId: string }) => {
 
         const response = await commentCreate({
           ...parseValues(),
-          userId: session?.user.id,
+          userId: session?.id,
         });
 
         if (!response) {

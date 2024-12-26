@@ -2,29 +2,35 @@ import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import {
   avatarUpload,
-  profileUpdate,
+  // profileUpdate,
 } from '@/handlers/requests/database/profile';
 import { Variant } from '@repo/enums';
 import { AUTH_URLS, BASE_URL, FILE_NAME, TIMEOUT } from '@/data/constants';
 import { usePathname, useRouter } from 'next/navigation';
 import { showNotification } from '@/utilities/notifications';
-import { errors } from '@repo/utils/validators';
+// import { errors } from '@repo/utils/validators';
 import { setRedirectUrl } from '@repo/utils/helpers';
-import { capitalizeWords, segmentFullName } from '@repo/utils/formatters';
+// import { capitalizeWords, segmentFullName } from '@repo/utils/formatters';
 import { useNetwork } from '@mantine/hooks';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { updateSession } from '@/libraries/redux/slices/session';
+import {
+  //  useAppDispatch,
+  useAppSelector,
+} from '@/hooks/redux';
+// import { updateSession } from '@/libraries/redux/slices/session';
 
 export const useFormUserProfile = () => {
-  const router = useRouter();
-  const networkStatus = useNetwork();
-  const pathname = usePathname();
+  // const router = useRouter();
+  // const networkStatus = useNetwork();
+  // const pathname = usePathname();
 
   const session = useAppSelector((state) => state.session.value);
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   // const { signOut } = useSignOut();
 
-  const [submitted, setSubmitted] = useState(false);
+  const [
+    submitted,
+    // setSubmitted
+  ] = useState(false);
 
   const form = useForm({
     // initialValues: {

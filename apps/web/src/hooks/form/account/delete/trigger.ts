@@ -1,9 +1,8 @@
-import { userDelete } from '@/handlers/requests/database/user';
-import { DeleteAccountRequest } from '@/types/token';
-import { decrypt, getUrlParam } from '@repo/utils/helpers';
+// import { DeleteAccountRequest } from '@/types/token';
+// import { decrypt, getUrlParam } from '@repo/utils/helpers';
 import { useEffect, useState } from 'react';
 // import { useAppSelector } from '@/hooks/redux';
-import { KEY } from '@/data/constants';
+// import { KEY } from '@/data/constants';
 
 export const useFormUserAccountDeleteTrigger = () => {
   const [status, setStatus] = useState<{
@@ -16,10 +15,10 @@ export const useFormUserAccountDeleteTrigger = () => {
     try {
       setStatus({ state: 'loading' });
 
-      let parsed: DeleteAccountRequest;
+      // let parsed: DeleteAccountRequest;
 
       try {
-        parsed = await decrypt(getUrlParam('token'), KEY);
+        // parsed = await decrypt(getUrlParam('token'), KEY);
       } catch {
         setStatus({
           state: 'error',
@@ -28,25 +27,25 @@ export const useFormUserAccountDeleteTrigger = () => {
         return;
       }
 
-      const response = await userDelete({
-        userId: parsed.userId,
-        options: { trigger: true },
-      });
+      // const response = await userDelete({
+      //   userId: parsed.userId,
+      //   options: { trigger: true },
+      // });
 
-      if (!response) throw new Error('No response from server');
+      // if (!response) throw new Error('No response from server');
 
-      const result = await response.json();
+      // const result = await response.json();
 
-      if (!response.ok) {
-        throw new Error(result.error);
-      }
-
-      // if (session) {
-      //   await signOut();
+      // if (!response.ok) {
+      //   throw new Error(result.error);
       // }
 
-      setStatus({ state: 'success', message: result.message });
-      return;
+      // // if (session) {
+      // //   await signOut();
+      // // }
+
+      // setStatus({ state: 'success', message: result.message });
+      // return;
     } catch (error) {
       setStatus({ state: 'error', message: (error as Error).message });
       return;

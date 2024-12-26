@@ -1,4 +1,4 @@
-import { useMantineColorScheme } from '@mantine/core';
+import { MantineColorScheme, useMantineColorScheme } from '@mantine/core';
 import { COOKIE_NAME, EXPIRY } from '@/data/constants';
 import { setCookie, getOSTheme } from '@repo/utils/helpers';
 import { useAppDispatch, useAppSelector } from './redux';
@@ -28,7 +28,7 @@ export const useColorSchemeHandler = () => {
     });
 
     // update mantine color scheme
-    setColorScheme(scheme);
+    setColorScheme(scheme as MantineColorScheme);
   };
 
   return { colorScheme, handleChange };

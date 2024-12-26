@@ -7,55 +7,56 @@ import { Button, Grid, GridCol } from '@mantine/core';
 import { images } from '@/assets/images';
 import { capitalizeWords } from '@repo/utils/formatters';
 import ImageDefault from '@/components/common/images/default';
-import { API_URL } from '@/data/constants';
+import { API_URL, URL_PARAM } from '@/data/constants';
 import { createClient } from '@/libraries/supabase/client';
+import { getUrlParam } from '@repo/utils/helpers';
 
 export default function Providers() {
   const [loading, setLoading] = useState('');
 
   const supabase = createClient();
 
-  const getButton = (providerDetails: { image: string; provider: string }) => (
-    <Button
-      key={providerDetails.provider}
-      fullWidth
-      variant="default"
-      onClick={async () => {
-        setLoading(providerDetails.provider);
-        // window.location.href = `/api/auth/sign-in/google?redirect=${encodeURIComponent(getUrlParam('redirect'))}`;
-
-        await supabase.auth.signInWithOAuth({
-          provider: providerDetails.provider.toLocaleLowerCase() as any,
-          options: {
-            redirectTo: `${API_URL}/auth/callback`,
-            queryParams: {
-              access_type: 'offline',
-              prompt: 'consent',
-            },
+  const getButton = (providerDetails: { image: string; provider: string }) => {
+    const handleClick = async () => {
+      setLoading(providerDetails.provider);
+      await supabase.auth.signInWithOAuth({
+        provider: providerDetails.provider.toLocaleLowerCase() as any,
+        options: {
+          redirectTo: `${API_URL}/auth/callback?next=${encodeURIComponent(getUrlParam(URL_PARAM.REDIRECT))}`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
           },
-        });
-      }}
-      loading={loading == providerDetails.provider}
-      leftSection={
-        <ImageDefault
-          src={providerDetails.image}
-          alt={providerDetails.provider}
-          height={24}
-          width={24}
-          mode="grid"
-        />
-      }
-    >
-      {providerDetails.provider != providerDetails.provider
-        ? capitalizeWords(providerDetails.provider)
-        : 'Email (SSO)'}
-    </Button>
-  );
+        },
+      });
+    };
+
+    return (
+      <Button
+        key={providerDetails.provider}
+        fullWidth
+        variant="default"
+        onClick={handleClick}
+        loading={loading == providerDetails.provider}
+        leftSection={
+          <ImageDefault
+            src={providerDetails.image}
+            alt={providerDetails.provider}
+            height={24}
+            width={24}
+            mode="grid"
+          />
+        }
+      >
+        Continue with {capitalizeWords(providerDetails.provider)}
+      </Button>
+    );
+  };
 
   return (
     <Grid>
       {providers.map((provider) => (
-        <GridCol key={provider.provider} span={{ base: 12, xs: 6 }}>
+        <GridCol key={provider.provider} span={{ base: 12 }}>
           {getButton(provider)}
         </GridCol>
       ))}
@@ -64,10 +65,6 @@ export default function Providers() {
 }
 
 const providers = [
-  {
-    image: images.icons.credentials,
-    provider: 'credentials',
-  },
   {
     image: images.icons.google,
     provider: 'google',

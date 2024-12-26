@@ -1,11 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 import { setRedirectUrl } from '@repo/utils/helpers';
 import { Box, LoadingOverlay } from '@mantine/core';
-import { AUTH_URLS, BASE_URL } from '@/data/constants';
+import { AUTH_URLS } from '@/data/constants';
+import { signOut } from '@/handlers/events/auth';
 
 export function SignIn({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export function SignIn({ children }: { children: React.ReactNode }) {
         router.push(
           setRedirectUrl({
             targetUrl: AUTH_URLS.SIGN_IN,
-            redirectUrl: `${BASE_URL}${pathname}`,
+            redirectUrl: pathname,
           })
         )
       }
@@ -28,16 +29,20 @@ export function SignIn({ children }: { children: React.ReactNode }) {
 }
 
 export function SignOut({ children }: { children: React.ReactNode }) {
-  // const { signOut, loading } = useSignOut();
+  const [clicked, setClicked] = useState(false);
 
   return (
     <Box
       component="span"
       pos="relative"
-      // onClick={signOut}
+      onClick={async () => {
+        setClicked(true);
+        await signOut();
+        window.location.href = '/';
+      }}
     >
       <LoadingOverlay
-        // visible={loading}
+        visible={clicked}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
         loaderProps={{ size: 'xs' }}

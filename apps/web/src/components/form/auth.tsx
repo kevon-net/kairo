@@ -38,7 +38,7 @@ export default function Auth({ action }: { action: 'sign-in' | 'sign-up' }) {
           </GridCol>
         </Grid>
 
-        <Divider label="or continue with" />
+        <Divider label="or" />
 
         <AuthProviders />
       </Stack>

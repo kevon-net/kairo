@@ -8,19 +8,7 @@ import { AUTH_URLS } from '@/data/constants';
 
 export const signIn = async (formData: { email: string; password: string }) => {
   const supabase = await createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.email,
-    password: formData.password,
-  };
-
-  const { error, data: userData } =
-    await supabase.auth.signInWithPassword(data);
-
-  console.log('userData', userData);
-  console.log('error', error);
+  const { error } = await supabase.auth.signInWithOtp(formData);
 
   if (error) {
     redirect(`${AUTH_URLS.ERROR}?message=${error.message}`);
@@ -32,15 +20,7 @@ export const signIn = async (formData: { email: string; password: string }) => {
 
 export const signUp = async (formData: { email: string; password: string }) => {
   const supabase = await createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.email,
-    password: formData.password,
-  };
-
-  const { error } = await supabase.auth.signUp(data);
+  const { error } = await supabase.auth.signUp(formData);
 
   if (error) {
     redirect(`${AUTH_URLS.ERROR}?message=${error.message}`);
@@ -48,4 +28,13 @@ export const signUp = async (formData: { email: string; password: string }) => {
 
   revalidatePath('/', 'layout');
   redirect(AUTH_URLS.VERIFY_REQUEST);
+};
+
+export const signOut = async () => {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    redirect(`${AUTH_URLS.ERROR}?message=${error.message}`);
+  }
 };

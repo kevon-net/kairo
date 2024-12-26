@@ -6,19 +6,11 @@ import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
 import FormUserProfile from '@/components/form/user/profile';
 import { Metadata } from 'next';
-import { profileGet } from '@/handlers/requests/database/profile';
-import { ProfileGet } from '@repo/types/models';
 import DropzoneAvatar from '@/components/common/dropzones/avatar';
 
 export const metadata: Metadata = { title: 'Profile' };
 
 export default async function Profile() {
-  // const session = await getSession();
-
-  const { profile }: { profile: ProfileGet } = await profileGet({
-    userId: session?.user.id || '',
-  });
-
   return (
     <LayoutPage stacked>
       <LayoutSection id="page-profile-picture" containerized={false}>
@@ -30,7 +22,7 @@ export default async function Profile() {
           </GridCol>
 
           <GridCol span={{ base: 12, md: 8 }}>
-            <DropzoneAvatar profile={profile} />
+            <DropzoneAvatar />
           </GridCol>
         </Grid>
       </LayoutSection>
@@ -44,7 +36,7 @@ export default async function Profile() {
           </GridCol>
 
           <GridCol span={{ base: 12, md: 8, lg: 6 }}>
-            <FormUserProfile data={profile} />
+            <FormUserProfile />
           </GridCol>
         </Grid>
       </LayoutSection>

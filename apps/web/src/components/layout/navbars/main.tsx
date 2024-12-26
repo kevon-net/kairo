@@ -88,7 +88,7 @@ export default function Main({
 
   const imageBrand = (
     <ImageDefault
-      src={images.logo.light}
+      src={images.brand.logo.light}
       alt={appData.name.app}
       height={{ base: 24 }}
       width={{ base: 72 }}

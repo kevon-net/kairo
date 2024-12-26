@@ -26,7 +26,8 @@ export default function Comment({ props }: { props: PostComment }) {
     commentId: props.id,
   });
 
-  const name = props.user?.profile?.name || props.name || 'Anonymous';
+  const usersName = `${props.profile?.firstName} ${props.profile?.lastName}`;
+  const name = usersName || props.name || 'Anonymous';
 
   const comment = comments.find((comment) => comment.id == props.id);
   const replies = comment?.replies;

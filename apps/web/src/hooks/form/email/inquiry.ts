@@ -2,8 +2,8 @@ import { emailSend } from '@/handlers/requests/email/send';
 import { Variant } from '@repo/enums';
 import { showNotification } from '@/utilities/notifications';
 import { capitalizeWords } from '@repo/utils/formatters';
-import { email, phone, text } from '@repo/utils/validators';
-import { useForm } from '@mantine/form';
+import { email } from '@repo/utils/validators';
+import { hasLength, useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';
 
@@ -27,12 +27,12 @@ export const useFormEmailInquiry = (
 
     validate: {
       from: {
-        name: (value) => text(value.trim(), 2, 24),
+        name: hasLength(2, 24),
         email: (value) => email(value.trim()),
       },
-      subject: (value) => text(value.trim(), 3, 255, true),
-      phone: (value) => value.trim().length > 0 && phone(value),
-      message: (value) => text(value.trim(), 3, 2048, true),
+      subject: hasLength(3, 255),
+      phone: hasLength(7, 15),
+      message: hasLength(3, 2048),
     },
   });
 

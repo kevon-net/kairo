@@ -4,7 +4,6 @@ import React from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 import { setRedirectUrl } from '@repo/utils/helpers';
-import { useSignOut } from '@/hooks/auth';
 import { Box, LoadingOverlay } from '@mantine/core';
 import { AUTH_URLS, BASE_URL } from '@/data/constants';
 
@@ -29,12 +28,16 @@ export function SignIn({ children }: { children: React.ReactNode }) {
 }
 
 export function SignOut({ children }: { children: React.ReactNode }) {
-  const { signOut, loading } = useSignOut();
+  // const { signOut, loading } = useSignOut();
 
   return (
-    <Box component="span" pos="relative" onClick={signOut}>
+    <Box
+      component="span"
+      pos="relative"
+      // onClick={signOut}
+    >
       <LoadingOverlay
-        visible={loading}
+        // visible={loading}
         zIndex={1000}
         overlayProps={{ radius: 'sm', blur: 2 }}
         loaderProps={{ size: 'xs' }}

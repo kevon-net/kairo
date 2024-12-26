@@ -5,7 +5,8 @@ import { initialize, getRegionalDate } from '@repo/utils/formatters';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
 
 export default function Reply({ props }: { props: ReplyRelations }) {
-  const name = props.user?.profile?.name || props.name || 'Anonymous';
+  const usersName = `${props.profile?.firstName} ${props.profile?.lastName}`;
+  const name = usersName || props.name || 'Anonymous';
 
   return (
     <Card bg={'transparent'} padding={0}>

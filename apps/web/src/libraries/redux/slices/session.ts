@@ -1,10 +1,10 @@
-import { Session } from '@/types/auth';
+import { AuthUser } from '@/types/auth';
 import { createSlice } from '@reduxjs/toolkit';
 
 export const sliceSession = createSlice({
   name: 'session',
   initialState: {
-    value: null satisfies Session | null as Session | null,
+    value: null satisfies AuthUser | null as AuthUser | null,
   },
   reducers: {
     update: (state, action) => {

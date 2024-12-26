@@ -19,15 +19,17 @@ export default function Main({
   ) : (
     <Avatar
       className={
-        !session.user.image ? classes.avatarInitials : classes.avatarImage
+        !session.user_metadata.avatar_url
+          ? classes.avatarInitials
+          : classes.avatarImage
       }
-      src={session.user.image || null}
-      name={session.user.name}
+      src={session.user_metadata.avatar_url || null}
+      name={session.user_metadata.name || 'User'}
       color={'initials'}
       w={size}
       h={size}
     >
-      {initialize(session.user.name)}
+      {initialize(session.user_metadata.name || 'User')}
     </Avatar>
   );
 }

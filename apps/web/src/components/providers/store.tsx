@@ -6,8 +6,8 @@ import { Provider } from 'react-redux';
 
 import { makeStore, AppStore } from '@/libraries/redux/store';
 import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
-import { Session } from '@repo/types';
 import { updateSession } from '@/libraries/redux/slices/session';
+import { AuthUser } from '@/types/auth';
 
 export default function Store({
   colorScheme,
@@ -15,7 +15,7 @@ export default function Store({
   children,
 }: {
   colorScheme: string;
-  session: Session | null;
+  session: AuthUser | null;
   children: React.ReactNode;
 }) {
   const storeRef = useRef<AppStore>();
@@ -28,9 +28,7 @@ export default function Store({
     storeRef.current.dispatch(updateColorScheme(colorScheme));
 
     if (session) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { iat, exp, ...restSession } = session;
-      storeRef.current.dispatch(updateSession(restSession));
+      storeRef.current.dispatch(updateSession(session));
     }
   }
 

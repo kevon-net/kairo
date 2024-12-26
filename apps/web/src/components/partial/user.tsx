@@ -23,11 +23,11 @@ export default function User() {
       {session && (
         <Stack gap={0}>
           <Title order={3} fz={'md'} ta={{ base: 'center', lg: 'start' }}>
-            {session.user.name}
+            {session.user_metadata.name}
           </Title>
 
           <Text fz={'xs'} c={'dimmed'} ta={{ base: 'center', lg: 'start' }}>
-            {session.user.email}
+            {session.email}
           </Text>
         </Stack>
       )}

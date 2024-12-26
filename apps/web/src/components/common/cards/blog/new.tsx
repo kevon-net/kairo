@@ -25,7 +25,7 @@ import ImageDefault from '@/components/common/images/default';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export default function New({ post }: { post: PostRelations }) {
-  const path = `/blog/${post.id}-${linkify(post.title)}`;
+  const path = `/blog/${linkify(post.title)}-${post.id}`;
 
   return (
     <Card className={classes.card} withBorder bg={'transparent'}>

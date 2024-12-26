@@ -34,7 +34,7 @@ import appResolver from '@/styles/resolver';
 import appData from '@/data/app';
 import { linkify } from '@repo/utils/formatters';
 
-// import { getSession } from '@/libraries/auth';
+import { createClient } from '@/libraries/supabase/server';
 
 import AffixOffline from '@/components/common/affixi/offline';
 import { COOKIE_NAME } from '@/data/constants';
@@ -61,7 +61,8 @@ export default async function RootLayout({
   const colorScheme = cookies().get(COOKIE_NAME.COLOR_SCHEME)?.value;
   const colorSchemeState = cookies().get(COOKIE_NAME.COLOR_SCHEME_STATE)?.value;
 
-  // const session=await getSession()
+  const supabase = await createClient();
+  const { data: session } = await supabase.auth.getUser();
 
   return (
     <html
@@ -82,7 +83,7 @@ export default async function RootLayout({
       <body className={noto.className}>
         <ProviderStore
           colorScheme={colorSchemeState || 'light'}
-          session={session}
+          session={session.user}
         >
           <MantineProvider
             theme={appTheme}

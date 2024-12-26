@@ -24,21 +24,10 @@ import {
 } from '@mantine/dropzone';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { useFormUserAvatar } from '@/hooks/form/account/profile';
-import { ProfileGet } from '@repo/types';
 
-export default function Avatar({
-  profile,
-  ...restProps
-}: { profile: ProfileGet } & Partial<DropzoneProps>) {
-  const {
-    file,
-    preview,
-    handleSubmit,
-    setFile,
-    setPreview,
-    submitted,
-    submittedProfile,
-  } = useFormUserAvatar(profile);
+export default function Avatar({ ...restProps }: Partial<DropzoneProps>) {
+  const { file, preview, handleSubmit, setFile, setPreview, submitted } =
+    useFormUserAvatar();
 
   const handleFileChange = (selectedFile: File | null) => {
     setFile(selectedFile);
@@ -162,11 +151,7 @@ export default function Avatar({
         </Box>
       </Dropzone>
 
-      <Button
-        onClick={handleSubmit}
-        disabled={!file}
-        loading={submitted || submittedProfile}
-      >
+      <Button onClick={handleSubmit} disabled={!file} loading={submitted}>
         Upload
       </Button>
     </Stack>

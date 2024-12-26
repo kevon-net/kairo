@@ -9,9 +9,13 @@ import { Variant } from '@repo/enums';
 // import { useNetwork, useOs } from '@mantine/hooks';
 // import { signIn } from '@/handlers/events/auth';
 // import { Provider } from '@repo/schemas/node_modules/@prisma/client';
-import { signIn as supaSignin } from '@/handlers/events/auth-supa';
+import { signIn as supaSignin } from '@/handlers/events/auth';
 
-export const useFormAuthSignIn = () => {
+export const useFormAuthSignIn = ({
+  action,
+}: {
+  action: 'sign-in' | 'sign-up';
+}) => {
   // const router = useRouter();
   // const os = useOs();
   // const networkStatus = useNetwork();

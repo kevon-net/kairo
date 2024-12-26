@@ -1,4 +1,4 @@
-import { API_URL } from '@/data/constants';
+import { API_URL, HEADERS } from '@/data/constants';
 import { EmailInquiry } from '@/types/email';
 import { Request as EnumRequest } from '@repo/enums';
 import { contactCreate } from './contact';
@@ -11,6 +11,7 @@ export const emailSend = async (
   try {
     const request = new Request(baseRequestUrl, {
       method: EnumRequest.POST,
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(options),
     });
 

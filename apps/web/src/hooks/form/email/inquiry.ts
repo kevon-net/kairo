@@ -27,12 +27,15 @@ export const useFormEmailInquiry = (
 
     validate: {
       from: {
-        name: hasLength(2, 24),
+        name: hasLength({ min: 2, max: 24 }, 'Between 2 and 24 characters'),
         email: (value) => email(value.trim()),
       },
-      subject: hasLength(3, 255),
-      phone: hasLength(7, 15),
-      message: hasLength(3, 2048),
+      subject: hasLength({ min: 2, max: 255 }, 'Between 2 and 255 characters'),
+      phone: hasLength({ min: 7, max: 15 }, 'Between 7 and 15 characters'),
+      message: hasLength(
+        { min: 3, max: 2048 },
+        'Between 3 and 2048 characters'
+      ),
     },
   });
 

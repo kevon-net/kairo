@@ -29,9 +29,12 @@ export const useFormBlogReply = (params: {
     },
 
     validate: {
-      name: hasLength(2, 24),
+      name: hasLength({ min: 2, max: 24 }, 'Between 2 and 24 characters'),
       email: (value) => email(value.trim()),
-      content: hasLength(3, 2048),
+      content: hasLength(
+        { min: 3, max: 2048 },
+        'Between 3 and 2048 characters'
+      ),
     },
   });
 

@@ -1,27 +1,21 @@
 import { hasLength, useForm } from '@mantine/form';
 import { useState } from 'react';
-import {
-  avatarUpload,
-  profileUpdate,
-} from '@/handlers/requests/database/profile';
 import { Variant } from '@repo/enums';
-import { AUTH_URLS, BASE_URL, FILE_NAME, TIMEOUT } from '@/data/constants';
-import { usePathname, useRouter } from 'next/navigation';
 import { showNotification } from '@/utilities/notifications';
-import { setRedirectUrl } from '@repo/utils/helpers';
 import { useNetwork } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { capitalizeWords, segmentFullName } from '@repo/utils/formatters';
 import { updateSession } from '@/libraries/redux/slices/session';
+import { profileUpdate } from '@/services/database/profile';
+import { createClient } from '@/libraries/supabase/client';
+import { uploadFile } from '@/services/logic/upload';
+import { FILE_NAME } from '@/data/constants';
 
 export const useFormUserProfile = () => {
-  const router = useRouter();
   const networkStatus = useNetwork();
-  const pathname = usePathname();
-
+  const supabase = createClient();
   const session = useAppSelector((state) => state.session.value);
   const dispatch = useAppDispatch();
-  // const { signOut } = useSignOut();
 
   const [submitted, setSubmitted] = useState(false);
 
@@ -31,10 +25,10 @@ export const useFormUserProfile = () => {
         first: segmentFullName(session?.user_metadata.name || '').first,
         last: segmentFullName(session?.user_metadata.name || '').last,
       },
-      phone: {
-        code: session?.phone?.split(' ')[0] || '',
-        number: session?.phone?.split(' ')[1] || '',
-      },
+      // phone: {
+      //   code: session?.phone?.split(' ')[0] || '',
+      //   number: session?.phone?.split(' ')[1] || '',
+      // },
       avatar: session?.user_metadata.avatar_url || '',
     },
     validate: {
@@ -42,26 +36,29 @@ export const useFormUserProfile = () => {
         first: hasLength({ min: 2, max: 24 }, 'Between 2 and 24 characters'),
         last: hasLength({ min: 2, max: 24 }, 'Between 2 and 24 characters'),
       },
-      phone: {
-        code: (value, values) =>
-          values.phone.number.trim().length > 0 && value?.trim().length < 1,
-        number: (value) =>
-          value.trim().length > 0 &&
-          (value.trim().length < 7 || value.trim().length > 15),
-      },
+      // phone: {
+      //   code: (value, values) =>
+      //     values.phone.number.trim().length > 0 && value?.trim().length < 1,
+      //   number: (value) =>
+      //     value.trim().length > 0 &&
+      //     (value.trim().length < 7 || value.trim().length > 15),
+      // },
     },
   });
 
   const parseValues = () => {
     const firstName = form.values.name.first.trim();
     const lastName = form.values.name.last.trim();
-    const code = form.values.phone.code.trim();
-    const number = form.values.phone.number.trim();
-    const avatar = form.values.avatar;
+    // const code = form.values.phone.code.trim();
+    // const number = form.values.phone.number.trim();
+    const avatar = form.values.avatar || session?.user_metadata.avatar_url;
 
     return {
       name: capitalizeWords(`${firstName} ${lastName}`),
-      phone: number && number.length > 0 ? `${code} ${number}` : '',
+      // phone: {
+      //   withSpace: number && number.length > 0 ? `${code} ${number}` : '',
+      //   withoutSpace: number && number.length > 0 ? `${code}${number}` : '',
+      // },
       avatar,
     };
   };
@@ -70,92 +67,71 @@ export const useFormUserProfile = () => {
     if (form.isValid()) {
       try {
         if (!networkStatus.online) {
-          showNotification({
+          return showNotification({
             variant: Variant.WARNING,
             title: 'Network Error',
             desc: 'Please check your internet connection.',
           });
-          return;
+        }
+
+        if (!session) {
+          throw new Error('You must be signed in');
         }
 
         if (!form.isDirty()) {
-          showNotification({
+          return showNotification({
             variant: Variant.WARNING,
             title: 'Nothing Updated',
             desc: 'Update at least one form field',
           });
-          return;
         }
 
         setSubmitted(true);
 
-        const response = await profileUpdate({
-          ...parseValues(),
+        await profileUpdate({
           firstName: segmentFullName(parseValues().name).first,
           lastName: segmentFullName(parseValues().name).last,
+          // phone: parseValues().phone.withSpace,
+          avatar: parseValues().avatar,
           id: session?.id,
         });
 
-        if (!response) throw new Error('No response from server');
+        await dispatch(
+          updateSession({
+            ...session,
+            // phone: parseValues().phone.withoutSpace,
+            user_metadata: {
+              ...session.user_metadata,
+              name: parseValues().name,
+              full_name: parseValues().name,
+              picture: parseValues().avatar,
+              avatar_url: parseValues().avatar,
+            },
+          })
+        );
 
-        const result = await response.json();
+        const { error } = await supabase.auth.updateUser({
+          data: {
+            name: parseValues().name,
+            full_name: parseValues().name,
+            picture: parseValues().avatar,
+            avatar_url: parseValues().avatar,
+          },
+        });
 
-        if (response.ok) {
-          if (session) {
-            dispatch(
-              updateSession({
-                ...session,
-                phone: parseValues().phone,
-                user_metadata: {
-                  ...session.user_metadata,
-                  name: parseValues().name,
-                  full_name: parseValues().name,
-                  picture: parseValues().avatar,
-                  avatar_url: parseValues().avatar,
-                },
-              })
-            );
-          }
-
-          window.location.reload();
-          return;
+        if (error) {
+          return showNotification({
+            variant: Variant.FAILED,
+            desc: (error as Error).message,
+          });
         }
 
-        form.reset();
-
-        if (response.status === 401) {
-          // redirect to sign in
-          setTimeout(
-            async () =>
-              router.push(
-                setRedirectUrl({
-                  targetUrl: AUTH_URLS.SIGN_IN,
-                  redirectUrl: `${BASE_URL}/${pathname}`,
-                })
-              ),
-            TIMEOUT.REDIRECT
-          );
-
-          showNotification({ variant: Variant.WARNING }, response, result);
-
-          return;
-        }
-
-        if (response.status === 404) {
-          // // sign out
-          // setTimeout(async () => await signOut(), TIMEOUT.REDIRECT);
-          showNotification({ variant: Variant.FAILED }, response, result);
-          return;
-        }
-
-        showNotification({ variant: Variant.FAILED }, response, result);
-        return;
+        window.location.reload();
       } catch (error) {
         showNotification({
           variant: Variant.FAILED,
           desc: (error as Error).message,
         });
-        return;
       } finally {
         setSubmitted(false);
       }
@@ -171,13 +147,11 @@ export const useFormUserProfile = () => {
 };
 
 export const useFormUserAvatar = () => {
-  const router = useRouter();
   const networkStatus = useNetwork();
-  const pathname = usePathname();
 
+  const supabase = createClient();
   const session = useAppSelector((state) => state.session.value);
-
-  // const { signOut } = useSignOut();
+  const dispatch = useAppDispatch();
 
   const [submitted, setSubmitted] = useState(false);
 
@@ -187,74 +161,57 @@ export const useFormUserAvatar = () => {
   const handleSubmit = async () => {
     try {
       if (!networkStatus.online) {
-        showNotification({
+        return showNotification({
           variant: Variant.WARNING,
           title: 'Network Error',
           desc: 'Please check your internet connection.',
         });
-        return;
       }
 
-      // if (!form.isDirty()) {
-      //   showNotification({
-      //     variant: Variant.WARNING,
-      //     title: 'Nothing Updated',
-      //     desc: 'Update at least one form field',
-      //   });
-      //   return;
-      // }
+      if (!session) {
+        throw new Error('You must be signed in');
+      }
 
       setSubmitted(true);
-
-      const formData = new FormData();
 
       if (!file) {
         throw new Error('No file selected');
       }
 
-      formData.append(FILE_NAME.avatar, file);
+      const formData = new FormData();
+      formData.append(FILE_NAME.AVATAR, file);
 
-      const response = await avatarUpload(formData);
+      const { file: fileDetails } = await uploadFile(formData, session.id);
 
-      if (!response) throw new Error('No response from server');
+      await profileUpdate({ id: session.id, avatar: fileDetails.path });
 
-      const result = await response.json();
+      await dispatch(
+        updateSession({
+          ...session,
+          // phone: parseValues().phone.withoutSpace,
+          user_metadata: {
+            ...session.user_metadata,
+            picture: fileDetails.path,
+            avatar_url: fileDetails.path,
+          },
+        })
+      );
 
-      if (response.ok) {
-        // await handleSubmitProfile({ avatar: result.file.path });
-        return;
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          picture: fileDetails.path,
+          avatar_url: fileDetails.path,
+        },
+      });
+
+      if (error) {
+        return showNotification({
+          variant: Variant.FAILED,
+          desc: (error as Error).message,
+        });
       }
 
-      setFile(null);
-      setPreview(null);
-
-      if (response.status === 401) {
-        // redirect to sign in
-        setTimeout(
-          async () =>
-            router.push(
-              setRedirectUrl({
-                targetUrl: AUTH_URLS.SIGN_IN,
-                redirectUrl: `${BASE_URL}/${pathname}`,
-              })
-            ),
-          TIMEOUT.REDIRECT
-        );
-
-        showNotification({ variant: Variant.WARNING }, response, result);
-        return;
-      }
-
-      if (response.status === 404) {
-        // // sign out
-        // setTimeout(async () => await signOut(), TIMEOUT.REDIRECT);
-
-        showNotification({ variant: Variant.FAILED }, response, result);
-        return;
-      }
-
-      showNotification({ variant: Variant.FAILED }, response, result);
-      return;
+      window.location.reload();
     } catch (error) {
       showNotification({
         variant: Variant.FAILED,

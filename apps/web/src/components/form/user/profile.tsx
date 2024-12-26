@@ -7,13 +7,13 @@ import {
   Button,
   Grid,
   GridCol,
-  Group,
-  Stack,
-  Text,
+  // Group,
+  // Stack,
+  // Text,
   TextInput,
 } from '@mantine/core';
 import { useFormUserProfile } from '@/hooks/form/account/profile';
-import InputComboboxCountryCode from '@/components/common/inputs/combobox/country-code';
+// import InputComboboxCountryCode from '@/components/common/inputs/combobox/country-code';
 
 export default function Profile() {
   const { form, submitted, handleSubmit, session } = useFormUserProfile();
@@ -30,6 +30,7 @@ export default function Profile() {
             disabled={!session}
           />
         </GridCol>
+
         <GridCol span={{ base: 12, sm: 6 }}>
           <TextInput
             required
@@ -39,7 +40,8 @@ export default function Profile() {
             disabled={!session}
           />
         </GridCol>
-        <GridCol span={{ base: 12 }}>
+
+        {/* <GridCol span={{ base: 12 }}>
           <Stack gap={'xs'}>
             <Text component="label" htmlFor="phone-number">
               Phone
@@ -65,8 +67,9 @@ export default function Profile() {
               />
             </Group>
           </Stack>
-        </GridCol>
-        <GridCol span={{ base: 6 }}>
+        </GridCol> */}
+
+        <GridCol span={{ base: 12 }}>
           <Button type="submit" loading={submitted} mt={'md'}>
             {submitted ? 'Submitting' : 'Submit'}
           </Button>

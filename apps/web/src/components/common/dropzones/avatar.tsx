@@ -6,12 +6,10 @@ import {
   Avatar as MantineAvatar,
   Box,
   Button,
-  Center,
-  Grid,
-  GridCol,
   Stack,
   Text,
   ThemeIcon,
+  Flex,
 } from '@mantine/core';
 import { IconUpload, IconUserCircle, IconX } from '@tabler/icons-react';
 import {
@@ -54,99 +52,81 @@ export default function Avatar({ ...restProps }: Partial<DropzoneProps>) {
       >
         <Box style={{ pointerEvents: 'none' }}>
           <DropzoneAccept>
-            <Grid align="center">
-              <GridCol span={{ base: 12, xs: 2 }}>
-                <Center>
-                  <ThemeIcon size={80} variant="light" color="blue.6">
-                    <IconUpload
-                      size={ICON_SIZE * 3}
-                      stroke={ICON_STROKE_WIDTH}
-                      color={'var(--mantine-color-blue-6)'}
-                    />
-                  </ThemeIcon>
-                </Center>
-              </GridCol>
+            <DropZoneLayout>
+              <ThemeIcon size={80} variant="light" color="blue.6">
+                <IconUpload
+                  size={ICON_SIZE * 3}
+                  stroke={ICON_STROKE_WIDTH}
+                  color={'var(--mantine-color-blue-6)'}
+                />
+              </ThemeIcon>
 
-              <GridCol span={{ base: 12, xs: 10 }}>
-                <Stack gap={4}>
-                  <Text>File accepted</Text>
+              <Stack gap={4}>
+                <Text>File accepted</Text>
 
-                  <Stack gap={0}>
-                    <Text fz="sm" c="dimmed">
-                      <Text inherit component="span" fw={'bold'}>
-                        Accepted Types
-                      </Text>
-                      : png, gif, jpeg, svg+xml, webp, avif, heic, heif
+                <Stack gap={0}>
+                  <Text fz="sm" c="dimmed">
+                    <Text inherit component="span" fw={'bold'}>
+                      Accepted Types
                     </Text>
+                    : png, gif, jpeg, svg+xml, webp, avif, heic, heif
+                  </Text>
 
-                    <Text fz="sm" c="dimmed">
-                      <Text inherit component="span" fw={'bold'}>
-                        Max size
-                      </Text>
-                      : 1 MB
+                  <Text fz="sm" c="dimmed">
+                    <Text inherit component="span" fw={'bold'}>
+                      Max size
                     </Text>
-                  </Stack>
+                    : 1 MB
+                  </Text>
                 </Stack>
-              </GridCol>
-            </Grid>
+              </Stack>
+            </DropZoneLayout>
           </DropzoneAccept>
 
           <DropzoneReject>
-            <Grid align="center">
-              <GridCol span={{ base: 12, xs: 2 }}>
-                <Center>
-                  <ThemeIcon size={80} variant="light" color="red.6">
-                    <IconX
-                      size={ICON_SIZE * 3}
-                      stroke={ICON_STROKE_WIDTH}
-                      color={'var(--mantine-color-red-6)'}
-                    />
-                  </ThemeIcon>
-                </Center>
-              </GridCol>
+            <DropZoneLayout>
+              <ThemeIcon size={80} variant="light" color="red.6">
+                <IconX
+                  size={ICON_SIZE * 3}
+                  stroke={ICON_STROKE_WIDTH}
+                  color={'var(--mantine-color-red-6)'}
+                />
+              </ThemeIcon>
 
-              <GridCol span={{ base: 12, xs: 10 }}>
-                <Stack gap={4}>
-                  <Text c={'red.6'}>
-                    File size too large or file type unaccepted
-                  </Text>
+              <Stack gap={4}>
+                <Text c={'red.6'}>
+                  File size too large or file type unaccepted
+                </Text>
 
-                  {description}
-                </Stack>
-              </GridCol>
-            </Grid>
+                {description}
+              </Stack>
+            </DropZoneLayout>
           </DropzoneReject>
 
           <DropzoneIdle>
-            <Grid align="center">
-              <GridCol span={{ base: 12, xs: 2 }}>
-                <Center>
-                  {file ? (
-                    <MantineAvatar src={preview} size={80} radius={'sm'} />
-                  ) : (
-                    <ThemeIcon size={80} variant="light" color="gray">
-                      <IconUserCircle
-                        size={ICON_SIZE * 3}
-                        stroke={ICON_STROKE_WIDTH}
-                        color={'var(--mantine-color-gray-6)'}
-                      />
-                    </ThemeIcon>
-                  )}
-                </Center>
-              </GridCol>
+            <DropZoneLayout>
+              {file ? (
+                <MantineAvatar src={preview} size={80} radius={'sm'} />
+              ) : (
+                <ThemeIcon size={80} variant="light" color="gray">
+                  <IconUserCircle
+                    size={ICON_SIZE * 3}
+                    stroke={ICON_STROKE_WIDTH}
+                    color={'var(--mantine-color-gray-6)'}
+                  />
+                </ThemeIcon>
+              )}
 
-              <GridCol span={{ base: 12, xs: 10 }}>
-                <Stack gap={4}>
-                  {file ? (
-                    <Text>File accepted</Text>
-                  ) : (
-                    <Text>Drag image here or click to select file</Text>
-                  )}
+              <Stack gap={4}>
+                {file ? (
+                  <Text>File accepted</Text>
+                ) : (
+                  <Text>Drag image here or click to select file</Text>
+                )}
 
-                  {description}
-                </Stack>
-              </GridCol>
-            </Grid>
+                {description}
+              </Stack>
+            </DropZoneLayout>
           </DropzoneIdle>
         </Box>
       </Dropzone>
@@ -178,3 +158,15 @@ const description = (
     </Text>
   </Stack>
 );
+
+function DropZoneLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Flex
+      align={{ base: 'start', xs: 'center' }}
+      direction={{ base: 'column', xs: 'row' }}
+      gap={'md'}
+    >
+      {children}
+    </Flex>
+  );
+}

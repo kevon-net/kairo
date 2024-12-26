@@ -40,7 +40,7 @@ export const FONT = { CTA_TITLE: FONT_CTA_TITLE };
 export const TIMEOUT = { REDIRECT: 5000 };
 
 export const FILE_NAME = {
-  avatar: 'avatar',
+  AVATAR: 'avatar',
 };
 
 export const COOKIE_NAME = {
@@ -48,6 +48,10 @@ export const COOKIE_NAME = {
   LOCAL: { COUNTRY: 'local.country', COUNTRIES: 'local.countries' },
   COLOR_SCHEME: 'theme.color-scheme',
   COLOR_SCHEME_STATE: 'theme.color-scheme-state',
+};
+
+export const BUCKET_NAME = {
+  AVATARS: 'avatars',
 };
 
 export const LOCAL_STORAGE_NAME = {

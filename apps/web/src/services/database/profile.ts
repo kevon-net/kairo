@@ -28,8 +28,8 @@ export const profileUpdate = async (params: ProfileUpdate) => {
         where: { id: params.id as string },
       });
 
-      if (profile) {
-        throw new Error('Profile already exists');
+      if (!profile) {
+        throw new Error("Profile doesn't exist");
       }
 
       await prisma.profile.update({

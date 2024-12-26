@@ -21,8 +21,8 @@ export default async function Profile() {
             </Title>
           </GridCol>
 
-          <GridCol span={{ base: 12, md: 8 }}>
-            <DropzoneAvatar />
+          <GridCol span={{ base: 12, lg: 9 }}>
+            <DropzoneAvatar w={'100%'} />
           </GridCol>
         </Grid>
       </LayoutSection>
@@ -31,11 +31,11 @@ export default async function Profile() {
         <Grid>
           <GridCol span={{ base: 12 }}>
             <Title order={2} fz={'xl'}>
-              Personal Details
+              Personal Information
             </Title>
           </GridCol>
 
-          <GridCol span={{ base: 12, md: 8, lg: 6 }}>
+          <GridCol span={{ base: 12, md: 9, xl: 6 }}>
             <FormUserProfile />
           </GridCol>
         </Grid>

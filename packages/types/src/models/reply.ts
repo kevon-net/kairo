@@ -21,8 +21,8 @@ export type ReplyRelations = Prisma.ReplyGetPayload<{
   };
 
   include: {
-    user: {
-      include: { profile: { select: { name: true; avatar: true } } };
+    profile: {
+      select: { firstName: true; lastName: true; avatar: true };
     };
   };
 }>;

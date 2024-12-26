@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Sizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type Widths = { md?: number; lg?: number };
+export type Widths = { md?: number; lg?: number };
 
 export interface Body {
   bar?: React.ReactNode;

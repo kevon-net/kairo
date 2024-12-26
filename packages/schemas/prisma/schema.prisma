@@ -31,122 +31,31 @@ enum Status {
   PUBLISHED
 }
 
-enum Type {
-  CONFIRM_EMAIL
-  SSO
-  TWO_FACTOR_AUTH
-  PASSWORD_RESET
-  DELETE_ACCOUNT
-}
-
-enum Provider {
-  CREDENTIALS
-  GITHUB
-  GOOGLE
-}
-
 // models
 
-// auth models
-
-model User {
-  id       String  @id @default(cuid())
-  email    String  @unique
-  password String?
-  verified Boolean @default(false)
-
-  role    Role     @default(USER)
-  profile Profile?
+model Profile {
+  id        String  @id @db.Uuid
+  userName  String? @map("user_name")
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+  bio       String?
+  avatar    String?
+  phone     String?
+  role      Role    @default(USER)
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
-  status    Status   @default(ACTIVE)
 
-  accounts  Account[]
-  sessions  Session[]
-  tokens    Token[]
   addresses Address[]
   posts     Post[]
   comments  Comment[]
   replies   Reply[]
 
-  @@map("users")
-}
-
-model Account {
-  id                String   @id @default(cuid())
-  refreshToken      String?  @map(name: "refresh_token")
-  accessToken       String?  @map(name: "access_token")
-  providerName      Provider @map(name: "provider_name")
-  providerAccountId String   @map(name: "provider_account_id")
-  expiresAt         DateTime @map(name: "expires_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  @@unique([providerName, providerAccountId])
-  @@map("accounts")
-}
-
-model Token {
-  id        String   @id @default(cuid())
-  token     String
-  type      Type
-  expiresAt DateTime @map(name: "expires_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  status    Status   @default(ACTIVE)
-
-  @@unique([type, userId])
-  @@map(name: "tokens")
-}
-
-model Session {
-  id        String   @id @default(cuid())
-  ip        String
-  os        String?
-  city      String?
-  country   String?
-  loc       String?
-  expiresAt DateTime @map(name: "expires_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  status    Status   @default(ACTIVE)
-
-  @@map("sessions")
-}
-
-// non-auth models
-
-model Profile {
-  id     String  @id @default(cuid())
-  name   String
-  bio    String?
-  avatar String?
-  phone  String?
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique @map("user_id")
-
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
   @@map("profiles")
 }
 
 model Address {
-  id       String  @id @default(cuid())
+  id       String  @id @default(uuid()) @db.Uuid
   title    String?
   phone    String?
   province String?
@@ -154,8 +63,8 @@ model Address {
   city     String
   country  String
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String  @map("profile_id") @db.Uuid
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
@@ -165,7 +74,7 @@ model Address {
 }
 
 model Post {
-  id            String  @id @default(cuid())
+  id            String  @id @default(uuid()) @db.Uuid
   image         String
   title         String
   excerpt       String
@@ -173,10 +82,10 @@ model Post {
   allowComments Boolean @default(true) @map(name: "allow_comments")
   viewCount     Int     @default(0) @map(name: "view_count")
 
-  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?   @map("user_id")
+  profile    Profile?  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  String?   @map("profile_id") @db.Uuid
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  categoryId String?   @map("category_id")
+  categoryId String?   @map("category_id") @db.Uuid
   tags       Tag[]
   comments   Comment[]
 
@@ -184,12 +93,12 @@ model Post {
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(DRAFT)
 
-  @@unique([userId, title])
+  @@unique([profileId, title])
   @@map(name: "posts")
 }
 
 model Category {
-  id    String @id @default(cuid())
+  id    String @id @default(uuid()) @db.Uuid
   title String
 
   posts Post[]
@@ -203,7 +112,7 @@ model Category {
 }
 
 model Tag {
-  id    String @id @default(cuid())
+  id    String @id @default(uuid()) @db.Uuid
   title String
 
   posts Post[]
@@ -217,39 +126,39 @@ model Tag {
 }
 
 model Comment {
-  id      String  @id @default(cuid())
+  id      String  @id @default(uuid()) @db.Uuid
   name    String?
   content String
 
-  post    Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId  String  @map("post_id")
-  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String? @map("user_id")
-  replies Reply[]
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String   @map("post_id") @db.Uuid
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String?  @map("profile_id") @db.Uuid
+  replies   Reply[]
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(ACTIVE)
 
-  @@unique([name, content, postId, userId])
+  @@unique([name, content, postId, profileId])
   @@map(name: "comments")
 }
 
 model Reply {
-  id      String  @id @default(cuid())
+  id      String  @id @default(uuid()) @db.Uuid
   name    String?
   content String
 
   replyId   String?  @map("reply_id")
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId String?  @map("comment_id")
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?  @map("user_id")
+  commentId String?  @map("comment_id") @db.Uuid
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String?  @map("profile_id") @db.Uuid
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
   status    Status   @default(ACTIVE)
 
-  @@unique([name, content, replyId, commentId, userId])
+  @@unique([name, content, replyId, commentId, profileId])
   @@map(name: "replies")
 }

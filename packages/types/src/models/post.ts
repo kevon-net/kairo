@@ -18,9 +18,8 @@ export type PostRelations = Prisma.PostGetPayload<{
 
     tags: { select: { id: true; title: true } };
 
-    user: {
-      select: { id: true };
-      include: { profile: { select: { name: true; avatar: true } } };
+    profile: {
+      select: { id: true; firstName: true; lastName: true; avatar: true };
     };
 
     comments: {
@@ -33,8 +32,8 @@ export type PostRelations = Prisma.PostGetPayload<{
 
         _count: { select: { replies: true } };
 
-        user: {
-          include: { profile: { select: { name: true; avatar: true } } };
+        profile: {
+          select: { firstName: true; lastName: true; avatar: true };
         };
 
         replies: {
@@ -45,8 +44,13 @@ export type PostRelations = Prisma.PostGetPayload<{
             createdAt: true;
             commentId: true;
 
-            user: {
-              include: { profile: { select: { name: true; avatar: true } } };
+            profile: {
+              select: {
+                id: true;
+                firstName: true;
+                lastName: true;
+                avatar: true;
+              };
             };
           };
         };

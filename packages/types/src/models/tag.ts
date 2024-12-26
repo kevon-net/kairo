@@ -22,9 +22,8 @@ export type TagRelations = Prisma.TagGetPayload<{
 
         tags: { select: { id: true; title: true } };
 
-        user: {
-          select: { id: true };
-          include: { profile: { select: { name: true; avatar: true } } };
+        profile: {
+          select: { id: true; firstName: true; lastName: true; avatar: true };
         };
 
         comments: {
@@ -37,8 +36,13 @@ export type TagRelations = Prisma.TagGetPayload<{
 
             _count: { select: { replies: true } };
 
-            user: {
-              include: { profile: { select: { name: true; avatar: true } } };
+            profile: {
+              select: {
+                id: true;
+                firstName: true;
+                lastName: true;
+                avatar: true;
+              };
             };
 
             replies: {
@@ -49,9 +53,12 @@ export type TagRelations = Prisma.TagGetPayload<{
                 createdAt: true;
                 commentId: true;
 
-                user: {
-                  include: {
-                    profile: { select: { name: true; avatar: true } };
+                profile: {
+                  select: {
+                    id: true;
+                    firstName: true;
+                    lastName: true;
+                    avatar: true;
                   };
                 };
               };

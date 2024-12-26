@@ -16,8 +16,8 @@ export type CommentRelations = Prisma.CommentGetPayload<{
 
     _count: { select: { replies: true } };
 
-    user: {
-      include: { profile: { select: { name: true; avatar: true } } };
+    profile: {
+      select: { firstName: true; lastName: true; avatar: true };
     };
 
     replies: {
@@ -30,8 +30,8 @@ export type CommentRelations = Prisma.CommentGetPayload<{
 
         _count: { select: { replies: true } };
 
-        user: {
-          include: { profile: { select: { name: true; avatar: true } } };
+        profile: {
+          select: { id: true; firstName: true; lastName: true; avatar: true };
         };
       };
     };

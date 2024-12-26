@@ -1,7 +1,6 @@
 import { Request as EnumRequest } from '@repo/enums';
 import { API_URL, HEADERS } from '@/data/constants';
 import { ReplyUpdate } from '@repo/types/models';
-import { authHeaders } from '@/libraries/auth';
 import { ReplyReplyCreate } from '@/types/bodies/request';
 
 const baseRequestUrl = `${API_URL}/replies/reply`;
@@ -11,7 +10,7 @@ export const repliesReplyGet = async (slug: { replyId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.replyId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
-      headers: await authHeaders(HEADERS.WITHOUT_BODY),
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);
@@ -30,7 +29,7 @@ export const replyReplyCreate = async (requestBody: ReplyReplyCreate) => {
     const request = new Request(`${baseRequestUrl}/${requestBody.replyId}`, {
       method: EnumRequest.POST,
       credentials: 'include',
-      headers: await authHeaders(HEADERS.WITH_BODY),
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(requestBody),
     });
 
@@ -50,7 +49,7 @@ export const replyReplyUpdate = async (
     const request = new Request(`${baseRequestUrl}/${requestBody.id}`, {
       method: EnumRequest.PUT,
       credentials: 'include',
-      headers: await authHeaders(HEADERS.WITH_BODY),
+      headers: HEADERS.WITH_BODY,
       body: JSON.stringify(requestBody),
     });
 
@@ -68,7 +67,7 @@ export const replyReplyDelete = async (slug: { replyId: string }) => {
     const request = new Request(`${baseRequestUrl}/${slug.replyId}`, {
       method: EnumRequest.DELETE,
       credentials: 'include',
-      headers: await authHeaders(HEADERS.WITHOUT_BODY),
+      headers: HEADERS.WITHOUT_BODY,
     });
 
     const response = await fetch(request);

@@ -14,8 +14,9 @@ import {
 import AuthProviders from '@/components/common/buttons/auth-providers';
 
 import { useFormAuthSignIn } from '@/hooks/form/auth/sign-in';
+import { AuthAction } from '@/types/auth';
 
-export default function Auth({ action }: { action: 'sign-in' | 'sign-up' }) {
+export default function Auth({ action }: { action: AuthAction }) {
   const { form, submitted, handleSubmit } = useFormAuthSignIn({ action });
 
   return (
@@ -33,7 +34,7 @@ export default function Auth({ action }: { action: 'sign-in' | 'sign-up' }) {
 
           <GridCol span={12}>
             <Button fullWidth type="submit" loading={submitted}>
-              {submitted ? 'Signing In' : 'Sign In'}
+              {action === 'sign-in' ? 'Sign In' : 'Sign Up'}
             </Button>
           </GridCol>
         </Grid>

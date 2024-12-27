@@ -28,6 +28,26 @@ export function SignIn({ children }: { children: React.ReactNode }) {
   );
 }
 
+export function SignUp({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  return (
+    <span
+      onClick={() =>
+        router.push(
+          setRedirectUrl({
+            targetUrl: AUTH_URLS.SIGN_UP,
+            redirectUrl: pathname,
+          })
+        )
+      }
+    >
+      {children}
+    </span>
+  );
+}
+
 export function SignOut({ children }: { children: React.ReactNode }) {
   const [clicked, setClicked] = useState(false);
 
@@ -37,8 +57,8 @@ export function SignOut({ children }: { children: React.ReactNode }) {
       pos="relative"
       onClick={async () => {
         setClicked(true);
-        await signOut();
-        window.location.href = '/';
+        const { redirect } = await signOut();
+        window.location.href = redirect;
       }}
     >
       <LoadingOverlay

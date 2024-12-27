@@ -9,7 +9,13 @@ import LayoutSection from '@/components/layout/section';
 
 export const metadata: Metadata = { title: 'Verify Request' };
 
-export default async function VerifyRequest() {
+export default async function VerifyRequest({
+  searchParams,
+}: {
+  searchParams: any;
+}) {
+  const message = searchParams.message;
+
   return (
     <LayoutPage>
       <LayoutSection id={'page-verify-request'} containerized={false} padded>
@@ -25,9 +31,7 @@ export default async function VerifyRequest() {
 
             <Stack gap={0}>
               <Text ta={{ base: 'center', md: 'start' }}>
-                If an account with the provided email exists, you&apos;ll
-                receive a password reset link. Remember to check the spam/junk
-                folder(s)
+                {message} Remember to check the spam/junk folder(s).
               </Text>
             </Stack>
           </Stack>

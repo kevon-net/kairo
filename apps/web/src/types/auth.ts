@@ -29,3 +29,5 @@ type UserMetadata = {
 export type AuthUser = Omit<SupabaseAuthUser, 'user_metadata'> & {
   user_metadata: UserMetadata;
 };
+
+export type AuthAction = 'sign-up' | 'sign-in';

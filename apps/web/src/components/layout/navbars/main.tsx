@@ -20,6 +20,7 @@ import MenuUser from '@/components/common/menus/user';
 import MenuNavbar from '@/components/common/menus/navbar';
 import DrawerUser from '@/components/common/drawers/user';
 import { SignIn as FragmentSignIn } from '@/components/partial/auth';
+import { SignUp as FragmentSignUp } from '@/components/partial/auth';
 
 import classes from './main.module.scss';
 import {
@@ -31,7 +32,7 @@ import {
   IconFingerprint,
   IconNotification,
 } from '@tabler/icons-react';
-import { AUTH_URLS, ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { useMediaQuery } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/hooks/redux';
@@ -149,14 +150,11 @@ export default function Main({
                   </Button>
                 </FragmentSignIn>
 
-                <Button
-                  size="xs"
-                  component={Link}
-                  href={AUTH_URLS.SIGN_UP}
-                  visibleFrom="md"
-                >
-                  Sign Up
-                </Button>
+                <FragmentSignUp>
+                  <Button size="xs" visibleFrom="md">
+                    Sign Up
+                  </Button>
+                </FragmentSignUp>
               </Group>
             ) : desktop ? (
               <MenuUser />

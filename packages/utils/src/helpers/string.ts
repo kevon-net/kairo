@@ -53,3 +53,8 @@ export const filterSearch = <T>(
     return searchIndex === normalizedSearch.length;
   });
 };
+
+export const getEmailLocalPart = (email: string): string => {
+  const atIndex = email.indexOf('@');
+  return atIndex !== -1 ? email.slice(0, atIndex) : email;
+};

@@ -1,16 +1,11 @@
 import React from 'react';
 
 import { Metadata } from 'next';
-import Link from 'next/link';
 
-import { Button, Flex, Group, Stack, Text, Title } from '@mantine/core';
+import { Flex, Stack, Text, Title } from '@mantine/core';
 
 import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
-import { SignIn as FragmentSignIn } from '@/components/partial/auth';
-
-import { IconArrowRight } from '@tabler/icons-react';
-import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 
 export const metadata: Metadata = { title: 'Error' };
 
@@ -44,23 +39,6 @@ export default async function Error({ searchParams }: { searchParams: any }) {
               )}
             </Stack>
           </Stack>
-
-          <Group>
-            <FragmentSignIn>
-              <Button>Try Again</Button>
-            </FragmentSignIn>
-
-            <Button
-              component={Link}
-              href={'/'}
-              variant="light"
-              rightSection={
-                <IconArrowRight size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-              }
-            >
-              Back Home
-            </Button>
-          </Group>
         </Flex>
       </LayoutSection>
     </LayoutPage>

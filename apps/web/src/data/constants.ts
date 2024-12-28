@@ -70,8 +70,6 @@ const WITH_BODY: HeadersInit = {
 
 export const HEADERS = { WITH_BODY, WITHOUT_BODY };
 
-export const KEY = new TextEncoder().encode(process.env.JWT_SECRET);
-
 const EXPIRY_SESSION_SEC_STANDARD = 60 * 60 * 24;
 const EXPIRY_SESSION_SEC_EXTENDED = 7 * EXPIRY_SESSION_SEC_STANDARD;
 

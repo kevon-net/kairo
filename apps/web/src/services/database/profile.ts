@@ -32,15 +32,19 @@ export const profileCreate = async (params: ProfileCreate) => {
       });
 
       if (profile) {
-        return { profile };
+        return { profile, existed: true };
       }
 
-      return { profile: await prisma.profile.create({ data: params }) };
+      return {
+        profile: await prisma.profile.create({ data: params }),
+        existed: false,
+      };
     });
 
-    return transaction.profile;
+    return transaction;
   } catch (error) {
     console.error('---> service error - (create profile):', error);
+    throw error;
   }
 };
 

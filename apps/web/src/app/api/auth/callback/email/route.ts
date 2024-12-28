@@ -5,6 +5,7 @@ import { createClient } from '@/libraries/supabase/server';
 import { AUTH_URLS } from '@/data/constants';
 import { profileCreate } from '@/services/database/profile';
 import { getEmailLocalPart } from '@repo/utils/helpers';
+import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
 
 export async function GET(request: NextRequest) {
   try {
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest) {
     if (verifyError) throw verifyError;
 
     // create profile if doesn't exist
-    const profile = await profileCreate({
+    const { profile, existed } = await profileCreate({
       id: verifyData.user?.id || '',
       firstName: getEmailLocalPart(verifyData.user?.email || ''),
     });
@@ -35,7 +36,10 @@ export async function GET(request: NextRequest) {
     const name = `${profile?.firstName} ${profile?.lastName || ''}`.trim();
 
     // update user
-    const { error: updateError } = await supabase.auth.updateUser({
+    const {
+      data: { user: userData },
+      error: updateError,
+    } = await supabase.auth.updateUser({
       data: {
         name,
         full_name: name,
@@ -46,6 +50,13 @@ export async function GET(request: NextRequest) {
     });
 
     if (updateError) throw updateError;
+
+    if (!existed && userData && userData.email) {
+      await sendEmailTransactionalOnboard({
+        to: userData.email,
+        userName: userData?.user_metadata.name || userData?.email,
+      });
+    }
 
     // if "next" is in param, use it as the redirect URL
     const next = searchParams.get('next') ?? '/';

@@ -7,7 +7,7 @@ import appData from '../../src/data/app';
 import { dimmedText, Email as LayoutEmail, text } from '../../src/layout';
 
 export const Welcome = (props: { userName: string }) => {
-  const message = `Thanks creating an account with ${appData.name.app}.`;
+  const message = `Thanks for creating an account with ${appData.name.app}.`;
 
   return (
     <LayoutEmail

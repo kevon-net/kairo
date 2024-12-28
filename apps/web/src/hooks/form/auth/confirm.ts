@@ -16,10 +16,11 @@ export const useFormAuthConfirmEmail = () => {
       message: 'Please wait while we verify your email.',
     });
 
-    const endpoint = `${API_URL}/auth/confirm/email`;
+    const endpoint = `${API_URL}/auth/callback/email`;
     const token = getUrlParam('token_hash');
     const type = getUrlParam('type');
-    const next = encodeURIComponent(getUrlParam(URL_PARAM.REDIRECT));
+    const redirect = getUrlParam(URL_PARAM.REDIRECT);
+    const next = encodeURIComponent(redirect);
     window.location.href = `${endpoint}?token_hash=${token}&type=${type}&next=${next}`;
   };
 
@@ -38,13 +39,14 @@ export const useFormAuthConfirmSignIn = () => {
   const handleTrigger = async () => {
     setStatus({
       state: 'loading',
-      message: 'Please wait while we verifiy the magic link.',
+      message: 'Please wait while we verify the magic link.',
     });
 
-    const endpoint = `${API_URL}/auth/confirm/email`;
+    const endpoint = `${API_URL}/auth/callback/email`;
     const token = getUrlParam('token_hash');
     const type = getUrlParam('type');
-    const next = encodeURIComponent(getUrlParam(URL_PARAM.REDIRECT));
+    const redirect = getUrlParam(URL_PARAM.REDIRECT);
+    const next = encodeURIComponent(redirect);
     window.location.href = `${endpoint}?token_hash=${token}&type=${type}&next=${next}`;
   };
 

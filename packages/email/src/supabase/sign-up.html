@@ -11,23 +11,23 @@
 
   <tr>
     <td style="text-align: center; padding-top: 2rem;">
-      <h1 style="margin: 0;">Magic Link</h1>
+      <h1 style="margin: 0;">Confirm Your Signup</h1>
     </td>
   </tr>
 
   <tr>
     <td style="padding-top: 2rem;">
       <p>Hello,</p>
-      <p style="margin: 0;">This is an email containing a magic link to sign you in. We're just making sure it's
-        really you. Click the link below to access your personalized experience.</p>
+      <p style="margin: 0;">This is an email containing a magic link to sign you up. We're just making sure this is your
+        email. Click the link below to access your personalized experience.</p>
     </td>
   </tr>
 
   <tr>
     <td style="text-align: center; padding-top: 2rem;">
-      <a href="{{ .SiteURL }}/auth/confirm/sign-in..."
+      <a href="{{ .SiteURL }}/auth/confirm/sign-up?token_hash={{ .TokenHash }}&type=signup&redirect={{ .RedirectTo }}"
         style="background-color: #e4e6ed; color: black; padding: 0.5rem; border-radius: 0.25rem; text-decoration: none; font-weight: bold; display: inline-block; width: 100%;">
-        Log In
+        Confirm Signup
       </a>
     </td>
   </tr>
@@ -40,7 +40,7 @@
 
   <tr>
     <td style="font-size: small; color: dimgray; margin: 0; padding-top: 2rem;">
-      If you didn't request a magic link, you can safely ignore this email. If you are concerned about the
+      If you didn't request this confirmation link, you can safely ignore this email. If you are concerned about the
       security of your account, please <a href="mailto:info@example.com" style="color: black;">contact support</a>.
     </td>
   </tr>

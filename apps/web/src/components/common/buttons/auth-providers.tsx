@@ -22,11 +22,11 @@ export default function Providers() {
       await supabase.auth.signInWithOAuth({
         provider: providerDetails.provider.toLocaleLowerCase() as any,
         options: {
-          redirectTo: `${API_URL}/auth/callback?next=${encodeURIComponent(getUrlParam(URL_PARAM.REDIRECT))}`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
+          redirectTo: `${API_URL}/auth/callback/oauth?next=${encodeURIComponent(getUrlParam(URL_PARAM.REDIRECT))}`,
+          // queryParams: {
+          //   access_type: 'offline',
+          //   prompt: 'consent',
+          // },
         },
       });
     };

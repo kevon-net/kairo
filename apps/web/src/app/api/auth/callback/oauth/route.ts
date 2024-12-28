@@ -4,11 +4,14 @@ import { createClient } from '@/libraries/supabase/server';
 import { profileCreate } from '@/services/database/profile';
 import { segmentFullName } from '@repo/utils/formatters';
 import { AUTH_URLS } from '@/data/constants';
+import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
 
 export async function GET(request: Request) {
   try {
     const { searchParams, origin } = new URL(request.url);
     const code = searchParams.get('code');
+    // const state = searchParams.get('state');
+    // console.log('state', state);
 
     if (!code) {
       throw new Error('The link is broken');
@@ -22,7 +25,7 @@ export async function GET(request: Request) {
     if (exchangeError) throw exchangeError;
 
     // create profile if doesn't exist
-    const profile = await profileCreate({
+    const { profile, existed } = await profileCreate({
       id: data.user?.id,
       firstName: segmentFullName(data.user.user_metadata.name || '').first,
       lastName: segmentFullName(data.user.user_metadata.name || '').last,
@@ -33,7 +36,10 @@ export async function GET(request: Request) {
     const name = `${profile?.firstName} ${profile?.lastName}`.trim();
 
     // update user
-    const { error: updateError } = await supabase.auth.updateUser({
+    const {
+      data: { user: userData },
+      error: updateError,
+    } = await supabase.auth.updateUser({
       data: {
         name,
         full_name: name,
@@ -44,6 +50,14 @@ export async function GET(request: Request) {
     });
 
     if (updateError) throw updateError;
+
+    if (!existed && userData && userData.email) {
+      await sendEmailTransactionalOnboard({
+        to: userData.email,
+        userName:
+          segmentFullName(userData?.user_metadata.name).first || userData.email,
+      });
+    }
 
     // if "next" is in param, use it as the redirect URL
     const next = searchParams.get('next') ?? '/';

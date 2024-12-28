@@ -6,6 +6,7 @@ import { AUTH_URLS } from '@/data/constants';
 import { profileCreate } from '@/services/database/profile';
 import { getEmailLocalPart } from '@repo/utils/helpers';
 import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
+import { segmentFullName } from '@repo/utils/formatters';
 
 export async function GET(request: NextRequest) {
   try {
@@ -54,7 +55,8 @@ export async function GET(request: NextRequest) {
     if (!existed && userData && userData.email) {
       await sendEmailTransactionalOnboard({
         to: userData.email,
-        userName: userData?.user_metadata.name || userData?.email,
+        userName:
+          segmentFullName(userData?.user_metadata.name).first || userData.email,
       });
     }
 

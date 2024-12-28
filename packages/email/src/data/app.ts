@@ -10,8 +10,8 @@ export const phones = {
 };
 
 export const emails = {
-  info: process.env.NEXT_PUBLIC_EMAIL_INFO,
-  noreply: process.env.NEXT_PUBLIC_EMAIL_NOREPLY,
+  info: 'info@example.com',
+  noreply: 'no-reply@example.com',
 };
 
 export const socials = {

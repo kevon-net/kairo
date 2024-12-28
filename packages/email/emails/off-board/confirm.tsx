@@ -1,56 +1,67 @@
 import * as React from 'react';
-
-import { Button, Heading, Section, Text } from '@react-email/components';
-
+import { Hr, Link, Section, Text } from '@react-email/components';
 import appData from '../../src/data/app';
+import { dimmedText, Email as LayoutEmail, text } from '../../src/layout';
 
-import LayoutEmail, { h1, section, text } from '../../src/layout';
-
-export function Confirm(props: { link: string; userName: string }) {
+export const Confirm = (props: { link: string; userName: string }) => {
   const message = `We want to make sure it's really you. Please click the following link to confirm the account deletion request. If you didn't request to delete your ${appData.name.app} account, you can ignore this message.`;
 
   return (
-    <LayoutEmail props={{ preview: message }}>
-      <Section style={section}>
-        <Heading style={{ ...h1, marginBottom: '32px' }}>
-          Account Deletion
-        </Heading>
-        <Text style={text}>
-          Hi {props.userName || 'John'},<br />
-          {message}
-        </Text>
+    <LayoutEmail props={{ preview: message, title: 'Account Deletion' }}>
+      <Section>
+        <Text style={{ marginTop: 0 }}>Hi {props.userName || 'John'},</Text>
+        <Text style={text}>{message}</Text>
       </Section>
 
-      <Section style={{ ...section, margin: '40px 0px' }}>
+      <Section style={{ marginTop: '2rem' }}>
         <Text style={{ ...text, textAlign: 'center', marginTop: '8px' }}>
-          <Button
-            href={props.link || '#'}
+          <Link
+            href="#"
             style={{
-              backgroundColor: 'rgba(0,0,0,0.1)',
+              backgroundColor: '#e4e6ed',
               color: 'black',
-              fontSize: 24,
-              borderRadius: '4px',
-              padding: '8px 16px',
+              padding: '0.5rem',
+              borderRadius: '0.25rem',
+              textDecoration: 'none',
               fontWeight: 'bold',
-              margin: '8px auto',
+              display: 'inline-block',
+              width: '100%',
             }}
           >
             Delete Account
-          </Button>
+          </Link>
         </Text>
 
-        <Text style={{ ...text, textAlign: 'center', marginTop: '8px' }}>
+        <Text
+          style={{ ...dimmedText, textAlign: 'center', marginTop: '0.5rem' }}
+        >
           (this link is valid for 60 minutes)
         </Text>
       </Section>
 
-      <Section style={section}>
-        <Text style={text}>
-          {appData.name.app} will never email you and ask you to disclose or
-          verify your password, credit card, banking account number or any other
-          sensitive personal information.
+      <Section style={{ marginTop: '2rem' }}>
+        <Hr />
+      </Section>
+
+      <Section style={{ marginTop: '2rem' }}>
+        <Text style={dimmedText}>
+          If you didn't request to delete your {appData.name.app} account, you
+          can safely ignore this email. If you are concerned about the security
+          of your account, please{' '}
+          <Link
+            href={`mailto:${appData.emails.info}`}
+            style={{
+              color: 'black',
+              textDecorationLine: 'underline',
+            }}
+          >
+            contact support
+          </Link>
+          .
         </Text>
       </Section>
     </LayoutEmail>
   );
-}
+};
+
+export default Confirm;

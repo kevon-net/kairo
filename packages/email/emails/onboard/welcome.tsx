@@ -1,34 +1,52 @@
 import * as React from 'react';
 
-import { Heading, Section, Text } from '@react-email/components';
+import { Hr, Link, Section, Text } from '@react-email/components';
 
 import appData from '../../src/data/app';
 
-import LayoutEmail, { h1, section, text } from '../../src/layout';
+import { dimmedText, Email as LayoutEmail, text } from '../../src/layout';
 
-export function Welcome(props: { userName: string }) {
+export const Welcome = (props: { userName: string }) => {
   const message = `Thanks creating an account with ${appData.name.app}.`;
 
   return (
-    <LayoutEmail props={{ preview: message }}>
-      <Section style={section}>
-        <Heading style={{ ...h1, marginBottom: '32px' }}>
-          Welcome To {appData.name.company}
-        </Heading>
+    <LayoutEmail
+      props={{ preview: message, title: `Welcome To ${appData.name.company}` }}
+    >
+      <Section>
+        <Text>Hi {props.userName || 'John'},</Text>
 
         <Text style={text}>
-          Hi {props.userName || 'John'},<br />
-          Thanks creating an account with {appData.name.app}.
+          Welcome to {appData.name.app}! We're thrilled to have you on board.
+          With your new account, you&apos;ll have access to key features and
+          benefits of our service. We're committed to helping you every step of
+          the way. If you have any questions or need assistance, feel free to
+          reach out to us at{' '}
+          <Link
+            href={`mailto:${appData.emails.info}`}
+            style={{
+              color: 'gray',
+              textDecorationLine: 'underline',
+            }}
+          >
+            {appData.emails.info}
+          </Link>
+          . Let&apos;s get started on this exciting journey together!
         </Text>
       </Section>
 
-      <Section style={section}>
-        <Text style={text}>
-          {appData.name.app} will never email you and ask you to disclose or
-          verify your password, credit card, banking account number or any other
-          sensitive personal information.
+      <Section style={{ marginTop: '2rem' }}>
+        <Hr />
+      </Section>
+
+      <Section style={{ marginTop: '2rem' }}>
+        <Text style={dimmedText}>
+          If you didn't create an account with {appData.name.app}, you can
+          safely ignore this email.
         </Text>
       </Section>
     </LayoutEmail>
   );
-}
+};
+
+export default Welcome;

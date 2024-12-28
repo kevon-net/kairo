@@ -4,99 +4,71 @@ import {
   Body,
   Container,
   Head,
-  // Heading,
-  Img,
   Html,
   Preview,
   Section,
   Text,
   Link,
+  Heading,
 } from '@react-email/components';
 import appData from './data/app';
-import { BASE_URL } from './data/constants';
 
-export default function Email({
+export const Email = ({
   props,
-  options = { withHeader: false, withFooter: true },
+  options = { withHeader: true, withFooter: true },
   children,
 }: {
-  props: { preview: string };
+  props: { preview: string; title?: string };
   options?: { withHeader?: boolean; withFooter?: boolean };
   children: React.ReactNode;
-}) {
+}) => {
   return (
     <>
       <Html lang="en">
         <Head />
-        <Preview>{props.preview}</Preview>
+
+        <Preview>{props.preview || 'Preview'}</Preview>
 
         <Body>
           <Container style={content}>
             {options.withHeader && (
-              <Section style={header}>
-                <Container style={container}>
-                  {/* <Heading style={{ ...h1, textAlign: "center" }}>{appData.name.company}</Heading> */}
-
-                  <Img
-                    src={`${BASE_URL}`}
-                    width={128}
-                    height={64}
+              <Section style={{ textAlign: 'center' }}>
+                <a href="https://example.com">
+                  <img
+                    src={
+                      'https://spewyluxhudgxpuhjjam.supabase.co/storage/v1/object/public/avatars/brand/icon/icon-dark.png'
+                    }
+                    width={40}
+                    height={'auto'}
                     alt={appData.name.company}
                   />
-                </Container>
+                </a>
+
+                {props.title && (
+                  <Heading style={{ marginTop: '2rem' }}>{props.title}</Heading>
+                )}
               </Section>
             )}
 
-            <Section style={section}>
-              <Container style={container}>{children}</Container>
+            <Section style={{ marginTop: '2rem' }}>
+              <Container>{children}</Container>
             </Section>
 
             {options.withFooter && (
-              <Section style={{ ...section, ...footer }}>
-                <Container style={container}>
-                  <Text style={{ ...text, fontSize: '10px', color: 'gray' }}>
+              <Section>
+                <Container>
+                  <Text style={dimmedText}>
                     Copyright © {new Date().getFullYear()},{' '}
                     <Link
-                      href="#"
+                      href="https://example.com"
                       style={{
-                        color: 'gray',
+                        color: 'black',
                         textDecorationLine: 'underline',
                       }}
                     >
                       {appData.name.company}
                     </Link>
                     . All rights reserved.
-                  </Text>
-
-                  <Text style={{ ...text, fontSize: '10px', color: 'gray' }}>
-                    {appData.locations.main.location}
-                  </Text>
-
-                  {/* <Text style={{ ...text, fontSize: '10px', color: 'gray' }}>
-                    This message was produced and distributed by{' '}
-                    {appData.name.company}, or its affiliates.
-                  </Text> */}
-
-                  <Text style={{ ...text, fontSize: '10px', color: 'gray' }}>
-                    <Link
-                      href="#"
-                      style={{
-                        color: 'gray',
-                        textDecorationLine: 'underline',
-                      }}
-                    >
-                      Unsubscribe
-                    </Link>{' '}
-                    |{' '}
-                    <Link
-                      href="#"
-                      style={{
-                        color: 'gray',
-                        textDecorationLine: 'underline',
-                      }}
-                    >
-                      Manage Preferences
-                    </Link>
                   </Text>
                 </Container>
               </Section>
@@ -106,51 +78,25 @@ export default function Email({
       </Html>
     </>
   );
-}
-
-export const footer = {};
-
-export const header = {
-  ...footer,
-  display: 'flex',
-  alignItems: 'center',
-  // justifyContent: 'center',
-};
-
-export const container = {
-  minWidth: '100%',
-  padding: '0 16px',
-};
-
-export const section = {
-  margin: '16px 0',
 };
 
 export const content = {
-  maxWidth: '640px',
+  maxWidth: '560px',
   margin: '0 auto',
-  overflow: 'hidden',
-  fontFamily:
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-};
-
-export const h1 = {
-  fontSize: '24px',
-  fontWeight: 'bolder',
-};
-
-export const h2 = {
-  fontSize: '16px',
-  fontWeight: 'bolder',
+  border: '1px solid #e4e6ed',
+  borderRadius: '0.25rem',
+  padding: '3rem',
+  fontFamily: "'Calibri', Arial, sans-serif",
 };
 
 export const text = {
   margin: 0,
-  fontSize: '12px',
 };
+
+export const dimmedText = { ...text, fontSize: 'small', color: 'gray' };
 
 export const link = {
   margin: 0,
   fontWeight: 'bold',
-  color: 'red',
+  color: 'black',
 };

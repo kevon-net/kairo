@@ -1,20 +1,18 @@
 import * as React from 'react';
-
 import { Text } from '@react-email/components';
-
 import appData from '../src/data/app';
-
-import LayoutEmail, { text } from '../src/layout';
+import { Email as LayoutEmail, text } from '../src/layout';
 import sample from '../src/data/sample';
 
-export function Inquiry(props: { userName: string; userMessage: string }) {
+export const Inquiry = (props: { userName: string; userMessage: string }) => {
   return (
     <LayoutEmail
       props={{ preview: props.userMessage }}
-      options={{ withHeader: false, withFooter: false }}
+      options={{ withHeader: true, withFooter: false }}
     >
+      <Text>{appData.name.company},</Text>
+
       <Text style={text}>
-        {appData.name.company}, <br />
         {props.userMessage || sample.text.prose} <br />
         <br />
         Regards, <br />
@@ -22,4 +20,6 @@ export function Inquiry(props: { userName: string; userMessage: string }) {
       </Text>
     </LayoutEmail>
   );
-}
+};
+
+export default Inquiry;

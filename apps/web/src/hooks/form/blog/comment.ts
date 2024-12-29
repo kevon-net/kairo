@@ -21,8 +21,8 @@ export const useFormBlogComment = (params: { postId: string }) => {
 
   const form = useForm({
     initialValues: {
-      name: '',
-      email: '',
+      name: session?.user_metadata.name || '',
+      email: session?.email || '',
       content: '',
     },
 
@@ -61,7 +61,7 @@ export const useFormBlogComment = (params: { postId: string }) => {
 
         const response = await commentCreate({
           ...parseValues(),
-          userId: session?.id,
+          profileId: session?.id,
         });
 
         if (!response) {
@@ -96,5 +96,6 @@ export const useFormBlogComment = (params: { postId: string }) => {
     form,
     submitted,
     handleSubmit,
+    session,
   };
 };

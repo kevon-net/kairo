@@ -20,8 +20,13 @@ export async function GET(
 
             _count: { select: { replies: true } },
 
-            user: {
-              include: { profile: { select: { name: true, avatar: true } } },
+            profile: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                avatar: true,
+              },
             },
           },
 

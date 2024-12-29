@@ -31,11 +31,18 @@ import ImageDefault from '@/components/common/images/default';
 import { PostRelations } from '@/types/static';
 import Link from 'next/link';
 import { getRegionalDate } from '@repo/utils/formatters';
+import { extractUuidFromParam } from '@repo/utils/helpers';
+import { redirect } from 'next/navigation';
 
 export default async function Post({ params }: { params: typeParams }) {
-  const [postId] = params['postTitle-postId'].split('-');
+  const postId = extractUuidFromParam(params['postTitle-postId']);
+  console.log('postId', postId);
 
-  const { post }: { post: PostRelations } = await postGet({ postId: postId });
+  if (!postId) redirect('/not-found');
+
+  const { post }: { post: PostRelations } = await postGet({
+    postId: postId,
+  });
 
   return (
     <LayoutPage>
@@ -146,9 +153,10 @@ export default async function Post({ params }: { params: typeParams }) {
         <Group justify="space-between">
           <CardBlogAuthor
             props={{
-              name: !post.user
+              name: !post.profile
                 ? 'Anonymous'
-                : post.user.profile?.name || 'No Name',
+                : `${post.profile.firstName} ${post.profile.lastName}` ||
+                  'No Name',
               date: post.createdAt,
             }}
           />

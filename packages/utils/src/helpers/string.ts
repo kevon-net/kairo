@@ -58,3 +58,15 @@ export const getEmailLocalPart = (email: string): string => {
   const atIndex = email.indexOf('@');
   return atIndex !== -1 ? email.slice(0, atIndex) : email;
 };
+
+export function extractUuidFromParam(param: string): string | null {
+  // Define the UUID regex pattern
+  const uuidPattern =
+    /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
+
+  // Match the UUID at the end of the string
+  const match = param.match(uuidPattern);
+
+  // Return the UUID if found, otherwise null
+  return match ? match[0] : null;
+}

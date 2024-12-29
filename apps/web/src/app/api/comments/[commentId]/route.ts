@@ -1,7 +1,6 @@
 import prisma from '@/libraries/prisma';
 import { CommentCreate } from '@/types/bodies/request';
 import { CommentUpdate } from '@repo/types/models';
-import { generateId } from '@repo/utils/generators';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -10,11 +9,11 @@ export async function POST(request: NextRequest) {
 
     const commentRecord = await prisma.comment.findUnique({
       where: {
-        name_content_postId_userId: {
+        name_content_postId_profileId: {
           name: comment.name || '',
           content: comment.content,
           postId: comment.postId,
-          userId: comment.userId || '',
+          profileId: comment.profileId || '',
         },
       },
     });
@@ -28,7 +27,6 @@ export async function POST(request: NextRequest) {
 
     const createComment = await prisma.comment.create({
       data: {
-        id: generateId(),
         name: comment.name,
         content: comment.content,
         postId: comment.postId,

@@ -2,15 +2,15 @@ import { CommentCreate as typeCommentCreate, ReplyCreate } from '@repo/types';
 
 export type CommentCreate = Omit<typeCommentCreate, 'id' | 'post'> & {
   postId: string;
-  userId?: string;
+  profileId?: string;
 };
 
 export type ReplyCommentCreate = Omit<ReplyCreate, 'id'> & {
-  userId?: string;
+  profileId?: string;
   commentId: string;
 };
 
 export type ReplyReplyCreate = Omit<ReplyCreate, 'id'> & {
-  userId?: string;
+  profileId?: string;
   replyId: string;
 };

@@ -1,7 +1,6 @@
 import prisma from '@/libraries/prisma';
 import { ReplyReplyCreate } from '@/types/bodies/request';
 import { ReplyUpdate } from '@repo/types/models';
-import { generateId } from '@repo/utils/generators';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -32,9 +31,12 @@ export async function GET(
             createdAt: true,
             commentId: true,
 
-            user: {
-              include: {
-                profile: { select: { name: true, avatar: true } },
+            profile: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                avatar: true,
               },
             },
           },
@@ -75,14 +77,16 @@ export async function POST(
   try {
     const reply: Omit<ReplyReplyCreate, 'replyId'> = await request.json();
 
+    const placeHolder = params.replyId;
+
     const replyRecord = await prisma.reply.findUnique({
       where: {
-        name_content_replyId_commentId_userId: {
+        name_content_replyId_commentId_profileId: {
           name: reply.name || '',
           content: reply.content,
           replyId: params.replyId,
-          commentId: '',
-          userId: reply.userId || '',
+          commentId: placeHolder,
+          profileId: reply.profileId || placeHolder,
         },
       },
     });
@@ -96,10 +100,10 @@ export async function POST(
 
     const createReply = await prisma.reply.create({
       data: {
-        id: generateId(),
         name: reply.name,
         content: reply.content,
         replyId: params.replyId,
+        profileId: reply.profileId,
       },
     });
 

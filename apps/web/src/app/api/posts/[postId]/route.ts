@@ -16,10 +16,12 @@ export async function GET(
 
         tags: { select: { id: true, title: true } },
 
-        user: {
+        profile: {
           select: {
             id: true,
-            profile: { select: { name: true, avatar: true } },
+            firstName: true,
+            lastName: true,
+            avatar: true,
           },
         },
       },

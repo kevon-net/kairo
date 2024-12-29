@@ -4,17 +4,20 @@ import { createClient } from '@/libraries/supabase/server';
 import { bucketCreate } from '../api/bucket';
 import { BUCKET_NAME, FILE_NAME } from '@/data/constants';
 
-export const uploadFile = async (formData: FormData, userId: string) => {
+export const uploadFile = async (params: {
+  formData: FormData;
+  profileId: string;
+}) => {
   try {
     const supabase = await createClient();
 
     await bucketCreate({ bucketName: BUCKET_NAME.AVATARS });
 
-    const file = formData.get(FILE_NAME.AVATAR) as File;
+    const file = params.formData.get(FILE_NAME.AVATAR) as File;
 
     // Get file extension
     const fileExtension = file.name.split('.').pop() || '';
-    const fileName = `${userId}.${fileExtension}`;
+    const fileName = `${params.profileId}.${fileExtension}`;
 
     const { error: uploadError } = await supabase.storage
       .from(BUCKET_NAME.AVATARS)

@@ -23,8 +23,8 @@ export const useFormBlogReply = (params: {
 
   const form = useForm({
     initialValues: {
-      name: '',
-      email: '',
+      name: session?.user_metadata.name || '',
+      email: session?.email || '',
       content: '',
     },
 
@@ -64,7 +64,7 @@ export const useFormBlogReply = (params: {
 
         const content = {
           ...parseValues(),
-          userId: session?.id || undefined,
+          profileId: session?.id || undefined,
         };
 
         if (params.commentId) {
@@ -161,5 +161,6 @@ export const useFormBlogReply = (params: {
     form,
     submitted,
     handleSubmit,
+    session,
   };
 };

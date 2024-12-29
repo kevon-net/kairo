@@ -56,7 +56,7 @@ export default function Comments({
                     props={{
                       ...comment,
                       replies: comment.replies,
-                      user: comment.user!,
+                      profile: comment.profile!,
                     }}
                   />
 

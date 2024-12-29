@@ -181,7 +181,10 @@ export const useFormUserAvatar = () => {
       const formData = new FormData();
       formData.append(FILE_NAME.AVATAR, file);
 
-      const { file: fileDetails } = await uploadFile(formData, session.id);
+      const { file: fileDetails } = await uploadFile({
+        formData,
+        profileId: session.id,
+      });
 
       await profileUpdate({ id: session.id, avatar: fileDetails.path });
 

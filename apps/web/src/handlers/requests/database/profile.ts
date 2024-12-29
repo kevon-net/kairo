@@ -4,9 +4,9 @@ import { ProfileCreate, ProfileUpdate } from '@repo/types/models';
 
 const baseRequestUrl = `${API_URL}/profiles`;
 
-export const profileGet = async (slug: { userId: string }) => {
+export const profileGet = async (slug: { profileId: string }) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${slug.userId}`, {
+    const request = new Request(`${baseRequestUrl}/${slug.profileId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,

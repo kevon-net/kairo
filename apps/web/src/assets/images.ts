@@ -1,17 +1,15 @@
 export const images = {
   brand: {
     logo: {
-      light: '/images/brand/logo/logo-light.svg',
-      dark: '/images/brand/logo/logo-dark.svg',
+      light:
+        'https://spewyluxhudgxpuhjjam.supabase.co/storage/v1/object/public/logos/brand/logo-light.png',
+      dark: 'https://spewyluxhudgxpuhjjam.supabase.co/storage/v1/object/public/logos/brand/logo-dark.png',
     },
     icon: {
-      light: '/images/brand/icon/icon-light.svg',
-      dark: '/images/brand/icon/icon-dark.svg',
+      light:
+        'https://spewyluxhudgxpuhjjam.supabase.co/storage/v1/object/public/avatars/brand/icon/icon-light.png',
+      dark: 'https://spewyluxhudgxpuhjjam.supabase.co/storage/v1/object/public/avatars/brand/icon/icon-dark.png',
     },
-  },
-
-  error: {
-    err404: '/images/error/404.svg',
   },
 
   icons: {

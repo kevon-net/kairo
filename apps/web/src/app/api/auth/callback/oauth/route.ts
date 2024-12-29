@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-// The client you created from the Server-Side Auth instructions
 import { createClient } from '@/libraries/supabase/server';
 import { profileCreate } from '@/services/database/profile';
 import { segmentFullName } from '@repo/utils/formatters';
 import { AUTH_URLS } from '@/data/constants';
 import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
+import { contactCreate } from '@/handlers/requests/email/contact';
 
 export async function GET(request: Request) {
   try {
@@ -56,6 +56,11 @@ export async function GET(request: Request) {
         to: userData.email,
         userName:
           segmentFullName(userData?.user_metadata.name).first || userData.email,
+      });
+
+      await contactCreate({
+        params: { email: userData.email, name: userData.user_metadata.name },
+        options: { notify: false },
       });
     }
 

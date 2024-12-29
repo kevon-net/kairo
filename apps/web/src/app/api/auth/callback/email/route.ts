@@ -1,12 +1,12 @@
 import { type EmailOtpType } from '@supabase/supabase-js';
 import { NextResponse, type NextRequest } from 'next/server';
-
 import { createClient } from '@/libraries/supabase/server';
 import { AUTH_URLS } from '@/data/constants';
 import { profileCreate } from '@/services/database/profile';
 import { getEmailLocalPart } from '@repo/utils/helpers';
 import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
 import { segmentFullName } from '@repo/utils/formatters';
+import { contactCreate } from '@/handlers/requests/email/contact';
 
 export async function GET(request: NextRequest) {
   try {
@@ -57,6 +57,11 @@ export async function GET(request: NextRequest) {
         to: userData.email,
         userName:
           segmentFullName(userData?.user_metadata.name).first || userData.email,
+      });
+
+      await contactCreate({
+        params: { email: userData.email, name: userData.user_metadata.name },
+        options: { notify: false },
       });
     }
 

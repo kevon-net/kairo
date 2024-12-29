@@ -43,6 +43,7 @@ export const contactCreate = async (contactOptions: EmailContactCreate) => {
 
     if (!errorContact) {
       return {
+        exists: false,
         data: dataContact,
         dataEmail:
           contactOptions.options?.notify == false

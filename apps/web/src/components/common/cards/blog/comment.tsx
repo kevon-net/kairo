@@ -22,15 +22,15 @@ import { PostComment } from '@/types/static';
 import { initialize, getRegionalDate } from '@repo/utils/formatters';
 
 export default function Comment({ props }: { props: PostComment }) {
-  const { loading, fetch, comments } = useFetchRepliesComment({
+  const { loading, data, fetch, comments } = useFetchRepliesComment({
     commentId: props.id,
   });
 
-  const usersName = `${props.profile?.firstName} ${props.profile?.lastName}`;
+  const usersName =
+    `${props.profile?.firstName || ''} ${props.profile?.lastName || ''}`.trim();
   const name = usersName || props.name || 'Anonymous';
-
   const comment = comments.find((comment) => comment.id == props.id);
-  const replies = comment?.replies;
+  const replies = comment?.replies?.length || 0;
 
   return (
     <Card bg={'transparent'} padding={0}>
@@ -50,7 +50,7 @@ export default function Comment({ props }: { props: PostComment }) {
                 </Text>{' '}
                 at{' '}
                 <Text component="span" inherit>
-                  {getRegionalDate(props.createdAt).time}
+                  {getRegionalDate(props.createdAt).time.toUpperCase()}
                 </Text>
               </Text>
             </Stack>
@@ -70,32 +70,35 @@ export default function Comment({ props }: { props: PostComment }) {
               </Button>
             </ModalReply>
 
-            {props._count && props._count.replies > 0 && !replies?.length && (
-              <>
-                <IconCircleFilled size={4} />
+            {props._count &&
+              props._count.replies > 0 &&
+              (replies < props._count.replies || !data.length) && (
+                <>
+                  <IconCircleFilled size={4} />
 
-                <Button
-                  size="compact-sm"
-                  px={0}
-                  variant="transparent"
-                  color="gray"
-                  rightSection={
-                    <Text component="span" inherit>
-                      (
-                      <NumberFormatter
-                        value={props._count.replies}
-                        thousandSeparator
-                      />
-                      )
-                    </Text>
-                  }
-                  onClick={fetch}
-                  loading={loading}
-                >
-                  View Replies
-                </Button>
-              </>
-            )}
+                  <Button
+                    size="compact-sm"
+                    px={0}
+                    variant="transparent"
+                    color="gray"
+                    rightSection={
+                      <Text component="span" inherit>
+                        (
+                        <NumberFormatter
+                          value={props._count.replies}
+                          thousandSeparator
+                        />
+                        )
+                      </Text>
+                    }
+                    onClick={fetch}
+                    loading={loading}
+                  >
+                    View
+                    {replies > 0 && !data.length ? ' More' : ''} Replies
+                  </Button>
+                </>
+              )}
           </Group>
         </Stack>
 

@@ -22,17 +22,18 @@ import { PostCommentReply } from '@/types/static';
 import { initialize, getRegionalDate } from '@repo/utils/formatters';
 
 export default function Comment({ props }: { props: PostCommentReply }) {
-  const { loading, fetch, replies } = useFetchRepliesReply({
+  const { loading, data, fetch, replies } = useFetchRepliesReply({
     replyId: props.id,
   });
 
-  const usersName = `${props.profile?.firstName} ${props.profile?.lastName}`;
+  const usersName =
+    `${props.profile?.firstName || ''} ${props.profile?.lastName || ''}`.trim();
   const name = usersName || props.name || 'Anonymous';
 
   const commentReply = replies?.find(
     (commentReply) => commentReply.id == props.id
   );
-  const commentReplyReplies = commentReply?.replies;
+  const commentReplyReplies = commentReply?.replies?.length || 0;
 
   return (
     <Card bg={'transparent'} padding={0}>
@@ -52,7 +53,7 @@ export default function Comment({ props }: { props: PostCommentReply }) {
                 </Text>{' '}
                 at{' '}
                 <Text inherit component="span">
-                  {getRegionalDate(props.createdAt).time}
+                  {getRegionalDate(props.createdAt).time.toUpperCase()}
                 </Text>
               </Text>
             </Stack>
@@ -69,7 +70,7 @@ export default function Comment({ props }: { props: PostCommentReply }) {
 
             {props._count &&
               props._count.replies > 0 &&
-              !commentReplyReplies?.length && (
+              (commentReplyReplies < props._count.replies || !data.length) && (
                 <>
                   <IconCircleFilled size={4} />
 
@@ -90,7 +91,11 @@ export default function Comment({ props }: { props: PostCommentReply }) {
                     onClick={fetch}
                     loading={loading}
                   >
-                    View Replies
+                    View
+                    {commentReplyReplies > 0 && !data.length
+                      ? ' More'
+                      : ''}{' '}
+                    Replies
                   </Button>
                 </>
               )}

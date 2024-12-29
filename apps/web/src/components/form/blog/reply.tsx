@@ -23,7 +23,7 @@ export default function Reply({
   replyId?: string;
   close?: () => void;
 }) {
-  const { form, submitted, handleSubmit } = useFormBlogReply({
+  const { form, submitted, handleSubmit, session } = useFormBlogReply({
     commentId,
     replyId,
     close,
@@ -38,6 +38,7 @@ export default function Reply({
             label={'Name'}
             placeholder="Name"
             {...form.getInputProps('name')}
+            disabled={session ? true : false}
           />
         </GridCol>
 
@@ -47,6 +48,7 @@ export default function Reply({
             label={'Email'}
             placeholder="Email"
             {...form.getInputProps('email')}
+            disabled={session ? true : false}
             rightSection={<TooltipInputInfo />}
           />
         </GridCol>

@@ -16,6 +16,7 @@ export const useFetchComments = (params: { postId: string }) => {
       setLoading(true);
 
       const result = await commentsGet({ postId: params.postId });
+
       dispatch(updateComments(result.comments));
     } catch (error) {
       showNotification({
@@ -31,5 +32,9 @@ export const useFetchComments = (params: { postId: string }) => {
     }
   };
 
-  return { loading, fetch: fetchComments, comments };
+  return {
+    loading,
+    fetch: fetchComments,
+    comments,
+  };
 };

@@ -5,7 +5,8 @@ import { initialize, getRegionalDate } from '@repo/utils/formatters';
 import { Avatar, Card, Group, Stack, Text, Title } from '@mantine/core';
 
 export default function Reply({ props }: { props: ReplyRelations }) {
-  const usersName = `${props.profile?.firstName} ${props.profile?.lastName}`;
+  const usersName =
+    `${props.profile?.firstName || ''} ${props.profile?.lastName || ''}`.trim();
   const name = usersName || props.name || 'Anonymous';
 
   return (
@@ -25,7 +26,7 @@ export default function Reply({ props }: { props: ReplyRelations }) {
               </Text>{' '}
               at{' '}
               <Text inherit component="span">
-                {getRegionalDate(props.createdAt).time}
+                {getRegionalDate(props.createdAt).time.toUpperCase()}
               </Text>
             </Text>
           </Stack>

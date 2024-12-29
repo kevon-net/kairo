@@ -16,7 +16,9 @@ import { useFormBlogComment } from '@/hooks/form/blog/comment';
 import TooltipInputInfo from '@/components/common/tooltips/input/info';
 
 export default function Comment({ postId }: { postId: string }) {
-  const { form, submitted, handleSubmit } = useFormBlogComment({ postId });
+  const { form, submitted, handleSubmit, session } = useFormBlogComment({
+    postId,
+  });
 
   return (
     <Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
@@ -27,6 +29,7 @@ export default function Comment({ postId }: { postId: string }) {
             label={'Name'}
             placeholder="Name"
             {...form.getInputProps('name')}
+            disabled={session ? true : false}
           />
         </GridCol>
 
@@ -36,6 +39,7 @@ export default function Comment({ postId }: { postId: string }) {
             label={'Email'}
             placeholder="Email"
             {...form.getInputProps('email')}
+            disabled={session ? true : false}
             rightSection={<TooltipInputInfo />}
           />
         </GridCol>

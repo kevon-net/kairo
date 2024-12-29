@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 export const useFetchRepliesComment = (params: { commentId: string }) => {
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<ReplyRelations[]>([]);
 
   const comments = useAppSelector((state) => state.comments.value);
   const dispatch = useAppDispatch();
@@ -21,16 +22,13 @@ export const useFetchRepliesComment = (params: { commentId: string }) => {
           commentId: params.commentId,
         });
 
+      setData(replies);
+
       dispatch(
         updateComments(
           comments.map((comment) => {
             if (comment.id == params.commentId) {
-              return {
-                ...comment,
-                replies: !comment.replies
-                  ? replies
-                  : [...comment.replies, ...replies],
-              };
+              return { ...comment, replies: replies };
             }
 
             return comment;
@@ -51,5 +49,10 @@ export const useFetchRepliesComment = (params: { commentId: string }) => {
     }
   };
 
-  return { loading, fetch: fetchCommentReplies, comments };
+  return {
+    loading,
+    data,
+    fetch: fetchCommentReplies,
+    comments,
+  };
 };

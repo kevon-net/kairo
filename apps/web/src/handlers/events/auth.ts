@@ -35,6 +35,16 @@ export const signIn = async (params: {
       `---> event handler error (${params.options?.action}):`,
       error
     );
+
+    if ((error as any).code == 'otp_disabled') {
+      const message =
+        'No account with the provided email exists, sign up instead';
+
+      return {
+        redirect: `${AUTH_URLS.ERROR}?message=${encodeURIComponent(message)}`,
+      };
+    }
+
     return {
       redirect: `${AUTH_URLS.ERROR}?message=${encodeURIComponent((error as Error).message)}`,
     };

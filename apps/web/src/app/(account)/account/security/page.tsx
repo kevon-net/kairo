@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import React from 'react';
 
-import { Anchor, Divider, Stack, Text, Title } from '@mantine/core';
+import { Anchor, Stack, Text, Title } from '@mantine/core';
 
 import LayoutPage from '@/components/layout/page';
 import LayoutSection from '@/components/layout/section';
@@ -15,17 +15,6 @@ export const metadata: Metadata = { title: 'Security' };
 export default async function Security() {
   return (
     <LayoutPage stacked>
-      <LayoutSection id="page-security-password" containerized={false}>
-        <Stack gap={'lg'}>
-          <Title order={2} fz={'xl'}>
-            Two Factor Authentication
-          </Title>
-          form similar to notifications
-        </Stack>
-      </LayoutSection>
-
-      <Divider />
-
       <LayoutSection id="page-security-delete" containerized={false}>
         <Stack gap={'lg'} align="start">
           <Title order={2} fz={'xl'}>

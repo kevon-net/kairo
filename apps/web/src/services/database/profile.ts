@@ -19,7 +19,7 @@ export const profileGet = async (id: string): Promise<ProfileGet | null> => {
 
     return transactions.profile;
   } catch (error) {
-    console.error('---> service error - (create profile):', error);
+    console.error('---> service error - (get profile):', error);
     return null;
   }
 };
@@ -65,6 +65,6 @@ export const profileUpdate = async (params: ProfileUpdate) => {
       });
     });
   } catch (error) {
-    console.error('---> service error - (create profile):', error);
+    console.error('---> service error - (update profile):', error);
   }
 };

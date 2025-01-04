@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 
 export const useColorSchemeHandler = () => {
   const { setColorScheme } = useMantineColorScheme({ keepTransitions: true });
-
   const colorScheme = useAppSelector((state) => state.colorScheme.value);
   const dispatch = useAppDispatch();
 
@@ -34,9 +33,22 @@ export const useColorSchemeHandler = () => {
 
   useEffect(() => {
     const cookieValueState = getCookie(COOKIE_NAME.COLOR_SCHEME_STATE);
-    dispatch(updateColorScheme(cookieValueState));
+
+    if (!cookieValueState) {
+      setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, 'light', {
+        expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
+      });
+    }
 
     const cookieValue = getCookie(COOKIE_NAME.COLOR_SCHEME);
+
+    if (!cookieValue) {
+      setCookie(COOKIE_NAME.COLOR_SCHEME, 'light', {
+        expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
+      });
+    }
+
+    dispatch(updateColorScheme(cookieValueState || 'light'));
     setColorScheme((cookieValue as MantineColorScheme) || 'light');
   });
 

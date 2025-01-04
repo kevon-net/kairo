@@ -19,8 +19,8 @@ import DrawerNavbarMain from '@/components/common/drawers/navbar/main';
 import MenuUser from '@/components/common/menus/user';
 import MenuNavbar from '@/components/common/menus/navbar';
 import DrawerUser from '@/components/common/drawers/user';
-import { SignIn as FragmentSignIn } from '@/components/partial/auth';
-import { SignUp as FragmentSignUp } from '@/components/partial/auth';
+import { SignIn as WrapperSignIn } from '@/components/wrapper/auth';
+import { SignUp as WrapperSignUp } from '@/components/wrapper/auth';
 
 import classes from './main.module.scss';
 import {
@@ -140,7 +140,7 @@ export default function Main({
           <Group justify="end">
             {!session ? (
               <Group gap={'xs'}>
-                <FragmentSignIn>
+                <WrapperSignIn>
                   <Button
                     size="xs"
                     variant={options?.absolute ? 'outline' : 'light'}
@@ -148,13 +148,13 @@ export default function Main({
                   >
                     Log In
                   </Button>
-                </FragmentSignIn>
+                </WrapperSignIn>
 
-                <FragmentSignUp>
+                <WrapperSignUp>
                   <Button size="xs" visibleFrom="md">
                     Sign Up
                   </Button>
-                </FragmentSignUp>
+                </WrapperSignUp>
               </Group>
             ) : desktop ? (
               <MenuUser />

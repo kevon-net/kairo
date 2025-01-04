@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { Burger, Button, Drawer, NavLink, Stack } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { SignIn as FragmentSignIn } from '../../../partial/auth';
+import { SignIn as WrapperSignIn } from '../../../wrapper/auth';
 
 import classes from './main.module.scss';
 
@@ -117,11 +117,11 @@ export default function Main({
 
           <Stack gap={'xs'} px={'xs'}>
             {!session && (
-              <FragmentSignIn>
+              <WrapperSignIn>
                 <Button size="xs" variant="light">
                   Log In
                 </Button>
-              </FragmentSignIn>
+              </WrapperSignIn>
             )}
           </Stack>
         </Stack>

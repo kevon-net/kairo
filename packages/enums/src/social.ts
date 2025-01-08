@@ -1,7 +1,0 @@
-export enum Platform {
-  TWITTER = 'TWITTER',
-  FACEBOOK = 'FACEBOOK',
-  LINKEDIN = 'LINKEDIN',
-  WHATSAPP = 'WHATSAPP',
-  INSTAGRAM = 'INSTAGRAM',
-}

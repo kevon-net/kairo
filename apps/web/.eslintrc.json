@@ -1,6 +1,0 @@
-{
-  "extends": ["../../.eslintrc.base.json", "next"],
-  "rules": {
-    "@next/next/no-img-element": "warn"
-  }
-}

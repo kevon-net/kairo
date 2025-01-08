@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// npx prisma migrate dev --name init -> sync database
+// npx prisma db push -> sync database
+
+// npx prisma studio -> view database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // uses connection pooling
+  directUrl = env("DIRECT_URL") // uses a direct connection
+}
+
+// enums
+
+enum Role {
+  USER
+  ADMIN
+  DEV
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  PUBLISHED
+}
+
+// models
+
+model Profile {
+  id        String  @id @db.Uuid
+  userName  String? @map("user_name")
+  firstName String? @map("first_name")
+  lastName  String? @map("last_name")
+  bio       String?
+  avatar    String?
+  phone     String?
+  role      Role    @default(USER)
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  addresses Address[]
+  posts     Post[]
+  comments  Comment[]
+  replies   Reply[]
+
+  @@map("profiles")
+}
+
+model Address {
+  id       String  @id @default(uuid()) @db.Uuid
+  title    String?
+  phone    String?
+  province String?
+  state    String?
+  city     String
+  country  String
+
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String  @map("profile_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  status    Status   @default(ACTIVE)
+
+  @@map("addresses")
+}
+
+model Post {
+  id            String  @id @default(uuid()) @db.Uuid
+  image         String
+  title         String
+  excerpt       String
+  content       String
+  allowComments Boolean @default(true) @map(name: "allow_comments")
+  viewCount     Int     @default(0) @map(name: "view_count")
+
+  profile    Profile?  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  String?   @map("profile_id") @db.Uuid
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String?   @map("category_id") @db.Uuid
+  tags       Tag[]
+  comments   Comment[]
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  status    Status   @default(DRAFT)
+
+  @@unique([profileId, title])
+  @@map(name: "posts")
+}
+
+model Category {
+  id    String @id @default(uuid()) @db.Uuid
+  title String
+
+  posts Post[]
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  status    Status   @default(ACTIVE)
+
+  @@unique([title])
+  @@map(name: "categories")
+}
+
+model Tag {
+  id    String @id @default(uuid()) @db.Uuid
+  title String
+
+  posts Post[]
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  status    Status   @default(ACTIVE)
+
+  @@unique([title])
+  @@map(name: "tags")
+}
+
+model Comment {
+  id      String  @id @default(uuid()) @db.Uuid
+  name    String?
+  content String
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String   @map("post_id") @db.Uuid
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String?  @map("profile_id") @db.Uuid
+  replies   Reply[]
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  status    Status   @default(ACTIVE)
+
+  @@unique([name, content, postId, profileId])
+  @@map(name: "comments")
+}
+
+model Reply {
+  id      String  @id @default(uuid()) @db.Uuid
+  name    String?
+  content String
+
+  replyId   String?  @map("reply_id")
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?  @map("comment_id") @db.Uuid
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String?  @map("profile_id") @db.Uuid
+
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  status    Status   @default(ACTIVE)
+
+  @@unique([name, content, replyId, commentId, profileId])
+  @@map(name: "replies")
+}

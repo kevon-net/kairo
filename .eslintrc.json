@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "@next/next/no-img-element": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "prettier/prettier": "warn"
+  }
+}

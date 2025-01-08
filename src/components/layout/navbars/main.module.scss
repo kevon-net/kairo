@@ -1,0 +1,33 @@
+.link {
+  padding: var(--mantine-spacing-md) 0;
+  font-size: var(--mantine-font-size-sm);
+  border-bottom: 1.5px solid transparent;
+  color: var(--mantine-color-text) !important;
+  transition: 0.25s color ease;
+
+  @include hover {
+    border-bottom: 1.5px solid var(--mantine-color-pri-6);
+    color: var(--mantine-color-pri-6) !important;
+  }
+}
+
+.linkAbsolute {
+  padding: var(--mantine-spacing-md) 0;
+  font-size: var(--mantine-font-size-sm);
+  border-bottom: 1.5px solid transparent;
+  color: var(--mantine-color-white) !important;
+  transition: 0.25s color ease;
+  font-weight: bold;
+
+  @include hover {
+    border-bottom: 1.5px solid var(--mantine-color-pri-6);
+    color: var(--mantine-color-pri-6) !important;
+  }
+}
+
+.linkActive {
+  font-weight: bold;
+
+  color: var(--mantine-color-pri-6) !important;
+  border-bottom: 1.5px solid var(--mantine-color-pri-6);
+}

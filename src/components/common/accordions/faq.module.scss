@@ -1,0 +1,14 @@
+.item {
+  border-radius: var(--mantine-radius-sm);
+  overflow: hidden;
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+.control {
+  border-radius: var(--mantine-radius-sm);
+  transition: 0.25s all ease;
+}
+
+.label {
+  font-weight: 700;
+}

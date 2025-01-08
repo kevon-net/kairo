@@ -1,0 +1,50 @@
+.root {
+  box-shadow: var(--mantine-shadow-xs);
+
+  &::before {
+    background-color: var(--mantine-color-body);
+  }
+
+  &[data-variant='success'] {
+    background-color: var(--mantine-color-green-6);
+
+    .icon {
+      background-color: var(--mantine-color-white);
+      color: var(--mantine-color-green-6);
+    }
+  }
+
+  &[data-variant='warning'] {
+    background-color: var(--mantine-color-yellow-6);
+
+    .icon {
+      background-color: var(--mantine-color-white);
+      color: var(--mantine-color-yellow-6);
+    }
+  }
+
+  &[data-variant='failed'] {
+    background-color: var(--mantine-color-red-6);
+
+    .icon {
+      background-color: var(--mantine-color-white);
+      color: var(--mantine-color-red-6);
+    }
+  }
+}
+
+.title {
+  color: var(--mantine-color-white) !important;
+}
+
+.description {
+  color: var(--mantine-color-white) !important;
+}
+
+.closeButton {
+  color: var(--mantine-color-white) !important;
+
+  @include hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}

@@ -38,7 +38,7 @@ export default function Support({ children }: { children: React.ReactNode }) {
             <FormContact
               props={{
                 subject: 'Technical Support',
-                message: `I just got a 404 error at ${BASE_URL}${pathname}`,
+                message: `I just got an error at ${BASE_URL}${pathname}`,
               }}
               options={{ modal: true, close }}
             />

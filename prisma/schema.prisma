@@ -3,8 +3,8 @@
 
 // npx prisma migrate dev --name init -> sync database
 // npx prisma db push -> sync database
-
 // npx prisma studio -> view database
+// npx prisma generate -> generate prisma client
 
 generator client {
   provider = "prisma-client-js"

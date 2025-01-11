@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import React from 'react';
 
 import { Anchor, Stack, Text, Title } from '@mantine/core';
@@ -10,6 +8,7 @@ import ModalDeleteAccount from '@/components/common/modals/delete/account';
 
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Security' };
 
 export default async function Security() {

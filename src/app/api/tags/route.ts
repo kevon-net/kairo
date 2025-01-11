@@ -1,6 +1,8 @@
 import prisma from '@/libraries/prisma';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const tagRecords = await prisma.tag.findMany({

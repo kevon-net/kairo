@@ -3,6 +3,7 @@ import { API_URL, HEADERS } from '@/data/constants';
 import { PostCreate, PostUpdate } from '@/types/models/post';
 
 const baseRequestUrl = `${API_URL}/posts`;
+
 export const postsGet = async () => {
   try {
     const request = new Request(baseRequestUrl, {
@@ -23,12 +24,16 @@ export const postsGet = async () => {
   }
 };
 
-export const postGet = async (slug: { postId: string }) => {
+export const postGet = async (params: {
+  postId: string;
+  options?: { cache?: RequestCache };
+}) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${slug.postId}`, {
+    const request = new Request(`${baseRequestUrl}/${params.postId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
+      cache: params.options?.cache,
     });
 
     const response = await fetch(request);

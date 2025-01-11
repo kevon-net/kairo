@@ -11,6 +11,8 @@ import IntroPage from '@/components/layout/intro/page';
 import { postsGet } from '@/handlers/requests/database/post';
 import { PostRelations } from '@/types/models/post';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Blog() {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 

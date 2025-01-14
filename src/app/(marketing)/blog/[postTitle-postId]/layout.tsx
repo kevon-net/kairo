@@ -8,6 +8,7 @@ import LayoutBody from '@/components/layout/body';
 import { typeParams } from '../layout';
 import { PostRelations } from '@/types/models/post';
 import { postsGet } from '@/handlers/requests/database/post';
+import { extractUuidFromParam } from '@/utilities/helpers/string';
 
 export const generateMetadata = async ({
   params,
@@ -16,7 +17,7 @@ export const generateMetadata = async ({
 }): Promise<Metadata> => {
   const { posts }: { posts: PostRelations[] } = await postsGet();
 
-  const [postId] = params['postTitle-postId'].split('-');
+  const postId = extractUuidFromParam(params['postTitle-postId']);
 
   const post = posts.find((p) => p.id == postId);
 

@@ -65,3 +65,26 @@ export const segmentFullName = (
 
   return { first: firstName, last: lastName };
 };
+
+/**
+ * Helper function to handle relative and absolute URLs
+ * @param {string} link - The URL to process
+ * @param {string} host - The host domain to prepend if URL is relative
+ * @returns {string} - The processed URL
+ */
+
+export const processUrl = (link: string, host: string) => {
+  // Remove trailing slash from host if present
+  const cleanHost = host.endsWith('/') ? host.slice(0, -1) : host;
+
+  // Check if the link is already absolute using URL constructor
+  try {
+    new URL(link);
+    return link; // Return as is if valid absolute URL
+  } catch {
+    // If URL constructor throws, it's likely relative
+    // Remove leading slash from link if present to avoid double slashes
+    const cleanLink = link.startsWith('/') ? link.slice(1) : link;
+    return `${cleanHost}/${cleanLink}`;
+  }
+};

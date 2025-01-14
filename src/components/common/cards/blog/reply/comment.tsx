@@ -41,7 +41,9 @@ export default function Comment({ props }: { props: PostCommentReply }) {
       <Stack gap={'lg'}>
         <Stack>
           <Group gap={'xs'}>
-            <Avatar size={40}>{initialize(name)}</Avatar>
+            <Avatar size={40} src={props.profile?.avatar}>
+              {initialize(name)}
+            </Avatar>
 
             <Stack gap={0}>
               <Title order={3} fz={'md'}>

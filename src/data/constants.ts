@@ -8,6 +8,9 @@ const URL_PREFIX =
 export const HOSTNAME = process.env.NEXT_PUBLIC_HOST;
 
 export const BASE_URL = `${URL_PREFIX}${HOSTNAME}`;
+export const HOSTED_BASE_URL = {
+  EXAMPLE: `https://example.com`,
+};
 
 export const API_URL = `${BASE_URL}/api`;
 

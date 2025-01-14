@@ -11,18 +11,7 @@ export type ReplyGet = Reply;
 
 // Type for fetched reply_comment with relations
 export type ReplyRelations = Prisma.ReplyGetPayload<{
-  select: {
-    id: true;
-    name: true;
-    content: true;
-    createdAt: true;
-    commentId: true;
-    replyId: true;
-  };
-
   include: {
-    profile: {
-      select: { firstName: true; lastName: true; avatar: true };
-    };
+    profile: true;
   };
 }>;

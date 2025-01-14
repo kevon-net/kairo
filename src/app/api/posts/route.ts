@@ -4,28 +4,12 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const postRecords = await prisma.post.findMany({
-      select: {
-        id: true,
-        image: true,
-        title: true,
-        excerpt: true,
-        createdAt: true,
-        viewCount: true,
-
+      include: {
         _count: { select: { comments: true } },
 
-        category: { select: { id: true, title: true } },
-
-        tags: { select: { id: true, title: true } },
-
-        profile: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            avatar: true,
-          },
-        },
+        category: true,
+        tags: true,
+        profile: true,
       },
 
       orderBy: { createdAt: 'desc' },

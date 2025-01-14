@@ -11,23 +11,10 @@ export async function GET(
 
       include: {
         comments: {
-          select: {
-            id: true,
-            name: true,
-            content: true,
-            createdAt: true,
-            postId: true,
-
+          include: {
             _count: { select: { replies: true } },
 
-            profile: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                avatar: true,
-              },
-            },
+            profile: true,
           },
 
           orderBy: { createdAt: 'desc' },

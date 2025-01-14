@@ -24,21 +24,8 @@ export async function GET(
         const replyRecords = await prisma.reply.findMany({
           where: { replyId: params.replyId },
 
-          select: {
-            id: true,
-            name: true,
-            content: true,
-            createdAt: true,
-            commentId: true,
-
-            profile: {
-              select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                avatar: true,
-              },
-            },
+          include: {
+            profile: true,
           },
 
           orderBy: { createdAt: 'desc' },

@@ -16,21 +16,8 @@ export async function GET(
           where: { id: params.commentId },
           include: {
             replies: {
-              select: {
-                id: true,
-                name: true,
-                content: true,
-                createdAt: true,
-                commentId: true,
-
-                profile: {
-                  select: {
-                    id: true,
-                    firstName: true,
-                    lastName: true,
-                    avatar: true,
-                  },
-                },
+              include: {
+                profile: true,
               },
 
               orderBy: { createdAt: 'desc' },

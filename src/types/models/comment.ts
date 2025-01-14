@@ -16,23 +16,12 @@ export type CommentRelations = Prisma.CommentGetPayload<{
 
     _count: { select: { replies: true } };
 
-    profile: {
-      select: { firstName: true; lastName: true; avatar: true };
-    };
-
+    profile: true;
     replies: {
-      select: {
-        id: true;
-        name: true;
-        content: true;
-        createdAt: true;
-        postId: true;
-
+      include: {
         _count: { select: { replies: true } };
 
-        profile: {
-          select: { id: true; firstName: true; lastName: true; avatar: true };
-        };
+        profile: true;
       };
     };
   };

@@ -151,15 +151,7 @@ export default async function Post({ params }: { params: typeParams }) {
         <Divider my={'lg'} />
 
         <Group justify="space-between">
-          <CardBlogAuthor
-            props={{
-              name: !post.profile
-                ? 'Anonymous'
-                : `${post.profile.firstName} ${post.profile.lastName}` ||
-                  'No Name',
-              date: post.createdAt,
-            }}
-          />
+          <CardBlogAuthor props={post.profile} />
 
           {/* <Text fw={'bold'}>
             Tags:{' '}

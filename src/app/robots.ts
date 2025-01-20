@@ -5,15 +5,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      // disallow: "/private/",
+      disallow: [
+        '/api/',
+        '/*?ref=*', // Prevent crawling of referral URLs
+        '/*?utm_*', // Prevent crawling of UTM URLs
+        // Add more private routes here
+      ],
     },
-    // sitemap: "https://acme.com/sitemap.xml",
+    sitemap: 'https://example.com/sitemap.xml',
   };
 }
-
-// Output
-// User-Agent: *
-// Allow: /
-// Disallow: /private/
-
-// Sitemap: https://acme.com/sitemap.xml

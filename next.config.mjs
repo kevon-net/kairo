@@ -58,6 +58,24 @@ const nextConfig = {
     config.externals = [...config.externals, 'bcrypt'];
     return config;
   },
+
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'x-google-site-verification',
+            value: 'x-google-site-verification-code',
+          },
+          {
+            key: 'x-bing-site-verification',
+            value: 'x-bing-site-verification-code',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

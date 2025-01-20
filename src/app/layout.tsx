@@ -30,18 +30,15 @@ import { ModalsProvider } from '@mantine/modals';
 
 import appTheme from '@/styles/theme';
 import appResolver from '@/styles/resolver';
-
 import appData from '@/data/app';
 import { linkify } from '@/utilities/formatters/string';
-
 import { createClient } from '@/libraries/supabase/server';
-
 import AffixOffline from '@/components/common/affixi/offline';
 import { COOKIE_NAME } from '@/data/constants';
-
 import ProviderStore from '@/components/providers/store';
 import { cookies } from 'next/headers';
 import AffixiCookies from '@/components/common/affixi/cookies';
+// import GoogleAnalytics from '@/components/seo/analytics';
 
 const noto = DM_Sans({ subsets: ['latin'] });
 
@@ -63,6 +60,8 @@ export default async function RootLayout({
 
   const supabase = await createClient();
   const { data: session } = await supabase.auth.getUser();
+
+  // const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
 
   return (
     <html
@@ -101,6 +100,8 @@ export default async function RootLayout({
         </ProviderStore>
 
         {/* <SpeedInsights /> */}
+
+        {/* <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} /> */}
       </body>
     </html>
   );

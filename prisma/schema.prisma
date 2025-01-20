@@ -34,7 +34,7 @@ enum Status {
 // models
 
 model Profile {
-  id        String  @id @db.Uuid
+  id        String  @id
   userName  String? @map("user_name")
   firstName String? @map("first_name")
   lastName  String? @map("last_name")
@@ -55,7 +55,7 @@ model Profile {
 }
 
 model Address {
-  id       String  @id @default(uuid()) @db.Uuid
+  id       String  @id @default(uuid())
   title    String?
   phone    String?
   province String?
@@ -64,7 +64,7 @@ model Address {
   country  String
 
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String  @map("profile_id") @db.Uuid
+  profileId String  @map("profile_id")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")
@@ -74,7 +74,7 @@ model Address {
 }
 
 model Post {
-  id            String  @id @default(uuid()) @db.Uuid
+  id            String  @id @default(uuid())
   image         String
   title         String
   excerpt       String
@@ -83,9 +83,9 @@ model Post {
   viewCount     Int     @default(0) @map(name: "view_count")
 
   profile    Profile?  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId  String?   @map("profile_id") @db.Uuid
+  profileId  String?   @map("profile_id")
   category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  categoryId String?   @map("category_id") @db.Uuid
+  categoryId String?   @map("category_id")
   tags       Tag[]
   comments   Comment[]
 
@@ -98,7 +98,7 @@ model Post {
 }
 
 model Category {
-  id    String @id @default(uuid()) @db.Uuid
+  id    String @id @default(uuid())
   title String
 
   posts Post[]
@@ -112,7 +112,7 @@ model Category {
 }
 
 model Tag {
-  id    String @id @default(uuid()) @db.Uuid
+  id    String @id @default(uuid())
   title String
 
   posts Post[]
@@ -126,14 +126,14 @@ model Tag {
 }
 
 model Comment {
-  id      String  @id @default(uuid()) @db.Uuid
+  id      String  @id @default(uuid())
   name    String?
   content String
 
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String   @map("post_id") @db.Uuid
+  postId    String   @map("post_id")
   profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String?  @map("profile_id") @db.Uuid
+  profileId String?  @map("profile_id")
   replies   Reply[]
 
   createdAt DateTime @default(now()) @map(name: "created_at")
@@ -145,15 +145,15 @@ model Comment {
 }
 
 model Reply {
-  id      String  @id @default(uuid()) @db.Uuid
+  id      String  @id @default(uuid())
   name    String?
   content String
 
   replyId   String?  @map("reply_id")
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  commentId String?  @map("comment_id") @db.Uuid
+  commentId String?  @map("comment_id")
   profile   Profile? @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String?  @map("profile_id") @db.Uuid
+  profileId String?  @map("profile_id")
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @updatedAt @map(name: "updated_at")

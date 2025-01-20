@@ -9,6 +9,8 @@ import ModalDeleteAccount from '@/components/common/modals/delete/account';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
+
 export const metadata: Metadata = { title: 'Security' };
 
 export default async function Security() {

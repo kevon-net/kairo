@@ -12,6 +12,7 @@ import { postsGet } from '@/handlers/requests/database/post';
 import { PostRelations } from '@/types/models/post';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
 
 export default async function Blog() {
   const { posts }: { posts: PostRelations[] } = await postsGet();

@@ -73,10 +73,10 @@ export default async function RootLayout({
           defaultColorScheme={(colorScheme || 'light') as MantineColorScheme}
         />
 
-        <meta
+        {/* <meta
           name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        /> */}
       </head>
 
       <body className={noto.className}>

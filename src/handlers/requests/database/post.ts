@@ -10,7 +10,6 @@ export const postsGet = async () => {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
-      cache: 'no-cache',
     });
 
     const response = await fetch(request);
@@ -24,16 +23,12 @@ export const postsGet = async () => {
   }
 };
 
-export const postGet = async (params: {
-  postId: string;
-  options?: { cache?: RequestCache };
-}) => {
+export const postGet = async (params: { postId: string }) => {
   try {
     const request = new Request(`${baseRequestUrl}/${params.postId}`, {
       method: EnumRequest.GET,
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
-      cache: params.options?.cache,
     });
 
     const response = await fetch(request);

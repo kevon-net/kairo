@@ -42,7 +42,6 @@ export default async function Post({ params }: { params: typeParams }) {
 
   const { post }: { post: PostRelations } = await postGet({
     postId: postId,
-    options: { cache: 'no-store' },
   });
 
   return (

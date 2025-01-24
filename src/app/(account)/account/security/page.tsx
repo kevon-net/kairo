@@ -7,9 +7,10 @@ import LayoutSection from '@/components/layout/section';
 import ModalDeleteAccount from '@/components/common/modals/delete/account';
 
 import { Metadata } from 'next';
+import { REVALIDATE } from '@/data/constants';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = REVALIDATE.HOUR;
 
 export const metadata: Metadata = { title: 'Security' };
 

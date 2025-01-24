@@ -10,9 +10,10 @@ import IntroPage from '@/components/layout/intro/page';
 
 import { postsGet } from '@/handlers/requests/database/post';
 import { PostRelations } from '@/types/models/post';
+import { REVALIDATE } from '@/data/constants';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = REVALIDATE.HOUR;
 
 export default async function Blog() {
   const { posts }: { posts: PostRelations[] } = await postsGet();

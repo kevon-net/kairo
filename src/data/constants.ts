@@ -14,6 +14,15 @@ export const HOSTED_BASE_URL = {
 
 export const API_URL = `${BASE_URL}/api`;
 
+export const REVALIDATE = {
+  MINUTE: 60,
+  HOUR: 60 * 60,
+  DAY: 60 * 60 * 24,
+  WEEK: 60 * 60 * 24 * 7,
+  MONTH: 60 * 60 * 24 * 30,
+  YEAR: 60 * 60 * 24 * 365,
+};
+
 export const AUTH_URLS = {
   SIGN_IN: `${BASE_URL}/auth/sign-in`,
   SIGN_UP: `${BASE_URL}/auth/sign-up`,

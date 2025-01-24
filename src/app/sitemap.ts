@@ -1,3 +1,4 @@
+import { REVALIDATE } from '@/data/constants';
 import { categoriesGet } from '@/handlers/requests/database/category';
 import { postsGet } from '@/handlers/requests/database/post';
 import { tagsGet } from '@/handlers/requests/database/tag';
@@ -8,7 +9,7 @@ import { linkify } from '@/utilities/formatters/string';
 import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = REVALIDATE.HOUR;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://example.com';

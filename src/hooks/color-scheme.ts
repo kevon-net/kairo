@@ -17,7 +17,7 @@ export const useColorSchemeHandler = () => {
 
     // update scheme state cookie
     setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, value, {
-      expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
+      expiryInSeconds: EXPIRY.WEEK,
     });
 
     const scheme =
@@ -28,7 +28,7 @@ export const useColorSchemeHandler = () => {
 
     // update scheme cookie
     setCookie(COOKIE_NAME.COLOR_SCHEME, scheme, {
-      expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
+      expiryInSeconds: EXPIRY.WEEK,
     });
   };
 
@@ -37,7 +37,7 @@ export const useColorSchemeHandler = () => {
 
     if (!cookieValueState) {
       setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, 'light', {
-        expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
+        expiryInSeconds: EXPIRY.WEEK,
       });
     }
 
@@ -45,7 +45,7 @@ export const useColorSchemeHandler = () => {
 
     if (!cookieValue) {
       setCookie(COOKIE_NAME.COLOR_SCHEME, 'light', {
-        expiryInSeconds: EXPIRY.SESSION.EXTENDED.SEC,
+        expiryInSeconds: EXPIRY.WEEK,
       });
     }
 

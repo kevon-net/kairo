@@ -1,31 +1,28 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Affix, AffixBaseProps } from '@mantine/core';
+import { Affix } from '@mantine/core';
 
 import WrapperTransition from '@/components/wrapper/transition';
-import CardCookies from '../cards/cookies';
 import { getCookie } from '@/utilities/helpers/cookie';
 import { COOKIE_NAME } from '@/data/constants';
 
-export default function Cookies({
-  position = {
-    bottom: 'var(--mantine-spacing-xl)',
-    left: 'var(--mantine-spacing-xl)',
-  },
-  ...restProps
-}: { position?: AffixBaseProps['position'] } & Omit<
-  AffixBaseProps,
-  'position' | 'children'
->) {
+export default function Cookies({ children }: { children: React.ReactNode }) {
   const consentCookie = getCookie(COOKIE_NAME.CONSENT.COOKIES);
-  const [opened, setOpened] = useState(consentCookie == 'true' ? false : true);
 
   return (
-    <Affix position={position} {...restProps}>
-      <WrapperTransition transition={'slide-right'} mounted={opened}>
-        <CardCookies close={() => setOpened(false)} />
+    <Affix
+      position={{
+        bottom: 'var(--mantine-spacing-xl)',
+        left: 'var(--mantine-spacing-xl)',
+      }}
+    >
+      <WrapperTransition
+        transition={'slide-right'}
+        mounted={consentCookie == 'true' ? false : true}
+      >
+        {children}
       </WrapperTransition>
     </Affix>
   );

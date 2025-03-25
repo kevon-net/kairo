@@ -1,4 +1,4 @@
-const baseUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images`;
+const baseUrl = `/images`;
 const iconUrl = `https://img.icons8.com`;
 
 export const images = {

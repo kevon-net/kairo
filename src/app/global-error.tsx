@@ -9,7 +9,7 @@ import {
   ICON_STROKE_WIDTH,
   SECTION_SPACING,
 } from '@/data/constants';
-import IntroPage from '@/components/layout/intro/page';
+import IntroPage from '@/components/layout/intros/page';
 
 export default function GlobalError({
   // error,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Paper } from '@mantine/core';
+import { alpha } from '@mantine/core';
 
 import classes from './glassmorphism.module.scss';
 
@@ -10,9 +10,11 @@ export default function Glassmorphism({
   children: React.ReactNode;
 }) {
   return (
-    <Paper className={classes.root}>
-      <div className={classes.underlay}></div>
+    <div
+      className={classes.bg}
+      style={{ backgroundColor: alpha('var(--mantine-color-body)', 0.9) }}
+    >
       {children}
-    </Paper>
+    </div>
   );
 }

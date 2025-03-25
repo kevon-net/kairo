@@ -1,20 +1,14 @@
 import React from 'react';
-
 import Link from 'next/link';
-
-import { Stack, Button, Flex, Group } from '@mantine/core';
-
+import { Stack, Button, Group } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
-
 import LayoutSection from '@/components/layout/section';
-
 import {
   ICON_SIZE,
   ICON_STROKE_WIDTH,
   SECTION_SPACING,
 } from '@/data/constants';
-import ModalCommunicationSupport from '@/components/common/modals/communication/support';
-import IntroPage from '@/components/layout/intro/page';
+import IntroPage from '@/components/layout/intros/page';
 
 export default function NotFound() {
   return (
@@ -31,26 +25,16 @@ export default function NotFound() {
         />
 
         <Group justify="center">
-          <Flex
-            direction={{ base: 'column', xs: 'row' }}
-            align={'center'}
-            gap={'md'}
+          <Button
+            leftSection={
+              <IconArrowLeft size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            }
+            component={Link}
+            href={'/'}
+            variant="light"
           >
-            <Button
-              leftSection={
-                <IconArrowLeft size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-              }
-              component={Link}
-              href={'/'}
-              variant="light"
-            >
-              Go To Home Page
-            </Button>
-
-            <ModalCommunicationSupport>
-              <Button>Contact Support</Button>
-            </ModalCommunicationSupport>
-          </Flex>
+            Go To Home Page
+          </Button>
         </Group>
       </Stack>
     </LayoutSection>

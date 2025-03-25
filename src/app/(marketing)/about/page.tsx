@@ -3,7 +3,7 @@ import React from 'react';
 import { Metadata } from 'next';
 
 import LayoutPage from '@/components/layout/page';
-import IntroPage from '@/components/layout/intro/page';
+import IntroPage from '@/components/layout/intros/page';
 
 import appData from '@/data/app';
 

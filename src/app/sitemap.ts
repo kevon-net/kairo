@@ -1,15 +1,8 @@
-import { REVALIDATE } from '@/data/constants';
-import { categoriesGet } from '@/handlers/requests/database/category';
-import { postsGet } from '@/handlers/requests/database/post';
-import { tagsGet } from '@/handlers/requests/database/tag';
-import { CategoryRelations } from '@/types/models/category';
-import { PostRelations } from '@/types/models/post';
-import { TagRelations } from '@/types/models/tag';
-import { linkify } from '@/utilities/formatters/string';
+import { EXPIRY } from '@/data/constants';
 import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = REVALIDATE.HOUR;
+export const revalidate = EXPIRY.DAY;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://example.com';
@@ -25,35 +18,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1 : 0.8,
   }));
 
-  const { posts }: { posts: PostRelations[] } = await postsGet();
-
-  const postRoutes = posts.map((post) => ({
-    url: `${baseUrl}/blog/${linkify(post.title)}-${post.id}`,
-    lastModified: post.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.5,
-  }));
-
-  const { categories }: { categories: CategoryRelations[] } =
-    await categoriesGet();
-
-  const categoryRoutes = categories.map((category) => ({
-    url: `${baseUrl}/blog/categories/${category.id}`,
-    lastModified: category.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.5,
-  }));
-
-  const { tags }: { tags: TagRelations[] } = await tagsGet();
-
-  const tagRoutes = tags.map((tag) => ({
-    url: `${baseUrl}/blog/tags/${tag.id}`,
-    lastModified: tag.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.5,
-  }));
-
-  const dynamicRoutes = [...postRoutes, ...categoryRoutes, ...tagRoutes];
-
-  return [...staticRoutes, ...dynamicRoutes];
+  return [...staticRoutes];
 }

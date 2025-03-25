@@ -1,0 +1,26 @@
+.root {
+  border-radius: 0;
+  padding-top: var(--mantine-spacing-xs);
+  padding-bottom: var(--mantine-spacing-xs);
+  background-image: linear-gradient(
+    -60deg,
+    var(--mantine-color-pri-4) 0%,
+    var(--mantine-color-pri-7) 100%
+  );
+}
+
+.icon {
+  color: var(--mantine-color-body);
+}
+
+.label {
+  color: var(--mantine-color-body);
+}
+
+.message {
+  color: var(--mantine-color-body);
+}
+
+.closeButton {
+  color: var(--mantine-color-body);
+}

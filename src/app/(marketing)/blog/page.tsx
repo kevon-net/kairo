@@ -1,7 +1,7 @@
 import React from 'react';
 import LayoutPage from '@/components/layout/page';
-import LayoutSection from '@/components/layout/section';
 import IntroPage from '@/components/layout/intros/page';
+// import LayoutSection from '@/components/layout/section';
 
 export default async function Blog() {
   return (
@@ -14,9 +14,8 @@ export default async function Blog() {
         }}
       />
 
-      <LayoutSection id={'page-blog-grid'} margined>
-        blog
-      </LayoutSection>
+      {/* <LayoutSection id={'page-blog-grid'} margined>
+      </LayoutSection> */}
     </LayoutPage>
   );
 }

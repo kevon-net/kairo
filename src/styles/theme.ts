@@ -88,7 +88,7 @@ const appTheme = createTheme({
         mx: 'auto',
       },
 
-      classNames: (_: any, { size }: { size?: any }) => ({
+      classNames: (_: unknown, { size }: { size?: unknown }) => ({
         root: cx({ [classesContainer.root]: size === 'responsive' }),
       }),
     }),

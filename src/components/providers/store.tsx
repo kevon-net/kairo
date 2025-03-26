@@ -14,7 +14,7 @@ export default function Store({
   colorScheme: string;
   children: React.ReactNode;
 }) {
-  const storeRef = useRef<AppStore>();
+  const storeRef = useRef<AppStore>(undefined);
 
   const store = useMemo(() => {
     if (storeRef.current) return storeRef.current;

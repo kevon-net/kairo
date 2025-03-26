@@ -1,13 +1,15 @@
-/** @type {import('next').NextConfig} */
+import type { NextConfig } from 'next';
 
-const nextConfig = {
+const nextConfig: NextConfig = {
+  /* config options here */
+
   sassOptions: {
     prependData: `@import "./_mantine.scss";`,
   },
 
   images: {
-    // unoptimized: true,
-    // dangerouslyAllowSVG: true,
+    unoptimized: false,
+    dangerouslyAllowSVG: false,
     remotePatterns: [
       {
         protocol: 'https',
@@ -35,28 +37,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'flagcdn.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.wikimedia.org',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
         hostname: '**.supabase.co',
         port: '',
         pathname: '/**',
       },
     ],
-  },
-
-  webpack: (config) => {
-    config.externals = [...config.externals, 'bcrypt'];
-    return config;
   },
 
   async headers() {

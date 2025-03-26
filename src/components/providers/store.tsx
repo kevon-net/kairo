@@ -5,15 +5,9 @@ import React, { useMemo, useRef } from 'react';
 import { Provider } from 'react-redux';
 
 import { makeStore, AppStore } from '@/libraries/redux/store';
-import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
+import { updateSession } from '@/libraries/redux/slices/session';
 
-export default function Store({
-  colorScheme,
-  children,
-}: {
-  colorScheme: string;
-  children: React.ReactNode;
-}) {
+export default function Store({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<AppStore>(undefined);
 
   const store = useMemo(() => {
@@ -23,10 +17,9 @@ export default function Store({
     const newStore = makeStore();
 
     // initialize store
-    newStore.dispatch(updateColorScheme(colorScheme));
+    newStore.dispatch(updateSession({ id: 'sid-1' }));
 
     return newStore;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <Provider store={store}>{children}</Provider>;

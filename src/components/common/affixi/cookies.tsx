@@ -5,11 +5,11 @@ import React from 'react';
 import { Affix } from '@mantine/core';
 
 import WrapperTransition from '@/components/wrapper/transition';
-import { getCookie } from '@/utilities/helpers/cookie';
+import { getCookieClient } from '@/utilities/helpers/cookie-client';
 import { COOKIE_NAME } from '@/data/constants';
 
 export default function Cookies({ children }: { children: React.ReactNode }) {
-  const consentCookie = getCookie(COOKIE_NAME.CONSENT.COOKIES);
+  const consentCookie = getCookieClient(COOKIE_NAME.CONSENT.COOKIES);
 
   return (
     <Affix

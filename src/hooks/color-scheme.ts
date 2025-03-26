@@ -1,57 +1,61 @@
+'use client';
+
 import { MantineColorScheme, useMantineColorScheme } from '@mantine/core';
-import { COOKIE_NAME, EXPIRY } from '@/data/constants';
-import { setCookie, getCookie } from '@/utilities/helpers/cookie';
+import { COOKIE_NAME, DEFAULT_COLOR_SCHEME, EXPIRY } from '@/data/constants';
 import { getOSTheme } from '@/utilities/helpers/theme';
-import { useAppDispatch, useAppSelector } from './redux';
-import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { setCookieServer } from '@/utilities/helpers/cookie-server';
+import {
+  getFromLocalStorage,
+  saveToLocalStorage,
+} from '@/utilities/helpers/storage';
+import { getCookieClient } from '@/utilities/helpers/cookie-client';
 
-export const useColorSchemeHandler = () => {
-  const { setColorScheme } = useMantineColorScheme({ keepTransitions: true });
-  const colorScheme = useAppSelector((state) => state.colorScheme.value);
-  const dispatch = useAppDispatch();
+export const useColorScheme = () => {
+  const { setColorScheme: setMantineColorScheme } = useMantineColorScheme({
+    keepTransitions: true,
+  });
 
-  const handleChange = (value: string) => {
-    // update in state
-    dispatch(updateColorScheme(value));
+  // get value from cookie
+  const cookieColorScheme = getCookieClient(COOKIE_NAME.COLOR_SCHEME);
 
-    // update scheme state cookie
-    setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, value, {
+  let localStorageColorScheme = DEFAULT_COLOR_SCHEME;
+
+  // if cookie is not found
+  if (!cookieColorScheme) {
+    // get value from local storage
+    localStorageColorScheme = getFromLocalStorage(COOKIE_NAME.COLOR_SCHEME);
+  }
+
+  const [colorScheme, setColorScheme] = useState<MantineColorScheme>(
+    (cookieColorScheme as MantineColorScheme) ||
+      (localStorageColorScheme as MantineColorScheme) ||
+      (DEFAULT_COLOR_SCHEME as MantineColorScheme)
+  );
+
+  const handleChange = async () => {
+    const binaryColorScheme = getOSTheme(colorScheme);
+
+    // update scheme (visual)
+    setMantineColorScheme(binaryColorScheme);
+
+    // update color scheme state cookie
+    await setCookieServer(COOKIE_NAME.COLOR_SCHEME_STATE, binaryColorScheme, {
       expiryInSeconds: EXPIRY.WEEK,
     });
 
-    const scheme =
-      value == 'light' ? 'light' : value == 'dark' ? 'dark' : getOSTheme();
-
-    // update mantine color scheme
-    setColorScheme(scheme as MantineColorScheme);
-
-    // update scheme cookie
-    setCookie(COOKIE_NAME.COLOR_SCHEME, scheme, {
+    // initialize/update cookie
+    await setCookieServer(COOKIE_NAME.COLOR_SCHEME, colorScheme, {
       expiryInSeconds: EXPIRY.WEEK,
     });
+
+    // initialize/update local storage
+    saveToLocalStorage(COOKIE_NAME.COLOR_SCHEME, colorScheme);
   };
 
   useEffect(() => {
-    const cookieValueState = getCookie(COOKIE_NAME.COLOR_SCHEME_STATE);
+    handleChange();
+  }, [colorScheme]);
 
-    if (!cookieValueState) {
-      setCookie(COOKIE_NAME.COLOR_SCHEME_STATE, 'light', {
-        expiryInSeconds: EXPIRY.WEEK,
-      });
-    }
-
-    const cookieValue = getCookie(COOKIE_NAME.COLOR_SCHEME);
-
-    if (!cookieValue) {
-      setCookie(COOKIE_NAME.COLOR_SCHEME, 'light', {
-        expiryInSeconds: EXPIRY.WEEK,
-      });
-    }
-
-    dispatch(updateColorScheme(cookieValueState || 'light'));
-    setColorScheme((cookieValue as MantineColorScheme) || 'light');
-  });
-
-  return { colorScheme, handleChange };
+  return { colorScheme, setColorScheme };
 };

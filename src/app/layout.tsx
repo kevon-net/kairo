@@ -6,8 +6,7 @@ import {
   MantineProvider,
 } from '@mantine/core';
 import appTheme from '@/styles/theme';
-import { cookies } from 'next/headers';
-import { COOKIE_NAME } from '@/data/constants';
+import { COOKIE_NAME, DEFAULT_COLOR_SCHEME } from '@/data/constants';
 import appResolver from '@/styles/resolver';
 import ProviderStore from '@/components/providers/store';
 import { Notifications } from '@mantine/notifications';
@@ -21,6 +20,7 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 
 import '../styles/globals.scss';
+import { getCookieServer } from '@/utilities/helpers/cookie-server';
 
 // fonts
 const geistSans = Geist({
@@ -35,9 +35,8 @@ const geistMono = Geist_Mono({
 
 // metadata
 export const metadata: Metadata = {
-  title: 'Next Static Template',
-  description:
-    'A lightweight and optimized Next.js template for building fast, SEO-friendly static websites.',
+  title: appData.name.app,
+  description: appData.companyOneLiner,
 };
 
 export default async function RootLayout({
@@ -45,24 +44,24 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const colorScheme = cookieStore.get(COOKIE_NAME.COLOR_SCHEME)?.value;
-  const colorSchemeState = cookieStore.get(
-    COOKIE_NAME.COLOR_SCHEME_STATE
-  )?.value;
+  const colorScheme = await getCookieServer(COOKIE_NAME.COLOR_SCHEME_STATE);
 
   return (
     <html
       lang="en"
-      data-mantine-color-scheme={(colorScheme || 'light') as MantineColorScheme}
+      data-mantine-color-scheme={colorScheme || DEFAULT_COLOR_SCHEME}
     >
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Next Static Template</title>
+
+        <title>{appData.name.app}</title>
+        <meta name="description" content={appData.companyOneLiner} />
 
         <ColorSchemeScript
-          defaultColorScheme={(colorScheme || 'light') as MantineColorScheme}
+          defaultColorScheme={
+            (colorScheme as MantineColorScheme) || DEFAULT_COLOR_SCHEME
+          }
         />
       </head>
 
@@ -70,10 +69,12 @@ export default async function RootLayout({
         <MantineProvider
           theme={appTheme}
           cssVariablesResolver={appResolver}
-          defaultColorScheme={(colorScheme || 'light') as MantineColorScheme}
+          defaultColorScheme={
+            (colorScheme as MantineColorScheme) || DEFAULT_COLOR_SCHEME
+          }
           classNamesPrefix={linkify(appData.name.app)}
         >
-          <ProviderStore colorScheme={colorSchemeState || 'light'}>
+          <ProviderStore>
             {children}
 
             <Notifications limit={3} />

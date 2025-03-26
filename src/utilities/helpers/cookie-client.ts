@@ -1,4 +1,6 @@
-export const setCookie = (
+'use client';
+
+export const setCookieClient = (
   name: string,
   value: any,
   options: {
@@ -21,7 +23,7 @@ export const setCookie = (
   document.cookie = `${name}=${cookieValue}; expires=${date.toUTCString()}; SameSite=${options.sameSite || 'Strict'}; path=${options.path || '/'}`;
 };
 
-export const getCookie = (cookieName: string): string | null => {
+export const getCookieClient = (cookieName: string): string | null => {
   if (typeof document === 'undefined') {
     return null;
   }

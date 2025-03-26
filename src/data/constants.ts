@@ -12,6 +12,8 @@ export const HOSTED_BASE_URL = {
   EXAMPLE: `https://example.com`,
 };
 
+export const DEFAULT_COLOR_SCHEME: 'light' | 'dark' = 'light';
+
 export const API_URL = `${BASE_URL}/api`;
 
 export const ICON_SIZE = 20;

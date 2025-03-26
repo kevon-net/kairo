@@ -1,6 +1,14 @@
-import sample from './sample';
+const sampleSentence =
+  'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis.';
 
-const companyName = 'Brix';
+const sampleProse =
+  'Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices. Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices. Lorem ipsum dolor sit amet consectetur adipiscing eli mattis sit phasellus mollis sit aliquam sit nullam neque ultrices.';
+
+const sample = {
+  text: { sentence: sampleSentence, prose: sampleProse },
+};
+
+const companyName = 'Next Static Template';
 const appName = companyName;
 const companyOneLiner = sample.text.sentence;
 const companyDescription = sample.text.prose;

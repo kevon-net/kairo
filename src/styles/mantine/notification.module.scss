@@ -44,7 +44,7 @@
 .closeButton {
   color: var(--mantine-color-white) !important;
 
-  @include hover {
+  @include mantine.hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
 }

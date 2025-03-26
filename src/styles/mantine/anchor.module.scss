@@ -2,7 +2,7 @@
   color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
   transition: 0.25s all ease;
 
-  @include hover {
+  @include mantine.hover {
     color: light-dark(var(--mantine-color-pri-9), var(--mantine-color-pri-6));
   }
 }

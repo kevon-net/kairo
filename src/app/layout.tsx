@@ -8,7 +8,6 @@ import {
 import appTheme from '@/styles/theme';
 import { COOKIE_NAME, DEFAULT_COLOR_SCHEME } from '@/data/constants';
 import appResolver from '@/styles/resolver';
-import ProviderStore from '@/components/providers/store';
 import { Notifications } from '@mantine/notifications';
 import { linkify } from '@/utilities/formatters/string';
 import appData from '@/data/app';
@@ -44,24 +43,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const colorScheme = await getCookieServer(COOKIE_NAME.COLOR_SCHEME_STATE);
+  const coScCo = await getCookieServer(COOKIE_NAME.COLOR_SCHEME_STATE);
+  const colorScheme = coScCo || DEFAULT_COLOR_SCHEME;
 
   return (
-    <html
-      lang="en"
-      data-mantine-color-scheme={colorScheme || DEFAULT_COLOR_SCHEME}
-    >
+    <html lang="en" data-mantine-color-scheme={colorScheme}>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        <title>{appData.name.app}</title>
         <meta name="description" content={appData.companyOneLiner} />
 
+        <title>{appData.name.app}</title>
+
         <ColorSchemeScript
-          defaultColorScheme={
-            (colorScheme as MantineColorScheme) || DEFAULT_COLOR_SCHEME
-          }
+          defaultColorScheme={colorScheme as MantineColorScheme}
         />
       </head>
 
@@ -69,16 +64,12 @@ export default async function RootLayout({
         <MantineProvider
           theme={appTheme}
           cssVariablesResolver={appResolver}
-          defaultColorScheme={
-            (colorScheme as MantineColorScheme) || DEFAULT_COLOR_SCHEME
-          }
+          defaultColorScheme={colorScheme as MantineColorScheme}
           classNamesPrefix={linkify(appData.name.app)}
         >
-          <ProviderStore>
-            {children}
+          {children}
 
-            <Notifications limit={3} />
-          </ProviderStore>
+          <Notifications limit={3} />
         </MantineProvider>
       </body>
     </html>

@@ -1,8 +1,6 @@
-import { EXPIRY } from '@/data/constants';
 import { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = EXPIRY.DAY;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://example.com';

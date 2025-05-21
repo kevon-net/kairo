@@ -17,7 +17,7 @@ export const hours = {
 export const locations = {
   main: {
     location: '410 Terry Ave. North, Seattle, WA 98109',
-    pin: '#pin',
+    pin: '#map-pin',
   },
 };
 

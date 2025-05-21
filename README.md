@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Static Site Template
+
+A lightweight and optimized Next.js template for building fast, SEO-friendly static websites.
+
+## Features
+
+- **Next.js 14 (App Router)** – Modern, efficient, and optimized for static site generation.
+- **TypeScript Support** – Ensures type safety and better development experience.
+- **CSS Modules** – Scoped styling for better maintainability.
+- **ESLint & Prettier** – Enforced code quality and formatting.
+- **Fast & SEO-Friendly** – Optimized for performance and search engine indexing.
+- **Minimal Dependencies** – No unnecessary bloat; easy to customize.
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the Repository
 
-```bash
+```sh
+git clone https://github.com/devokrann/next-static.git
+cd next-static
+```
+
+### 2. Install Dependencies
+
+```sh
+npm install
+# or
+yarn install
+```
+
+### 3. Run the Development Server
+
+```sh
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the template in action.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+npm run build
+# or
+yarn build
+```
 
-## Learn More
+### 5. Export Static Files
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run export
+# or
+yarn export
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This generates a fully static version of the site inside the `out` directory.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Folder Structure
 
-## Deploy on Vercel
+```
+nextjs-static-template/
+├── public/             # Static assets (images, favicon, etc.)
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── app/            # Page routes
+│   ├── styles/         # Global and module-based styles
+│   ├── utils/          # Utility functions
+├── .eslintrc.js        # ESLint configuration
+├── .prettierrc         # Prettier configuration
+├── next.config.js      # Next.js configuration
+├── package.json        # Project metadata and scripts
+└── README.md           # Project documentation
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This template is optimized for deployment on platforms like:
+
+- **Vercel** (recommended)
+- **Netlify**
+- **GitHub Pages (via static export)**
+
+### Deploying to Vercel
+
+```sh
+npx vercel
+```
+
+Follow the on-screen instructions to complete the deployment.
+
+## Contributing
+
+Feel free to submit issues or pull requests to improve this template.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

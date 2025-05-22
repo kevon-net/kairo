@@ -1,6 +1,4 @@
-import { BASE_URL } from '@/data/constants';
-
-const imageUrl = `${BASE_URL}/images`;
+const imageUrl = `/images`;
 const iconUrl = `https://img.icons8.com`;
 
 export const images = {

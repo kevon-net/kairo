@@ -10,6 +10,10 @@ const appTheme = createTheme({
   primaryShade: { light: 6, dark: 6 },
   cursorType: 'pointer',
 
+  headings: {
+    fontFamily: 'var(--font-geist-sans)',
+  },
+
   components: {
     Container: Container.extend({
       defaultProps: {

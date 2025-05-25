@@ -7,7 +7,7 @@ import { updateSession } from '@/libraries/redux/slices/session';
 import { generateUUID } from '@/utilities/generators/id';
 
 export default function Store({
-  session,
+  session = { id: generateUUID() },
   children,
 }: {
   session?: { id: string };
@@ -21,7 +21,7 @@ export default function Store({
   const store = storeRef.current;
 
   // initialize store
-  if (session) store.dispatch(updateSession(session || { id: generateUUID() }));
+  if (session) store.dispatch(updateSession(session));
 
   return <Provider store={store}>{children}</Provider>;
 }

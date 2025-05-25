@@ -2,8 +2,14 @@
 
 set -e
 
+# === Prompt for Config ===
+read -p "🔧 Enter the template remote (required): " TEMPLATE_REMOTE
+if [[ -z "$TEMPLATE_REMOTE" ]]; then
+  echo "❌ No remote entered. Exiting."
+  exit 1
+fi
+
 # === Config ===
-TEMPLATE_REMOTE="upstream"
 TEMPLATE_BRANCH="main"
 DATE_STR=$(date +%Y-%m-%d/%H%M)
 PROJECT_BRANCH=$(git rev-parse --abbrev-ref HEAD)

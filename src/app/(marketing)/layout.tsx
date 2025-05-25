@@ -1,6 +1,5 @@
 import React from 'react';
 import LayoutBody from '@/components/layout/body';
-import AffixTop from '@/components/common/affixi/top';
 import ProviderStore from '@/components/providers/store';
 
 export default function LayoutMarketing({
@@ -12,8 +11,6 @@ export default function LayoutMarketing({
     <ProviderStore>
       <LayoutBody>
         <main>{children}</main>
-
-        <AffixTop />
       </LayoutBody>
     </ProviderStore>
   );

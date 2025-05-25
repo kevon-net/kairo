@@ -1,10 +1,10 @@
-# Next.js Static Site Template
+# Next.js Site Template
 
-A lightweight and optimized Next.js template for building fast, SEO-friendly static websites.
+A lightweight and optimized Next.js template for building fast, SEO-friendly websites.
 
 ## Features
 
-- **Next.js 14 (App Router)** – Modern, efficient, and optimized for static site generation.
+- **Next.js 14 (App Router)** – Modern, efficient, and optimized for site generation.
 - **TypeScript Support** – Ensures type safety and better development experience.
 - **CSS Modules** – Scoped styling for better maintainability.
 - **ESLint & Prettier** – Enforced code quality and formatting.
@@ -16,8 +16,8 @@ A lightweight and optimized Next.js template for building fast, SEO-friendly sta
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/devokrann/next-static.git
-cd next-static
+git clone https://github.com/devokrann/template-next.git
+cd template-next
 ```
 
 ### 2. Install Dependencies
@@ -59,7 +59,7 @@ This generates a fully static version of the site inside the `out` directory.
 ## Folder Structure
 
 ```
-nextjs-static-template/
+template-next/
 ├── public/             # Static assets (images, favicon, etc.)
 ├── src/
 │   ├── components/     # Reusable UI components

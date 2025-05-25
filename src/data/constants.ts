@@ -14,12 +14,56 @@ export const ICON_STROKE_WIDTH = 1.5;
 export const SECTION_SPACING = 64;
 
 export const MINUTE = 60;
-export const HOUR = MINUTE * 60;
-export const DAY = HOUR * 24;
-export const WEEK = DAY * 7;
+export const HOUR = 60 * MINUTE;
+export const DAY = 24 * HOUR;
+export const WEEK = 7 * DAY;
+export const MONTH = 30 * DAY;
 
 export const DEFAULT_COLOR_SCHEME: 'light' | 'dark' = 'light';
 
 export const COOKIE_NAME = {
   CONSENT_COOKIES: 'consent.cookies',
+  LOCAL: { COUNTRY: 'local.country', COUNTRIES: 'local.countries' },
+  COLOR_SCHEME: 'theme.color-scheme',
+  COLOR_SCHEME_STATE: 'theme.color-scheme-state',
+};
+
+export const LOCAL_STORAGE_NAME = {
+  COUNTRY: 'country',
+  COUNTRIES: 'countries',
+};
+
+export const GEO_DATA_URL = {
+  COUNTRIES: `${process.env.NEXT_PUBLIC_REST_COUNTRIES_API_URL}`,
+};
+
+const WITHOUT_BODY: HeadersInit = {
+  Accept: 'application/json',
+};
+
+const WITH_BODY: HeadersInit = {
+  'Content-Type': 'application/json',
+  ...WITHOUT_BODY,
+};
+
+export const HEADERS = { WITHOUT_BODY, WITH_BODY };
+
+export const BUCKET_NAME = {
+  AVATARS: 'avatars',
+};
+
+export const FILE_NAME = {
+  AVATAR: 'avatar',
+};
+
+export const AUTH_URLS = {
+  SIGN_IN: `${BASE_URL}/auth/sign-in`,
+  SIGN_UP: `${BASE_URL}/auth/sign-up`,
+  VERIFY_REQUEST: `${BASE_URL}/auth/verify-request`,
+  ERROR: `${BASE_URL}/auth/error`,
+  SIGN_OUT: `${BASE_URL}/auth/sign-out`,
+};
+
+export const HOSTED_BASE_URL = {
+  PRIMARY: `https://example.com`,
 };

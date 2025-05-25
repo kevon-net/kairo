@@ -4,10 +4,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import reducerSession from './slices/session';
 import { isProduction } from '@/utilities/helpers/environment';
 
+import reducerComments from './slices/comments';
+
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      colorScheme: reducerSession,
+      
+      comments: reducerComments,
     },
 
     devTools: isProduction(),

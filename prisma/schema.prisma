@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// npx prisma migrate dev --name init -> sync database
+// npx prisma db push -> sync database
+// npx prisma studio -> view database
+// npx prisma generate -> generate prisma client
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // uses connection pooling
+  directUrl = env("DIRECT_URL") // uses a direct connection
+}
+
+// enums
+
+enum Role {
+  USER
+  ADMIN
+  DEV
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  PUBLISHED
+}
+
+// models
+
+model Profile {
+  id         String  @id
+  user_name  String?
+  first_name String?
+  last_name  String?
+  bio        String?
+  avatar     String?
+  phone      String?
+  role       Role    @default(USER)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  posts    Post[]
+  comments Comment[]
+  replies  Reply[]
+
+  @@map("profiles")
+}
+
+model Post {
+  id             String  @id @default(uuid())
+  image          String
+  title          String
+  excerpt        String
+  content        String
+  allow_comments Boolean @default(true)
+  view_count     Int     @default(0)
+
+  profile     Profile?  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id  String?
+  category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  category_id String?
+  tags        Tag[]
+  comments    Comment[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     Status   @default(DRAFT)
+
+  @@unique([profile_id, title])
+  @@map(name: "posts")
+}
+
+model Category {
+  id    String @id @default(uuid())
+  title String
+
+  posts Post[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     Status   @default(ACTIVE)
+
+  @@unique([title])
+  @@map(name: "categories")
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  title String
+
+  posts Post[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     Status   @default(ACTIVE)
+
+  @@unique([title])
+  @@map(name: "tags")
+}
+
+model Comment {
+  id      String  @id @default(uuid())
+  name    String?
+  content String
+
+  post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post_id    String
+  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id String?
+  replies    Reply[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     Status   @default(ACTIVE)
+
+  @@unique([name, content, post_id, profile_id])
+  @@map(name: "comments")
+}
+
+model Reply {
+  id      String  @id @default(uuid())
+  name    String?
+  content String
+
+  reply_id   String?
+  comment    Comment? @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  comment_id String?
+  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     Status   @default(ACTIVE)
+
+  @@unique([name, content, reply_id, comment_id, profile_id])
+  @@map(name: "replies")
+}

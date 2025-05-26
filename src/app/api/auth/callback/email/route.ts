@@ -4,9 +4,9 @@ import { createClient } from '@/libraries/supabase/server';
 import { AUTH_URLS } from '@/data/constants';
 import { profileCreate } from '@/services/database/profile';
 import { getEmailLocalPart } from '@/utilities/helpers/string';
-import { sendEmailTransactionalOnboard } from '@/libraries/wrappers/email/transactional/on-board';
+import { emailSendOnboardSignUp } from '@/libraries/wrappers/email/on-board/sign-up';
 import { segmentFullName } from '@/utilities/formatters/string';
-import { contactCreate } from '@/handlers/requests/email/contact';
+import { contactAdd } from '@/services/api/email/contacts';
 
 export async function GET(request: NextRequest) {
   try {
@@ -53,15 +53,15 @@ export async function GET(request: NextRequest) {
     if (updateError) throw updateError;
 
     if (!existed && userData && userData.email) {
-      await sendEmailTransactionalOnboard({
+      await emailSendOnboardSignUp({
         to: userData.email,
         userName:
           segmentFullName(userData?.user_metadata.name).first || userData.email,
       });
 
-      await contactCreate(
+      await contactAdd(
         { email: userData.email, name: userData.user_metadata.name },
-        { notify: false }
+        false
       );
     }
 

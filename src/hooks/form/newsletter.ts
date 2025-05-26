@@ -1,10 +1,10 @@
-import { contactCreate } from '@/handlers/requests/email/contact';
 import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { email } from '@/utilities/validators/email';
 import { useForm } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';
+import { contactAdd } from '@/handlers/requests/contact';
 
 export const useFormNewsletter = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -29,7 +29,7 @@ export const useFormNewsletter = () => {
 
         setSubmitted(true);
 
-        const response = await contactCreate({
+        const response = await contactAdd({
           email: form.values.email.trim().toLowerCase(),
         });
 

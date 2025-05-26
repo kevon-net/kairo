@@ -13,7 +13,7 @@ import {
   TextInput,
   Textarea,
 } from '@mantine/core';
-import { useFormEmailInquiry } from '@/hooks/form/email/inquiry';
+import { useFormEmailInquiry } from '@/hooks/form/inquiry';
 import TooltipInputInfo from '../common/tooltips/input/info';
 import Link from 'next/link';
 
@@ -45,7 +45,7 @@ export default function Contact({
                 label={options?.modal ? undefined : 'Name'}
                 aria-label={options?.modal ? 'Name' : undefined}
                 placeholder={`Your Name${options?.modal ? ' *' : ''}`}
-                {...form.getInputProps('from.name')}
+                {...form.getInputProps('name')}
               />
             </GridCol>
 
@@ -66,7 +66,7 @@ export default function Contact({
                 label={options?.modal ? undefined : 'Email'}
                 aria-label={options?.modal ? 'Email' : undefined}
                 placeholder={`Your Email${options?.modal ? ' *' : ''}`}
-                {...form.getInputProps('from.email')}
+                {...form.getInputProps('email')}
                 rightSection={<TooltipInputInfo />}
               />
             </GridCol>

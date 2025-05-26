@@ -1,17 +1,28 @@
-import { emailSend } from '@/handlers/requests/email/send';
 import { Variant } from '@/enums/notification';
 import { showNotification } from '@/utilities/notifications';
 import { capitalizeWords } from '@/utilities/formatters/string';
 import { email } from '@/utilities/validators/email';
-import { hasLength, useForm } from '@mantine/form';
+import { hasLength, useForm, UseFormReturnType } from '@mantine/form';
 import { useNetwork } from '@mantine/hooks';
 import { useState } from 'react';
+import { handleInquiry } from '@/handlers/requests/email/inquiry';
+import { contactAdd } from '@/handlers/requests/contact';
+
+export type FormInquiryValues = {
+  name: string;
+  email: string;
+  subject: string;
+  phone: string;
+  message: string;
+};
+
+export type FormInquiry = UseFormReturnType<
+  FormInquiryValues,
+  (values: FormInquiryValues) => FormInquiryValues
+>;
 
 export const useFormEmailInquiry = (
-  initialValues?: {
-    subject?: string;
-    message?: string;
-  },
+  initialValues?: Partial<FormInquiryValues>,
   options?: { close?: () => void }
 ) => {
   const [submitted, setSubmitted] = useState(false);
@@ -19,17 +30,16 @@ export const useFormEmailInquiry = (
 
   const form = useForm({
     initialValues: {
-      from: { name: '', email: '' },
+      name: '',
+      email: '',
       subject: initialValues?.subject || '',
       phone: '',
       message: initialValues?.message || '',
     },
 
     validate: {
-      from: {
-        name: hasLength({ min: 2, max: 24 }, 'Between 2 and 24 characters'),
-        email: (value) => email(value.trim()),
-      },
+      name: hasLength({ min: 2, max: 24 }, 'Between 2 and 24 characters'),
+      email: (value) => email(value.trim()),
       subject: hasLength({ min: 2, max: 255 }, 'Between 2 and 255 characters'),
       phone: hasLength({ min: 7, max: 15 }, 'Between 7 and 15 characters'),
       message: hasLength(
@@ -38,18 +48,6 @@ export const useFormEmailInquiry = (
       ),
     },
   });
-
-  const parseValues = () => {
-    return {
-      from: {
-        name: capitalizeWords(form.values.from.name.trim()),
-        email: form.values.from.email.trim().toLowerCase(),
-      },
-      subject: form.values.subject.trim(),
-      phone: form.values.phone.trim(),
-      message: form.values.message.trim(),
-    };
-  };
 
   const handleSubmit = async () => {
     if (form.isValid()) {
@@ -65,7 +63,7 @@ export const useFormEmailInquiry = (
 
         setSubmitted(true);
 
-        const response = await emailSend(parseValues());
+        const response = await handleInquiry(parseFormValues(form.values));
 
         if (!response) {
           throw new Error('No response from server');
@@ -78,6 +76,12 @@ export const useFormEmailInquiry = (
         if (response.ok) {
           if (options?.close) {
             options.close();
+          }
+
+          const addContact = await contactAdd(parseFormValues(form.values));
+
+          if (!addContact.ok) {
+            console.error('Error adding contact');
           }
 
           showNotification({ variant: Variant.SUCCESS }, response, result);
@@ -102,5 +106,15 @@ export const useFormEmailInquiry = (
     form,
     submitted,
     handleSubmit,
+  };
+};
+
+const parseFormValues = (formValues: FormInquiryValues): FormInquiryValues => {
+  return {
+    name: capitalizeWords(formValues.name.trim()),
+    email: formValues.email.trim().toLowerCase(),
+    subject: formValues.subject.trim(),
+    phone: formValues.phone.trim(),
+    message: formValues.message.trim(),
   };
 };

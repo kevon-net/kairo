@@ -1,31 +1,15 @@
-import appData from '@/data/app';
+import { appName } from '@/data/app';
 import { INDEXED_DB } from '@/data/constants';
 import { DBConfig } from '@/types/indexed-db';
 import { Database, DatabaseError } from './transactions';
 
 // indexedDB config
 export const config = {
-  name: appData.name.app.toLowerCase(),
+  name: appName.toLowerCase(),
   version: 1,
   stores: [
     {
-      name: INDEXED_DB.TASKS,
-      keyPath: 'id',
-    },
-    {
-      name: INDEXED_DB.RECURRING_RULES,
-      keyPath: 'id',
-    },
-    {
-      name: INDEXED_DB.REMINDERS,
-      keyPath: 'id',
-    },
-    {
-      name: INDEXED_DB.TAGS,
-      keyPath: 'id',
-    },
-    {
-      name: INDEXED_DB.CATEGORIES,
+      name: INDEXED_DB.SAMPLE_STORE,
       keyPath: 'id',
     },
   ],

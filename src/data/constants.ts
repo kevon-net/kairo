@@ -67,3 +67,7 @@ export const AUTH_URLS = {
 export const HOSTED_BASE_URL = {
   PRIMARY: `https://example.com`,
 };
+
+export const INDEXED_DB = {
+  SAMPLE_STORE: 'sampleStore',
+};

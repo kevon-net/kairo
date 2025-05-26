@@ -1,11 +1,11 @@
-import appData from '@/data/app';
+import { appName } from '@/data/app';
 import { INDEXED_DB } from '@/data/constants';
 import { DBConfig } from '@/types/indexed-db';
 import { Database, DatabaseError } from './transactions';
 
 // indexedDB config
 export const config = {
-  name: appData.name.app.toLowerCase(),
+  name: appName.toLowerCase(),
   version: 1,
   stores: [
     {

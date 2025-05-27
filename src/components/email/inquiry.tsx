@@ -6,7 +6,7 @@ import { companyName } from '@/data/app';
 export const Inquiry = (props: {
   userName: string;
   userMessage: string;
-  userPhone: string;
+  userPhone?: string;
 }) => {
   return (
     <LayoutEmail

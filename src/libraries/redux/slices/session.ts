@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { User } from '@supabase/supabase-js';
 
 export const sliceSession = createSlice({
   name: 'session',
   initialState: {
-    value: null as any satisfies any,
+    value: null as User | null satisfies User | null,
   },
   reducers: {
     updateSession: (state, action) => {

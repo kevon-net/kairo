@@ -1,15 +1,15 @@
 import { Prisma, Tag } from '@generated/prisma';
 
-// Type for creating a tag (without id and relations)
+// Type for creating a item (without id and relations)
 export type TagCreate = Prisma.TagCreateInput;
 
-// Type for updating a tag (all fields optional except id)
+// Type for updating a item (all fields optional except id)
 export type TagUpdate = Prisma.TagUpdateInput;
 
-// Type for default tag (with id and no relations)
+// Type for default item (with id and no relations)
 export type TagGet = Tag;
 
-// Type for fetched tag with relations
+// Type for fetched item with relations
 export type TagRelations = Prisma.TagGetPayload<{
   include: {
     _count: { select: { posts: true } };

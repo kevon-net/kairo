@@ -48,11 +48,13 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { commentId: string } }
+  { params }: { params: Promise<{ commentId: string }> }
 ) {
   try {
+    const { commentId } = await params;
+
     const commentRecord = await prisma.comment.findUnique({
-      where: { id: params.commentId },
+      where: { id: commentId },
     });
 
     if (!commentRecord) {
@@ -65,7 +67,7 @@ export async function PUT(
     const comment: CommentUpdate = await request.json();
 
     await prisma.comment.update({
-      where: { id: params.commentId },
+      where: { id: commentId },
       data: comment,
     });
 

@@ -6,8 +6,12 @@ import LayoutSection from '@/components/layout/section';
 
 export const metadata: Metadata = { title: 'Error' };
 
-export default async function Error({ searchParams }: { searchParams: any }) {
-  const message = searchParams.message;
+export default async function Error({
+  searchParams,
+}: {
+  searchParams: Promise<any>;
+}) {
+  const message = (await searchParams).message;
 
   return (
     <LayoutPage>

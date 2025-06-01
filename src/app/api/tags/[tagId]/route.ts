@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { tagId: string } }
+  { params }: { params: Promise<{ tagId: string }> }
 ) {
   try {
+    const { tagId } = await params;
+
     const tagRecord = await prisma.tag.findUnique({
-      where: { id: params.tagId },
+      where: { id: tagId },
 
       include: {
         _count: { select: { posts: true } },

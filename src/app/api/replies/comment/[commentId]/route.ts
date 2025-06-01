@@ -3,6 +3,9 @@ import { ReplyCommentCreate } from '@/types/models/custom';
 import { ReplyUpdate } from '@/types/models/reply';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = 60;
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ commentId: string }> }

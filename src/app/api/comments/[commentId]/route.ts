@@ -3,6 +3,9 @@ import { CommentCreate } from '@/types/models/custom';
 import { CommentUpdate } from '@/types/models/comment';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = 60;
+
 export async function POST(request: NextRequest) {
   try {
     const comment: CommentCreate = await request.json();

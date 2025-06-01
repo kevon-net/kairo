@@ -8,6 +8,8 @@ import { emailSendOnboardSignUp } from '@/libraries/wrappers/email/on-board/sign
 import { segmentFullName } from '@/utilities/formatters/string';
 import { contactAdd } from '@/services/api/email/contacts';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

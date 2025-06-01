@@ -3,17 +3,22 @@ import { ReplyReplyCreate } from '@/types/models/custom';
 import { ReplyUpdate } from '@/types/models/reply';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = 60;
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { replyId: string } }
+  { params }: { params: Promise<{ replyId: string }> }
 ) {
   try {
+    const { replyId } = await params;
+
     let getResolvedReplyReplies;
 
     try {
       getResolvedReplyReplies = await prisma.$transaction(async () => {
         const replyRecord = await prisma.reply.findUnique({
-          where: { id: params.replyId },
+          where: { id: replyId },
           select: { id: true },
         });
 
@@ -22,7 +27,7 @@ export async function GET(
         }
 
         const replyRecords = await prisma.reply.findMany({
-          where: { reply_id: params.replyId },
+          where: { reply_id: replyId },
 
           include: {
             profile: true,
@@ -59,19 +64,21 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { replyId: string } }
+  { params }: { params: Promise<{ replyId: string }> }
 ) {
   try {
+    const { replyId } = await params;
+
     const reply: Omit<ReplyReplyCreate, 'replyId'> = await request.json();
 
-    const placeHolder = params.replyId;
+    const placeHolder = replyId;
 
     const replyRecord = await prisma.reply.findUnique({
       where: {
         name_content_reply_id_comment_id_profile_id: {
           name: reply.name || '',
           content: reply.content,
-          reply_id: params.replyId,
+          reply_id: replyId,
           comment_id: placeHolder,
           profile_id: reply.profile_id || placeHolder,
         },
@@ -89,7 +96,7 @@ export async function POST(
       data: {
         name: reply.name,
         content: reply.content,
-        reply_id: params.replyId,
+        reply_id: replyId,
         profile_id: reply.profile_id,
       },
     });

@@ -31,3 +31,29 @@ export const processUrl = (link: string, host: string) => {
     return `${cleanHost}/${cleanLink}`;
   }
 };
+
+export function getSafeRedirectUrl(
+  request: any,
+  paramName: string,
+  fallbackPath = '/'
+): string {
+  const { searchParams } = new URL(request.url);
+  const paramValue = searchParams.get(paramName);
+  const fallbackUrl = new URL(fallbackPath, request.url);
+
+  try {
+    if (!paramValue) return fallbackUrl.toString();
+
+    const nextUrl = new URL(paramValue, request.url);
+    const currentOrigin = new URL(request.url).origin;
+
+    // Allow if it's a same-origin or a relative path
+    if (paramValue.startsWith('/') || nextUrl.origin === currentOrigin) {
+      return nextUrl.toString();
+    }
+
+    return fallbackUrl.toString();
+  } catch {
+    return fallbackUrl.toString();
+  }
+}

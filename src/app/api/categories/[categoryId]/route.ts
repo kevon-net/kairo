@@ -1,13 +1,18 @@
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = 60;
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: Promise<{ categoryId: string }> }
 ) {
   try {
+    const { categoryId } = await params;
+
     const categoryRecord = await prisma.category.findUnique({
-      where: { id: params.categoryId },
+      where: { id: categoryId },
 
       include: {
         _count: { select: { posts: true } },

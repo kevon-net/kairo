@@ -3,17 +3,22 @@ import { ReplyCommentCreate } from '@/types/models/custom';
 import { ReplyUpdate } from '@/types/models/reply';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-static';
+export const revalidate = 60;
+
 export async function GET(
   request: NextRequest,
-  { params }: { params: { commentId: string } }
+  { params }: { params: Promise<{ commentId: string }> }
 ) {
   try {
+    const { commentId } = await params;
+
     let getResolvedCommentReplies;
 
     try {
       getResolvedCommentReplies = await prisma.$transaction(async () => {
         const commentRecord = await prisma.comment.findUnique({
-          where: { id: params.commentId },
+          where: { id: commentId },
           include: {
             replies: {
               include: {
@@ -82,12 +87,14 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { commentId: string } }
+  { params }: { params: Promise<{ commentId: string }> }
 ) {
   try {
+    const { commentId } = await params;
+
     const reply: Omit<ReplyCommentCreate, 'commentId'> = await request.json();
 
-    const placeHolder = params.commentId;
+    const placeHolder = commentId;
 
     const replyRecord = await prisma.reply.findUnique({
       where: {
@@ -95,7 +102,7 @@ export async function POST(
           name: reply.name || '',
           content: reply.content,
           reply_id: placeHolder,
-          comment_id: params.commentId,
+          comment_id: commentId,
           profile_id: reply.profile_id || placeHolder,
         },
       },
@@ -112,7 +119,7 @@ export async function POST(
       data: {
         name: reply.name,
         content: reply.content,
-        comment_id: params.commentId,
+        comment_id: commentId,
         profile_id: reply.profile_id,
       },
     });

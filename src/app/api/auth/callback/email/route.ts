@@ -7,6 +7,9 @@ import { getEmailLocalPart } from '@/utilities/helpers/string';
 import { emailSendOnboardSignUp } from '@/libraries/wrappers/email/on-board/sign-up';
 import { segmentFullName } from '@/utilities/formatters/string';
 import { contactAdd } from '@/services/api/email/contacts';
+import { getSafeRedirectUrl } from '@/utilities/helpers/url';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
@@ -66,8 +69,8 @@ export async function GET(request: NextRequest) {
     }
 
     // if "next" is in param, use it as the redirect URL
-    const next = searchParams.get('next') ?? '/';
-    return NextResponse.redirect(next);
+    const redirectUrl = getSafeRedirectUrl(request, 'next');
+    return NextResponse.redirect(redirectUrl);
   } catch (error) {
     return NextResponse.redirect(
       `${AUTH_URLS.ERROR}?message=${encodeURIComponent((error as Error).message)}`

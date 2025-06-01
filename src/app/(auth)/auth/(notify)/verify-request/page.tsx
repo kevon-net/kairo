@@ -9,9 +9,9 @@ export const metadata: Metadata = { title: 'Verify Request' };
 export default async function VerifyRequest({
   searchParams,
 }: {
-  searchParams: any;
+  searchParams: Promise<any>;
 }) {
-  const message = searchParams.message;
+  const message = (await searchParams).message;
 
   return (
     <LayoutPage>

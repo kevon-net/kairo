@@ -6,6 +6,8 @@ import { AUTH_URLS } from '@/data/constants';
 import { emailSendOnboardSignUp } from '@/libraries/wrappers/email/on-board/sign-up';
 import { contactAdd } from '@/services/api/email/contacts';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const { searchParams, origin } = new URL(request.url);

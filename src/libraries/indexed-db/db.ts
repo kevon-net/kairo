@@ -54,3 +54,25 @@ export const openDatabase = async (config: DBConfig): Promise<Database> => {
     };
   });
 };
+
+export const deleteDatabase = async (dbName: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(dbName);
+
+    request.onsuccess = () => {
+      console.log(`Deleted IndexedDB "${dbName}" successfully.`);
+      resolve();
+    };
+
+    request.onerror = () => {
+      console.error(`Error deleting IndexedDB "${dbName}":`, request.error);
+      reject(request.error);
+    };
+
+    request.onblocked = () => {
+      console.warn(
+        `Deletion of "${dbName}" is blocked. Close all open tabs using the database.`
+      );
+    };
+  });
+};

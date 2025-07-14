@@ -1,19 +1,22 @@
+import { AUTH_URLS, PARAM_NAME } from '@/data/constants';
+import { authRoues, protectedRoutes } from '@/data/routes';
+
 export const setRedirectUrl = (params: {
   targetUrl: string;
   redirectUrl?: string;
+  redirectParamName?: string;
 }) => {
   const target = params.targetUrl;
   const redirect = params.redirectUrl || '';
-  return `${target}?redirect=${encodeURIComponent(redirect)}`;
+  return `${target}?${params.redirectParamName || PARAM_NAME.REDIRECT_AUTH}=${encodeURIComponent(redirect)}`;
 };
 
-export const getUrlParam = (urlParamName: string) => {
-  if (typeof window === 'undefined') {
-    return '/';
-  }
-
+export const getUrlParam = (urlParamName: string): string | null => {
+  if (typeof window === 'undefined') return '/';
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(urlParamName) || '/';
+  const urlParam = urlParams.get(urlParamName);
+  if (!urlParam) return null;
+  return urlParams.get(urlParamName);
 };
 
 export const processUrl = (link: string, host: string) => {
@@ -35,7 +38,7 @@ export const processUrl = (link: string, host: string) => {
 export function getSafeRedirectUrl(
   request: any,
   paramName: string,
-  fallbackPath = '/'
+  fallbackPath = AUTH_URLS.REDIRECT.DEFAULT
 ): string {
   const { searchParams } = new URL(request.url);
   const paramValue = searchParams.get(paramName);
@@ -57,3 +60,24 @@ export function getSafeRedirectUrl(
     return fallbackUrl.toString();
   }
 }
+
+export const validateRoute = (params: {
+  user: any | null;
+  pathname: string;
+}) => {
+  const { user, pathname } = params;
+  const actions = { redirectToAuth: false, redirectFromAuth: false };
+
+  if (!user) {
+    const isProtectedRoute = protectedRoutes.some((route) =>
+      pathname.startsWith(route)
+    );
+
+    if (isProtectedRoute) actions.redirectToAuth = true;
+  } else {
+    const isAuthRoute = authRoues.some((route) => pathname.startsWith(route));
+    if (isAuthRoute) actions.redirectFromAuth = true;
+  }
+
+  return actions;
+};

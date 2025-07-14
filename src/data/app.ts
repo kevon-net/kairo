@@ -1,12 +1,14 @@
-export const companyName = '';
-export const appName = '';
+export const companyName = 'MeridianByte';
+export const appName = 'Kairo';
+export const appDesc =
+  'A lightweight and optimized Next.js template for building fast, SEO-friendly websites.';
 
 export const phones = {
   main: '(254) 123 456-789',
 };
 
 export const emails = {
-  info: 'info@example.com',
+  info: 'kairo@kevon.net',
 };
 
 export const hours = {

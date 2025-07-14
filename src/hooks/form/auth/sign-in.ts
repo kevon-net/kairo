@@ -10,6 +10,7 @@ import { signIn } from '@/handlers/events/auth';
 import { AuthAction } from '@/types/auth';
 import { getUrlParam } from '@/utilities/helpers/url';
 import { useRouter } from 'next/navigation';
+import { AUTH_URLS, PARAM_NAME } from '@/data/constants';
 
 export const useFormAuthSignIn = (params: { action: AuthAction }) => {
   const networkStatus = useNetwork();
@@ -49,7 +50,9 @@ export const useFormAuthSignIn = (params: { action: AuthAction }) => {
           formData: parseValues(),
           options: {
             action: params.action,
-            redirectUrl: getUrlParam('redirect') || '/',
+            redirectUrl:
+              getUrlParam(PARAM_NAME.REDIRECT_AUTH) ||
+              AUTH_URLS.REDIRECT.DEFAULT,
           },
         });
 

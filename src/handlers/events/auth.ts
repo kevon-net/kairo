@@ -16,7 +16,7 @@ export const signIn = async (params: {
       options: {
         // set this to false if you do not want the user to be automatically signed up
         shouldCreateUser: params.options?.action == 'sign-up',
-        emailRedirectTo: `${BASE_URL}${params.options?.redirectUrl || ''}`,
+        emailRedirectTo: `${BASE_URL}${params.options?.redirectUrl || AUTH_URLS.REDIRECT.DEFAULT}`,
       },
     });
 
@@ -72,6 +72,7 @@ export const signOut = async () => {
     const supabase = await createClient();
     const { error: signOutError } = await supabase.auth.signOut();
     if (signOutError) throw signOutError;
+
     return {
       redirect: BASE_URL,
     };

@@ -33,6 +33,10 @@ export const LOCAL_STORAGE_NAME = {
   COUNTRIES: 'countries',
 };
 
+export const PARAM_NAME = {
+  REDIRECT_AUTH: '/redirect',
+};
+
 export const GEO_DATA_URL = {
   COUNTRIES: `${process.env.NEXT_PUBLIC_REST_COUNTRIES_API_URL}`,
 };
@@ -62,6 +66,9 @@ export const AUTH_URLS = {
   VERIFY_REQUEST: `${BASE_URL}/auth/verify-request`,
   ERROR: `${BASE_URL}/auth/error`,
   SIGN_OUT: `${BASE_URL}/auth/sign-out`,
+  REDIRECT: {
+    DEFAULT: '/app/home',
+  },
 };
 
 export const HOSTED_BASE_URL = {

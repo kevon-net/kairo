@@ -1,6 +1,6 @@
 'use client';
 
-import { API_URL } from '@/data/constants';
+import { API_URL, AUTH_URLS, PARAM_NAME } from '@/data/constants';
 import { getUrlParam } from '@/utilities/helpers/url';
 import { useState } from 'react';
 
@@ -19,9 +19,10 @@ export const useFormAuthConfirmEmail = () => {
     const endpoint = `${API_URL}/auth/callback/email`;
     const token = getUrlParam('token_hash');
     const type = getUrlParam('type');
-    const redirect = getUrlParam('redirect');
-    const next = encodeURIComponent(redirect);
-    window.location.href = `${endpoint}?token_hash=${token}&type=${type}&next=${next}`;
+    const redirect = getUrlParam(PARAM_NAME.REDIRECT_AUTH);
+    const next = encodeURIComponent(redirect || AUTH_URLS.REDIRECT.DEFAULT);
+    const redirectUrl = `${endpoint}?token_hash=${token}&type=${type}&next=${next}`;
+    window.location.href = redirectUrl;
   };
 
   return { status, handleTrigger };
@@ -45,9 +46,10 @@ export const useFormAuthConfirmSignIn = () => {
     const endpoint = `${API_URL}/auth/callback/email`;
     const token = getUrlParam('token_hash');
     const type = getUrlParam('type');
-    const redirect = getUrlParam('redirect');
-    const next = encodeURIComponent(redirect);
-    window.location.href = `${endpoint}?token_hash=${token}&type=${type}&next=${next}`;
+    const redirect = getUrlParam(PARAM_NAME.REDIRECT_AUTH);
+    const next = encodeURIComponent(redirect || AUTH_URLS.REDIRECT.DEFAULT);
+    const redirectUrl = `${endpoint}?token_hash=${token}&type=${type}&next=${next}`;
+    window.location.href = redirectUrl;
   };
 
   return { status, handleTrigger };

@@ -5,8 +5,9 @@ import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { setRedirectUrl } from '@/utilities/helpers/url';
 import { Box, LoadingOverlay } from '@mantine/core';
-import { AUTH_URLS } from '@/data/constants';
+import { AUTH_URLS, BASE_URL } from '@/data/constants';
 import { signOut } from '@/handlers/events/auth';
+import { config, deleteDatabase } from '@/libraries/indexed-db/db';
 
 export function SignIn({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -57,8 +58,16 @@ export function SignOut({ children }: { children: React.ReactNode }) {
       pos="relative"
       onClick={async () => {
         setClicked(true);
-        const { redirect } = await signOut();
-        window.location.href = redirect;
+
+        // Delete local database
+        await deleteDatabase(config.name);
+
+        // Clear storage (optional)
+        localStorage.clear();
+        sessionStorage.clear();
+
+        const signOutOptions = await signOut();
+        window.location.href = signOutOptions?.redirect || BASE_URL;
       }}
     >
       <LoadingOverlay

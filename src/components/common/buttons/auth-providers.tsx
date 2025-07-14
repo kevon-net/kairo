@@ -72,8 +72,8 @@ const providers = [
     image: images.icons.google,
     provider: 'google',
   },
-  {
-    image: 'https://img.icons8.com/?size=100&id=16318&format=png&color=000000',
-    provider: 'github',
-  },
+  // {
+  //   image: 'https://img.icons8.com/fluency/96/github.png',
+  //   provider: 'github',
+  // },
 ];

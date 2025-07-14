@@ -1,0 +1,35 @@
+.container {
+  @include mantine.hover {
+    .overlay {
+      opacity: 1;
+    }
+
+    .count {
+      @include mantine.larger-than(mantine.$mantine-breakpoint-md) {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.link {
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  right: 0;
+  padding-right: var(--mantine-spacing-xs);
+  opacity: 1;
+  transition: 0.25s all ease;
+  z-index: 1;
+
+  @include mantine.larger-than(mantine.$mantine-breakpoint-md) {
+    opacity: 0;
+  }
+}
+
+.count {
+  transition: 0.25s all ease;
+  opacity: 1;
+}

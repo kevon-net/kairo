@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Modal, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import LayoutModal from '@/components/layout/modal';
+import LayoutModalMain from '@/components/layout/modal/main';
 import FormBlogReply from '@/components/form/blog/reply';
 
 export default function Reply({
@@ -26,7 +26,7 @@ export default function Reply({
         padding={'xl'}
         size={'lg'}
       >
-        <LayoutModal props={{ title: `Reply to ${props.name}`, close }}>
+        <LayoutModalMain props={{ title: `Reply to ${props.name}`, close }}>
           <Stack>
             <Text>Your email address will not be published.</Text>
 
@@ -36,7 +36,7 @@ export default function Reply({
               close={close}
             />
           </Stack>
-        </LayoutModal>
+        </LayoutModalMain>
       </Modal>
 
       <span onClick={open}>{children}</span>

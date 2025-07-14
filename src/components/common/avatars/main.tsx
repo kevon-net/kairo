@@ -13,9 +13,9 @@ export default function Main({
 }) {
   const session = useAppSelector((state) => state.session.value);
 
-  return !session ? (
-    <Avatar className={classes.avatar} color="pri" w={size} h={size} />
-  ) : (
+  if (!session) return null;
+
+  return (
     <Avatar
       className={
         !session.user_metadata.avatar_url
@@ -25,8 +25,7 @@ export default function Main({
       src={session.user_metadata.avatar_url || null}
       name={session.user_metadata.name || 'User'}
       color={'initials'}
-      w={size}
-      h={size}
+      size={size as any}
     >
       {initialize(session.user_metadata.name || 'User')}
     </Avatar>

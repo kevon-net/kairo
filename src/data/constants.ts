@@ -19,16 +19,20 @@ export const DAY = 24 * HOUR;
 export const WEEK = 7 * DAY;
 export const MONTH = 30 * DAY;
 
-export const DEFAULT_COLOR_SCHEME: 'light' | 'dark' = 'light';
+export const DEFAULT_COLOR_SCHEME: 'light' | 'dark' = 'dark';
 
 export const COOKIE_NAME = {
   CONSENT_COOKIES: 'consent.cookies',
   LOCAL: { COUNTRY: 'local.country', COUNTRIES: 'local.countries' },
   COLOR_SCHEME: 'theme.color-scheme',
   COLOR_SCHEME_STATE: 'theme.color-scheme-state',
+  APP_SHELL: {
+    NAVBAR: 'app-shell.navbar',
+  },
 };
 
 export const LOCAL_STORAGE_NAME = {
+  SESSION: 'session',
   COUNTRY: 'country',
   COUNTRIES: 'countries',
 };
@@ -76,5 +80,28 @@ export const HOSTED_BASE_URL = {
 };
 
 export const INDEXED_DB = {
-  SAMPLE_STORE: 'sampleStore',
+  PROFILES: 'profiles',
+  TASKS: 'tasks',
+  RECURRING_RULES: 'recurring_rules',
+  REMINDERS: 'reminders',
+  TAGS: 'tags',
+  CATEGORIES: 'categories',
+  VIEWS: 'views',
+  NOTIFICATIONS: 'notifications',
+};
+
+export const APPSHELL = {
+  HEADER_HEIGHT: 60,
+  SCROLLBAR_WIDTH: 8,
+  NAVBAR_WIDTH: { base: 220, sm: 260, md: 280, lg: 300 },
+  PADDING: 'var(--mantine-spacing-xs)',
+  PADDING_OFFSET: 'calc(var(--mantine-spacing-md) / 4)',
+};
+
+export const TIME_FORMAT = {
+  LOCALE: 'en-GB',
+};
+
+export const MODAL_HEIGHT = {
+  TASK_VIEW: 420,
 };

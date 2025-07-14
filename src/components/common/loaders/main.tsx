@@ -2,6 +2,9 @@
 
 import { Loader, Stack, Text, Transition } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
+import ImageDefault from '../images/default';
+import { images } from '@/assets/images';
+import { appName } from '@/data/app';
 
 export default function Main() {
   const [mounted, setMounted] = useState(false);
@@ -12,6 +15,14 @@ export default function Main() {
 
   return (
     <Stack align="center">
+      <ImageDefault
+        src={images.brand.icon.default}
+        alt={appName}
+        height={{ base: 64 }}
+        fit="contain"
+        mode="grid"
+      />
+
       <Loader color="pri" type="dots" />
 
       <Transition

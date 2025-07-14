@@ -30,10 +30,11 @@ export default function LayoutNotify({
             <Center h={'100vh'} px={{ xs: 32 }}>
               <Anchor component={Link} href={'/'}>
                 <ImageDefault
-                  src={images.brand.logo.light}
+                  src={images.brand.icon.default}
                   alt={appName}
-                  height={48}
-                  width={160}
+                  height={128}
+                  width={128}
+                  fit={'contain'}
                   mode="grid"
                 />
               </Anchor>

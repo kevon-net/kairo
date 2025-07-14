@@ -11,7 +11,7 @@ const appResolver: CSSVariablesResolver = (theme) => ({
   },
 
   dark: {
-    '--mantine-color-body': `${theme.black}`,
+    '--mantine-color-body': `var(--mantine-color-dark-8)`,
     '--mantine-color-text': `var(--mantine-color-dark-0)`,
   },
 });

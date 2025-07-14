@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-
 import Link from 'next/link';
-
 import {
   Menu,
   MenuDivider,
@@ -15,11 +13,10 @@ import {
   Skeleton,
   Title,
   MenuLabel,
+  Tooltip,
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-
 import AvatarMain from '../avatars/main';
-
 import classes from './user.module.scss';
 import { navLinkItems } from '@/data/links';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
@@ -29,10 +26,7 @@ import { usePathname } from 'next/navigation';
 
 export default function User() {
   const session = useAppSelector((state) => state.session.value);
-
   const mobile = useMediaQuery('(max-width: 48em)');
-  const desktop = useMediaQuery('(min-width: 62em)');
-
   const pathname = usePathname();
 
   const matchesPath = (link: string) => {
@@ -41,22 +35,26 @@ export default function User() {
 
   return (
     <Menu
-      position={'bottom-end'}
+      position={'bottom-start'}
       offset={{ mainAxis: 16, crossAxis: 0 }}
       width={mobile ? 200 : 240}
-      trigger="click-hover"
-      openDelay={50}
-      closeDelay={50}
+      trigger="click"
       classNames={classes}
-      opened={desktop ? undefined : false}
-      transitionProps={{ transition: 'pop-top-right' }}
       withArrow
       arrowOffset={16}
     >
       <MenuTarget>
-        <div className={classes.target}>
-          <AvatarMain size={40} />
-        </div>
+        <Tooltip
+          label={session?.user_metadata.name || 'Account'}
+          position="right"
+          withArrow
+          color="pri"
+          fz={'xs'}
+        >
+          <div className={classes.target}>
+            <AvatarMain size={28} />
+          </div>
+        </Tooltip>
       </MenuTarget>
 
       <MenuDropdown>

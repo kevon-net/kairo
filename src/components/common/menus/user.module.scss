@@ -1,5 +1,5 @@
 .target {
-  @include hover {
+  @include mantine.hover {
     cursor: pointer;
   }
 }
@@ -19,7 +19,7 @@
   overflow: hidden;
   transition: 0.25s all ease;
 
-  @include hover {
+  @include mantine.hover {
     background-color: light-dark(
       var(--mantine-color-gray-light),
       var(--mantine-color-dark-light)
@@ -36,7 +36,7 @@
     var(--mantine-color-dark-light)
   );
 
-  @include hover {
+  @include mantine.hover {
     background-color: light-dark(
       var(--mantine-color-gray-light),
       var(--mantine-color-dark-light)
@@ -50,7 +50,7 @@
   transition: 0.25s all ease;
   color: var(--mantine-color-red-6);
 
-  @include hover {
+  @include mantine.hover {
     background-color: light-dark(
       var(--mantine-color-red-light),
       var(--mantine-color-red-light)
@@ -64,7 +64,7 @@
   background-color: var(--mantine-color-red-light);
   transition: 0.25s all ease;
 
-  @include hover {
+  @include mantine.hover {
     background-color: var(--mantine-color-red-light) !important;
   }
 }

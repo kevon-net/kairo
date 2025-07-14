@@ -4,7 +4,10 @@ import { User } from '@supabase/supabase-js';
 export const sliceSession = createSlice({
   name: 'session',
   initialState: {
-    value: null as User | null satisfies User | null,
+    value: undefined as User | null | undefined satisfies
+      | User
+      | null
+      | undefined,
   },
   reducers: {
     updateSession: (state, action) => {

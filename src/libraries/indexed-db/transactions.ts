@@ -74,9 +74,9 @@ export class Database {
 
       if (Array.isArray(data)) {
         if (data.length === 0) {
-          reject(
-            new DatabaseError('Empty array provided, no operation performed.')
-          );
+          // reject(
+          //   new DatabaseError('Empty array provided, no operation performed.')
+          // );
           return;
         }
 
@@ -140,9 +140,9 @@ export class Database {
 
       if (Array.isArray(data)) {
         if (data.length === 0) {
-          reject(
-            new DatabaseError('Empty array provided, no operation performed.')
-          );
+          // reject(
+          //   new DatabaseError('Empty array provided, no operation performed.')
+          // );
           return;
         }
 
@@ -202,9 +202,9 @@ export class Database {
 
       if (Array.isArray(data)) {
         if (data.length === 0) {
-          reject(
-            new DatabaseError('Empty array provided, no operation performed.')
-          );
+          // reject(
+          //   new DatabaseError('Empty array provided, no operation performed.')
+          // );
           return;
         }
 

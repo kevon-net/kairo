@@ -1,5 +1,6 @@
 import LayoutPage from '@/components/layout/page';
-import { Stack } from '@mantine/core';
+import { Anchor, Stack } from '@mantine/core';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -11,6 +12,10 @@ export default function Home() {
           </p>
 
           <p>Save and see your changes instantly.</p>
+
+          <Anchor component={Link} href={'/app/inbox'} inherit ta="center">
+            App
+          </Anchor>
         </Stack>
       </main>
     </LayoutPage>

@@ -26,9 +26,9 @@ export default function LayoutDefault({
             <Stack gap={'xl'}>
               <Anchor component={Link} href={'/'}>
                 <ImageDefault
-                  src={images.brand.logo.light}
+                  src={images.brand.icon.default}
                   alt={appName}
-                  height={{ base: 28 }}
+                  height={{ base: 64 }}
                   fit="contain"
                   mode="grid"
                 />

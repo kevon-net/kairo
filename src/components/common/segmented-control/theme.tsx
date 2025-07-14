@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { SegmentedControl, Group } from '@mantine/core';
+import { SegmentedControl, Center } from '@mantine/core';
 
 import { IconDeviceDesktop, IconMoon, IconSun } from '@tabler/icons-react';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
@@ -15,28 +15,29 @@ export default function Theme() {
     <SegmentedControl
       value={colorScheme}
       onChange={(v) => handleChange(v)}
+      fullWidth
       data={[
         {
           label: (
-            <Group>
+            <Center>
               <IconSun size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </Group>
+            </Center>
           ),
           value: 'light',
         },
         {
           label: (
-            <Group>
+            <Center>
               <IconMoon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </Group>
+            </Center>
           ),
           value: 'dark',
         },
         {
           label: (
-            <Group>
+            <Center>
               <IconDeviceDesktop size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </Group>
+            </Center>
           ),
           value: 'auto',
         },

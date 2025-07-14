@@ -1,7 +1,10 @@
 export const protectedRoutes = [
-  '/account',
-  '/dashboard',
   '/auth/sign-out',
+  '/app',
+  '/api/recurring-rules',
+  '/api/reminders',
+  '/api/tasks',
+  '/api/views',
   // Add other protected routes
 ];
 

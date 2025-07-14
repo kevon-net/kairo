@@ -1,5 +1,38 @@
 import type { NextConfig } from 'next';
 import path from 'node:path';
+import nextPwa from 'next-pwa';
+import { isProduction } from '@/utilities/helpers/environment';
+
+const withPWA = nextPwa({
+  dest: 'public',
+  disable: !isProduction(),
+  register: true,
+  skipWaiting: true,
+  runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'google-fonts',
+        expiration: {
+          maxEntries: 4,
+          maxAgeSeconds: 365 * 24 * 60 * 60, // 1 year
+        },
+      },
+    },
+    {
+      urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'static-font-assets',
+        expiration: {
+          maxEntries: 4,
+          maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        },
+      },
+    },
+  ],
+});
 
 const nextConfig: NextConfig = {
   images: {
@@ -59,8 +92,26 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: '/notifications-sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache',
+          },
+        ],
+      },
+      {
+        source: '/offline-sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache',
+          },
+        ],
+      },
     ];
   },
 };
 
-export default nextConfig;
+export default withPWA(nextConfig as any);

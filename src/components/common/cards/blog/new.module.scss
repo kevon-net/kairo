@@ -3,7 +3,7 @@
   overflow: hidden;
   box-shadow: var(--mantine-shadow-xs);
 
-  @include hover {
+  @include mantine.hover {
     .overlay {
       opacity: 0;
     }

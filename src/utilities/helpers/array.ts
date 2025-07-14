@@ -1,4 +1,5 @@
 import { Order } from '@/enums/sort';
+import { Priority } from '@generated/prisma';
 
 export const isFirstItem = <T>(array: T[], item: T): boolean => {
   return array[0] === item;
@@ -13,6 +14,13 @@ export const sortArray = <T>(
   getField: (item: T) => any | undefined,
   order: Order
 ): T[] => {
+  const priorityOrder = {
+    [Priority.URGENT_IMPORTANT]: 1,
+    [Priority.URGENT_UNIMPORTANT]: 2,
+    [Priority.NOT_URGENT_IMPORTANT]: 3,
+    [Priority.NOT_URGENT_UNIMPORTANT]: 4,
+  };
+
   const items = {
     valid: array.filter(
       (item) => getField(item) !== null && getField(item) !== undefined
@@ -27,10 +35,12 @@ export const sortArray = <T>(
       const aValue = getField(a);
       const bValue = getField(b);
 
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
+      if (aValue in priorityOrder && bValue in priorityOrder) {
         return order === Order.ASCENDING
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
+          ? priorityOrder[aValue as Priority] -
+              priorityOrder[bValue as Priority]
+          : priorityOrder[bValue as Priority] -
+              priorityOrder[aValue as Priority];
       }
 
       if (aValue instanceof Date && bValue instanceof Date) {
@@ -39,13 +49,19 @@ export const sortArray = <T>(
           : bValue.getTime() - aValue.getTime();
       }
 
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return order === Order.ASCENDING
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
       if (typeof aValue === 'number' && typeof bValue === 'number') {
         return order === Order.ASCENDING ? aValue - bValue : bValue - aValue;
       }
 
       // Handle cases where types are inconsistent or not comparable
       throw new Error(
-        `Comparison not supported between ${typeof aValue} and ${typeof bValue} for the selcted property`
+        `Comparison not supported between ${typeof aValue} and ${typeof bValue} for the selected property`
       );
     } catch (error) {
       console.error(`---> utility error (sort array):`, error);

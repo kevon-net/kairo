@@ -3,7 +3,7 @@
 import { Modal, Button, Stack, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import LayoutModal from '@/components/layout/modal';
+import LayoutModalMain from '@/components/layout/modal/main';
 import { Alert } from '@/enums/notification';
 
 export default function Account() {
@@ -19,7 +19,7 @@ export default function Account() {
         size={'xl'}
         padding={'xl'}
       >
-        <LayoutModal
+        <LayoutModalMain
           props={{
             title: 'Account Erasure',
             close,
@@ -39,7 +39,7 @@ export default function Account() {
             </Stack>
             action
           </Stack>
-        </LayoutModal>
+        </LayoutModalMain>
       </Modal>
 
       <Button color="red" onClick={open}>

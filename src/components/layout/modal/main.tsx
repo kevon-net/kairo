@@ -22,7 +22,7 @@ import {
 } from '@tabler/icons-react';
 import React from 'react';
 
-export default function Modal({
+export default function Main({
   children,
   props,
   variant,

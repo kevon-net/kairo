@@ -3,7 +3,7 @@ import { HourSystem } from '@/enums/date';
 export interface FormatOptions {
   locale?: string; // en-US | en-GB
   timezone?: string;
-  format?: 'numeric' | 'short' | 'long' | 'full';
+  format?: 'numeric' | 'short' | 'long' | 'full' | 'weekday';
   hourSystem?: HourSystem;
 }
 
@@ -48,6 +48,13 @@ export const getRegionalDate = (
           month: 'long',
           day: 'numeric',
           weekday: 'long',
+        };
+
+        break;
+
+      case 'weekday':
+        formatOptions = {
+          weekday: 'short',
         };
 
         break;

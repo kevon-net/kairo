@@ -1,7 +1,7 @@
 .card {
   overflow: hidden;
 
-  @include hover {
+  @include mantine.hover {
     .overlay {
       opacity: 0;
     }

@@ -13,7 +13,7 @@ export default function Home() {
 
           <p>Save and see your changes instantly.</p>
 
-          <Anchor component={Link} href={'/app/inbox'} inherit ta="center">
+          <Anchor component={Link} href={'/app/home'} inherit ta="center">
             App
           </Anchor>
         </Stack>

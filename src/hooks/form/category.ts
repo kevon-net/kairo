@@ -67,7 +67,7 @@ export const useCategory = (params?: { id?: string }) => {
       updated_at: currentDate.toISOString() as any,
       sync_status: SyncStatus.PENDING,
       profile_id: session?.id as string,
-      context: Context.TASKS,
+      context: Context.SESSIONS,
       status: Status.ACTIVE,
     };
 

@@ -18,9 +18,7 @@ import classes from './tasks.module.scss';
 import CardCtaTaskCreate from '../cards/cta/task/create';
 import { SECTION_SPACING } from '@/data/constants';
 import { useEffect, useState } from 'react';
-import { FormTask } from '@/hooks/form/task';
-import { useFormTaskView, useGetOrganizedTasks } from '@/hooks/form/task/view';
-import { GroupSort } from '@generated/prisma';
+import { useGetOrganizedTasks } from '@/hooks/form/task/view';
 import { TaskRelations } from '@/types/models/task';
 
 export default function Tasks({
@@ -28,15 +26,9 @@ export default function Tasks({
 }: {
   props: {
     tasks: TaskRelations[] | null;
-    defaultValues?: {
-      categoryId?: FormTask['values']['properties']['category_id'];
-      dueDate?: FormTask['values']['properties']['due_date'];
-      priority?: FormTask['values']['properties']['priority'];
-    };
     completeTasks?: boolean;
   };
 }) {
-  const { view } = useFormTaskView();
   const { organizedTasksState } = useGetOrganizedTasks({
     tasks: props.tasks || [],
     completeTasks: props.completeTasks,
@@ -67,26 +59,7 @@ export default function Tasks({
         <AccordionPanel pt={'xs'}>
           <ListDraggable props={{ list: group.tasks }} />
 
-          <CardCtaTaskCreate
-            props={{
-              defaultValues: {
-                properties: {
-                  category_id:
-                    view?.group_by == GroupSort.CATEGORY
-                      ? group.id
-                      : props.defaultValues?.categoryId,
-                  due_date: (view?.group_by == GroupSort.DATE
-                    ? group.id
-                      ? new Date(group.id)
-                      : undefined
-                    : props.defaultValues?.dueDate) as any,
-                  priority: (view?.group_by == GroupSort.PRIORITY
-                    ? group.id
-                    : props.defaultValues?.priority) as any,
-                },
-              },
-            }}
-          />
+          <CardCtaTaskCreate />
         </AccordionPanel>
       </AccordionItem>
     );

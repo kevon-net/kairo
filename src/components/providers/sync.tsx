@@ -3,8 +3,7 @@
 import { INDEXED_DB } from '@/data/constants';
 import { categoriesUpdate } from '@/handlers/requests/database/category';
 import { tasksUpdate } from '@/handlers/requests/database/task';
-import { recurringRulesUpdate } from '@/handlers/requests/database/recurring-rule';
-import { remindersUpdate } from '@/handlers/requests/database/reminders';
+import { sessionsUpdate } from '@/handlers/requests/database/session';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { config, openDatabase } from '@/libraries/indexed-db/db';
 import { DatabaseError } from '@/libraries/indexed-db/transactions';
@@ -18,13 +17,9 @@ import {
   updateTasks,
 } from '@/libraries/redux/slices/tasks';
 import {
-  updateRecurringRules,
-  updateDeletedRecurringRules,
-} from '@/libraries/redux/slices/recurring-rules';
-import {
-  updateReminders,
-  updateDeletedReminders,
-} from '@/libraries/redux/slices/reminders';
+  updateSessions,
+  updateDeletedSessions,
+} from '@/libraries/redux/slices/sessions';
 import { useDebouncedCallback, useNetwork } from '@mantine/hooks';
 import { SyncStatus } from '@generated/prisma';
 import React, { useEffect } from 'react';
@@ -134,12 +129,8 @@ export default function Sync({ children }: { children: React.ReactNode }) {
   const deletedTasks = useAppSelector((state) => state.tasks.deleted);
   const categories = useAppSelector((state) => state.categories.value);
   const deletedCategories = useAppSelector((state) => state.categories.deleted);
-  const recurringRules = useAppSelector((state) => state.recurringRules.value);
-  const deletedRecurringRules = useAppSelector(
-    (state) => state.recurringRules.deleted
-  );
-  const reminders = useAppSelector((state) => state.reminders.value);
-  const deletedReminders = useAppSelector((state) => state.reminders.deleted);
+  const sessions = useAppSelector((state) => state.sessions.value);
+  const deletedSessions = useAppSelector((state) => state.sessions.deleted);
   const views = useAppSelector((state) => state.views.value);
   const deletedViews = useAppSelector((state) => state.views.deleted);
   const notifications = useAppSelector((state) => state.notifications.value);
@@ -191,10 +182,10 @@ export default function Sync({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const syncRecurringRules = () => {
+  const syncSessions = () => {
     const trigger = triggerSync({
-      items: recurringRules,
-      deletedItems: deletedRecurringRules,
+      items: sessions || [],
+      deletedItems: deletedSessions,
       syncStatus,
       online: networkStatus.online,
     });
@@ -202,37 +193,14 @@ export default function Sync({ children }: { children: React.ReactNode }) {
     if (!trigger) return;
 
     debounceSync({
-      items: recurringRules,
-      deletedItems: deletedRecurringRules,
-      dataStore: INDEXED_DB.RECURRING_RULES,
-      stateUpdateFunctionDeleted: () =>
-        dispatch(updateDeletedRecurringRules([])),
+      items: sessions || [],
+      deletedItems: deletedSessions,
+      dataStore: INDEXED_DB.SESSIONS,
+      stateUpdateFunctionDeleted: () => dispatch(updateDeletedSessions([])),
       stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateRecurringRules(stateUpdateItems)),
+        dispatch(updateSessions(stateUpdateItems)),
       serverUpdateFunction: async (serverSyncItems, deletedIds) =>
-        await recurringRulesUpdate(serverSyncItems, deletedIds),
-    });
-  };
-
-  const syncReminders = () => {
-    const trigger = triggerSync({
-      items: reminders,
-      deletedItems: deletedReminders,
-      syncStatus,
-      online: networkStatus.online,
-    });
-
-    if (!trigger) return;
-
-    debounceSync({
-      items: reminders,
-      deletedItems: deletedReminders,
-      dataStore: INDEXED_DB.REMINDERS,
-      stateUpdateFunctionDeleted: () => dispatch(updateDeletedReminders([])),
-      stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateReminders(stateUpdateItems)),
-      serverUpdateFunction: async (serverSyncItems, deletedIds) =>
-        await remindersUpdate(serverSyncItems, deletedIds),
+        await sessionsUpdate(serverSyncItems, deletedIds),
     });
   };
 
@@ -283,8 +251,7 @@ export default function Sync({ children }: { children: React.ReactNode }) {
 
   useEffect(() => syncTasks(), [tasks]);
   useEffect(() => syncCategories(), [categories]);
-  useEffect(() => syncRecurringRules(), [recurringRules]);
-  useEffect(() => syncReminders(), [reminders]);
+  useEffect(() => syncSessions(), [sessions]);
   useEffect(() => syncViews(), [views]);
   useEffect(() => syncNotifications(), [notifications]);
 
@@ -298,7 +265,7 @@ export default function Sync({ children }: { children: React.ReactNode }) {
   }, [networkStatus.online]);
 
   // task reminder notification watcher
-  useNotificationReminder({ tasks });
+  useNotificationReminder({ sessions });
 
   return <div>{children}</div>;
 }

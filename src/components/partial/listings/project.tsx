@@ -57,12 +57,7 @@ export default function Project({
           </ModalTaskCreate>
         </PlaceholderEmpty>
       ) : (
-        <AccordionTasks
-          props={{
-            tasks: tasksOfCategory,
-            defaultValues: { categoryId: props.projectId || '' },
-          }}
-        />
+        <AccordionTasks props={{ tasks: tasksOfCategory }} />
       )}
     </Container>
   );

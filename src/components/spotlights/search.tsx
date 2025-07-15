@@ -7,15 +7,7 @@ import {
   SpotlightActionGroupData,
   spotlight,
 } from '@mantine/spotlight';
-import {
-  IconSearch,
-  IconSun,
-  IconCalendarEvent,
-  IconCalendarMonth,
-  IconClearAll,
-  IconCircleCheck,
-  IconInbox,
-} from '@tabler/icons-react';
+import { IconSearch, IconHome, IconTimeline } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import classes from './search.module.scss';
 
@@ -27,50 +19,18 @@ export default function Search({ children }: { children: React.ReactNode }) {
       group: 'Navigation',
       actions: [
         {
-          id: 'today',
-          label: 'Today',
-          leftSection: <IconSun size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />,
-          onClick: () => router.push(`/app/today`),
+          id: 'home',
+          label: 'Home',
+          leftSection: <IconHome size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />,
+          onClick: () => router.push(`/app/home`),
         },
         {
-          id: 'upcoming',
-          label: 'Upcoming',
+          id: 'timeline',
+          label: 'Timeline',
           leftSection: (
-            <IconCalendarEvent size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            <IconTimeline size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
           ),
-          onClick: () => router.push(`/app/upcoming`),
-        },
-        {
-          id: 'planned',
-          label: 'Planned',
-          leftSection: (
-            <IconCalendarMonth size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          ),
-          onClick: () => router.push(`/app/planned`),
-        },
-        {
-          id: 'all',
-          label: 'All',
-          leftSection: (
-            <IconClearAll size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          ),
-          onClick: () => router.push(`/app/all`),
-        },
-        {
-          id: 'completed',
-          label: 'Completed',
-          leftSection: (
-            <IconCircleCheck size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          ),
-          onClick: () => router.push(`/app/completed`),
-        },
-        {
-          id: 'inbox',
-          label: 'Inbox',
-          leftSection: (
-            <IconInbox size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          ),
-          onClick: () => router.push(`/app/inbox`),
+          onClick: () => router.push(`/app/timeline`),
         },
       ],
     },

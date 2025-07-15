@@ -82,8 +82,7 @@ export const HOSTED_BASE_URL = {
 export const INDEXED_DB = {
   PROFILES: 'profiles',
   TASKS: 'tasks',
-  RECURRING_RULES: 'recurring_rules',
-  REMINDERS: 'reminders',
+  SESSIONS: 'sessions',
   TAGS: 'tags',
   CATEGORIES: 'categories',
   VIEWS: 'views',

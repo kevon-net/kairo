@@ -4,10 +4,7 @@ import { FormTask } from '@/hooks/form/task';
 import { Group, Textarea } from '@mantine/core';
 import React from 'react';
 import classes from './create.module.scss';
-import ComboboxTaskDue from '@/components/common/inputs/combobox/task/due';
-import ComboboxTaskTime from '@/components/common/inputs/combobox/task/time';
-import ComboboxTaskRepeat from '@/components/common/inputs/combobox/task/repeat';
-import ComboboxTaskPriority from '@/components/common/inputs/combobox/task/priority';
+import ComboboxTaskDue from '@/components/common/inputs/combobox/task/date';
 
 export default function Create({ props }: { props: { form: FormTask } }) {
   return (
@@ -41,9 +38,6 @@ export default function Create({ props }: { props: { form: FormTask } }) {
 
       <Group gap={'xs'} mt={'xs'}>
         <ComboboxTaskDue props={{ form: props.form }} />
-        <ComboboxTaskTime props={{ form: props.form }} />
-        <ComboboxTaskRepeat props={{ form: props.form }} />
-        <ComboboxTaskPriority props={{ formTask: props.form }} />
       </Group>
     </>
   );

@@ -14,7 +14,7 @@ export async function GET(
 
     const taskRecord = await prisma.task.findUnique({
       where: { id: taskId },
-      include: { tags: true, reminders: true, recurring_rule: true },
+      include: { category: true, sessions: true },
     });
 
     return NextResponse.json(

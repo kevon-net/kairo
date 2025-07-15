@@ -1,14 +1,14 @@
 import React from 'react';
 import { Metadata } from 'next';
-import PartialListingComplete from '@/components/partial/listings/complete';
+import PartialListingTimeline from '@/components/partial/listings/timeline';
 
 export const metadata: Metadata = {
-  title: 'Completed',
+  title: 'Timeline',
 };
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 10;
 
-export default function Completed() {
-  return <PartialListingComplete />;
+export default function Timeline() {
+  return <PartialListingTimeline />;
 }

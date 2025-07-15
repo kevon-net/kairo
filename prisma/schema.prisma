@@ -35,30 +35,6 @@ enum Status {
   PUBLISHED
 }
 
-enum Priority {
-  URGENT_IMPORTANT
-  NOT_URGENT_IMPORTANT
-  URGENT_UNIMPORTANT
-  NOT_URGENT_UNIMPORTANT
-}
-
-enum Frequency {
-  DAY
-  WEEK
-  MONTH
-  YEAR
-}
-
-enum Weekdays {
-  MO
-  TU
-  WE
-  TH
-  FR
-  SA
-  SU
-}
-
 enum SyncStatus {
   PENDING
   SYNCED
@@ -69,19 +45,7 @@ enum SyncStatus {
 
 enum Context {
   BLOG
-  TASKS
-}
-
-enum ViewType {
-  LIST
-  BOARD
-  CALENDAR
-}
-
-enum GroupSort {
-  PRIORITY
-  CATEGORY
-  DATE
+  SESSIONS
 }
 
 enum SortDirection {
@@ -102,16 +66,15 @@ model Profile {
   role       Role    @default(USER)
   status     Status  @default(ACTIVE)
 
-  posts           Post[]
-  comments        Comment[]
-  replies         Reply[]
-  recurring_rules RecurringRule[]
-  tasks           Task[]
-  reminders       Reminder[]
-  categories      Category[]
-  tags            Tag[]
-  views           View[]
-  notifications   Notification[]
+  posts         Post[]
+  comments      Comment[]
+  replies       Reply[]
+  tasks         Task[]
+  categories    Category[]
+  tags          Tag[]
+  views         View[]
+  notifications Notification[]
+  sessions      Session[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -130,8 +93,9 @@ model Category {
   profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id String?
 
-  posts Post[]
-  tasks Task[]
+  posts    Post[]
+  tasks    Task[]
+  sessions Session[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -144,14 +108,12 @@ model Tag {
   title       String
   color       String
   status      Status     @default(ACTIVE)
-  context     Context
   sync_status SyncStatus @default(SYNCED)
 
   profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id String?
 
   posts Post[]
-  tasks Task[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -224,43 +186,18 @@ model Reply {
   @@map(name: "replies")
 }
 
-model RecurringRule {
-  id          String     @id @default(uuid())
-  frequency   Frequency
-  interval    Int        @default(1)
-  day_of_week Weekdays[]
-  end_date    DateTime?
-  sync_status SyncStatus @default(SYNCED)
-
-  profile    Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  profile_id String
-
-  tasks Task[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@map(name: "recurring_rules")
-}
-
 model Task {
   id          String     @id @default(uuid())
   title       String
   complete    Boolean    @default(false)
-  description String?
-  due_date    DateTime?
-  priority    Priority   @default(NOT_URGENT_UNIMPORTANT)
   sync_status SyncStatus @default(SYNCED)
 
-  profile           Profile        @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  profile_id        String
-  category          Category?      @relation(fields: [category_id], references: [id], onDelete: SetNull)
-  category_id       String?
-  recurring_rule    RecurringRule? @relation(fields: [recurring_rule_id], references: [id])
-  recurring_rule_id String?
+  profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id  String
+  category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  category_id String?
 
-  tags      Tag[]
-  reminders Reminder[]
+  sessions Session[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -268,33 +205,33 @@ model Task {
   @@map(name: "tasks")
 }
 
-model Reminder {
+model Session {
   id          String     @id @default(uuid())
-  remind_at   DateTime
-  sent        Boolean    @default(false)
+  title       String
+  start       DateTime
+  end         DateTime?
+  duration    Int? // minutes
   sync_status SyncStatus @default(SYNCED)
+  status      Status     @default(ACTIVE)
 
-  profile    Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  profile_id String
-  task       Task    @relation(fields: [task_id], references: [id], onDelete: Cascade)
-  task_id    String
+  profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id  String
+  category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  category_id String?
+  task        Task?     @relation(fields: [task_id], references: [id], onDelete: SetNull)
+  task_id     String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map(name: "reminders")
+  @@map(name: "sesions")
 }
 
 model View {
-  id              String         @id @default(uuid())
-  title           String
-  view            ViewType?      @default(LIST)
-  sort_by         GroupSort?     @default(DATE)
-  sort_direction  SortDirection? @default(DESCENDING)
-  group_by        GroupSort?
-  category_filter String?
-  priority_filter Priority?
-  sync_status     SyncStatus     @default(SYNCED)
+  id             String         @id @default(uuid())
+  title          String
+  sort_direction SortDirection? @default(DESCENDING)
+  sync_status    SyncStatus     @default(SYNCED)
 
   profile    Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id String

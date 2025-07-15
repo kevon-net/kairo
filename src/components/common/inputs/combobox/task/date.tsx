@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  CloseButton,
   Combobox,
   ComboboxChevron,
   ComboboxDropdown,
@@ -10,7 +9,6 @@ import {
   ComboboxTarget,
   Group,
   InputBase,
-  InputPlaceholder,
   Popover,
   PopoverDropdown,
   PopoverTarget,
@@ -21,23 +19,21 @@ import { FormTask } from '@/hooks/form/task';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import {
   Icon,
-  IconBell,
-  IconBellCog,
-  IconBellDown,
-  IconBellShare,
+  IconCalendarCog,
+  IconCalendarDown,
+  IconCalendarEvent,
+  IconCalendarShare,
 } from '@tabler/icons-react';
 import { ICON_SIZE, ICON_STROKE_WIDTH, TIME_FORMAT } from '@/data/constants';
 import {
+  getDueButtonLabel,
   getNextWeek,
-  getReminderButtonLabel,
-  getRoundedFutureTime,
   getTomorrow,
 } from '@/services/logic/time';
 import { useState } from 'react';
-import InputCalendarTime from '../../calendar/time';
-import { HourSystem } from '@/enums/date';
+import InputCalendarDate from '../../calendar/date';
 
-export default function Time({
+export default function SessionDate({
   props,
 }: {
   props: { form: FormTask; inputProps?: { width?: any } };
@@ -69,43 +65,23 @@ export default function Time({
       p={0}
       w={props.inputProps?.width || 'fit-content'}
       pointer
-      rightSection={
-        props.form.values.properties.time ? (
-          <CloseButton
-            size="sm"
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={() => {
-              props.form.setFieldValue('properties.time', '');
-              setMounted(false);
-            }}
-            aria-label="Clear value"
-          />
-        ) : (
-          <ComboboxChevron />
-        )
-      }
+      rightSection={<ComboboxChevron />}
       onClick={() => setMounted(true)}
       rightSectionPointerEvents={
-        !props.form.values.properties.time ? 'none' : 'all'
+        'none'
+        // 'all'
       }
     >
       <Group gap={'xs'} fz={'sm'} pr={'xs'}>
-        {props.form.values.properties.time ? (
-          <Group gap={'xs'}>
-            <IconBell size={ICON_SIZE / 1.25} stroke={ICON_STROKE_WIDTH} />
-
-            {getReminderButtonLabel({
-              date: new Date(props.form.values.properties.time),
-            })}
-          </Group>
-        ) : (
-          <InputPlaceholder fz={'sm'}>
-            <Group gap={'xs'}>
-              <IconBell size={ICON_SIZE / 1.25} stroke={ICON_STROKE_WIDTH} />
-              Reminder
-            </Group>
-          </InputPlaceholder>
-        )}
+        <Group gap={'xs'}>
+          <IconCalendarEvent
+            size={ICON_SIZE / 1.25}
+            stroke={ICON_STROKE_WIDTH}
+          />
+          {getDueButtonLabel({
+            date: new Date(props.form.values.date),
+          })}
+        </Group>
       </Group>
     </InputBase>
   );
@@ -121,18 +97,18 @@ export default function Time({
           return;
         }
 
-        props.form.setFieldValue('properties.time', val);
+        props.form.setFieldValue('properties.date', val);
         setMounted(false);
       }}
     >
       <ComboboxTarget>{popoverTarget}</ComboboxTarget>
 
-      <ComboboxDropdown miw={220}>
+      <ComboboxDropdown miw={200}>
         <ComboboxOptions>
           {options}
 
           <ComboboxOption value={'custom'} onClick={(e) => e.preventDefault()}>
-            <Option props={{ icon: IconBellCog }}>Pick a date & time</Option>
+            <Option props={{ icon: IconCalendarCog }}>Pick a date</Option>
           </ComboboxOption>
         </ComboboxOptions>
       </ComboboxDropdown>
@@ -150,7 +126,7 @@ export default function Time({
       <PopoverTarget>{popoverTarget}</PopoverTarget>
 
       <PopoverDropdown p={'xs'}>
-        <InputCalendarTime
+        <InputCalendarDate
           props={{
             form: props.form,
             setMounted: (state) => setMounted(state),
@@ -162,48 +138,29 @@ export default function Time({
   );
 }
 
-const roundedFutureTime = getRoundedFutureTime();
-const tomorrowTime = getTomorrow();
-const nextWeekTime = getNextWeek();
+const currentDate = new Date();
 
 const items = [
   {
-    value: roundedFutureTime,
+    value: currentDate,
     component: (
-      <Option
-        props={{
-          date: roundedFutureTime,
-          icon: IconBellDown,
-        }}
-      >
+      <Option props={{ date: currentDate, icon: IconCalendarDown }}>
         Today
       </Option>
     ),
   },
   {
-    value: tomorrowTime,
+    value: getTomorrow(),
     component: (
-      <Option
-        props={{
-          date: tomorrowTime,
-          time: tomorrowTime,
-          icon: IconBellShare,
-        }}
-      >
+      <Option props={{ date: getTomorrow(), icon: IconCalendarShare }}>
         Tomorrow
       </Option>
     ),
   },
   {
-    value: nextWeekTime,
+    value: getNextWeek(),
     component: (
-      <Option
-        props={{
-          date: nextWeekTime,
-          time: nextWeekTime,
-          icon: IconBellShare,
-        }}
-      >
+      <Option props={{ date: getNextWeek(), icon: IconCalendarShare }}>
         Next Week
       </Option>
     ),
@@ -214,7 +171,7 @@ function Option({
   props,
   children,
 }: {
-  props: { date?: Date; time?: Date; icon: Icon };
+  props: { date?: Date; icon: Icon };
   children: React.ReactNode;
 }) {
   return (
@@ -225,28 +182,13 @@ function Option({
       </Group>
 
       {props.date && (
-        <Text component="span" inherit c={'dimmed'} fz={'xs'}>
-          {!props.time
-            ? getReminderButtonLabel({
-                date: props.date,
-              })
-            : `${
-                getRegionalDate(props.date, {
-                  locale: TIME_FORMAT.LOCALE,
-                  format: 'weekday',
-                  hourSystem: HourSystem.TWENTY_FOUR,
-                }).date
-              }${
-                props.time
-                  ? `, ${
-                      getRegionalDate(props.time, {
-                        locale: TIME_FORMAT.LOCALE,
-                        format: 'weekday',
-                        hourSystem: HourSystem.TWENTY_FOUR,
-                      }).time
-                    }`
-                  : ''
-              }`}
+        <Text component="span" c={'dimmed'} fz={'xs'}>
+          {
+            getRegionalDate(props.date, {
+              locale: TIME_FORMAT.LOCALE,
+              format: 'weekday',
+            }).date
+          }
         </Text>
       )}
     </Group>

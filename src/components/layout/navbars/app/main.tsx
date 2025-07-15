@@ -17,23 +17,18 @@ import {
   Title,
 } from '@mantine/core';
 import {
-  IconCalendarEvent,
   IconCategory,
   IconCategoryPlus,
-  IconCircleCheck,
-  IconClearAll,
   IconDots,
-  IconInbox,
   IconHome,
   IconSearch,
-  IconSun,
+  IconTimeline,
 } from '@tabler/icons-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { linkify } from '@/utilities/formatters/string';
 import Link from 'next/link';
-import { isToday, isWithinNext7Days } from '@/utilities/helpers/time';
 import { TaskRelations } from '@/types/models/task';
 import SpotlightSearch from '@/components/spotlights/search';
 import classes from './main.module.scss';
@@ -51,8 +46,6 @@ export default function App() {
   const dispatch = useAppDispatch();
   const desktop = useMediaQuery('(min-width: 62em)');
 
-  const linksWithCounts = getLinksWithCounts(tasks || []);
-
   return (
     <Stack px={`xs`} pb={'xs'} maw={'100vw'}>
       <Stack gap={2}>
@@ -66,7 +59,7 @@ export default function App() {
           />
         </SpotlightSearch>
 
-        {linksWithCounts.map((link, index) => {
+        {navLinks.map((link, index) => {
           return (
             <div key={index}>
               <NavLink
@@ -88,15 +81,6 @@ export default function App() {
                         : 'var(--mantine-color-text)'
                     }
                   />
-                }
-                rightSection={
-                  tasks == null ? (
-                    <Skeleton h={ICON_SIZE / 2} w={ICON_SIZE / 2} />
-                  ) : !link.count ? undefined : (
-                    <Group fz={'sm'}>
-                      <NumberFormatter value={link.count} />
-                    </Group>
-                  )
                 }
                 style={navLinkStyles}
               />
@@ -210,29 +194,9 @@ export const navLinks = [
     link: '/app/home',
   },
   {
-    icon: IconInbox,
-    label: 'Inbox',
-    link: '/app/inbox',
-  },
-  {
-    icon: IconSun,
-    label: 'Today',
-    link: '/app/today',
-  },
-  {
-    icon: IconCalendarEvent,
-    label: 'Upcoming',
-    link: '/app/upcoming',
-  },
-  {
-    icon: IconClearAll,
-    label: 'All',
-    link: '/app/all',
-  },
-  {
-    icon: IconCircleCheck,
-    label: 'Completed',
-    link: '/app/completed',
+    icon: IconTimeline,
+    label: 'Timeline',
+    link: '/app/timeline',
   },
 ];
 
@@ -243,55 +207,6 @@ export const navLinkStyles = {
   paddingLeft: 'calc(var(--mantine-spacing-md) / 2)',
   paddingRight: 'calc(var(--mantine-spacing-md) / 1)',
 };
-
-const getLinksWithCounts = (tasks: TaskRelations[]) =>
-  navLinks.map((nl) => {
-    let count = 0;
-    const incompleteTasks = tasks.filter((t) => !t.complete);
-    const dueTasks = incompleteTasks.filter((t) => {
-      if (t.due_date || t.reminders?.length) {
-        return !!t.due_date || !!t.reminders[0].remind_at;
-      } else {
-        return false;
-      }
-    });
-
-    switch (nl.label) {
-      case 'Today':
-        count = dueTasks.filter((t) =>
-          isToday(new Date(t.due_date || t.reminders[0].remind_at))
-        ).length;
-        break;
-
-      case 'Upcoming':
-        count = dueTasks.filter((t) =>
-          isWithinNext7Days(new Date(t.due_date || t.reminders[0].remind_at))
-        ).length;
-        break;
-
-      case 'All':
-        count = incompleteTasks.length;
-        break;
-
-      case 'Completed':
-        count = tasks.filter((t) => t.complete).length;
-        break;
-
-      case 'Inbox':
-        count = incompleteTasks.filter((t) => !t.category_id).length;
-        break;
-
-      case 'Home':
-        count = 0;
-        break;
-
-      default:
-        count = incompleteTasks.length;
-        break;
-    }
-
-    return { ...nl, count };
-  });
 
 const getCategoryCount = (tasks: TaskRelations[], categoryId: string) => {
   return tasks.filter(

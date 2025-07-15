@@ -1,5 +1,4 @@
 import { Order } from '@/enums/sort';
-import { Priority } from '@generated/prisma';
 
 export const isFirstItem = <T>(array: T[], item: T): boolean => {
   return array[0] === item;
@@ -14,13 +13,6 @@ export const sortArray = <T>(
   getField: (item: T) => any | undefined,
   order: Order
 ): T[] => {
-  const priorityOrder = {
-    [Priority.URGENT_IMPORTANT]: 1,
-    [Priority.URGENT_UNIMPORTANT]: 2,
-    [Priority.NOT_URGENT_IMPORTANT]: 3,
-    [Priority.NOT_URGENT_UNIMPORTANT]: 4,
-  };
-
   const items = {
     valid: array.filter(
       (item) => getField(item) !== null && getField(item) !== undefined
@@ -34,14 +26,6 @@ export const sortArray = <T>(
     try {
       const aValue = getField(a);
       const bValue = getField(b);
-
-      if (aValue in priorityOrder && bValue in priorityOrder) {
-        return order === Order.ASCENDING
-          ? priorityOrder[aValue as Priority] -
-              priorityOrder[bValue as Priority]
-          : priorityOrder[bValue as Priority] -
-              priorityOrder[aValue as Priority];
-      }
 
       if (aValue instanceof Date && bValue instanceof Date) {
         return order === Order.ASCENDING

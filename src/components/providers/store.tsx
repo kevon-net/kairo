@@ -26,16 +26,11 @@ import {
   updateCategories,
   // updateDeletedCategories,
 } from '@/libraries/redux/slices/categories';
-import { recurringRulesGet } from '@/handlers/requests/database/recurring-rule';
+import { sessionsGet } from '@/handlers/requests/database/session';
 import {
-  // updateDeletedRecurringRules,
-  updateRecurringRules,
-} from '@/libraries/redux/slices/recurring-rules';
-import { remindersGet } from '@/handlers/requests/database/reminders';
-import {
-  // updateDeletedReminders,
-  updateReminders,
-} from '@/libraries/redux/slices/reminders';
+  // updateDeletedSessions,
+  updateSessions,
+} from '@/libraries/redux/slices/sessions';
 import { DatabaseError } from '@/libraries/indexed-db/transactions';
 import { config, openDatabase } from '@/libraries/indexed-db/db';
 import {
@@ -313,30 +308,17 @@ export default function Store({ children }: { children: React.ReactNode }) {
       });
     };
 
-    const loadRecurringRules = async () => {
+    const loadSessions = async () => {
       if (prevItemsRef.current.length) return;
 
       await loadInitialData({
-        dataStore: INDEXED_DB.RECURRING_RULES,
-        dataFetchFunction: async () => await recurringRulesGet(),
+        dataStore: INDEXED_DB.SESSIONS,
+        dataFetchFunction: async () => await sessionsGet(),
         stateUpdateFunction: (stateUpdateItems) =>
-          storeRef.current?.dispatch(updateRecurringRules(stateUpdateItems)),
-        // deletedStateUpdateFunction: (deletedStateItems) =>
-        //   storeRef.current?.dispatch(updateDeletedRecurringRules(deletedStateItems)),
-      });
-    };
-
-    const loadReminders = async () => {
-      if (prevItemsRef.current.length) return;
-
-      await loadInitialData({
-        dataStore: INDEXED_DB.REMINDERS,
-        dataFetchFunction: async () => await remindersGet(),
-        stateUpdateFunction: (stateUpdateItems) =>
-          storeRef.current?.dispatch(updateReminders(stateUpdateItems)),
+          storeRef.current?.dispatch(updateSessions(stateUpdateItems)),
         // deletedStateUpdateFunction: (deletedStateItems) =>
         //   storeRef.current?.dispatch(
-        //     updateDeletedReminders(deletedStateItems)
+        //     updateDeletedSessions(deletedStateItems)
         //   ),
       });
     };
@@ -356,8 +338,7 @@ export default function Store({ children }: { children: React.ReactNode }) {
 
     loadTasks();
     loadCategories();
-    loadRecurringRules();
-    loadReminders();
+    loadSessions();
     loadViews();
   }, []);
 

@@ -1,19 +1,19 @@
-import { Task, Prisma } from '@generated/prisma';
+import { Session, Prisma } from '@generated/prisma';
 
 // Type for creating an item (without id and relations)
-export type TaskCreate = Prisma.TaskCreateInput;
+export type SessionCreate = Prisma.SessionCreateInput;
 
 // Type for updating an item (all fields optional except id)
-export type TaskUpdate = Prisma.TaskUpdateInput;
+export type SessionUpdate = Prisma.SessionUpdateInput;
 
 // Type for default item (with id and no relations)
-export type TaskGet = Task;
+export type SessionGet = Session;
 
 // Type for fetched item with relations
-export type TaskRelations = Prisma.TaskGetPayload<{
+export type SessionRelations = Prisma.SessionGetPayload<{
   include: {
     profile: true;
     category: true;
-    sessions: true;
+    task: true;
   };
 }>;

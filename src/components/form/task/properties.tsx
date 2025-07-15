@@ -20,10 +20,7 @@ import { getRegionalDate } from '@/utilities/formatters/date';
 import { useAppSelector } from '@/hooks/redux';
 import { FormTask } from '@/hooks/form/task';
 import ComboboxTaskProject from '@/components/common/inputs/combobox/task/project';
-import ComboboxTaskDueDate from '@/components/common/inputs/combobox/task/due';
-import ComboboxTaskTime from '@/components/common/inputs/combobox/task/time';
-import ComboboxTaskRepeat from '@/components/common/inputs/combobox/task/repeat';
-import ComboboxTaskPriority from '@/components/common/inputs/combobox/task/priority';
+import ComboboxTaskDueDate from '@/components/common/inputs/combobox/task/date';
 import ModalPrompt from '@/components/common/modals/prompt';
 
 export default function Properties({
@@ -64,39 +61,6 @@ export default function Properties({
           </Title>
           <ComboboxTaskDueDate
             props={{ form: props.form, inputProps: { width: '100%' } }}
-          />
-        </Stack>
-
-        <Divider />
-
-        <Stack gap={5}>
-          <Title order={3} fz={'xs'} fw={500} pl={'sm'}>
-            Reminder
-          </Title>
-          <ComboboxTaskTime
-            props={{ form: props.form, inputProps: { width: '100%' } }}
-          />
-        </Stack>
-
-        <Divider />
-
-        <Stack gap={5}>
-          <Title order={3} fz={'xs'} fw={500} pl={'sm'}>
-            Recurrence
-          </Title>
-          <ComboboxTaskRepeat
-            props={{ form: props.form, inputProps: { width: '100%' } }}
-          />
-        </Stack>
-
-        <Divider />
-
-        <Stack gap={5}>
-          <Title order={3} fz={'xs'} fw={500} pl={'sm'}>
-            Priority
-          </Title>
-          <ComboboxTaskPriority
-            props={{ formTask: props.form, inputProps: { width: '100%' } }}
           />
         </Stack>
       </Stack>

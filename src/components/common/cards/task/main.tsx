@@ -3,19 +3,10 @@
 import { Box, Group, Stack, Text, Title } from '@mantine/core';
 import React, { useMemo } from 'react';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
-import {
-  IconBell,
-  IconCalendarEvent,
-  IconCategory,
-  IconCircleFilled,
-  IconNote,
-  IconRepeat,
-} from '@tabler/icons-react';
+import { IconCategory } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { useFormTask } from '@/hooks/form/task';
 import classes from './main.module.scss';
-import { getRegionalDate } from '@/utilities/formatters/date';
-import { isOverdue, isToday, isTomorrow } from '@/utilities/helpers/time';
 // import ActionIconDragHandle from '../../action-icons/drag-handle';
 import { updateSelectedTask } from '@/libraries/redux/slices/tasks';
 import InputCheckboxTask from '../../inputs/checkboxes/task';
@@ -71,99 +62,8 @@ export default function Main({
             </Title>
 
             <Group gap={'xs'}>
-              {task?.due_date && (
-                <Group
-                  gap={5}
-                  c={
-                    isOverdue(task.due_date) && !task.complete
-                      ? 'red'
-                      : isToday(task.due_date)
-                        ? 'pri'
-                        : 'dimmed'
-                  }
-                >
-                  <IconCalendarEvent
-                    size={ICON_SIZE / 1.5}
-                    stroke={ICON_STROKE_WIDTH * 1.5}
-                  />
-
-                  <Text fz={'xs'} lineClamp={1}>
-                    {isToday(task.due_date)
-                      ? 'Today'
-                      : isTomorrow(task.due_date)
-                        ? 'Tomorrow'
-                        : `${isOverdue(task.due_date) ? 'Overdue, ' : ''}${getRegionalDate(task.due_date).date}`}
-                  </Text>
-
-                  {task?.recurring_rule && (
-                    <IconRepeat
-                      size={ICON_SIZE / 1.5}
-                      stroke={ICON_STROKE_WIDTH * 1.5}
-                    />
-                  )}
-                </Group>
-              )}
-
-              {(task?.reminders || [])[0]?.remind_at && (
-                <>
-                  {task?.due_date && <IconCircleFilled size={3} color="gray" />}
-
-                  <Group
-                    gap={5}
-                    c={
-                      isOverdue((task?.reminders || [])[0].remind_at) &&
-                      !task?.complete
-                        ? 'red'
-                        : isToday((task?.reminders || [])[0].remind_at)
-                          ? 'pri'
-                          : 'dimmed'
-                    }
-                  >
-                    <IconBell
-                      size={ICON_SIZE / 1.5}
-                      stroke={ICON_STROKE_WIDTH * 1.5}
-                    />
-
-                    <Text fz={'xs'} lineClamp={1}>
-                      {isToday((task?.reminders || [])[0].remind_at)
-                        ? 'Today'
-                        : isTomorrow((task?.reminders || [])[0].remind_at)
-                          ? 'Tomorrow'
-                          : getRegionalDate(
-                              (task?.reminders || [])[0].remind_at
-                            ).date}
-                    </Text>
-                  </Group>
-                </>
-              )}
-
-              {task?.description && (
-                <>
-                  {task.due_date || (task?.reminders || [])[0]?.remind_at ? (
-                    <IconCircleFilled size={3} color="gray" />
-                  ) : null}
-
-                  <Group gap={5} c={'dimmed'}>
-                    <IconNote
-                      size={ICON_SIZE / 1.5}
-                      stroke={ICON_STROKE_WIDTH * 1.5}
-                    />
-
-                    <Text fz={'xs'} lineClamp={1}>
-                      Note
-                    </Text>
-                  </Group>
-                </>
-              )}
-
               {task?.category_id && (
                 <>
-                  {task.due_date ||
-                  (task?.reminders || [])[0]?.remind_at ||
-                  task.description ? (
-                    <IconCircleFilled size={3} color="gray" />
-                  ) : null}
-
                   <Group gap={5} c={'dimmed'}>
                     <IconCategory
                       size={ICON_SIZE / 1.5}

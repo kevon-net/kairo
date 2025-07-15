@@ -1,8 +1,6 @@
 import { ICON_WRAPPER_SIZE } from '@/data/constants';
 import { FormTask } from '@/hooks/form/task';
-import { getPriorityColor } from '@/services/logic/priorityColor';
 import { Checkbox } from '@mantine/core';
-import { Priority } from '@generated/prisma';
 import React from 'react';
 
 export default function Task({ props }: { props: { form: FormTask } }) {
@@ -15,7 +13,7 @@ export default function Task({ props }: { props: { form: FormTask } }) {
         input: {
           width: ICON_WRAPPER_SIZE / 1.5,
           height: ICON_WRAPPER_SIZE / 1.5,
-          border: `1.5px solid ${props.form.values.properties.complete ? 'var(--mantine-color-pri-7)' : getPriorityColor(props.form.values.properties.priority as Priority) || 'var(--mantine-color-white)'}`,
+          border: `1.5px solid var(--mantine-color-pri-7)`,
         },
         icon: {
           width: ICON_WRAPPER_SIZE / 3,

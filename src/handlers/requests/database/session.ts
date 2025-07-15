@@ -1,17 +1,19 @@
 import { API_URL, HEADERS } from '@/data/constants';
 import {
-  RecurringRuleCreate,
-  RecurringRuleUpdate,
-} from '@/types/models/recurring-rule';
+  SessionCreate,
+  SessionRelations,
+  SessionUpdate,
+} from '@/types/models/session';
 
-const baseRequestUrl = `${API_URL}/recurring-rules`;
+const baseRequestUrl = `${API_URL}/sessions`;
 
-export const recurringRulesGet = async () => {
+export const sessionsGet = async () => {
   try {
     const request = new Request(baseRequestUrl, {
       method: 'GET',
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
+      cache: 'no-store',
     });
 
     const response = await fetch(request);
@@ -24,13 +26,13 @@ export const recurringRulesGet = async () => {
 
     return result;
   } catch (error) {
-    console.error('---> handler error - (get recurring rules):', error);
+    console.error('---> handler error - (get sessions):', error);
     throw error;
   }
 };
 
-export const recurringRulesUpdate = async (
-  recurringRules: RecurringRuleUpdate[],
+export const sessionsUpdate = async (
+  sessions: SessionRelations[],
   deletedIds?: string[]
 ) => {
   try {
@@ -38,7 +40,7 @@ export const recurringRulesUpdate = async (
       method: 'PUT',
       credentials: 'include',
       headers: HEADERS.WITH_BODY,
-      body: JSON.stringify({ recurringRules, deletedIds }),
+      body: JSON.stringify({ sessions, deletedIds }),
     });
 
     const response = await fetch(request);
@@ -51,14 +53,14 @@ export const recurringRulesUpdate = async (
 
     return result;
   } catch (error) {
-    console.error('---> handler error - (update recurring rules):', error);
+    console.error('---> handler error - (update sessions):', error);
     throw error;
   }
 };
 
-export const recurringRuleGet = async (slug: { recurringRuleId: string }) => {
+export const sessionGet = async (slug: { sessionId: string }) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${slug.recurringRuleId}`, {
+    const request = new Request(`${baseRequestUrl}/${slug.sessionId}`, {
       method: 'GET',
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
@@ -74,12 +76,12 @@ export const recurringRuleGet = async (slug: { recurringRuleId: string }) => {
 
     return result;
   } catch (error) {
-    console.error('---> handler error - (get recurring rule):', error);
+    console.error('---> handler error - (get session):', error);
     throw error;
   }
 };
 
-export const recurringRuleCreate = async (params: RecurringRuleCreate) => {
+export const sessionCreate = async (params: SessionCreate) => {
   try {
     const request = new Request(`${baseRequestUrl}/new`, {
       method: 'POST',
@@ -98,12 +100,12 @@ export const recurringRuleCreate = async (params: RecurringRuleCreate) => {
 
     return result;
   } catch (error) {
-    console.error('---> handler error - (create recurring rule):', error);
+    console.error('---> handler error - (create session):', error);
     throw error;
   }
 };
 
-export const recurringRuleUpdate = async (params: RecurringRuleUpdate) => {
+export const sessionUpdate = async (params: SessionUpdate) => {
   try {
     const request = new Request(`${baseRequestUrl}/${params.id}`, {
       method: 'PUT',
@@ -122,16 +124,14 @@ export const recurringRuleUpdate = async (params: RecurringRuleUpdate) => {
 
     return result;
   } catch (error) {
-    console.error('---> handler error - (update recurring rule):', error);
+    console.error('---> handler error - (update session):', error);
     throw error;
   }
 };
 
-export const recurringRuleDelete = async (slug: {
-  recurringRuleId: string;
-}) => {
+export const sessionDelete = async (slug: { sessionId: string }) => {
   try {
-    const request = new Request(`${baseRequestUrl}/${slug.recurringRuleId}`, {
+    const request = new Request(`${baseRequestUrl}/${slug.sessionId}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: HEADERS.WITHOUT_BODY,
@@ -147,7 +147,7 @@ export const recurringRuleDelete = async (slug: {
 
     return result;
   } catch (error) {
-    console.error('---> handler error - (delete recurring rule):', error);
+    console.error('---> handler error - (delete session):', error);
     throw error;
   }
 };

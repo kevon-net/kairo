@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { createClient } from '@/libraries/supabase/server';
 import { TaskGet, TaskRelations } from '@/types/models/task';
-import { Priority, SyncStatus } from '@generated/prisma';
+import { SyncStatus } from '@generated/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -20,15 +20,8 @@ export async function GET() {
     const taskRecords = await prisma.task.findMany({
       where: { profile_id: session.user?.id },
       include: {
-        tags: {
-          where: { sync_status: SyncStatus.SYNCED },
-        },
-        reminders: {
-          where: { sync_status: SyncStatus.SYNCED },
-        },
-        recurring_rule: {
-          where: { sync_status: SyncStatus.SYNCED },
-        },
+        category: true,
+        sessions: true,
       },
     });
 
@@ -68,95 +61,18 @@ export async function PUT(request: NextRequest) {
           update: {
             title: task.title,
             complete: task.complete,
-            description: task.description,
-            due_date: task.due_date ? new Date(task.due_date) : null,
-            priority: task.priority || Priority.NOT_URGENT_UNIMPORTANT,
             sync_status: task.sync_status,
             category_id: task.category_id || null,
             updated_at: new Date(task.updated_at),
-            // Handle tags
-            tags: task.tags
-              ? {
-                  set: [], // Remove existing tag connections
-                  connectOrCreate: task.tags.map((tag) => ({
-                    where: { id: tag.id || '' },
-                    create: {
-                      id: tag.id || undefined,
-                      title: tag.title,
-                      color: tag.color,
-                      context: tag.context,
-                      profile_id: tag.profile_id,
-                    },
-                  })),
-                }
-              : undefined,
           },
           create: {
             id: task.id,
             title: task.title,
             complete: task.complete || false,
-            description: task.description || '',
-            due_date: task.due_date ? new Date(task.due_date) : null,
-            priority: task.priority || Priority.NOT_URGENT_UNIMPORTANT,
             sync_status: task.sync_status || SyncStatus.SYNCED,
             category_id: task.category_id || null,
             updated_at: new Date(task.updated_at),
             profile_id: task.profile_id,
-            // Handle tags for new tasks
-            tags: task.tags
-              ? {
-                  connectOrCreate: task.tags.map((tag) => ({
-                    where: { id: tag.id || '' },
-                    create: {
-                      id: tag.id || undefined,
-                      title: tag.title,
-                      color: tag.color,
-                      context: tag.context,
-                      profile_id: tag.profile_id,
-                    },
-                  })),
-                }
-              : undefined,
-          },
-        });
-
-        // Now that we have the task, handle recurring rule if it exists
-        let recurringRuleId: string | undefined = undefined;
-
-        if (task.recurring_rule) {
-          const recurringRule = await prisma.recurringRule.upsert({
-            where: { id: task.recurring_rule.id || '' },
-            create: {
-              id: task.recurring_rule.id || undefined,
-              frequency: task.recurring_rule.frequency || 'DAY',
-              interval: task.recurring_rule.interval || 1,
-              day_of_week: task.recurring_rule.day_of_week || [],
-              end_date: task.recurring_rule.end_date
-                ? new Date(task.recurring_rule.end_date)
-                : null,
-              sync_status: task.recurring_rule.sync_status || SyncStatus.SYNCED,
-              profile_id: task.profile_id,
-            },
-            update: {
-              frequency: task.recurring_rule.frequency,
-              interval: task.recurring_rule.interval,
-              day_of_week: task.recurring_rule.day_of_week,
-              end_date: task.recurring_rule.end_date
-                ? new Date(task.recurring_rule.end_date)
-                : null,
-              sync_status: task.recurring_rule.sync_status,
-              profile_id: task.profile_id,
-            },
-          });
-
-          recurringRuleId = recurringRule.id;
-        }
-
-        // Update the task with the recurring rule ID if needed
-        await prisma.task.update({
-          where: { id: upsertOperation.id },
-          data: {
-            recurring_rule_id: task.recurring_rule ? recurringRuleId : null,
           },
         });
 
@@ -164,9 +80,8 @@ export async function PUT(request: NextRequest) {
         return prisma.task.findUnique({
           where: { id: upsertOperation.id },
           include: {
-            recurring_rule: true,
-            reminders: true,
-            tags: true,
+            category: true,
+            sessions: true,
           },
         });
       })

@@ -13,11 +13,7 @@ export const config = {
       keyPath: 'id',
     },
     {
-      name: INDEXED_DB.RECURRING_RULES,
-      keyPath: 'id',
-    },
-    {
-      name: INDEXED_DB.REMINDERS,
+      name: INDEXED_DB.SESSIONS,
       keyPath: 'id',
     },
     {

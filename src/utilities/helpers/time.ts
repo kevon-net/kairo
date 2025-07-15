@@ -222,6 +222,18 @@ export const isWithinNext7Days = (date: Date | null): boolean => {
   return date >= now && date <= end;
 };
 
+export const isWithinPast7Days = (date: Date | null): boolean => {
+  if (!date) return false;
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // Normalize to local midnight
+
+  const end = new Date(now);
+  end.setDate(now.getDate() - 7); // Move to 7 days before
+
+  return date >= now && date <= end;
+};
+
 export const deduplicateDates = (dates: (Date | string)[]): Date[] => {
   // Create a map to store unique dates by their UTC date string
   const uniqueDatesMap = new Map<string, Date>();

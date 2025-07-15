@@ -10,21 +10,18 @@ import {
 } from '@/data/constants';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { updateAppShell } from '@/libraries/redux/slices/app-shell';
-import { ActionIcon, Button, Group, Skeleton, Text } from '@mantine/core';
-import { IconLayout, IconLayoutSidebarFilled } from '@tabler/icons-react';
+import { ActionIcon, Group, Skeleton } from '@mantine/core';
+import { IconLayoutSidebarFilled } from '@tabler/icons-react';
 import React from 'react';
 import LayoutSection from '../../section';
 import classes from './content.module.scss';
 import IndicatorNetworkStatus from '@/components/indicators/network-status';
-import PopoverView from '@/components/common/popovers/view';
 import IconNotificationPermission from '@/components/common/action-icons/notification-permission';
 import { setCookieClient } from '@/utilities/helpers/cookie-client';
-import { useMediaQuery } from '@mantine/hooks';
 
 export default function Content() {
   const appShell = useAppSelector((state) => state.appShell.value);
   const dispatch = useAppDispatch();
-  const mobile = useMediaQuery('(max-width: 36em)');
 
   const toogle = () => {
     if (!appShell) return;
@@ -33,8 +30,6 @@ export default function Content() {
       expiryInSeconds: WEEK,
     });
   };
-
-  const layoutIcon = <IconLayout size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />;
 
   return (
     <LayoutSection
@@ -69,22 +64,6 @@ export default function Content() {
           <IconNotificationPermission />
 
           <IndicatorNetworkStatus />
-
-          <PopoverView>
-            {mobile ? (
-              <Group>
-                <ActionIcon size={28} variant="subtle">
-                  {layoutIcon}
-                </ActionIcon>
-              </Group>
-            ) : (
-              <Button variant="subtle" size="xs" leftSection={layoutIcon}>
-                <Text component="span" inherit mt={2}>
-                  View
-                </Text>
-              </Button>
-            )}
-          </PopoverView>
         </Group>
       </Group>
     </LayoutSection>

@@ -21,14 +21,12 @@ import { IconCategory, IconInbox } from '@tabler/icons-react';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { useState } from 'react';
 import { useAppSelector } from '@/hooks/redux';
-import { FormTaskView } from '@/hooks/form/task/view';
 
 export default function Project({
   props,
 }: {
   props: {
     formTask?: FormTask;
-    formTaskView?: FormTaskView;
     inputProps?: { width?: any };
   };
 }) {
@@ -117,10 +115,6 @@ export default function Project({
           props.formTask.setFieldValue('properties.category_id', val);
         }
 
-        if (props.formTaskView) {
-          props.formTaskView.setFieldValue('filterBy.category', val);
-        }
-
         combobox.closeDropdown();
         setSearch('');
       }}
@@ -140,18 +134,13 @@ export default function Project({
           pointer
           onClick={() => combobox.toggleDropdown()}
           rightSection={
-            props.formTask?.values.properties.category_id ||
-            props.formTaskView?.values.filterBy.category ? (
+            props.formTask?.values.properties.category_id ? (
               <CloseButton
                 size="sm"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
                   if (props.formTask) {
                     props.formTask.setFieldValue('properties.category_id', '');
-                  }
-
-                  if (props.formTaskView) {
-                    props.formTaskView.setFieldValue('filterBy.category', '');
                   }
 
                   combobox.closeDropdown();
@@ -164,32 +153,23 @@ export default function Project({
             )
           }
           rightSectionPointerEvents={
-            !(
-              props.formTask?.values.properties.category_id ||
-              props.formTaskView?.values.filterBy.category
-            )
-              ? 'none'
-              : 'all'
+            !props.formTask?.values.properties.category_id ? 'none' : 'all'
           }
         >
-          {props.formTask?.values.properties.category_id ||
-          props.formTaskView?.values.filterBy.category ? (
+          {props.formTask?.values.properties.category_id ? (
             <Group gap={'xs'} fz={'sm'} pr={'xs'}>
-              {(props.formTask?.values.properties.category_id ||
-                props.formTaskView?.values.filterBy.category) == 'inbox' ? (
+              {props.formTask?.values.properties.category_id == 'inbox' ? (
                 <IconInbox size={ICON_SIZE / 1.25} stroke={ICON_STROKE_WIDTH} />
               ) : (
                 <IconCategory
                   size={ICON_SIZE / 1.25}
                   stroke={ICON_STROKE_WIDTH}
                   color={
-                    props.formTask?.values.properties.category_id ||
-                    props.formTaskView?.values.filterBy.category
+                    props.formTask?.values.properties.category_id
                       ? categories?.find(
                           (category) =>
                             category.id ==
-                            (props.formTask?.values.properties.category_id ||
-                              props.formTaskView?.values.filterBy.category)
+                            props.formTask?.values.properties.category_id
                         )?.color
                       : undefined
                   }
@@ -197,14 +177,12 @@ export default function Project({
               )}
 
               <Text component="span" inherit>
-                {(props.formTask?.values.properties.category_id ||
-                  props.formTaskView?.values.filterBy.category) == 'inbox'
+                {props.formTask?.values.properties.category_id == 'inbox'
                   ? items[0].component
                   : categories?.find(
                       (category) =>
                         category.id ==
-                        (props.formTask?.values.properties.category_id ||
-                          props.formTaskView?.values.filterBy.category)
+                        props.formTask?.values.properties.category_id
                     )?.title}
               </Text>
             </Group>

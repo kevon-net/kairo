@@ -61,7 +61,6 @@ export async function PUT(request: NextRequest) {
             id: tag.id,
             title: tag.title,
             color: tag.color,
-            context: tag.context,
             sync_status: tag.sync_status || SyncStatus.SYNCED,
             created_at: new Date(tag.created_at),
             updated_at: new Date(tag.updated_at),

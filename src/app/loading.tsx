@@ -1,11 +1,14 @@
 import React from 'react';
-import LoadingMain from '@/components/partial/loading/main';
 import ProviderMantine from '@/components/providers/mantine';
+import LoaderApp from '@/components/common/loaders/app';
+import { Stack } from '@mantine/core';
 
 export default function Loading() {
   return (
     <ProviderMantine>
-      <LoadingMain />
+      <Stack h={'100vh'} align="center" justify="center">
+        <LoaderApp />
+      </Stack>
     </ProviderMantine>
   );
 }

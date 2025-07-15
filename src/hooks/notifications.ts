@@ -1,4 +1,3 @@
-import { TaskRelations } from '@/types/models/task';
 import { notifications } from '@mantine/notifications';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppSelector } from './redux';
@@ -6,9 +5,10 @@ import { sendPushNotification } from '@/libraries/wrappers/push-notification';
 import { NotificationGet } from '@/types/models/notification';
 import { usePathname } from 'next/navigation';
 import { linkify } from '@/utilities/formatters/string';
+import { SessionRelations } from '@/types/models/session';
 
 export const useNotificationReminder = (props: {
-  tasks: TaskRelations[] | null;
+  sessions: SessionRelations[] | null;
 }) => {
   const { isGranted } = useNotificationPermission();
   const pathname = usePathname();
@@ -28,7 +28,7 @@ export const useNotificationReminder = (props: {
     const timeoutId = setTimeout(() => {
       // Run the check immediately at the start of the minute
       checkForReminder({
-        tasks: props.tasks,
+        sessions: props.sessions,
         notifications: stateNotifications,
         isGranted,
         currentUrl: pathname,
@@ -37,7 +37,7 @@ export const useNotificationReminder = (props: {
       // Set an interval to run every 60 seconds thereafter
       const intervalId = setInterval(() => {
         checkForReminder({
-          tasks: props.tasks,
+          sessions: props.sessions,
           notifications: stateNotifications,
           isGranted,
           currentUrl: pathname,
@@ -50,28 +50,26 @@ export const useNotificationReminder = (props: {
 
     // Cleanup the timeout on unmount
     return () => clearTimeout(timeoutId);
-  }, [props.tasks]);
+  }, [props.sessions]);
 };
 
 const checkForReminder = (props: {
-  tasks: TaskRelations[] | null;
+  sessions: SessionRelations[] | null;
   notifications: NotificationGet[] | null;
   isGranted: boolean;
   currentUrl: string;
 }) => {
   try {
-    if (props.tasks == null) return;
+    if (props.sessions == null) return;
 
-    props.tasks.forEach(async (task) => {
-      if (!task.reminders) return;
-      if (task.reminders.length == 0) return;
-
-      const reminderDate = new Date(task.reminders[0].remind_at);
+    props.sessions.forEach(async (session) => {
       const now = new Date();
-      const timeDifference = reminderDate.getTime() - now.getTime();
+      const timeDifference = session.created_at.getTime() - now.getTime();
       const secondsDifference = Math.floor(timeDifference / 1000);
+      const sessionDuration = session.duration || 25 * 60; // Default to 25 minutes if not set
+      const sessionComplete = sessionDuration == secondsDifference - 1;
 
-      if (secondsDifference == -1) {
+      if (sessionComplete) {
         if (!props.isGranted) {
           // request notification permission
           // setup modal
@@ -92,15 +90,15 @@ const checkForReminder = (props: {
           if (!currentNotification) throw new Error('Notification not found');
 
           await sendPushNotification(currentNotification, {
-            title: 'Task Due',
-            body: task.title,
+            title: 'Session Complete',
+            body: session.title,
             data: { url: props.currentUrl || '/' },
           });
         }
 
         notifications.show({
-          id: task.id,
-          message: task.title,
+          id: session.id,
+          message: session.title,
           position: 'top-right',
           autoClose: false,
         });

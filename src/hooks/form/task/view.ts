@@ -1,19 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { sortArray } from '@/utilities/helpers/array';
-import {
-  getTasksByDate,
-  getTasksCategorized,
-  getTasksPrioritized,
-  GroupedReturnType,
-} from '@/services/logic/view';
+import { GroupedReturnType } from '@/services/logic/view';
 import { useForm, UseFormReturnType } from '@mantine/form';
-import {
-  GroupSort,
-  Priority,
-  SortDirection,
-  SyncStatus,
-  ViewType,
-} from '@generated/prisma';
+import { SortDirection, SyncStatus } from '@generated/prisma';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Order } from '@/enums/sort';
 import { TaskRelations } from '@/types/models/task';
@@ -24,14 +13,7 @@ import { generateUUID } from '@/utilities/generators/id';
 import { updateViews } from '@/libraries/redux/slices/views';
 
 export type FormView = {
-  view: ViewType;
-  groupBy: GroupSort;
-  sortBy: GroupSort;
   sortDirection: SortDirection;
-  filterBy: {
-    priority: Priority;
-    category: string;
-  };
 };
 
 export type FormTaskView = UseFormReturnType<
@@ -52,16 +34,7 @@ export const useFormTaskView = () => {
 
   const form = useForm({
     initialValues: {
-      view: view?.view || ('' as ViewType),
-
-      groupBy: view?.group_by || ('' as GroupSort),
-      sortBy: view?.sort_by || ('' as GroupSort),
       sortDirection: view?.sort_direction || ('' as SortDirection),
-
-      filterBy: {
-        priority: view?.priority_filter || ('' as Priority),
-        category: view?.category_filter || '',
-      },
     },
   });
 
@@ -76,12 +49,7 @@ export const useFormTaskView = () => {
       const viewObject: ViewGet = {
         id: generateUUID(),
         title: linkify(pathname),
-        view: formValues.view,
-        group_by: formValues.groupBy,
-        sort_by: formValues.sortBy,
         sort_direction: formValues.sortDirection,
-        priority_filter: formValues.filterBy.priority,
-        category_filter: formValues.filterBy.category,
         sync_status: SyncStatus.PENDING,
         profile_id: session.id,
         created_at: now.toISOString() as any,
@@ -92,16 +60,7 @@ export const useFormTaskView = () => {
       dispatch(updateViews([...views, viewObject]));
     } else {
       const viewObjectUpdate: ViewUpdate = {
-        view: params?.reset ? ('' as any) : formValues.view,
-        group_by: params?.reset ? ('' as any) : formValues.groupBy,
-        sort_by: params?.reset ? ('' as any) : formValues.sortBy,
         sort_direction: params?.reset ? ('' as any) : formValues.sortDirection,
-        priority_filter: params?.reset
-          ? ('' as any)
-          : formValues.filterBy.priority,
-        category_filter: params?.reset
-          ? ('' as any)
-          : formValues.filterBy.category,
         sync_status: SyncStatus.PENDING,
         updated_at: now.toISOString() as any,
       };
@@ -130,19 +89,7 @@ export const useFormTaskView = () => {
     if (prevFormValuesRef.current == formValues) return;
 
     // don't run if form values are the same as the view
-    if (
-      view.view == formValues.view &&
-      view.group_by == formValues.groupBy &&
-      view.sort_by == formValues.sortBy &&
-      view.sort_direction == formValues.sortDirection &&
-      view.priority_filter == formValues.filterBy.priority &&
-      view.category_filter == formValues.filterBy.category
-    )
-      return;
-
-    console.log('prevFormValuesRef.current', prevFormValuesRef.current);
-    console.log('view', view);
-    console.log('formValues', formValues);
+    if (view.sort_direction == formValues.sortDirection) return;
 
     updateView();
   }, [form.values, tasks]);
@@ -153,25 +100,12 @@ export const useFormTaskView = () => {
 
     const current = form.values;
 
-    const same =
-      current.view === view.view &&
-      current.groupBy === view.group_by &&
-      current.sortBy === view.sort_by &&
-      current.sortDirection === view.sort_direction &&
-      current.filterBy.priority === view.priority_filter &&
-      current.filterBy.category === view.category_filter;
+    const same = current.sortDirection === view.sort_direction;
 
     if (same) return;
 
     form.setValues({
-      view: view.view as ViewType,
-      groupBy: view.group_by as GroupSort,
-      sortBy: view.sort_by as GroupSort,
       sortDirection: view.sort_direction as SortDirection,
-      filterBy: {
-        priority: view.priority_filter as Priority,
-        category: view.category_filter as string,
-      },
     });
 
     // update 'prevFormValuesRef'
@@ -193,15 +127,9 @@ export const useGetOrganizedTasks = (props: {
     [views, pathname]
   );
 
-  const { groupBy, sortBy, filterBy } = {
-    groupBy: view?.group_by,
-    sortBy: view?.sort_by,
-    filterBy: {
-      priority: view?.priority_filter,
-      category: view?.category_filter,
-    },
+  const { sortBy } = {
+    sortBy: view?.sort_direction || ('' as SortDirection),
   };
-  const { priority, category } = filterBy;
 
   let organizedTasks: GroupedReturnType[] = [];
   const [organizedTasksState, setOrganizedTasksState] = useState<
@@ -211,7 +139,6 @@ export const useGetOrganizedTasks = (props: {
   const completionStatusTasks = props.tasks.filter((t) =>
     props?.completeTasks ? !!t.complete : !t.complete
   );
-  const categories = useAppSelector((state) => state.categories.value);
 
   const defaultGroup: GroupedReturnType = {
     id: 'default',
@@ -220,126 +147,43 @@ export const useGetOrganizedTasks = (props: {
   };
 
   const getOrganizedTasks = () => {
-    if (groupBy) {
-      switch (groupBy) {
-        case GroupSort.PRIORITY:
-          organizedTasks = sortArray(
-            getTasksPrioritized({ tasks: completionStatusTasks }),
-            (item) => item.title,
-            Order.ASCENDING
-          );
-          break;
-
-        case GroupSort.CATEGORY:
-          // get tasks without categories
-          const tasksWithoutCategory = completionStatusTasks.filter(
-            (task) => !task.category_id
-          );
-
-          organizedTasks = [
-            ...sortArray(
-              getTasksCategorized({
-                tasks: completionStatusTasks,
-                categories: categories || [],
-              }),
-              (item) => item.title,
-              Order.ASCENDING
-            ),
-            {
-              id: 'inbox',
-              title: 'Uncategorized',
-              tasks: tasksWithoutCategory,
-            },
-          ];
-          break;
-
-        case GroupSort.DATE:
-          // get tasks not due
-          const tasksWithoutDueDate = completionStatusTasks.filter(
-            (task) => !task.due_date && !task.reminders?.length
-          );
-
-          organizedTasks = [
-            ...sortArray(
-              getTasksByDate({ tasks: completionStatusTasks }),
-              (item) => new Date(item.title),
-              Order.ASCENDING
-            ),
-            {
-              id: '',
-              title: 'No Due Date',
-              tasks: tasksWithoutDueDate,
-            },
-          ];
-          break;
-
-        default:
-          // Default to ungrouped tasks
-          organizedTasks = [
-            {
-              ...defaultGroup,
-              tasks: sortArray(
-                defaultGroup.tasks,
-                (item) => new Date(item.created_at),
-                Order.DESCENDING
-              ),
-            },
-          ];
-          break;
-      }
-    } else {
-      // If no grouping is selected, treat all tasks as a single group.
-      organizedTasks = [
-        {
-          ...defaultGroup,
-          tasks: sortArray(
-            defaultGroup.tasks,
-            (item) => new Date(item.created_at),
-            Order.DESCENDING
-          ),
-        },
-      ];
-    }
+    // Treat all tasks as a single group.
+    organizedTasks = [
+      {
+        ...defaultGroup,
+        tasks: sortArray(
+          defaultGroup.tasks,
+          (item) => new Date(item.created_at),
+          Order.DESCENDING
+        ),
+      },
+    ];
 
     if (sortBy) {
       switch (sortBy) {
-        case GroupSort.PRIORITY:
-          // sort group tasks by priority
+        case SortDirection.ASCENDING:
+          // sort group tasks by created_at ascending
           organizedTasks = organizedTasks.map((group) => {
             return {
               ...group,
               tasks: sortArray(
                 group.tasks,
-                (item) => item.priority,
+                (item) => new Date(item.created_at),
                 Order.ASCENDING
               ),
             };
           });
           break;
 
-        case GroupSort.CATEGORY:
-          // sort group tasks by category
+        case SortDirection.DESCENDING:
+          // sort group tasks by created_at descending
           organizedTasks = organizedTasks.map((group) => {
             return {
               ...group,
               tasks: sortArray(
                 group.tasks,
-                (item) => item.category_id,
-                Order.ASCENDING
-              ),
-            };
-          });
-          break;
-
-        case GroupSort.DATE:
-          // sort group tasks by date
-          organizedTasks = organizedTasks.map((group) => {
-            return {
-              ...group,
-              tasks: sortArray(
-                group.tasks,
-                (item) => (item.due_date ? new Date(item.due_date) : null),
-                Order.ASCENDING
+                (item) => new Date(item.created_at),
+                Order.DESCENDING
               ),
             };
           });
@@ -359,28 +203,6 @@ export const useGetOrganizedTasks = (props: {
           });
           break;
       }
-    }
-
-    if (priority) {
-      organizedTasks = organizedTasks
-        .map((group) => {
-          return {
-            ...group,
-            tasks: group.tasks.filter((task) => task.priority === priority),
-          };
-        })
-        .filter((g) => g.tasks.length);
-    }
-
-    if (category) {
-      organizedTasks = organizedTasks
-        .map((group) => {
-          return {
-            ...group,
-            tasks: group.tasks.filter((task) => task.category_id === category),
-          };
-        })
-        .filter((g) => g.tasks.length);
     }
 
     setOrganizedTasksState(organizedTasks);

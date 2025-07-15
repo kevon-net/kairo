@@ -5,7 +5,7 @@ import { DatePicker } from '@mantine/dates';
 import { Button, Group, Stack } from '@mantine/core';
 import { FormTask } from '@/hooks/form/task';
 
-export default function Due({
+export default function SessionDate({
   props,
 }: {
   props: {
@@ -16,7 +16,7 @@ export default function Due({
 }) {
   const currentDate = new Date();
   const [value, setValue] = useState<string | null>(
-    props.form.values.properties.due_date || currentDate.toISOString()
+    props.form.values.date || currentDate.toISOString()
   );
 
   return (
@@ -46,7 +46,7 @@ export default function Due({
             if (value) {
               props.setMounted(false);
               props.setPopover(false);
-              props.form.setFieldValue('properties.due_date', value);
+              props.form.setFieldValue('properties.date', value);
             }
           }}
         >

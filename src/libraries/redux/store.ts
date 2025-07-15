@@ -9,10 +9,9 @@ import reducerAppShell from './slices/app-shell';
 import reducerSyncStatus from './slices/sync-status';
 import reducerTasks from './slices/tasks';
 import reducerCategories from './slices/categories';
-import reducerRecurringRules from './slices/recurring-rules';
-import reducerReminders from './slices/reminders';
 import reducerViews from './slices/views';
 import reducerNotifications from './slices/notifications';
+import reducerSessions from './slices/sessions';
 
 export const makeStore = () => {
   return configureStore({
@@ -24,9 +23,8 @@ export const makeStore = () => {
       appShell: reducerAppShell,
       syncStatus: reducerSyncStatus,
       tasks: reducerTasks,
+      sessions: reducerSessions,
       categories: reducerCategories,
-      recurringRules: reducerRecurringRules,
-      reminders: reducerReminders,
       views: reducerViews,
       notifications: reducerNotifications,
     },

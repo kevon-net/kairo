@@ -103,4 +103,5 @@ export const TIME_FORMAT = {
 
 export const MODAL_HEIGHT = {
   TASK_VIEW: 420,
+  SESSION_VIEW: 420,
 };

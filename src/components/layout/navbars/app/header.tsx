@@ -25,7 +25,7 @@ import {
   IconPlus,
 } from '@tabler/icons-react';
 import React from 'react';
-import ModalTaskCreate from '@/components/common/modals/task/create';
+import ModalSessionCreate from '@/components/common/modals/session/create';
 import { navLinkStyles } from './main';
 import MenuUser from '@/components/common/menus/user';
 import { setCookieClient } from '@/utilities/helpers/cookie-client';
@@ -84,9 +84,9 @@ export default function Header() {
       </Group>
 
       <Stack gap={'xs'}>
-        <ModalTaskCreate>
+        <ModalSessionCreate>
           <NavLink
-            label="Add task"
+            label="New Session"
             leftSection={
               <ThemeIcon size={ICON_SIZE} color="pri">
                 <IconPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
@@ -94,7 +94,7 @@ export default function Header() {
             }
             style={navLinkStyles}
           />
-        </ModalTaskCreate>
+        </ModalSessionCreate>
       </Stack>
     </Stack>
   );

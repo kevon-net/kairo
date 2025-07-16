@@ -1,0 +1,20 @@
+.button {
+  border-width: 0;
+  color: var(--mantine-color-gray-7);
+  font-weight: normal;
+  font-size: var(--mantine-font-size-xs);
+
+  @include mantine.hover {
+    color: var(--mantine-color-text);
+  }
+}
+
+.textarea {
+  background-color: var(--mantine-color-white);
+  font-size: var(--mantine-font-size-xs);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-xs);
+
+  &:focus {
+    border: 1px solid var(--mantine-color-default-border);
+  }
+}

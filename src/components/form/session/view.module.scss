@@ -1,0 +1,23 @@
+.title {
+  padding: calc(var(--mantine-spacing-xs) / 2) 0;
+  font-weight: bold;
+  font-size: var(--mantine-font-size-md);
+  border: 1px solid transparent;
+  transition: 0.25s all ease;
+
+  &:focus {
+    padding: calc(var(--mantine-spacing-xs) / 2) var(--mantine-spacing-xs);
+    border: 1px solid var(--mantine-color-default-border);
+  }
+}
+
+.desc {
+  padding: calc(var(--mantine-spacing-xs) / 2) 0;
+  border: 1px solid transparent;
+  transition: 0.25s all ease;
+
+  &:focus {
+    padding: calc(var(--mantine-spacing-xs) / 2) var(--mantine-spacing-xs);
+    border: 1px solid var(--mantine-color-default-border);
+  }
+}

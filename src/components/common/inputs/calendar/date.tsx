@@ -3,20 +3,20 @@
 import { useState } from 'react';
 import { DatePicker } from '@mantine/dates';
 import { Button, Group, Stack } from '@mantine/core';
-import { FormTask } from '@/hooks/form/task';
+import { FormSession } from '@/hooks/form/session';
 
 export default function SessionDate({
   props,
 }: {
   props: {
-    form: FormTask;
+    form: FormSession;
     setMounted: (state: boolean) => void;
     setPopover: (state: boolean) => void;
   };
 }) {
   const currentDate = new Date();
   const [value, setValue] = useState<string | null>(
-    props.form.values.date || currentDate.toISOString()
+    props.form.values.properties.start || currentDate.toISOString()
   );
 
   return (

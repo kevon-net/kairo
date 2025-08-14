@@ -19,6 +19,7 @@ export type FormSessionValues = {
   title: string;
   properties: {
     start: string;
+    focusDuration: number | null;
     end: string;
     category_id: string;
     task_id: string;
@@ -57,6 +58,7 @@ export const useFormSession = (params?: {
           title: session.title,
           properties: {
             start: session.start as any,
+            focusDuration: session.focus_duration,
             end: session.end as any,
             category_id: session.category_id || 'inbox',
             task_id: session.task_id || '',
@@ -66,6 +68,7 @@ export const useFormSession = (params?: {
           title: '',
           properties: {
             start: new Date().toISOString(),
+            focusDuration: 0,
             end: '',
             category_id: 'inbox',
             task_id: '',
@@ -79,55 +82,64 @@ export const useFormSession = (params?: {
     validateInputOnChange: true,
   });
 
-  const currentDate = new Date();
-
-  const sessionId = generateUUID();
-
-  const newSession: Omit<SessionRelations, 'profile' | 'task' | 'category'> = {
-    id: sessionId,
-    title: form.values.title,
-    start: session?.start || (currentDate.toISOString() as any),
-    end: session?.end || (currentDate.toISOString() as any),
-    status: Status.ACTIVE,
-    duration: 25,
-    profile_id: sessionUser?.id as string,
-    task_id: form.values.properties.task_id || '',
-    category_id:
-      form.values.properties.category_id == 'inbox'
-        ? ''
-        : form.values.properties.category_id,
-    sync_status: SyncStatus.PENDING,
-    created_at: session?.created_at || (currentDate.toISOString() as any),
-    updated_at: currentDate.toISOString() as any,
-  };
-
   const addSessionToState = () => {
+    const currentDate = new Date();
+    const sessionId = generateUUID();
+    const formValues = form.getValues();
+
+    const newSession: Omit<SessionRelations, 'profile' | 'task' | 'category'> =
+      {
+        id: sessionId,
+        title: formValues.title,
+        start: (formValues.properties.start ||
+          currentDate.toISOString()) as any,
+        end: (formValues.properties.end || '') as any,
+        status: Status.ACTIVE,
+        pomo_duration: 25,
+        focus_duration: 0,
+        profile_id: sessionUser?.id as string,
+        task_id: formValues.properties.task_id || '',
+        category_id:
+          formValues.properties.category_id == 'inbox'
+            ? ''
+            : formValues.properties.category_id,
+        sync_status: SyncStatus.PENDING,
+        created_at: (session?.created_at || currentDate.toISOString()) as any,
+        updated_at: currentDate.toISOString() as any,
+      };
+
     const newSessions = [newSession, ...(sessions || [])];
     dispatch(updateSessions(newSessions));
   };
 
   const updateState = () => {
+    const formValuesUpdate = form.getValues();
+
+    console.log('formValuesUpdate', formValuesUpdate.properties.focusDuration);
+
     const newSessions = sessions?.map((t) => {
       if (t.id === session?.id) {
         return {
           ...t,
           sync_status: SyncStatus.PENDING,
-          updated_at: currentDate.toISOString(),
-          title: form.values.title,
-          start: form.values.properties.start,
-          end: form.values.properties.end,
-          task_id: form.values.properties.task_id || '',
+          updated_at: new Date().toISOString(),
+          title: formValuesUpdate.title,
+          start: formValuesUpdate.properties.start,
+          focus_duration: formValuesUpdate.properties.focusDuration,
+          end: formValuesUpdate.properties.end,
+          task_id: formValuesUpdate.properties.task_id || '',
           category_id:
-            form.values.properties.category_id == 'inbox'
+            formValuesUpdate.properties.category_id == 'inbox'
               ? ''
-              : form.values.properties.category_id,
+              : formValuesUpdate.properties.category_id,
         };
       }
 
       return t;
     });
 
-    dispatch(updateSessions(newSessions));
+    console.log('newSessions', newSessions);
+    // dispatch(updateSessions(newSessions));
   };
 
   const handleDelete = () => {
@@ -167,12 +179,14 @@ export const useFormSession = (params?: {
   const prevSessionPropertiesRef = useRef(form.values.properties);
 
   const handlePropertiesChange = () => {
+    const formValuesPropertiesChange = form.getValues();
+
     if (!session?.id || !form.isTouched() || !form.isValid()) return;
 
     // check if form session properties have actually changed
     const propertiesChanged =
       JSON.stringify(prevSessionPropertiesRef.current) !=
-      JSON.stringify(form.values.properties);
+      JSON.stringify(formValuesPropertiesChange.properties);
 
     if (!propertiesChanged) return;
 
@@ -182,7 +196,7 @@ export const useFormSession = (params?: {
     updateState();
 
     // Update ref to avoid unnecessary resets
-    prevSessionPropertiesRef.current = form.values.properties;
+    prevSessionPropertiesRef.current = formValuesPropertiesChange.properties;
   };
 
   const debounceHandlePropertiesChange = useDebouncedCallback(() => {
@@ -202,6 +216,8 @@ export const useFormSession = (params?: {
             start:
               params?.defaultValues?.properties?.start ||
               new Date().toISOString(),
+            focusDuration:
+              params?.defaultValues?.properties?.focusDuration || 0,
             end: params?.defaultValues?.properties?.end || '',
             task_id: params?.defaultValues?.properties?.task_id || '',
             category_id:
@@ -213,6 +229,7 @@ export const useFormSession = (params?: {
           title: session.title,
           properties: {
             start: session.start as any,
+            focusDuration: session.focus_duration || 0,
             end: session.end as any,
             task_id: session.task_id || '',
             category_id: session.category_id || 'inbox',
@@ -243,6 +260,7 @@ export const useFormSession = (params?: {
           title: session.title,
           properties: {
             start: session.start as any,
+            focusDuration: session.focus_duration || 0,
             end: session.end as any,
             task_id: session.task_id || '',
             category_id: session.category_id || 'inbox',

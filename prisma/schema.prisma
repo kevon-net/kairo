@@ -31,6 +31,7 @@ enum Role {
 enum Status {
   ACTIVE
   INACTIVE
+  PAUSED
   DRAFT
   PUBLISHED
 }
@@ -206,13 +207,14 @@ model Task {
 }
 
 model Session {
-  id          String     @id @default(uuid())
-  title       String
-  start       DateTime
-  end         DateTime?
-  duration    Int? // minutes
-  sync_status SyncStatus @default(SYNCED)
-  status      Status     @default(ACTIVE)
+  id             String     @id @default(uuid())
+  title          String
+  start          DateTime
+  end            DateTime?
+  pomo_duration  Int? // minutes
+  focus_duration Int? // in seconds or minutes (actual work time)
+  sync_status    SyncStatus @default(SYNCED)
+  status         Status     @default(ACTIVE)
 
   profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id  String

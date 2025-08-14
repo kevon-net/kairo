@@ -56,23 +56,26 @@ export async function PUT(request: NextRequest) {
 
     const upsertSessions = await Promise.all(
       sessions.map(async (session) => {
+        const now = new Date();
+
         // First create/update the session without relationships
         const upsertOperation = await prisma.session.upsert({
           where: { id: session.id },
           update: {
             title: session.title,
-            start: session.start ? new Date(session.start) : new Date(),
-            end: session.end ? new Date(session.end) : new Date(),
+            start: new Date(session.start || now),
+            end: new Date(session.end || now),
             pomo_duration: session.pomo_duration,
             focus_duration: session.focus_duration,
             sync_status: session.sync_status,
             category_id: session.category_id || null,
-            updated_at: new Date(session.updated_at),
+            updated_at: new Date(session.updated_at || now),
           },
           create: {
             id: session.id,
             title: session.title,
-            start: session.start || new Date(),
+            start: new Date(session.start || now),
+            end: session.end ? new Date(session.end) : null,
             pomo_duration: session.pomo_duration || 25,
             focus_duration: session.focus_duration || 0,
             sync_status: session.sync_status || SyncStatus.SYNCED,

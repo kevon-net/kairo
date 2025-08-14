@@ -2,7 +2,6 @@
 
 import { POMO_SESSION_LENGTH } from '@/data/constants';
 import { useFormSession } from '@/hooks/form/session';
-import { useAppSelector } from '@/hooks/redux';
 import usePomodoro from '@/hooks/session';
 import { SessionRelations } from '@/types/models/session';
 import { getRegionalDate } from '@/utilities/formatters/date';
@@ -14,7 +13,6 @@ import {
   Center,
   Group,
   RingProgress,
-  Skeleton,
   Stack,
   Text,
 } from '@mantine/core';
@@ -25,16 +23,12 @@ export default function Live({
 }: {
   session: SessionRelations | null;
 }) {
-  const sessions = useAppSelector((state) => state.sessions.value);
-
-  const currentDate = new Date();
-
-  const { form, handleSubmit, addSessionToState, updateState, submitted } =
+  const { submitted, createOrSelectSession, persistRuntime, finalizeAndClear } =
     useFormSession({
       defaultValues: {
-        title: `${getRegionalDate(currentDate).time} - ...`,
+        title: `${getRegionalDate(new Date()).time} - ...`,
         properties: {
-          start: currentDate.toISOString(),
+          start: new Date().toISOString(),
           end: '',
           category_id: 'inbox',
           task_id: '',
@@ -42,13 +36,32 @@ export default function Live({
       },
     });
 
-  const { minutes, seconds, startTimer, pauseTimer, resetTimer, state } =
+  const { minutes, seconds, state, startTimer, pauseTimer, stopTimer } =
     usePomodoro({
       durationMinutes: session?.pomo_duration ?? POMO_SESSION_LENGTH,
-      form,
-      handleSubmit: handleSubmit,
-      addSessionToState: addSessionToState,
-      updateState: updateState,
+      onStart: async (e) => {
+        await createOrSelectSession(); // ✅ follows your existing create->ClientDB path
+        persistRuntime({
+          status: Status.ACTIVE,
+          focus_duration: e.focusDuration,
+        });
+      },
+      onPause: (e) => {
+        persistRuntime({
+          status: Status.PAUSED,
+          focus_duration: e.focusDuration,
+        });
+      },
+      onStop: (e) => {
+        finalizeAndClear(
+          {
+            status: Status.INACTIVE,
+            focus_duration: e.focusDuration,
+            end: e.end as any,
+          },
+          { stopped: true }
+        );
+      },
     });
 
   const progressValue =
@@ -87,29 +100,49 @@ export default function Live({
         </Center>
       </Box>
 
-      <Group justify={'center'} mt={'md'}>
+      <Group justify="center" mt="md" wrap="nowrap">
         {state === Status.INACTIVE ? (
-          sessions == null ? (
-            <Skeleton h={40} w={100} />
-          ) : (
-            <Button disabled={submitted} onClick={startTimer}>
-              Start
-            </Button>
-          )
+          <Button
+            color="pri.5"
+            w={'50%'}
+            size="xs"
+            disabled={submitted}
+            onClick={startTimer}
+          >
+            Start
+          </Button>
         ) : (
-          <Button disabled={submitted} onClick={resetTimer}>
+          <Button
+            color="pri.5"
+            w={'50%'}
+            size="xs"
+            disabled={submitted}
+            onClick={stopTimer}
+          >
             Stop
           </Button>
         )}
 
         {state === Status.ACTIVE && (
-          <Button disabled={submitted} onClick={pauseTimer}>
+          <Button
+            color="pri.5"
+            w={'50%'}
+            size="xs"
+            disabled={submitted}
+            onClick={pauseTimer}
+          >
             Pause
           </Button>
         )}
 
         {state === Status.PAUSED && (
-          <Button disabled={submitted} onClick={startTimer}>
+          <Button
+            color="pri.5"
+            w={'50%'}
+            size="xs"
+            disabled={submitted}
+            onClick={startTimer}
+          >
             Resume
           </Button>
         )}

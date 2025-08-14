@@ -64,9 +64,10 @@ const checkForReminder = (props: {
 
     props.sessions.forEach(async (session) => {
       const now = new Date();
-      const timeDifference = session.created_at.getTime() - now.getTime();
+      const timeDifference =
+        new Date(session.created_at).getTime() - now.getTime();
       const secondsDifference = Math.floor(timeDifference / 1000);
-      const sessionDuration = session.duration || 25 * 60; // Default to 25 minutes if not set
+      const sessionDuration = session.pomo_duration || 25 * 60; // Default to 25 minutes if not set
       const sessionComplete = sessionDuration == secondsDifference - 1;
 
       if (sessionComplete) {

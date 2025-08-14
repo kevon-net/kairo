@@ -82,7 +82,7 @@ export default function Properties({
             <Text component="span" inherit>
               Created on{' '}
               {session?.created_at
-                ? getRegionalDate(session.created_at).date
+                ? getRegionalDate(new Date(session.created_at || '')).date
                 : ''}
             </Text>
 

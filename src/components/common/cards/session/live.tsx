@@ -1,9 +1,13 @@
 'use client';
 
-import { POMO_SESSION_LENGTH } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  POMO_BREAK_LENGTH,
+  POMO_SESSION_LENGTH,
+} from '@/data/constants';
 import { useFormSession } from '@/hooks/form/session';
-import usePomodoro from '@/hooks/session';
-import { SessionRelations } from '@/types/models/session';
+import { usePomodoroCycle } from '@/hooks/session';
 import { getRegionalDate } from '@/utilities/formatters/date';
 import { prependZeros } from '@/utilities/formatters/number';
 import { Status } from '@generated/prisma';
@@ -12,17 +16,15 @@ import {
   Button,
   Center,
   Group,
+  Progress,
   RingProgress,
   Stack,
   Text,
 } from '@mantine/core';
+import { IconCircleFilled } from '@tabler/icons-react';
 import React from 'react';
 
-export default function Live({
-  session,
-}: {
-  session: SessionRelations | null;
-}) {
+export default function Live() {
   const { submitted, createOrSelectSession, persistRuntime, finalizeAndClear } =
     useFormSession({
       defaultValues: {
@@ -36,40 +38,154 @@ export default function Live({
       },
     });
 
-  const { minutes, seconds, state, startTimer, pauseTimer, stopTimer } =
-    usePomodoro({
-      durationMinutes: session?.pomo_duration ?? POMO_SESSION_LENGTH,
-      onStart: async (e) => {
-        await createOrSelectSession(); // ✅ follows your existing create->ClientDB path
-        persistRuntime({
-          status: Status.ACTIVE,
+  const {
+    minutes,
+    seconds,
+    state,
+    mode,
+    completedWorkSessions,
+    startTimer,
+    pauseTimer,
+    stopTimer,
+  } = usePomodoroCycle({
+    workMinutes: POMO_SESSION_LENGTH,
+    shortBreakMinutes: POMO_BREAK_LENGTH,
+    longBreakMinutes: POMO_BREAK_LENGTH * 3,
+    onWorkStart: async (e) => {
+      await createOrSelectSession();
+      persistRuntime({
+        status: Status.ACTIVE,
+        focus_duration: e.focusDuration,
+      });
+    },
+    onWorkStop: (e) => {
+      finalizeAndClear(
+        {
+          status: Status.INACTIVE,
           focus_duration: e.focusDuration,
-        });
-      },
-      onPause: (e) => {
-        persistRuntime({
-          status: Status.PAUSED,
-          focus_duration: e.focusDuration,
-        });
-      },
-      onStop: (e) => {
-        finalizeAndClear(
-          {
-            status: Status.INACTIVE,
-            focus_duration: e.focusDuration,
-            end: e.end as any,
-          },
-          { stopped: true }
-        );
-      },
-    });
+          end: e.end as any,
+        },
+        { stopped: true }
+      );
+    },
+    onBreakStart: () => {
+      // optional: show a "Break started" toast
+    },
+    onBreakStop: () => {
+      // optional: show "Break ended, next Pomodoro starting"
+    },
+  });
 
   const progressValue =
-    ((minutes * 60 + seconds) / (POMO_SESSION_LENGTH * 60)) * 100;
+    ((minutes * 60 + seconds) /
+      ((mode == 'work'
+        ? POMO_SESSION_LENGTH
+        : mode == 'shortBreak'
+          ? POMO_BREAK_LENGTH
+          : POMO_BREAK_LENGTH * 3) *
+        60)) *
+    100;
 
   return (
     <Stack>
-      <Box pos={'relative'}>
+      {mode != 'longBreak' ? (
+        <Group mt={'xl'} gap={'xs'} justify="center" mih={5}>
+          <Progress
+            value={
+              completedWorkSessions % 4 >= 1
+                ? 100
+                : completedWorkSessions % 4 == 0 && mode == 'work'
+                  ? 100 - progressValue
+                  : 0
+            }
+            w={24}
+            size={ICON_STROKE_WIDTH}
+            color={completedWorkSessions % 4 > 0 ? 'pri' : undefined}
+            transitionDuration={250}
+          />
+
+          <IconCircleFilled
+            size={ICON_SIZE / 4}
+            color={
+              completedWorkSessions % 4 >= 1
+                ? 'var(--mantine-color-pri-5)'
+                : 'var(--mantine-color-default-border)'
+            }
+          />
+
+          <Progress
+            value={
+              completedWorkSessions % 4 >= 2
+                ? 100
+                : completedWorkSessions % 4 == 1 && mode == 'work'
+                  ? 100 - progressValue
+                  : 0
+            }
+            w={24}
+            size={ICON_STROKE_WIDTH}
+            color={completedWorkSessions % 4 > 1 ? 'pri' : undefined}
+            transitionDuration={250}
+          />
+
+          <IconCircleFilled
+            size={ICON_SIZE / 4}
+            color={
+              completedWorkSessions % 4 >= 2
+                ? 'var(--mantine-color-pri-5)'
+                : 'var(--mantine-color-default-border)'
+            }
+          />
+
+          <Progress
+            value={
+              completedWorkSessions % 4 >= 3
+                ? 100
+                : completedWorkSessions % 4 == 2 && mode == 'work'
+                  ? 100 - progressValue
+                  : 0
+            }
+            w={24}
+            size={ICON_STROKE_WIDTH}
+            color={completedWorkSessions % 4 > 2 ? 'pri' : undefined}
+            transitionDuration={250}
+          />
+
+          <IconCircleFilled
+            size={ICON_SIZE / 4}
+            color={
+              completedWorkSessions % 4 >= 3
+                ? 'var(--mantine-color-pri-5)'
+                : 'var(--mantine-color-default-border)'
+            }
+          />
+
+          <Progress
+            value={
+              completedWorkSessions % 4 >= 4
+                ? 100
+                : completedWorkSessions % 4 == 3 && mode == 'work'
+                  ? 100 - progressValue
+                  : 0
+            }
+            w={24}
+            size={ICON_STROKE_WIDTH}
+            color={completedWorkSessions % 4 > 3 ? 'pri' : undefined}
+            transitionDuration={250}
+          />
+        </Group>
+      ) : (
+        <Group mt={'xl'} gap={'xs'} justify="center" mih={5}>
+          <Progress
+            value={100 - progressValue}
+            w={96}
+            size={ICON_STROKE_WIDTH}
+            color={completedWorkSessions % 4 == 0 ? 'pri' : undefined}
+            transitionDuration={250}
+          />
+        </Group>
+      )}
+
+      <Box pos={'relative'} mt={'md'}>
         <Center
           pos={'absolute'}
           top={0}
@@ -83,6 +199,7 @@ export default function Live({
             thickness={2}
             roundCaps
             sections={[{ value: progressValue, color: 'pri.7' }]}
+            transitionDuration={250}
           />
         </Center>
 
@@ -92,17 +209,18 @@ export default function Live({
           fz={'var(--mantine-h1-font-size)'}
           fw={'lighter'}
         >
-          <span>{prependZeros(minutes, 2)}</span>
+          <span>{prependZeros(Math.floor(minutes), 2)}</span>
           <Text component={'span'} inherit mx={'xs'}>
             :
           </Text>
-          <span>{prependZeros(seconds, 2)}</span>
+          <span>{prependZeros(Math.floor(seconds), 2)}</span>
         </Center>
       </Box>
 
       <Group justify="center" mt="md" wrap="nowrap">
         {state === Status.INACTIVE ? (
           <Button
+            variant={'light'}
             color="pri.5"
             w={'50%'}
             size="xs"
@@ -113,22 +231,24 @@ export default function Live({
           </Button>
         ) : (
           <Button
+            variant={'light'}
             color="pri.5"
             w={'50%'}
             size="xs"
             disabled={submitted}
-            onClick={stopTimer}
+            onClick={() => stopTimer('manual')}
           >
             Stop
           </Button>
         )}
 
-        {state === Status.ACTIVE && (
+        {state !== Status.PAUSED && (
           <Button
+            variant={'light'}
             color="pri.5"
             w={'50%'}
             size="xs"
-            disabled={submitted}
+            disabled={submitted || state === Status.INACTIVE}
             onClick={pauseTimer}
           >
             Pause
@@ -137,6 +257,7 @@ export default function Live({
 
         {state === Status.PAUSED && (
           <Button
+            variant={'light'}
             color="pri.5"
             w={'50%'}
             size="xs"

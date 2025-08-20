@@ -19,6 +19,7 @@ export const DAY = 24 * HOUR;
 export const WEEK = 7 * DAY;
 export const MONTH = 30 * DAY;
 export const POMO_SESSION_LENGTH = 25;
+export const POMO_BREAK_LENGTH = 5;
 
 export const DEFAULT_COLOR_SCHEME: 'light' | 'dark' = 'dark';
 

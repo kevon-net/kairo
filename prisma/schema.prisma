@@ -226,7 +226,7 @@ model Session {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map(name: "sesions")
+  @@map(name: "sessions")
 }
 
 model View {

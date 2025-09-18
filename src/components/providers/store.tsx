@@ -8,12 +8,9 @@ import { updateColorScheme } from '@/libraries/redux/slices/color-scheme';
 import { updateAppShell } from '@/libraries/redux/slices/app-shell';
 import { SyncStatus } from '@generated/prisma';
 import {
-  AUTH_URLS,
-  BASE_URL,
   COOKIE_NAME,
   DEFAULT_COLOR_SCHEME,
   INDEXED_DB,
-  LOCAL_STORAGE_NAME,
   WEEK,
 } from '@/data/constants';
 import { tasksGet } from '@/handlers/requests/database/task';
@@ -39,15 +36,8 @@ import {
 } from '@/libraries/redux/slices/views';
 import { viewsGet } from '@/handlers/requests/database/views';
 import { registerServiceWorker } from '@/libraries/service-workers/register';
-import { createClient } from '@/libraries/supabase/client';
-import { validateRoute } from '@/utilities/helpers/url';
-import { usePathname, useRouter } from 'next/navigation';
 import { useMediaQuery, useNetwork } from '@mantine/hooks';
-import {
-  getFromLocalStorage,
-  saveToLocalStorage,
-} from '@/utilities/helpers/storage';
-import { Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import {
   // updateDeletedNotifications,
   updateNotifications,
@@ -60,11 +50,15 @@ import {
 } from '@/utilities/helpers/cookie-client';
 import { AppShell } from '@/types/components/app-shell';
 
-export default function Store({ children }: { children: React.ReactNode }) {
+export default function Store({
+  session,
+  children,
+}: {
+  session: User | null;
+  children: React.ReactNode;
+}) {
   const storeRef = useRef<AppStore | null>(null);
   const prevItemsRef = useRef<any[]>([]);
-  const pathname = usePathname();
-  const router = useRouter();
   const networkStatus = useNetwork();
 
   if (!storeRef.current) storeRef.current = makeStore();
@@ -72,9 +66,18 @@ export default function Store({ children }: { children: React.ReactNode }) {
   // Always update store with the latest props
   const store = storeRef.current;
 
-  const colorScheme =
-    getCookieClient(COOKIE_NAME.COLOR_SCHEME_STATE) || DEFAULT_COLOR_SCHEME;
-  if (colorScheme) storeRef.current.dispatch(updateColorScheme(colorScheme));
+  // color scheme initialization
+  useEffect(() => {
+    const colorScheme =
+      getCookieClient(COOKIE_NAME.COLOR_SCHEME_STATE) || DEFAULT_COLOR_SCHEME;
+
+    storeRef.current?.dispatch(updateColorScheme(colorScheme));
+  }, []);
+
+  // session initialization
+  useEffect(() => {
+    if (session) store.dispatch(updateSession(session));
+  }, [session]);
 
   // load appshell state
   const desktop = useMediaQuery('(min-width: 62em)');
@@ -342,45 +345,45 @@ export default function Store({ children }: { children: React.ReactNode }) {
     loadViews();
   }, []);
 
-  useEffect(() => {
-    const handleSessionLoad = async () => {
-      if (!networkStatus.online) {
-        const userSession: Session | null = getFromLocalStorage(
-          LOCAL_STORAGE_NAME.SESSION
-        );
+  // useEffect(() => {
+  //   const handleSessionLoad = async () => {
+  //     if (!networkStatus.online) {
+  //       const userSession: Session | null = getFromLocalStorage(
+  //         LOCAL_STORAGE_NAME.SESSION
+  //       );
 
-        if (!userSession) {
-          console.error('Session missing');
-          return;
-        }
+  //       if (!userSession) {
+  //         console.error('Session missing');
+  //         return;
+  //       }
 
-        console.log('userSession (localstorage)', userSession);
+  //       console.log('userSession (localstorage)', userSession);
 
-        storeRef.current?.dispatch(updateSession(userSession.user));
+  //       storeRef.current?.dispatch(updateSession(userSession.user));
 
-        const { redirectToAuth, redirectFromAuth } = validateRoute({
-          user: userSession.user,
-          pathname: pathname,
-        });
+  //       const { redirectToAuth, redirectFromAuth } = validateRoute({
+  //         user: userSession.user,
+  //         pathname: pathname,
+  //       });
 
-        if (redirectToAuth) router.push(AUTH_URLS.SIGN_IN);
-        if (redirectFromAuth) router.push(BASE_URL);
-      } else {
-        const supabase = createClient();
-        const { data, error } = await supabase.auth.getSession();
+  //       if (redirectToAuth) router.push(AUTH_URLS.SIGN_IN);
+  //       if (redirectFromAuth) router.push(BASE_URL);
+  //     } else {
+  //       const supabase = createClient();
+  //       const { data, error } = await supabase.auth.getSession();
 
-        if (error) {
-          console.error('Supabase session error:', error.message);
-          return;
-        }
+  //       if (error) {
+  //         console.error('Supabase session error:', error.message);
+  //         return;
+  //       }
 
-        saveToLocalStorage(LOCAL_STORAGE_NAME.SESSION, data.session?.user);
-        storeRef.current?.dispatch(updateSession(data.session?.user));
-      }
-    };
+  //       saveToLocalStorage(LOCAL_STORAGE_NAME.SESSION, data.session?.user);
+  //       storeRef.current?.dispatch(updateSession(data.session?.user));
+  //     }
+  //   };
 
-    handleSessionLoad(); // run once on mount
-  }, [pathname, router]);
+  //   handleSessionLoad(); // run once on mount
+  // }, [pathname, router]);
 
   useEffect(() => {
     // registerServiceWorker({ pathToWorker: '/offline-sw.js' });

@@ -1,10 +1,19 @@
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { Variant } from '@/enums/notification';
-import { IconCheck, IconExclamationMark, IconX } from '@tabler/icons-react';
+import {
+  Icon,
+  IconCheck,
+  IconExclamationMark,
+  IconX,
+} from '@tabler/icons-react';
 import React from 'react';
 
-export default function Notification({ variant }: { variant: Variant }) {
-  switch (variant) {
+export default function Notification({
+  props,
+}: {
+  props: { variant: Variant; icon?: Icon };
+}) {
+  switch (props.variant) {
     case Variant.FAILED:
       return <IconX size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />;
     case Variant.WARNING:
@@ -13,5 +22,8 @@ export default function Notification({ variant }: { variant: Variant }) {
       );
     case Variant.SUCCESS:
       return <IconCheck size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />;
+    case Variant.INFO:
+      if (props.icon)
+        return <props.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />;
   }
 }

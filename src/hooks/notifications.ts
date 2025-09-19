@@ -5,10 +5,10 @@ import { sendPushNotification } from '@/libraries/wrappers/push-notification';
 import { NotificationGet } from '@/types/models/notification';
 import { usePathname } from 'next/navigation';
 import { linkify } from '@/utilities/formatters/string';
-import { SessionRelations } from '@/types/models/session';
+import { SessionGet } from '@/types/models/session';
 
 export const useNotificationReminder = (props: {
-  sessions: SessionRelations[] | null;
+  sessions: SessionGet[] | null;
 }) => {
   const { isGranted } = useNotificationPermission();
   const pathname = usePathname();
@@ -54,7 +54,7 @@ export const useNotificationReminder = (props: {
 };
 
 const checkForReminder = (props: {
-  sessions: SessionRelations[] | null;
+  sessions: SessionGet[] | null;
   notifications: NotificationGet[] | null;
   isGranted: boolean;
   currentUrl: string;

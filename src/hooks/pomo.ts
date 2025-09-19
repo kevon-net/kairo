@@ -17,9 +17,6 @@ interface UsePomoCyclesOptions {
 }
 
 export const usePomoCycles = ({
-  workDuration = POMO_SESSION_LENGTH * 60,
-  shortBreakDuration = POMO_BREAK_LENGTH.SHORT * 60,
-  longBreakDuration = POMO_BREAK_LENGTH.LONG * 60,
   cyclesBeforeLongBreak = POMO_CYCLE_LENGTH,
 }: UsePomoCyclesOptions = {}) => {
   // inside usePomoCycles
@@ -31,7 +28,6 @@ export const usePomoCycles = ({
     stopTimer,
     pauseTimer,
     resumeTimer,
-    pomoCycle,
   } = useSessionTimer();
   const [phase, setPhase] = useState<PomoPhase>('work');
   const [completedWorkSessions, setCompletedWorkSessions] = useState(0);
@@ -41,13 +37,7 @@ export const usePomoCycles = ({
   // Start current phase
   const startPhase = useCallback(() => {
     startTimer({ pomoDuration: phaseTime });
-  }, [
-    phaseTime,
-    workDuration,
-    shortBreakDuration,
-    longBreakDuration,
-    startTimer,
-  ]);
+  }, [phaseTime, startTimer]);
 
   // Skip to next phase manually
   const skipPhase = useCallback(() => {
@@ -90,7 +80,7 @@ export const usePomoCycles = ({
     // reset local state
     setPhase('work');
     setCompletedWorkSessions(0);
-  }, [stopTimer, pomoCycle]);
+  }, [stopTimer]);
 
   return {
     // Pomodoro state

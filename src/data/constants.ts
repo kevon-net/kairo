@@ -88,6 +88,7 @@ export const INDEXED_DB = {
   SESSIONS: 'sessions',
   TAGS: 'tags',
   CATEGORIES: 'categories',
+  POMO_CYCLES: 'pomo-cycles',
   VIEWS: 'views',
   NOTIFICATIONS: 'notifications',
   COMMENTS: 'comments',

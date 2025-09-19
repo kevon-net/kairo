@@ -47,6 +47,9 @@ export const useSessionActions = () => {
       cycle_id: params?.values?.cycle_id || null,
       profile_id: params?.values?.profile_id || session.id,
       status: params?.values?.status || Status.ACTIVE,
+      sync_status: params?.values?.sync_status || SyncStatus.PENDING,
+      created_at: params?.values?.created_at || (now.toISOString() as any),
+      updated_at: params?.values?.updated_at || (now.toISOString() as any),
     };
 
     // add to state

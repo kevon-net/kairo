@@ -1,101 +1,62 @@
 'use client';
 
-import {
-  ICON_SIZE,
-  ICON_STROKE_WIDTH,
-  POMO_BREAK_LENGTH,
-  POMO_SESSION_LENGTH,
-} from '@/data/constants';
-import { useFormSession } from '@/hooks/form/session';
-import { usePomodoroCycle } from '@/hooks/session';
-import { getRegionalDate } from '@/utilities/formatters/date';
-import { prependZeros } from '@/utilities/formatters/number';
+import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
+import { usePomoCycles } from '@/hooks/pomo';
+import { millToMinSec, prependZeros } from '@/utilities/formatters/number';
 import { Status } from '@generated/prisma';
 import {
+  ActionIcon,
   Box,
-  Button,
   Center,
   Group,
   Progress,
   RingProgress,
   Stack,
   Text,
+  Tooltip,
 } from '@mantine/core';
-import { IconCircleFilled } from '@tabler/icons-react';
+import {
+  IconCircleFilled,
+  IconPlayerPause,
+  IconPlayerPlay,
+  IconPlayerSkipForward,
+  IconPlayerStop,
+  IconRestore,
+} from '@tabler/icons-react';
 import React from 'react';
 
 export default function Live() {
-  const { submitted, createOrSelectSession, persistRuntime, finalizeAndClear } =
-    useFormSession({
-      defaultValues: {
-        title: `${getRegionalDate(new Date()).time} - ...`,
-        properties: {
-          start: new Date().toISOString(),
-          end: '',
-          category_id: 'inbox',
-          task_id: '',
-        },
-      },
-    });
-
   const {
-    minutes,
-    seconds,
-    state,
-    mode,
+    phase,
     completedWorkSessions,
-    startTimer,
+    session,
+    remainingTime,
+    elapsedTime,
+    startPhase,
     pauseTimer,
+    resetCycle,
+    resumeTimer,
+    skipPhase,
     stopTimer,
-  } = usePomodoroCycle({
-    workMinutes: POMO_SESSION_LENGTH,
-    shortBreakMinutes: POMO_BREAK_LENGTH,
-    longBreakMinutes: POMO_BREAK_LENGTH * 3,
-    onWorkStart: async (e) => {
-      await createOrSelectSession();
-      persistRuntime({
-        status: Status.ACTIVE,
-        focus_duration: e.focusDuration,
-      });
-    },
-    onWorkStop: (e) => {
-      finalizeAndClear(
-        {
-          status: Status.INACTIVE,
-          focus_duration: e.focusDuration,
-          end: e.end as any,
-        },
-        { stopped: true }
-      );
-    },
-    onBreakStart: () => {
-      // optional: show a "Break started" toast
-    },
-    onBreakStop: () => {
-      // optional: show "Break ended, next Pomodoro starting"
-    },
-  });
+  } = usePomoCycles();
 
   const progressValue =
-    ((minutes * 60 + seconds) /
-      ((mode == 'work'
-        ? POMO_SESSION_LENGTH
-        : mode == 'shortBreak'
-          ? POMO_BREAK_LENGTH
-          : POMO_BREAK_LENGTH * 3) *
-        60)) *
-    100;
+    elapsedTime && session?.duration
+      ? (elapsedTime / session.duration) * 100
+      : 0;
+
+  const minSec = millToMinSec(remainingTime * 1000);
 
   return (
     <Stack>
-      {mode != 'longBreak' ? (
+      {phase != 'longBreak' ? (
         <Group mt={'xl'} gap={'xs'} justify="center" mih={5}>
           <Progress
             value={
               completedWorkSessions % 4 >= 1
                 ? 100
-                : completedWorkSessions % 4 == 0 && mode == 'work'
-                  ? 100 - progressValue
+                : completedWorkSessions % 4 == 0 && phase == 'work'
+                  ? progressValue
                   : 0
             }
             w={24}
@@ -117,8 +78,8 @@ export default function Live() {
             value={
               completedWorkSessions % 4 >= 2
                 ? 100
-                : completedWorkSessions % 4 == 1 && mode == 'work'
-                  ? 100 - progressValue
+                : completedWorkSessions % 4 == 1 && phase == 'work'
+                  ? progressValue
                   : 0
             }
             w={24}
@@ -140,8 +101,8 @@ export default function Live() {
             value={
               completedWorkSessions % 4 >= 3
                 ? 100
-                : completedWorkSessions % 4 == 2 && mode == 'work'
-                  ? 100 - progressValue
+                : completedWorkSessions % 4 == 2 && phase == 'work'
+                  ? progressValue
                   : 0
             }
             w={24}
@@ -163,8 +124,8 @@ export default function Live() {
             value={
               completedWorkSessions % 4 >= 4
                 ? 100
-                : completedWorkSessions % 4 == 3 && mode == 'work'
-                  ? 100 - progressValue
+                : completedWorkSessions % 4 == 3 && phase == 'work'
+                  ? progressValue
                   : 0
             }
             w={24}
@@ -176,7 +137,7 @@ export default function Live() {
       ) : (
         <Group mt={'xl'} gap={'xs'} justify="center" mih={5}>
           <Progress
-            value={100 - progressValue}
+            value={progressValue}
             w={96}
             size={ICON_STROKE_WIDTH}
             color={completedWorkSessions % 4 == 0 ? 'pri' : undefined}
@@ -198,7 +159,7 @@ export default function Live() {
             size={ringSize}
             thickness={2}
             roundCaps
-            sections={[{ value: progressValue, color: 'pri.7' }]}
+            sections={[{ value: 100 - progressValue, color: 'pri.7' }]}
             transitionDuration={250}
           />
         </Center>
@@ -209,63 +170,71 @@ export default function Live() {
           fz={'var(--mantine-h1-font-size)'}
           fw={'lighter'}
         >
-          <span>{prependZeros(Math.floor(minutes), 2)}</span>
+          <span>
+            {prependZeros(Math.floor(Number(minSec?.minutes || 0)), 2)}
+          </span>
           <Text component={'span'} inherit mx={'xs'}>
             :
           </Text>
-          <span>{prependZeros(Math.floor(seconds), 2)}</span>
+          <span>
+            {prependZeros(Math.floor(Number(minSec?.seconds || 0)), 2)}
+          </span>
         </Center>
       </Box>
 
       <Group justify="center" mt="md" wrap="nowrap">
-        {state === Status.INACTIVE ? (
-          <Button
-            variant={'light'}
-            color="pri.5"
-            w={'50%'}
-            size="xs"
-            disabled={submitted}
-            onClick={startTimer}
-          >
-            Start
-          </Button>
+        {!session ? (
+          <Tooltip label={'Start timer'}>
+            <ActionIcon variant={'light'} color="pri.5" onClick={startPhase}>
+              <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ActionIcon>
+          </Tooltip>
         ) : (
-          <Button
-            variant={'light'}
-            color="pri.5"
-            w={'50%'}
-            size="xs"
-            disabled={submitted}
-            onClick={() => stopTimer('manual')}
-          >
-            Stop
-          </Button>
+          <>
+            <Tooltip label={'Skip to next session'}>
+              <ActionIcon variant={'light'} color="pri.5" onClick={skipPhase}>
+                <IconPlayerSkipForward
+                  size={ICON_SIZE}
+                  stroke={ICON_STROKE_WIDTH}
+                />
+              </ActionIcon>
+            </Tooltip>
+
+            <Tooltip label={'Stop timer'}>
+              <ActionIcon variant={'light'} color="pri.5" onClick={stopTimer}>
+                <IconPlayerStop size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              </ActionIcon>
+            </Tooltip>
+          </>
         )}
 
-        {state !== Status.PAUSED && (
-          <Button
-            variant={'light'}
-            color="pri.5"
-            w={'50%'}
-            size="xs"
-            disabled={submitted || state === Status.INACTIVE}
-            onClick={pauseTimer}
-          >
-            Pause
-          </Button>
+        {session?.status !== Status.PAUSED && (
+          <Tooltip label={'Pause timer'}>
+            <ActionIcon
+              variant={'light'}
+              color="pri.5"
+              onClick={pauseTimer}
+              disabled={session?.status === Status.INACTIVE}
+            >
+              <IconPlayerPause size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ActionIcon>
+          </Tooltip>
         )}
 
-        {state === Status.PAUSED && (
-          <Button
-            variant={'light'}
-            color="pri.5"
-            w={'50%'}
-            size="xs"
-            disabled={submitted}
-            onClick={startTimer}
-          >
-            Resume
-          </Button>
+        {session?.status === Status.PAUSED && (
+          <Tooltip label={'Resume timer'}>
+            <ActionIcon variant={'light'} color="pri.5" onClick={resumeTimer}>
+              <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ActionIcon>
+          </Tooltip>
+        )}
+
+        {completedWorkSessions > 0 && (
+          <Tooltip label={'Reset cycle'}>
+            <ActionIcon variant="light" color="red" onClick={resetCycle}>
+              <IconRestore size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ActionIcon>
+          </Tooltip>
         )}
       </Group>
     </Stack>

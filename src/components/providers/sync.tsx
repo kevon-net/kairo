@@ -8,32 +8,26 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { config, openDatabase } from '@/libraries/indexed-db/db';
 import { DatabaseError } from '@/libraries/indexed-db/transactions';
 import { updateSyncStatus } from '@/libraries/redux/slices/sync-status';
-import {
-  updateDeletedCategories,
-  updateCategories,
-} from '@/libraries/redux/slices/categories';
-import {
-  updateDeletedTasks,
-  updateTasks,
-} from '@/libraries/redux/slices/tasks';
-import {
-  updateSessions,
-  updateDeletedSessions,
-} from '@/libraries/redux/slices/sessions';
 import { useDebouncedCallback, useNetwork } from '@mantine/hooks';
 import { SyncStatus } from '@generated/prisma';
 import React, { useEffect } from 'react';
-import {
-  updateViews,
-  updateDeletedViews,
-} from '@/libraries/redux/slices/views';
 import { viewsUpdate } from '@/handlers/requests/database/views';
 import { useNotificationReminder } from '@/hooks/notifications';
-import {
-  updateDeletedNotifications,
-  updateNotifications,
-} from '@/libraries/redux/slices/notifications';
 import { notificationsUpdate } from '@/handlers/requests/database/notifications';
+import {
+  clearDeletedCategories,
+  setCategories,
+} from '@/libraries/redux/slices/categories';
+import { clearDeletedTasks, setTasks } from '@/libraries/redux/slices/tasks';
+import {
+  clearDeletedSessions,
+  setSessions,
+} from '@/libraries/redux/slices/sessions';
+import { clearDeletedViews, setViews } from '@/libraries/redux/slices/views';
+import {
+  clearDeletedNotifications,
+  setNotifications,
+} from '@/libraries/redux/slices/notifications';
 
 // Add new type to handle deleted items
 type SyncItem = {
@@ -47,7 +41,7 @@ type SyncParams = {
   deletedItems?: any[]; // Add array of deleted items
   dataStore: string;
   stateUpdateFunction: (items: any[]) => void;
-  stateUpdateFunctionDeleted: () => void;
+  stateClearDeletedFunction: () => void;
   serverUpdateFunction: (items: any[], deletedIds?: string[]) => Promise<void>;
 };
 
@@ -94,7 +88,7 @@ export default function Sync({ children }: { children: React.ReactNode }) {
       dispatch(updateSyncStatus(SyncStatus.SYNCED));
     }
 
-    params.stateUpdateFunctionDeleted();
+    params.stateClearDeletedFunction();
   };
 
   const handleSync = async (params: SyncParams) => {
@@ -152,9 +146,9 @@ export default function Sync({ children }: { children: React.ReactNode }) {
       items: tasks || [],
       deletedItems: deletedTasks,
       dataStore: INDEXED_DB.TASKS,
-      stateUpdateFunctionDeleted: () => dispatch(updateDeletedTasks([])),
+      stateClearDeletedFunction: () => dispatch(clearDeletedTasks()),
       stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateTasks(stateUpdateItems)),
+        dispatch(setTasks(stateUpdateItems)),
       serverUpdateFunction: async (serverSyncItems, deletedIds) =>
         await tasksUpdate(serverSyncItems, deletedIds),
     });
@@ -174,9 +168,9 @@ export default function Sync({ children }: { children: React.ReactNode }) {
       items: categories || [],
       deletedItems: deletedCategories || [],
       dataStore: INDEXED_DB.CATEGORIES,
-      stateUpdateFunctionDeleted: () => dispatch(updateDeletedCategories([])),
+      stateClearDeletedFunction: () => dispatch(clearDeletedCategories()),
       stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateCategories(stateUpdateItems)),
+        dispatch(setCategories(stateUpdateItems)),
       serverUpdateFunction: async (serverSyncItems, deletedIds) =>
         await categoriesUpdate(serverSyncItems, deletedIds),
     });
@@ -196,9 +190,9 @@ export default function Sync({ children }: { children: React.ReactNode }) {
       items: sessions || [],
       deletedItems: deletedSessions,
       dataStore: INDEXED_DB.SESSIONS,
-      stateUpdateFunctionDeleted: () => dispatch(updateDeletedSessions([])),
+      stateClearDeletedFunction: () => dispatch(clearDeletedSessions()),
       stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateSessions(stateUpdateItems)),
+        dispatch(setSessions(stateUpdateItems)),
       serverUpdateFunction: async (serverSyncItems, deletedIds) =>
         await sessionsUpdate(serverSyncItems, deletedIds),
     });
@@ -218,9 +212,9 @@ export default function Sync({ children }: { children: React.ReactNode }) {
       items: views || [],
       deletedItems: deletedViews,
       dataStore: INDEXED_DB.VIEWS,
-      stateUpdateFunctionDeleted: () => dispatch(updateDeletedViews([])),
+      stateClearDeletedFunction: () => dispatch(clearDeletedViews()),
       stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateViews(stateUpdateItems)),
+        dispatch(setViews(stateUpdateItems)),
       serverUpdateFunction: async (serverSyncItems, deletedIds) =>
         await viewsUpdate(serverSyncItems, deletedIds),
     });
@@ -240,10 +234,9 @@ export default function Sync({ children }: { children: React.ReactNode }) {
       items: notifications || [],
       deletedItems: deletedNotifications,
       dataStore: INDEXED_DB.NOTIFICATIONS,
-      stateUpdateFunctionDeleted: () =>
-        dispatch(updateDeletedNotifications([])),
+      stateClearDeletedFunction: () => dispatch(clearDeletedNotifications()),
       stateUpdateFunction: (stateUpdateItems) =>
-        dispatch(updateNotifications(stateUpdateItems)),
+        dispatch(setNotifications(stateUpdateItems)),
       serverUpdateFunction: async (serverSyncItems, deletedIds) =>
         await notificationsUpdate(serverSyncItems, deletedIds),
     });

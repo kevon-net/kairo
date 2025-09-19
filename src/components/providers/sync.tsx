@@ -8,7 +8,11 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { config, openDatabase } from '@/libraries/indexed-db/db';
 import { DatabaseError } from '@/libraries/indexed-db/transactions';
 import { updateSyncStatus } from '@/libraries/redux/slices/sync-status';
-import { useDebouncedCallback, useNetwork } from '@mantine/hooks';
+import {
+  useDebouncedCallback,
+  useNetwork,
+  useThrottledCallback,
+} from '@mantine/hooks';
 import { SyncStatus } from '@generated/prisma';
 import React, { useEffect } from 'react';
 import { viewsUpdate } from '@/handlers/requests/database/views';
@@ -28,6 +32,11 @@ import {
   clearDeletedNotifications,
   setNotifications,
 } from '@/libraries/redux/slices/notifications';
+import {
+  clearDeletedPomoCycles,
+  setPomoCycles,
+} from '@/libraries/redux/slices/pomo-cycles';
+import { pomoCyclesUpdate } from '@/handlers/requests/database/pomo-cycle';
 
 // Add new type to handle deleted items
 type SyncItem = {
@@ -113,7 +122,7 @@ export default function Sync({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const debounceSync = useDebouncedCallback(handleSync, 1000);
+  const debounceSync = useThrottledCallback(handleSync, 1000);
   const debounceSyncToServer = useDebouncedCallback(
     syncToServerAfterDelay,
     15000
@@ -125,6 +134,8 @@ export default function Sync({ children }: { children: React.ReactNode }) {
   const deletedCategories = useAppSelector((state) => state.categories.deleted);
   const sessions = useAppSelector((state) => state.sessions.value);
   const deletedSessions = useAppSelector((state) => state.sessions.deleted);
+  const pomoCycles = useAppSelector((state) => state.pomoCycles.value);
+  const deletedPomoCycles = useAppSelector((state) => state.pomoCycles.deleted);
   const views = useAppSelector((state) => state.views.value);
   const deletedViews = useAppSelector((state) => state.views.deleted);
   const notifications = useAppSelector((state) => state.notifications.value);
@@ -198,6 +209,28 @@ export default function Sync({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const syncPomoCycles = () => {
+    const trigger = triggerSync({
+      items: pomoCycles || [],
+      deletedItems: deletedPomoCycles,
+      syncStatus,
+      online: networkStatus.online,
+    });
+
+    if (!trigger) return;
+
+    debounceSync({
+      items: pomoCycles || [],
+      deletedItems: deletedPomoCycles,
+      dataStore: INDEXED_DB.POMO_CYCLES,
+      stateClearDeletedFunction: () => dispatch(clearDeletedPomoCycles()),
+      stateUpdateFunction: (stateUpdateItems) =>
+        dispatch(setPomoCycles(stateUpdateItems)),
+      serverUpdateFunction: async (serverSyncItems, deletedIds) =>
+        await pomoCyclesUpdate(serverSyncItems, deletedIds),
+    });
+  };
+
   const syncViews = () => {
     const trigger = triggerSync({
       items: views || [],
@@ -245,6 +278,7 @@ export default function Sync({ children }: { children: React.ReactNode }) {
   useEffect(() => syncTasks(), [tasks]);
   useEffect(() => syncCategories(), [categories]);
   useEffect(() => syncSessions(), [sessions]);
+  useEffect(() => syncPomoCycles(), [pomoCycles]);
   useEffect(() => syncViews(), [views]);
   useEffect(() => syncNotifications(), [notifications]);
 
@@ -253,6 +287,8 @@ export default function Sync({ children }: { children: React.ReactNode }) {
 
     syncTasks();
     syncCategories();
+    syncSessions();
+    syncPomoCycles();
     syncViews();
     syncNotifications();
   }, [networkStatus.online]);

@@ -25,6 +25,10 @@ export const config = {
       keyPath: 'id',
     },
     {
+      name: INDEXED_DB.POMO_CYCLES,
+      keyPath: 'id',
+    },
+    {
       name: INDEXED_DB.VIEWS,
       keyPath: 'id',
     },

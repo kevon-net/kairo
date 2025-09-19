@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { createClient } from '@/libraries/supabase/server';
 import { SessionGet, SessionRelations } from '@/types/models/session';
-import { SyncStatus } from '@generated/prisma';
+import { SessionType, SyncStatus } from '@generated/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -67,9 +67,11 @@ export async function PUT(request: NextRequest) {
             start: new Date(session.start || now),
             elapsed: session.elapsed,
             end: new Date(session.end || now),
+            type: session.type,
             tag_id: session.tag_id || null,
             task_id: session.task_id || null,
             category_id: session.category_id || null,
+            cycle_id: session.cycle_id || null,
             profile_id: session.profile_id,
             status: session.status,
             sync_status: session.sync_status,
@@ -82,9 +84,11 @@ export async function PUT(request: NextRequest) {
             start: new Date(session.start || now),
             elapsed: session.elapsed,
             end: session.end ? new Date(session.end) : null,
+            type: session.type || SessionType.POMO_FOCUS,
             tag_id: session.tag_id || null,
             task_id: session.task_id || null,
             category_id: session.category_id || null,
+            cycle_id: session.cycle_id || null,
             profile_id: session.profile_id,
             status: session.status,
             sync_status: session.sync_status || SyncStatus.SYNCED,

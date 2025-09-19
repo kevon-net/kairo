@@ -19,6 +19,21 @@ export const millToMinSec = (milliseconds: number): MinSec | null => {
   }
 };
 
+// helpet that takes in seconds and returns minutes and seconds
+export const secToMinSec = (seconds: number): MinSec | null => {
+  try {
+    if (seconds < 0) throw new Error('Seconds value cannot be negative.');
+
+    const minutes = Math.floor(seconds / 60).toString();
+    const remainingSeconds = (seconds % 60).toString();
+
+    return { minutes, seconds: remainingSeconds };
+  } catch (error) {
+    console.error('x-> Time convertion failure:', error);
+    return null;
+  }
+};
+
 export const prependZeros = (value: number, length: number): string => {
   const paddedStr = String(value).padStart(length, '0');
   return paddedStr;

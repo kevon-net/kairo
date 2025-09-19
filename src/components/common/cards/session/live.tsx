@@ -2,7 +2,7 @@
 
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { usePomoCycles } from '@/hooks/pomo';
-import { millToMinSec, prependZeros } from '@/utilities/formatters/number';
+import { prependZeros, secToMinSec } from '@/utilities/formatters/number';
 import { Status } from '@generated/prisma';
 import {
   ActionIcon,
@@ -28,6 +28,7 @@ import React from 'react';
 export default function Live() {
   const {
     phase,
+    phaseTime,
     completedWorkSessions,
     session,
     remainingTime,
@@ -41,11 +42,9 @@ export default function Live() {
   } = usePomoCycles();
 
   const progressValue =
-    elapsedTime && session?.duration
-      ? (elapsedTime / session.duration) * 100
-      : 0;
-
-  const minSec = millToMinSec(remainingTime * 1000);
+    ((elapsedTime || 0) / (session?.duration || phaseTime)) * 100;
+  const defaultMinSec = { minutes: phaseTime, seconds: '00' };
+  const minSec = secToMinSec(remainingTime || defaultMinSec.minutes);
 
   return (
     <Stack>
@@ -201,7 +200,11 @@ export default function Live() {
             </Tooltip>
 
             <Tooltip label={'Stop timer'}>
-              <ActionIcon variant={'light'} color="pri.5" onClick={stopTimer}>
+              <ActionIcon
+                variant={'light'}
+                color="pri.5"
+                onClick={() => stopTimer()}
+              >
                 <IconPlayerStop size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               </ActionIcon>
             </Tooltip>

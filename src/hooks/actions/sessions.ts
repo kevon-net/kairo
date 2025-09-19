@@ -1,7 +1,7 @@
 import { generateUUID } from '@/utilities/generators/id';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { SessionGet } from '@/types/models/session';
-import { Status, SyncStatus } from '@generated/prisma';
+import { SessionType, Status, SyncStatus } from '@generated/prisma';
 import { usePathname, useRouter } from 'next/navigation';
 import { useItemEditContext } from '@/components/contexts/item-edit';
 import { CategoryGet } from '@/types/models/category';
@@ -40,9 +40,11 @@ export const useSessionActions = () => {
       start: (params?.values?.start || now.toISOString()) as any,
       elapsed: params?.values?.elapsed || 0,
       end: params?.values?.end || null,
+      type: params?.values?.type || SessionType.POMO_FOCUS,
       tag_id: params?.values?.tag_id || null,
       task_id: params?.values?.task_id || null,
       category_id: params?.values?.category_id || null,
+      cycle_id: params?.values?.cycle_id || null,
       profile_id: params?.values?.profile_id || session.id,
       status: params?.values?.status || Status.ACTIVE,
     };

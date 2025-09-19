@@ -12,6 +12,7 @@ import reducerCategories from './slices/categories';
 import reducerViews from './slices/views';
 import reducerNotifications from './slices/notifications';
 import reducerSessions from './slices/sessions';
+import reducerPomoCycles from './slices/pomo-cycles';
 
 export const makeStore = () => {
   return configureStore({
@@ -27,6 +28,7 @@ export const makeStore = () => {
       categories: reducerCategories,
       views: reducerViews,
       notifications: reducerNotifications,
+      pomoCycles: reducerPomoCycles,
     },
 
     devTools: isProduction(),

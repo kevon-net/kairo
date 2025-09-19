@@ -1,14 +1,23 @@
+'use client';
+
 import { ICON_WRAPPER_SIZE } from '@/data/constants';
-import { FormTask } from '@/hooks/form/task';
+import { useTaskActions } from '@/hooks/actions/tasks';
+import { TaskGet } from '@/types/models/task';
 import { Checkbox } from '@mantine/core';
 import React from 'react';
 
-export default function Task({ props }: { props: { form: FormTask } }) {
+export default function Task({ item }: { item: TaskGet }) {
+  const { updateTask } = useTaskActions();
+
   return (
     <Checkbox
+      checked={item.complete}
+      onChange={(event) => {
+        updateTask({
+          values: { ...item, complete: event.currentTarget.checked },
+        });
+      }}
       radius="xl"
-      key={props.form.key('properties.complete')}
-      {...props.form.getInputProps('properties.complete', { type: 'checkbox' })}
       styles={{
         input: {
           width: ICON_WRAPPER_SIZE / 1.5,

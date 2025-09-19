@@ -1,5 +1,5 @@
 import { API_URL, HEADERS } from '@/data/constants';
-import { ViewCreate, ViewGet } from '@/types/models/views';
+import { ViewCreate, ViewGet } from '@/types/models/view';
 
 const baseRequestUrl = `${API_URL}/views`;
 

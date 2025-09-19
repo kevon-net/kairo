@@ -25,7 +25,6 @@ import {
   IconPlus,
 } from '@tabler/icons-react';
 import React from 'react';
-import ModalSessionCreate from '@/components/common/modals/session/create';
 import { navLinkStyles } from './main';
 import MenuUser from '@/components/common/menus/user';
 import { setCookieClient } from '@/utilities/helpers/cookie-client';
@@ -84,17 +83,15 @@ export default function Header() {
       </Group>
 
       <Stack gap={'xs'}>
-        <ModalSessionCreate>
-          <NavLink
-            label="New Session"
-            leftSection={
-              <ThemeIcon size={ICON_SIZE} color="pri">
-                <IconPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-              </ThemeIcon>
-            }
-            style={navLinkStyles}
-          />
-        </ModalSessionCreate>
+        <NavLink
+          label="New Session"
+          leftSection={
+            <ThemeIcon size={ICON_SIZE} color="pri">
+              <IconPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ThemeIcon>
+          }
+          style={navLinkStyles}
+        />
       </Stack>
     </Stack>
   );

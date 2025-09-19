@@ -6,14 +6,14 @@ export const sliceColorScheme = createSlice({
     value: null as any satisfies any,
   },
   reducers: {
-    updateColorScheme: (state, action) => {
+    update: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateColorScheme } = sliceColorScheme.actions;
+export const { update: updateColorScheme } = sliceColorScheme.actions;
 
 const reducerColorScheme = sliceColorScheme.reducer;
 

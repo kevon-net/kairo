@@ -14,34 +14,14 @@ import {
   WEEK,
 } from '@/data/constants';
 import { tasksGet } from '@/handlers/requests/database/task';
-import {
-  // updateDeletedTasks,
-  updateTasks,
-} from '@/libraries/redux/slices/tasks';
 import { categoriesGet } from '@/handlers/requests/database/category';
-import {
-  updateCategories,
-  // updateDeletedCategories,
-} from '@/libraries/redux/slices/categories';
 import { sessionsGet } from '@/handlers/requests/database/session';
-import {
-  // updateDeletedSessions,
-  updateSessions,
-} from '@/libraries/redux/slices/sessions';
 import { DatabaseError } from '@/libraries/indexed-db/transactions';
 import { config, openDatabase } from '@/libraries/indexed-db/db';
-import {
-  // updateDeletedViews,
-  updateViews,
-} from '@/libraries/redux/slices/views';
 import { viewsGet } from '@/handlers/requests/database/views';
 import { registerServiceWorker } from '@/libraries/service-workers/register';
 import { useMediaQuery, useNetwork } from '@mantine/hooks';
 import { User } from '@supabase/supabase-js';
-import {
-  // updateDeletedNotifications,
-  updateNotifications,
-} from '@/libraries/redux/slices/notifications';
 import { subscribeUser } from '@/services/api/notification';
 import { NotificationGet } from '@/types/models/notification';
 import {
@@ -49,6 +29,11 @@ import {
   setCookieClient,
 } from '@/utilities/helpers/cookie-client';
 import { AppShell } from '@/types/components/app-shell';
+import { setCategories } from '@/libraries/redux/slices/categories';
+import { setTasks } from '@/libraries/redux/slices/tasks';
+import { setSessions } from '@/libraries/redux/slices/sessions';
+import { setViews } from '@/libraries/redux/slices/views';
+import { setNotifications } from '@/libraries/redux/slices/notifications';
 
 export default function Store({
   session,
@@ -290,7 +275,7 @@ export default function Store({
         dataStore: INDEXED_DB.TASKS,
         dataFetchFunction: async () => await tasksGet(),
         stateUpdateFunction: (stateUpdateItems) =>
-          storeRef.current?.dispatch(updateTasks(stateUpdateItems)),
+          storeRef.current?.dispatch(setTasks(stateUpdateItems)),
         // deletedStateUpdateFunction: (deletedStateItems) =>
         //   storeRef.current?.dispatch(updateDeletedTasks(deletedStateItems)),
       });
@@ -303,7 +288,7 @@ export default function Store({
         dataStore: INDEXED_DB.CATEGORIES,
         dataFetchFunction: async () => await categoriesGet(),
         stateUpdateFunction: (stateUpdateItems) =>
-          storeRef.current?.dispatch(updateCategories(stateUpdateItems)),
+          storeRef.current?.dispatch(setCategories(stateUpdateItems)),
         // deletedStateUpdateFunction: (deletedStateItems) =>
         //   storeRef.current?.dispatch(
         //     updateDeletedCategories(deletedStateItems)
@@ -318,7 +303,7 @@ export default function Store({
         dataStore: INDEXED_DB.SESSIONS,
         dataFetchFunction: async () => await sessionsGet(),
         stateUpdateFunction: (stateUpdateItems) =>
-          storeRef.current?.dispatch(updateSessions(stateUpdateItems)),
+          storeRef.current?.dispatch(setSessions(stateUpdateItems)),
         // deletedStateUpdateFunction: (deletedStateItems) =>
         //   storeRef.current?.dispatch(
         //     updateDeletedSessions(deletedStateItems)
@@ -333,7 +318,7 @@ export default function Store({
         dataStore: INDEXED_DB.VIEWS,
         dataFetchFunction: async () => await viewsGet(),
         stateUpdateFunction: (stateUpdateItems) =>
-          storeRef.current?.dispatch(updateViews(stateUpdateItems)),
+          storeRef.current?.dispatch(setViews(stateUpdateItems)),
         // deletedStateUpdateFunction: (deletedStateItems) =>
         //   storeRef.current?.dispatch(updateDeletedViews(deletedStateItems)),
       });
@@ -401,7 +386,7 @@ export default function Store({
             return { items: [notification] };
           },
           stateUpdateFunction: (stateUpdateItems) =>
-            storeRef.current?.dispatch(updateNotifications(stateUpdateItems)),
+            storeRef.current?.dispatch(setNotifications(stateUpdateItems)),
           // deletedStateUpdateFunction: (deletedStateItems) =>
           //   storeRef.current?.dispatch(
           //     updateDeletedNotifications(deletedStateItems)

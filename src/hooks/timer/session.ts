@@ -3,6 +3,9 @@ import { SessionGet } from '@/types/models/session';
 import { useSessionActions } from '../actions/sessions';
 import { Status } from '@generated/prisma';
 import { getRegionalDate } from '@/utilities/formatters/date';
+import { PomoCycleGet } from '@/types/models/pomo-cycle';
+import { usePomoCycleActions } from '../actions/pomo-cycles';
+import { generateUUID } from '@/utilities/generators/id';
 
 type StopReason = 'manual' | 'finished';
 
@@ -10,20 +13,48 @@ export type TimerEvent = SessionGet & { reason?: StopReason };
 
 export const useSessionTimer = () => {
   const { createSession, updateSession, deleteSession } = useSessionActions();
+  const { createPomoCycle, updatePomoCycle } = usePomoCycleActions();
 
   const [session, setSession] = useState<Partial<SessionGet> | null>(null);
+  const [pomoCycle, setPomoCycle] = useState<Partial<PomoCycleGet> | null>(
+    null
+  );
 
   // handler to start new session timer
   const handleStartTimer = (params?: { pomoDuration?: number }) => {
     if (session) return;
 
-    const newSession = createSession();
+    const cycleId = generateUUID();
 
-    if (newSession)
+    const newSession = createSession({
+      values: { duration: params?.pomoDuration, cycle_id: cycleId },
+    });
+
+    if (newSession) {
+      if (!pomoCycle) {
+        const newPomoCycle = createPomoCycle({
+          values: { id: cycleId, current_session_id: newSession.id },
+        });
+
+        if (newPomoCycle) setPomoCycle(newPomoCycle);
+      } else {
+        setPomoCycle((prev) =>
+          prev ? { ...prev, current_session_id: newSession.id } : prev
+        );
+
+        updatePomoCycle({
+          values: {
+            ...pomoCycle,
+            current_session_id: newSession.id,
+          } as PomoCycleGet,
+        });
+      }
+
       setSession({
         ...newSession,
-        duration: !params?.pomoDuration ? null : params.pomoDuration * 60,
+        duration: !params?.pomoDuration ? null : params.pomoDuration,
       });
+    }
   };
 
   // handler to pause session timer
@@ -47,24 +78,42 @@ export const useSessionTimer = () => {
   };
 
   // handler to stop session timer
-  const handleStopTimer = () => {
-    if (!session) return;
-
-    setSession(null);
+  const handleStopTimer = (params?: {
+    options?: {
+      skipping?: boolean;
+      cycleReset?: boolean;
+    };
+  }) => {
+    if (session) setSession(null);
 
     const now = new Date();
 
     const stoppedSession = {
       ...session,
       status: Status.INACTIVE,
-      title: `${session.title} ${getRegionalDate(now).time}`,
+      title: `${session?.title} ${getRegionalDate(now).time}`,
       end: now.toISOString() as any,
     };
 
-    if (!session.duration || session.duration == session.elapsed) {
+    if (
+      params?.options?.skipping ||
+      (session && (!session.duration || session.duration == session.elapsed))
+    ) {
       updateSession({ values: stoppedSession as SessionGet });
     } else {
-      deleteSession({ values: session as SessionGet });
+      deleteSession({
+        values: { ...session, status: Status.INACTIVE } as SessionGet,
+      });
+
+      if (params?.options?.cycleReset) setPomoCycle(null);
+
+      updatePomoCycle({
+        values: {
+          ...pomoCycle,
+          status: Status.INACTIVE,
+          current_session_id: null,
+        } as PomoCycleGet,
+      });
     }
   };
 
@@ -81,10 +130,27 @@ export const useSessionTimer = () => {
 
     const intervalRedux = setInterval(() => {
       // update session in redux state
-      setSession((prev) => {
-        if (!prev) return prev;
-        updateSession({ values: prev as SessionGet });
-        return prev;
+      setSession((prevSession) => {
+        if (!prevSession) return prevSession;
+
+        updateSession({ values: prevSession as SessionGet });
+
+        // also pomo cycle in local state
+        setPomoCycle((prevPomoCycle) => {
+          if (!prevPomoCycle) return prevPomoCycle;
+
+          // also pomo cycle in redux state
+          updatePomoCycle({
+            values: {
+              ...prevPomoCycle,
+              current_session_id: prevSession.id,
+            } as PomoCycleGet,
+          });
+
+          return prevPomoCycle;
+        });
+
+        return prevSession;
       });
     }, 60000);
 
@@ -96,6 +162,7 @@ export const useSessionTimer = () => {
 
   return {
     session,
+    pomoCycle,
     // ensure we never return negative remaining time
     remainingTime: Math.max(
       0,

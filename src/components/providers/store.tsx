@@ -34,6 +34,8 @@ import { setTasks } from '@/libraries/redux/slices/tasks';
 import { setSessions } from '@/libraries/redux/slices/sessions';
 import { setViews } from '@/libraries/redux/slices/views';
 import { setNotifications } from '@/libraries/redux/slices/notifications';
+import { setPomoCycles } from '@/libraries/redux/slices/pomo-cycles';
+import { pomoCyclesGet } from '@/handlers/requests/database/pomo-cycle';
 
 export default function Store({
   session,
@@ -311,6 +313,21 @@ export default function Store({
       });
     };
 
+    const loadPomoCycles = async () => {
+      if (prevItemsRef.current.length) return;
+
+      await loadInitialData({
+        dataStore: INDEXED_DB.POMO_CYCLES,
+        dataFetchFunction: async () => await pomoCyclesGet(),
+        stateUpdateFunction: (stateUpdateItems) =>
+          storeRef.current?.dispatch(setPomoCycles(stateUpdateItems)),
+        // deletedStateUpdateFunction: (deletedStateItems) =>
+        //   storeRef.current?.dispatch(
+        //     updateDeletedPomoCycles(deletedStateItems)
+        //   ),
+      });
+    };
+
     const loadViews = async () => {
       if (prevItemsRef.current.length) return;
 
@@ -327,6 +344,7 @@ export default function Store({
     loadTasks();
     loadCategories();
     loadSessions();
+    loadPomoCycles();
     loadViews();
   }, []);
 

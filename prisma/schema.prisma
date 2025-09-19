@@ -56,6 +56,12 @@ enum TagType {
   TASK
 }
 
+enum SessionType {
+  STOPWATCH
+  POMO_FOCUS
+  POMO_BREAK
+}
+
 enum SortDirection {
   ASCENDING
   DESCENDING
@@ -83,6 +89,7 @@ model Profile {
   views         View[]
   notifications Notification[]
   sessions      Session[]
+  pomoCycles    PomoCycle[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -224,21 +231,24 @@ model Task {
 }
 
 model Session {
-  id       String    @id @default(uuid())
+  id       String      @id @default(uuid())
   title    String
   duration Int?
   start    DateTime
   elapsed  Int
   end      DateTime?
+  type     SessionType @default(POMO_FOCUS)
 
-  profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile     Profile    @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id  String
-  tag         Tag?      @relation(fields: [tag_id], references: [id], onDelete: SetNull)
+  tag         Tag?       @relation(fields: [tag_id], references: [id], onDelete: SetNull)
   tag_id      String?
-  category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  category    Category?  @relation(fields: [category_id], references: [id], onDelete: SetNull)
   category_id String?
-  task        Task?     @relation(fields: [task_id], references: [id], onDelete: SetNull)
+  task        Task?      @relation(fields: [task_id], references: [id], onDelete: SetNull)
   task_id     String?
+  cycle       PomoCycle? @relation(fields: [cycle_id], references: [id], onDelete: SetNull)
+  cycle_id    String?
 
   status      Status     @default(ACTIVE)
   sync_status SyncStatus @default(SYNCED)
@@ -246,6 +256,23 @@ model Session {
   updated_at  DateTime   @updatedAt
 
   @@map(name: "sessions")
+}
+
+model PomoCycle {
+  id                 String  @id @default(uuid())
+  current_session_id String?
+
+  profile    Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id String
+
+  sessions Session[]
+
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  @@map(name: "pomo_cycles")
 }
 
 model View {

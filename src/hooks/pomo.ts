@@ -5,6 +5,7 @@ import {
   POMO_CYCLE_LENGTH,
   POMO_SESSION_LENGTH,
 } from '@/data/constants';
+import { Status } from '@generated/prisma';
 
 type PomoPhase = 'work' | 'shortBreak' | 'longBreak';
 
@@ -16,11 +17,12 @@ interface UsePomoCyclesOptions {
 }
 
 export const usePomoCycles = ({
-  workDuration = POMO_SESSION_LENGTH,
-  shortBreakDuration = POMO_BREAK_LENGTH.SHORT,
-  longBreakDuration = POMO_BREAK_LENGTH.LONG,
+  workDuration = POMO_SESSION_LENGTH * 60,
+  shortBreakDuration = POMO_BREAK_LENGTH.SHORT * 60,
+  longBreakDuration = POMO_BREAK_LENGTH.LONG * 60,
   cyclesBeforeLongBreak = POMO_CYCLE_LENGTH,
 }: UsePomoCyclesOptions = {}) => {
+  // inside usePomoCycles
   const {
     session,
     remainingTime,
@@ -29,65 +31,71 @@ export const usePomoCycles = ({
     stopTimer,
     pauseTimer,
     resumeTimer,
+    pomoCycle,
   } = useSessionTimer();
-
   const [phase, setPhase] = useState<PomoPhase>('work');
   const [completedWorkSessions, setCompletedWorkSessions] = useState(0);
 
+  const phaseTime = getPhaseTime({ phase });
+
   // Start current phase
   const startPhase = useCallback(() => {
-    if (phase === 'work') {
-      startTimer({ pomoDuration: workDuration });
-    } else if (phase === 'shortBreak') {
-      startTimer({ pomoDuration: shortBreakDuration });
-    } else if (phase === 'longBreak') {
-      startTimer({ pomoDuration: longBreakDuration });
-    }
-  }, [phase, workDuration, shortBreakDuration, longBreakDuration, startTimer]);
+    startTimer({ pomoDuration: phaseTime });
+  }, [
+    phaseTime,
+    workDuration,
+    shortBreakDuration,
+    longBreakDuration,
+    startTimer,
+  ]);
 
   // Skip to next phase manually
   const skipPhase = useCallback(() => {
-    stopTimer();
+    stopTimer({ options: { skipping: true } });
     advancePhase();
   }, [stopTimer]);
 
   // Advance phase logic
   const advancePhase = useCallback(() => {
     if (phase === 'work') {
-      setCompletedWorkSessions((prev) => prev + 1);
-
-      // After 4 work sessions → long break
-      if ((completedWorkSessions + 1) % cyclesBeforeLongBreak === 0) {
-        setPhase('longBreak');
-      } else {
-        setPhase('shortBreak');
-      }
+      setCompletedWorkSessions((prev) => {
+        const next = prev + 1;
+        if (next % cyclesBeforeLongBreak === 0) {
+          setPhase('longBreak');
+        } else {
+          setPhase('shortBreak');
+        }
+        return next;
+      });
     } else {
       // After any break → always return to work
       setPhase('work');
     }
-  }, [phase, completedWorkSessions, cyclesBeforeLongBreak]);
+  }, [phase, cyclesBeforeLongBreak]);
 
   // Auto-advance when timer ends
   useEffect(() => {
-    if (!session) return;
-    if (remainingTime > 0) return;
-
-    // Timer finished
-    stopTimer();
-    advancePhase();
+    if (session && remainingTime === 0 && session.status === Status.ACTIVE) {
+      setTimeout(() => {
+        stopTimer();
+        advancePhase();
+      }, 1000);
+    }
   }, [session, remainingTime, stopTimer, advancePhase]);
 
   // 🔹 Reset cycle completely
   const resetCycle = useCallback(() => {
-    stopTimer(); // stop any active session
+    stopTimer({ options: { cycleReset: true } }); // stop any active session
+
+    // reset local state
     setPhase('work');
     setCompletedWorkSessions(0);
-  }, [stopTimer]);
+  }, [stopTimer, pomoCycle]);
 
   return {
     // Pomodoro state
     phase, // "work" | "shortBreak" | "longBreak"
+    phaseTime: phaseTime,
     completedWorkSessions,
 
     // Timer state passthrough
@@ -105,4 +113,18 @@ export const usePomoCycles = ({
     resumeTimer,
     stopTimer, // passthrough
   };
+};
+
+const getPhaseTime = (params: { phase: string }) => {
+  // switch to get respective phase lengths
+  switch (params.phase) {
+    case 'work':
+      return POMO_SESSION_LENGTH * 60;
+    case 'shortBreak':
+      return POMO_BREAK_LENGTH.SHORT * 60;
+    case 'longBreak':
+      return POMO_BREAK_LENGTH.LONG * 60;
+    default:
+      return POMO_SESSION_LENGTH * 60;
+  }
 };

@@ -44,9 +44,16 @@ enum SyncStatus {
   DELETED
 }
 
-enum Context {
-  BLOG
-  SESSIONS
+enum CategoryType {
+  POST
+  SESSION
+  TASK
+}
+
+enum TagType {
+  POST
+  SESSION
+  TASK
 }
 
 enum SortDirection {
@@ -83,46 +90,6 @@ model Profile {
   @@map("profiles")
 }
 
-model Category {
-  id          String     @id @default(uuid())
-  title       String
-  color       String
-  status      Status     @default(ACTIVE)
-  context     Context
-  sync_status SyncStatus @default(SYNCED)
-
-  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  profile_id String?
-
-  posts    Post[]
-  tasks    Task[]
-  sessions Session[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@map(name: "categories")
-}
-
-model Tag {
-  id          String     @id @default(uuid())
-  title       String
-  color       String
-  status      Status     @default(ACTIVE)
-  sync_status SyncStatus @default(SYNCED)
-
-  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
-  profile_id String?
-
-  posts Post[]
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@unique([title])
-  @@map(name: "tags")
-}
-
 model Post {
   id             String  @id @default(uuid())
   image          String
@@ -131,7 +98,6 @@ model Post {
   content        String
   allow_comments Boolean @default(true)
   view_count     Int     @default(0)
-  status         Status  @default(DRAFT)
 
   profile     Profile?  @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id  String?
@@ -141,18 +107,40 @@ model Post {
   tags     Tag[]
   comments Comment[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(DRAFT)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@unique([profile_id, title])
   @@map(name: "posts")
+}
+
+model Category {
+  id    String       @id @default(uuid())
+  title String
+  color String?
+  type  CategoryType @default(SESSION)
+
+  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id String?
+
+  posts    Post[]
+  sessions Session[]
+  tasks    Task[]
+
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  @@map(name: "categories")
 }
 
 model Comment {
   id      String  @id @default(uuid())
   name    String?
   content String
-  status  Status  @default(ACTIVE)
 
   post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
   post_id    String
@@ -161,18 +149,41 @@ model Comment {
 
   replies Reply[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@unique([name, content, post_id, profile_id])
   @@map(name: "comments")
+}
+
+model Tag {
+  id    String  @id @default(uuid())
+  title String
+  color String?
+  type  TagType @default(SESSION)
+
+  profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  profile_id String?
+
+  posts    Post[]
+  sessions Session[]
+  tasks    Task[]
+
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  @@unique([title])
+  @@map(name: "tags")
 }
 
 model Reply {
   id      String  @id @default(uuid())
   name    String?
   content String
-  status  Status  @default(ACTIVE)
 
   reply_id   String?
   comment    Comment? @relation(fields: [comment_id], references: [id], onDelete: Cascade)
@@ -180,51 +191,59 @@ model Reply {
   profile    Profile? @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id String?
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@unique([name, content, reply_id, comment_id, profile_id])
   @@map(name: "replies")
 }
 
 model Task {
-  id          String     @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
-  complete    Boolean    @default(false)
-  sync_status SyncStatus @default(SYNCED)
+  description String?
+  complete    Boolean @default(false)
 
   profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id  String
   category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
   category_id String?
+  tag         Tag?      @relation(fields: [tag_id], references: [id], onDelete: SetNull)
+  tag_id      String?
 
   sessions Session[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@map(name: "tasks")
 }
 
 model Session {
-  id             String     @id @default(uuid())
-  title          String
-  start          DateTime
-  end            DateTime?
-  pomo_duration  Int? // minutes
-  focus_duration Int? // in seconds or minutes (actual work time)
-  sync_status    SyncStatus @default(SYNCED)
-  status         Status     @default(ACTIVE)
+  id       String    @id @default(uuid())
+  title    String
+  duration Int?
+  start    DateTime
+  elapsed  Int
+  end      DateTime?
 
   profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id  String
+  tag         Tag?      @relation(fields: [tag_id], references: [id], onDelete: SetNull)
+  tag_id      String?
   category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
   category_id String?
   task        Task?     @relation(fields: [task_id], references: [id], onDelete: SetNull)
   task_id     String?
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@map(name: "sessions")
 }
@@ -233,32 +252,34 @@ model View {
   id             String         @id @default(uuid())
   title          String
   sort_direction SortDirection? @default(DESCENDING)
-  sync_status    SyncStatus     @default(SYNCED)
 
   profile    Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id String
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@unique([title])
   @@map(name: "views")
 }
 
 model Notification {
-  id             String     @id @default(uuid())
+  id             String  @id @default(uuid())
   endpoint       String
   endpointId     String
   expirationTime BigInt?
   p256dh         String
   auth           String
-  sync_status    SyncStatus @default(SYNCED)
 
   profile    Profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
   profile_id String
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  status      Status     @default(ACTIVE)
+  sync_status SyncStatus @default(SYNCED)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
 
   @@unique([endpointId])
   @@map(name: "notifications")

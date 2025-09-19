@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/libraries/supabase/server';
 import { NotificationGet } from '@/types/models/notification';
 import { linkify } from '@/utilities/formatters/string';
+import { SyncStatus } from '@generated/prisma';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
@@ -46,6 +47,8 @@ export async function PUT(request: NextRequest) {
 
     const updateNotifications = await Promise.all(
       notifications.map(async (notification) => {
+        const now = new Date();
+
         const updateOperation = await prisma.notification.upsert({
           where: { id: notification.id },
           update: {
@@ -54,7 +57,10 @@ export async function PUT(request: NextRequest) {
             endpointId: linkify(notification.endpoint),
             expirationTime: notification.expirationTime,
             p256dh: notification.p256dh,
-            updated_at: new Date(notification.updated_at),
+            profile_id: notification.profile_id,
+            status: notification.status,
+            sync_status: notification.sync_status,
+            updated_at: new Date(notification.updated_at || now),
           },
           create: {
             id: notification.id,
@@ -63,10 +69,11 @@ export async function PUT(request: NextRequest) {
             endpointId: linkify(notification.endpoint),
             expirationTime: notification.expirationTime,
             p256dh: notification.p256dh,
-            sync_status: notification.sync_status,
-            created_at: new Date(notification.created_at),
-            updated_at: new Date(notification.updated_at),
             profile_id: notification.profile_id,
+            status: notification.status,
+            sync_status: notification.sync_status || SyncStatus.SYNCED,
+            created_at: new Date(notification.created_at || now),
+            updated_at: new Date(notification.updated_at || now),
           },
         });
 

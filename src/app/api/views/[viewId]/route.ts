@@ -1,5 +1,5 @@
 import prisma from '@/libraries/prisma';
-import { ViewCreate, ViewUpdate } from '@/types/models/views';
+import { ViewCreate, ViewUpdate } from '@/types/models/view';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';

@@ -55,24 +55,32 @@ export async function PUT(request: NextRequest) {
 
     const upsertTasks = await Promise.all(
       tasks.map(async (task) => {
+        const now = new Date();
+
         // First create/update the task without relationships
         const upsertOperation = await prisma.task.upsert({
           where: { id: task.id },
           update: {
             title: task.title,
             complete: task.complete,
-            sync_status: task.sync_status,
             category_id: task.category_id || null,
-            updated_at: new Date(task.updated_at),
+            tag_id: task.tag_id || null,
+            status: task.status,
+            profile_id: task.profile_id,
+            sync_status: task.sync_status,
+            updated_at: new Date(task.updated_at || now),
           },
           create: {
             id: task.id,
             title: task.title,
             complete: task.complete || false,
-            sync_status: task.sync_status || SyncStatus.SYNCED,
             category_id: task.category_id || null,
-            updated_at: new Date(task.updated_at),
+            tag_id: task.tag_id || null,
             profile_id: task.profile_id,
+            status: task.status,
+            sync_status: task.sync_status || SyncStatus.SYNCED,
+            created_at: new Date(task.created_at || now),
+            updated_at: new Date(task.updated_at || now),
           },
         });
 

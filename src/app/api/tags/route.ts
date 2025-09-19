@@ -49,22 +49,29 @@ export async function PUT(request: NextRequest) {
 
     const updateTags = await Promise.all(
       tags.map(async (tag) => {
+        const now = new Date();
+
         const updateOperation = await prisma.tag.upsert({
           where: { id: tag.id },
           update: {
             title: tag.title,
             color: tag.color,
+            type: tag.type,
+            profile_id: tag.profile_id,
+            status: tag.status,
             sync_status: tag.sync_status,
-            updated_at: new Date(tag.updated_at),
+            updated_at: new Date(tag.updated_at || now),
           },
           create: {
             id: tag.id,
             title: tag.title,
             color: tag.color,
-            sync_status: tag.sync_status || SyncStatus.SYNCED,
-            created_at: new Date(tag.created_at),
-            updated_at: new Date(tag.updated_at),
+            type: tag.type,
             profile_id: tag.profile_id,
+            status: tag.status,
+            sync_status: tag.sync_status || SyncStatus.SYNCED,
+            created_at: new Date(tag.created_at || now),
+            updated_at: new Date(tag.updated_at || now),
           },
         });
 

@@ -1,7 +1,7 @@
 import prisma from '@/libraries/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/libraries/supabase/server';
-import { ViewGet } from '@/types/models/views';
+import { ViewGet } from '@/types/models/view';
 import { SyncStatus } from '@generated/prisma';
 
 export const dynamic = 'force-dynamic';
@@ -49,22 +49,27 @@ export async function PUT(request: NextRequest) {
 
     const updateViews = await Promise.all(
       views.map(async (view) => {
+        const now = new Date();
+
         const updateOperation = await prisma.view.upsert({
           where: { id: view.id },
           update: {
             title: view.title,
             sort_direction: view.sort_direction || null,
+            profile_id: view.profile_id,
+            status: view.status,
             sync_status: view.sync_status,
-            updated_at: new Date(view.updated_at),
+            updated_at: new Date(view.updated_at || now),
           },
           create: {
             id: view.id,
             title: view.title,
             sort_direction: view.sort_direction || null,
-            sync_status: view.sync_status || SyncStatus.SYNCED,
-            created_at: new Date(view.created_at),
-            updated_at: new Date(view.updated_at),
             profile_id: view.profile_id,
+            status: view.status,
+            sync_status: view.sync_status || SyncStatus.SYNCED,
+            created_at: new Date(view.created_at || now),
+            updated_at: new Date(view.updated_at || now),
           },
         });
 

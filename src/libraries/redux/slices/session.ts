@@ -10,14 +10,14 @@ export const sliceSession = createSlice({
       | undefined,
   },
   reducers: {
-    updateSession: (state, action) => {
+    update: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateSession } = sliceSession.actions;
+export const { update: updateSession } = sliceSession.actions;
 
 const reducerSession = sliceSession.reducer;
 

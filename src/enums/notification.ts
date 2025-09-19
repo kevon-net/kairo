@@ -6,6 +6,7 @@ export enum Alert {
 }
 
 export enum Variant {
+  INFO = 'info',
   SUCCESS = 'success',
   WARNING = 'warning',
   FAILED = 'failed',

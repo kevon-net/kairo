@@ -57,25 +57,29 @@ export async function PUT(request: NextRequest) {
 
     const updateCategories = await Promise.all(
       categories.map(async (category) => {
+        const now = new Date();
+
         const updateOperation = await prisma.category.upsert({
           where: { id: category.id },
           update: {
             title: category.title,
             color: category.color,
+            type: category.type,
+            profile_id: category.profile_id,
+            status: category.status,
             sync_status: category.sync_status,
-            // view: category.view,
-            context: category.context,
-            updated_at: new Date(category.updated_at),
+            updated_at: new Date(category.updated_at || now),
           },
           create: {
             id: category.id,
             title: category.title,
             color: category.color,
-            sync_status: category.sync_status || SyncStatus.SYNCED,
-            // view: category.view,
-            context: category.context,
-            updated_at: new Date(category.updated_at),
+            type: category.type,
             profile_id: category.profile_id,
+            status: category.status,
+            sync_status: category.sync_status || SyncStatus.SYNCED,
+            created_at: new Date(category.created_at || now),
+            updated_at: new Date(category.updated_at || now),
           },
         });
 

@@ -26,6 +26,8 @@ export const useCategoryActions = () => {
   const handleCreateCategory = (params?: { values?: Partial<CategoryGet> }) => {
     if (!session?.id) return;
 
+    const now = new Date();
+
     const categoryNew = {
       ...params?.values,
       id: params?.values?.id || generateUUID(),
@@ -34,6 +36,9 @@ export const useCategoryActions = () => {
       type: params?.values?.type || CategoryType.SESSION,
       profile_id: params?.values?.profile_id || session.id,
       status: params?.values?.status || Status.ACTIVE,
+      sync_status: params?.values?.sync_status || SyncStatus.PENDING,
+      created_at: params?.values?.created_at || (now.toISOString() as any),
+      updated_at: params?.values?.updated_at || (now.toISOString() as any),
     };
 
     // add to state

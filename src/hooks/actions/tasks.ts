@@ -23,6 +23,8 @@ export const useTaskActions = () => {
   const handleCreateTask = (params?: { values?: Partial<TaskGet> }) => {
     if (!session?.id) return;
 
+    const now = new Date();
+
     const taskNew = {
       ...params?.values,
       id: params?.values?.id || generateUUID(),
@@ -33,6 +35,9 @@ export const useTaskActions = () => {
       profile_id: params?.values?.profile_id || session.id,
       category_id: params?.values?.category_id || null,
       status: params?.values?.status || Status.ACTIVE,
+      sync_status: params?.values?.sync_status || SyncStatus.PENDING,
+      created_at: params?.values?.created_at || (now.toISOString() as any),
+      updated_at: params?.values?.updated_at || (now.toISOString() as any),
     };
 
     // add to state

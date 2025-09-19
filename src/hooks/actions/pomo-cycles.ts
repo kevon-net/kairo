@@ -1,7 +1,7 @@
 import { generateUUID } from '@/utilities/generators/id';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { PomoCycleGet } from '@/types/models/pomo-cycle';
-import { Status } from '@generated/prisma';
+import { Status, SyncStatus } from '@generated/prisma';
 import { useItemEditContext } from '@/components/contexts/item-edit';
 import {
   addPomoCycle,
@@ -24,12 +24,17 @@ export const usePomoCycleActions = () => {
   }) => {
     if (!session?.id) return;
 
+    const now = new Date();
+
     const pomoCycleNew = {
       ...params?.values,
       id: params?.values?.id || generateUUID(),
       current_session_id: params?.values?.current_session_id || null,
       profile_id: params?.values?.profile_id || session.id,
       status: params?.values?.status || Status.ACTIVE,
+      sync_status: params?.values?.sync_status || SyncStatus.PENDING,
+      created_at: params?.values?.created_at || (now.toISOString() as any),
+      updated_at: params?.values?.updated_at || (now.toISOString() as any),
     };
 
     // add to state

@@ -8,29 +8,31 @@ import { useEffect, useState } from 'react';
  * - new Date(2025, 12, 31, 23, 59, 59)
  * - new Date('2025-12-31T23:59:59')
  */
-export default function useTimer(
-  targetDate: Date,
-  direction?: TimerDirection.DOWN,
-  active: boolean = true
-) {
+export default function useTimer(params: {
+  targetDate: Date;
+  direction?: TimerDirection.DOWN;
+  active?: boolean;
+}) {
   // Decide which function to use based on direction
   const getTime: (targetDate: Date) => Timer | null =
-    direction === TimerDirection.DOWN ? getTimeRemaining : getTimeElapsed;
+    params.direction === TimerDirection.DOWN
+      ? getTimeRemaining
+      : getTimeElapsed;
 
-  const [time, setTime] = useState(() => getTime(targetDate));
+  const [time, setTime] = useState(() => getTime(params.targetDate));
 
-  const [isActive, setActive] = useState(active);
+  const [isActive, setActive] = useState(params.active ?? true);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (isActive) {
-        setTime(getTime(targetDate));
+        setTime(getTime(params.targetDate));
       }
     }, 1000);
 
     // Cleanup interval when the component unmounts
     return () => clearInterval(interval);
-  }, [targetDate, getTime, isActive]);
+  }, [params.targetDate, getTime, isActive]);
 
-  return { time, setTime, isActive, setActive };
+  return { time, isActive, setActive };
 }

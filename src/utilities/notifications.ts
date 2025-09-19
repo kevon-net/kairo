@@ -3,9 +3,15 @@ import { notifications } from '@mantine/notifications';
 import { linkify } from './formatters/string';
 import { capitalizeWord } from './formatters/string';
 import { Variant } from '@/enums/notification';
+import { Icon } from '@tabler/icons-react';
 
 export const showNotification = (
-  notification: { variant: Variant; title?: string; desc?: string },
+  notification: {
+    icon?: Icon;
+    variant: Variant;
+    title?: string;
+    desc?: string;
+  },
   response?: Response,
   result?: any
 ) => {
@@ -25,12 +31,13 @@ export const showNotification = (
       id: linkify(
         `${notification.variant}-${response?.status || '500'}-${message}`
       ),
-      icon: IconNotification({ variant: notification.variant }),
+      icon: IconNotification({
+        props: { icon: notification.icon, variant: notification.variant },
+      }),
       title,
       message,
       variant: notification.variant,
       autoClose: 5000,
-      withBorder: false,
     });
   } catch (error) {
     console.error('---> notification error (show notification)', error);

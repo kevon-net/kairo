@@ -31,7 +31,7 @@ export const useCategoryActions = () => {
     const categoryNew = {
       ...params?.values,
       id: params?.values?.id || generateUUID(),
-      title: params?.values?.title || 'New Folder',
+      title: params?.values?.title || 'New Project',
       color: params?.values?.color || 'gray',
       type: params?.values?.type || CategoryType.SESSION,
       profile_id: params?.values?.profile_id || session.id,

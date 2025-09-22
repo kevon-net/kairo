@@ -50,7 +50,7 @@ export default function Confirm({
         >
           <div>
             <Text>
-              {props.desc || 'Are you sure you want to delete this note?'}
+              {props.desc || 'Are you sure you want to delete this project?'}
             </Text>
 
             <Group justify="end" mt={'xl'}>

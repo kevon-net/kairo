@@ -10,14 +10,7 @@ export default function Warning({
   props: { label: string };
 } & Omit<TooltipProps, 'children' | 'label'>) {
   return (
-    <Tooltip
-      label={props.label}
-      position="top-end"
-      withArrow
-      transitionProps={{ transition: 'pop-bottom-right' }}
-      arrowOffset={8}
-      {...restProps}
-    >
+    <Tooltip label={props.label} {...restProps}>
       <Center style={{ cursor: 'help' }}>
         <IconAlertTriangle size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
       </Center>

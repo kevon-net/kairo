@@ -109,10 +109,14 @@ const appTheme = createTheme({
 
     Tooltip: Tooltip.extend({
       defaultProps: {
+        color: 'dark.9',
+        fz: 'xs',
+        withArrow: true,
         transitionProps: {
-          enterDelay: 0,
+          transition: 'fade',
           duration: 100,
           exitDuration: 100,
+          enterDelay: 500,
           exitDelay: 0,
         },
       },

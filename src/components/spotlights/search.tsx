@@ -1,40 +1,34 @@
 'use client';
 
-import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
+import { ICON_SIZE } from '@/data/constants';
 import {
   Spotlight,
   SpotlightActionData,
   SpotlightActionGroupData,
   spotlight,
 } from '@mantine/spotlight';
-import { IconSearch, IconHome, IconTimeline } from '@tabler/icons-react';
+import { IconSearch, IconCircleFilled } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 import classes from './search.module.scss';
+import { useAppSelector } from '@/hooks/redux';
+import { linkify } from '@/utilities/formatters/string';
 
 export default function Search({ children }: { children: React.ReactNode }) {
+  const categories = useAppSelector((state) => state.categories.value);
   const router = useRouter();
 
-  const actions: (SpotlightActionGroupData | SpotlightActionData)[] = [
-    {
-      group: 'Navigation',
-      actions: [
-        {
-          id: 'home',
-          label: 'Home',
-          leftSection: <IconHome size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />,
-          onClick: () => router.push(`/app/home`),
-        },
-        {
-          id: 'timeline',
-          label: 'Timeline',
-          leftSection: (
-            <IconTimeline size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          ),
-          onClick: () => router.push(`/app/timeline`),
-        },
-      ],
-    },
-  ];
+  const actions: (SpotlightActionGroupData | SpotlightActionData)[] = (
+    categories || []
+  ).map((c) => {
+    return {
+      id: c.id,
+      label: c.title,
+      leftSection: (
+        <IconCircleFilled size={ICON_SIZE / 2.5} color={c.color || undefined} />
+      ),
+      onClick: () => router.push(`/app/projects/${linkify(c.title)}-${c.id}`),
+    };
+  });
 
   return (
     <>
@@ -49,7 +43,7 @@ export default function Search({ children }: { children: React.ReactNode }) {
         centered
         searchProps={{
           leftSection: <IconSearch size={20} stroke={1.5} />,
-          placeholder: 'Search or type a command...',
+          placeholder: 'Search category...',
         }}
         classNames={classes}
       />

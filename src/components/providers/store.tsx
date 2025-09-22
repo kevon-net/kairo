@@ -73,20 +73,22 @@ export default function Store({
     const initializeAppShell = () => {
       if (desktop == undefined) return;
 
-      const appShellCookie = getCookieClient(COOKIE_NAME.APP_SHELL.NAVBAR);
+      const cookie = getCookieClient(COOKIE_NAME.APP_SHELL);
+      const appShellCookie = !cookie ? null : JSON.parse(cookie);
 
       const appShellValue: AppShell = {
-        navbar: desktop
-          ? appShellCookie == null
-            ? true
-            : !(appShellCookie == 'false')
-          : false,
+        navbar: desktop ? (appShellCookie?.navbar ?? true) : false,
+        aside: desktop ? (appShellCookie?.aside ?? true) : false,
+        child: {
+          navbar: desktop ? (appShellCookie?.child.navbar ?? false) : false,
+          aside: desktop ? (appShellCookie?.child.aside ?? false) : false,
+        },
       };
 
       storeRef.current?.dispatch(updateAppShell(appShellValue));
 
       if (appShellCookie == null)
-        setCookieClient(COOKIE_NAME.APP_SHELL.NAVBAR, appShellValue.navbar, {
+        setCookieClient(COOKIE_NAME.APP_SHELL, appShellValue, {
           expiryInSeconds: WEEK,
         });
     };

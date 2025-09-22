@@ -29,9 +29,7 @@ export const COOKIE_NAME = {
   LOCAL: { COUNTRY: 'local.country', COUNTRIES: 'local.countries' },
   COLOR_SCHEME: 'theme.color-scheme',
   COLOR_SCHEME_STATE: 'theme.color-scheme-state',
-  APP_SHELL: {
-    NAVBAR: 'app-shell.navbar',
-  },
+  APP_SHELL: 'app-shell',
 };
 
 export const LOCAL_STORAGE_NAME = {
@@ -95,11 +93,9 @@ export const INDEXED_DB = {
 };
 
 export const APPSHELL = {
-  HEADER_HEIGHT: 60,
+  HEADER_HEIGHT: 48,
   SCROLLBAR_WIDTH: 8,
-  NAVBAR_WIDTH: { base: 220, sm: 260, md: 280, lg: 300 },
-  PADDING: 'var(--mantine-spacing-xs)',
-  PADDING_OFFSET: 'calc(var(--mantine-spacing-md) / 4)',
+  NAVBAR_WIDTH: 48,
 };
 
 export const TIME_FORMAT = {

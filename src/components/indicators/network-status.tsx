@@ -93,17 +93,7 @@ export default function NetworkStatus({
     >
       {(styles) => (
         <div style={styles}>
-          <Tooltip
-            label={syncStatusProps.label}
-            fz={'xs'}
-            withArrow
-            color="pri"
-            position="left"
-            transitionProps={{
-              duration: 100,
-              transition: 'fade',
-            }}
-          >
+          <Tooltip label={syncStatusProps.label} position="right">
             <Group>
               <ThemeIcon
                 size={ICON_WRAPPER_SIZE / 1.25}

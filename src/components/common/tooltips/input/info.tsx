@@ -12,10 +12,6 @@ export default function Info({
   return (
     <Tooltip
       label={props?.label || 'We will not share your email'}
-      position="top-end"
-      withArrow
-      transitionProps={{ transition: 'pop-bottom-right' }}
-      arrowOffset={8}
       {...restProps}
     >
       <Center style={{ cursor: 'help' }}>

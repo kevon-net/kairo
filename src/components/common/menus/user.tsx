@@ -44,13 +44,7 @@ export default function User() {
       arrowOffset={16}
     >
       <MenuTarget>
-        <Tooltip
-          label={session?.user_metadata.name || 'Account'}
-          position="right"
-          withArrow
-          color="pri"
-          fz={'xs'}
-        >
+        <Tooltip label={session?.user_metadata.name || 'Account'}>
           <div className={classes.target}>
             <AvatarMain size={28} />
           </div>

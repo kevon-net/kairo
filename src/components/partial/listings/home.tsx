@@ -16,7 +16,7 @@ export default function Home() {
         gap={SECTION_SPACING / 2}
         h={'100%'}
         justify={'center'}
-        pb={SECTION_SPACING}
+        py={SECTION_SPACING}
       >
         <Group justify="center">
           <CardSessionLive />

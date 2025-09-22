@@ -14,6 +14,7 @@ import {
   Stack,
   Text,
   Tooltip,
+  Transition,
 } from '@mantine/core';
 import {
   IconCircleFilled,
@@ -48,104 +49,112 @@ export default function Live() {
 
   return (
     <Stack>
-      {phase != 'longBreak' ? (
-        <Group mt={'xl'} gap={'xs'} justify="center" mih={5}>
-          <Progress
-            value={
-              completedWorkSessions % 4 >= 1
-                ? 100
-                : completedWorkSessions % 4 == 0 && phase == 'work'
-                  ? progressValue
-                  : 0
-            }
-            w={24}
-            size={ICON_STROKE_WIDTH}
-            color={completedWorkSessions % 4 > 0 ? 'pri' : undefined}
-            transitionDuration={250}
-          />
+      <Box mih={5}>
+        <Transition mounted={!!session || completedWorkSessions > 0}>
+          {(styles) => (
+            <div style={styles}>
+              {phase != 'longBreak' ? (
+                <Group gap={'xs'} justify="center" mih={5}>
+                  <Progress
+                    value={
+                      completedWorkSessions % 4 >= 1
+                        ? 100
+                        : completedWorkSessions % 4 == 0 && phase == 'work'
+                          ? progressValue
+                          : 0
+                    }
+                    w={24}
+                    size={ICON_STROKE_WIDTH}
+                    color={completedWorkSessions % 4 > 0 ? 'pri' : undefined}
+                    transitionDuration={250}
+                  />
 
-          <IconCircleFilled
-            size={ICON_SIZE / 4}
-            color={
-              completedWorkSessions % 4 >= 1
-                ? 'var(--mantine-color-pri-5)'
-                : 'var(--mantine-color-default-border)'
-            }
-          />
+                  <IconCircleFilled
+                    size={ICON_SIZE / 4}
+                    color={
+                      completedWorkSessions % 4 >= 1
+                        ? 'var(--mantine-color-pri-5)'
+                        : 'var(--mantine-color-default-border)'
+                    }
+                  />
 
-          <Progress
-            value={
-              completedWorkSessions % 4 >= 2
-                ? 100
-                : completedWorkSessions % 4 == 1 && phase == 'work'
-                  ? progressValue
-                  : 0
-            }
-            w={24}
-            size={ICON_STROKE_WIDTH}
-            color={completedWorkSessions % 4 > 1 ? 'pri' : undefined}
-            transitionDuration={250}
-          />
+                  <Progress
+                    value={
+                      completedWorkSessions % 4 >= 2
+                        ? 100
+                        : completedWorkSessions % 4 == 1 && phase == 'work'
+                          ? progressValue
+                          : 0
+                    }
+                    w={24}
+                    size={ICON_STROKE_WIDTH}
+                    color={completedWorkSessions % 4 > 1 ? 'pri' : undefined}
+                    transitionDuration={250}
+                  />
 
-          <IconCircleFilled
-            size={ICON_SIZE / 4}
-            color={
-              completedWorkSessions % 4 >= 2
-                ? 'var(--mantine-color-pri-5)'
-                : 'var(--mantine-color-default-border)'
-            }
-          />
+                  <IconCircleFilled
+                    size={ICON_SIZE / 4}
+                    color={
+                      completedWorkSessions % 4 >= 2
+                        ? 'var(--mantine-color-pri-5)'
+                        : 'var(--mantine-color-default-border)'
+                    }
+                  />
 
-          <Progress
-            value={
-              completedWorkSessions % 4 >= 3
-                ? 100
-                : completedWorkSessions % 4 == 2 && phase == 'work'
-                  ? progressValue
-                  : 0
-            }
-            w={24}
-            size={ICON_STROKE_WIDTH}
-            color={completedWorkSessions % 4 > 2 ? 'pri' : undefined}
-            transitionDuration={250}
-          />
+                  <Progress
+                    value={
+                      completedWorkSessions % 4 >= 3
+                        ? 100
+                        : completedWorkSessions % 4 == 2 && phase == 'work'
+                          ? progressValue
+                          : 0
+                    }
+                    w={24}
+                    size={ICON_STROKE_WIDTH}
+                    color={completedWorkSessions % 4 > 2 ? 'pri' : undefined}
+                    transitionDuration={250}
+                  />
 
-          <IconCircleFilled
-            size={ICON_SIZE / 4}
-            color={
-              completedWorkSessions % 4 >= 3
-                ? 'var(--mantine-color-pri-5)'
-                : 'var(--mantine-color-default-border)'
-            }
-          />
+                  <IconCircleFilled
+                    size={ICON_SIZE / 4}
+                    color={
+                      completedWorkSessions % 4 >= 3
+                        ? 'var(--mantine-color-pri-5)'
+                        : 'var(--mantine-color-default-border)'
+                    }
+                  />
 
-          <Progress
-            value={
-              completedWorkSessions % 4 >= 4
-                ? 100
-                : completedWorkSessions % 4 == 3 && phase == 'work'
-                  ? progressValue
-                  : 0
-            }
-            w={24}
-            size={ICON_STROKE_WIDTH}
-            color={completedWorkSessions % 4 > 3 ? 'pri' : undefined}
-            transitionDuration={250}
-          />
-        </Group>
-      ) : (
-        <Group mt={'xl'} gap={'xs'} justify="center" mih={5}>
-          <Progress
-            value={progressValue}
-            w={96}
-            size={ICON_STROKE_WIDTH}
-            color={completedWorkSessions % 4 == 0 ? 'pri' : undefined}
-            transitionDuration={250}
-          />
-        </Group>
-      )}
+                  <Progress
+                    value={
+                      completedWorkSessions % 4 >= 4
+                        ? 100
+                        : completedWorkSessions % 4 == 3 && phase == 'work'
+                          ? progressValue
+                          : 0
+                    }
+                    w={24}
+                    size={ICON_STROKE_WIDTH}
+                    color={completedWorkSessions % 4 > 3 ? 'pri' : undefined}
+                    transitionDuration={250}
+                  />
+                </Group>
+              ) : (
+                <Group gap={'xs'} justify="center" mih={5}>
+                  <Progress
+                    value={progressValue}
+                    w={96}
+                    size={ICON_STROKE_WIDTH}
+                    color={completedWorkSessions % 4 == 0 ? 'pri' : undefined}
+                    transitionDuration={250}
+                  />
+                </Group>
+              )}
+            </div>
+          )}
+        </Transition>
+      </Box>
 
-      <Box pos={'relative'} mt={'md'}>
+      <Box pos={'relative'}>
         <Center
           pos={'absolute'}
           top={0}
@@ -156,7 +165,7 @@ export default function Live() {
         >
           <RingProgress
             size={ringSize}
-            thickness={2}
+            thickness={ICON_STROKE_WIDTH}
             roundCaps
             sections={[{ value: 100 - progressValue, color: 'pri.7' }]}
             transitionDuration={250}
@@ -181,65 +190,85 @@ export default function Live() {
         </Center>
       </Box>
 
-      <Group justify="center" mt="md" wrap="nowrap">
-        {!session ? (
-          <Tooltip label={'Start timer'}>
-            <ActionIcon variant={'light'} color="pri.5" onClick={startPhase}>
-              <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </ActionIcon>
-          </Tooltip>
-        ) : (
-          <>
-            <Tooltip label={'Skip to next session'}>
-              <ActionIcon variant={'light'} color="pri.5" onClick={skipPhase}>
-                <IconPlayerSkipForward
-                  size={ICON_SIZE}
-                  stroke={ICON_STROKE_WIDTH}
-                />
+      <Stack mih={72}>
+        <Group justify="center" wrap="nowrap">
+          <Transition mounted={!!session}>
+            {(styles) => (
+              <Group style={styles}>
+                <Tooltip label={'Stop session'}>
+                  <ActionIcon
+                    variant={'light'}
+                    color="pri.5"
+                    onClick={() => stopTimer()}
+                  >
+                    <IconPlayerStop
+                      size={ICON_SIZE}
+                      stroke={ICON_STROKE_WIDTH}
+                    />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            )}
+          </Transition>
+
+          {!session && (
+            <Tooltip label={'Start session'}>
+              <ActionIcon variant={'light'} color="pri.5" onClick={startPhase}>
+                <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               </ActionIcon>
             </Tooltip>
+          )}
 
-            <Tooltip label={'Stop timer'}>
-              <ActionIcon
-                variant={'light'}
-                color="pri.5"
-                onClick={() => stopTimer()}
-              >
-                <IconPlayerStop size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+          {session?.status === Status.ACTIVE && (
+            <Tooltip label={'Pause session'}>
+              <ActionIcon variant={'light'} color="pri.5" onClick={pauseTimer}>
+                <IconPlayerPause size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               </ActionIcon>
             </Tooltip>
-          </>
-        )}
+          )}
 
-        {session?.status !== Status.PAUSED && (
-          <Tooltip label={'Pause timer'}>
-            <ActionIcon
-              variant={'light'}
-              color="pri.5"
-              onClick={pauseTimer}
-              disabled={session?.status === Status.INACTIVE}
-            >
-              <IconPlayerPause size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </ActionIcon>
-          </Tooltip>
-        )}
+          {session?.status === Status.PAUSED && (
+            <Tooltip label={'Resume session'}>
+              <ActionIcon variant={'light'} color="pri.5" onClick={resumeTimer}>
+                <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              </ActionIcon>
+            </Tooltip>
+          )}
 
-        {session?.status === Status.PAUSED && (
-          <Tooltip label={'Resume timer'}>
-            <ActionIcon variant={'light'} color="pri.5" onClick={resumeTimer}>
-              <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </ActionIcon>
-          </Tooltip>
-        )}
+          <Transition mounted={!!session}>
+            {(styles) => (
+              <Group style={styles}>
+                <Tooltip label={'Skip to next session'}>
+                  <ActionIcon
+                    variant={'light'}
+                    color="pri.5"
+                    onClick={skipPhase}
+                  >
+                    <IconPlayerSkipForward
+                      size={ICON_SIZE}
+                      stroke={ICON_STROKE_WIDTH}
+                    />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            )}
+          </Transition>
+        </Group>
 
-        {completedWorkSessions > 0 && (
-          <Tooltip label={'Reset cycle'}>
-            <ActionIcon variant="light" color="red" onClick={resetCycle}>
-              <IconRestore size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </ActionIcon>
-          </Tooltip>
-        )}
-      </Group>
+        <Group justify="center" wrap="nowrap">
+          <Transition mounted={completedWorkSessions > 0}>
+            {(styles) => (
+              <Group style={styles}>
+                <Tooltip label={'Reset cycle'}>
+                  <ActionIcon variant="light" color="red" onClick={resetCycle}>
+                    <IconRestore size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            )}
+          </Transition>
+        </Group>
+      </Stack>
     </Stack>
   );
 }

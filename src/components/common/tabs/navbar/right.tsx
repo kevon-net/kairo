@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Group,
@@ -5,20 +7,33 @@ import {
   TabsList,
   TabsPanel,
   TabsTab,
+  Text,
   Tooltip,
 } from '@mantine/core';
 import classes from './right.module.scss';
 import { IconChartDots, IconCheckbox, IconLogs } from '@tabler/icons-react';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
+import { useTabAside } from '@/hooks/tab/navbar';
+import PartialTabAsideTasks from '@/components/partial/tabs/aside/tasks';
+import PartialTabAsideSessions from '@/components/partial/tabs/aside/sessions';
 
 export default function Right() {
+  const { activeTab, setActiveTab, category } = useTabAside();
+
   return (
-    <Tabs defaultValue="sessions" variant="pills" classNames={classes}>
+    <Tabs
+      value={activeTab}
+      onChange={setActiveTab}
+      variant="pills"
+      keepMounted
+      classNames={classes}
+    >
       <TabsList
-        style={{ gap: 5 }}
+        style={{ gap: 5, zIndex: 1 }}
         pos={'sticky'}
         top={0}
-        px={'xs'}
+        pl={'xs'}
+        mr={'xs'}
         bg={
           'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7))'
         }
@@ -31,8 +46,23 @@ export default function Right() {
           </Tooltip>
         </TabsTab>
 
-        <TabsTab value="tasks">
-          <Tooltip label={'Tasks'}>
+        <TabsTab value="tasks" disabled={!category}>
+          <Tooltip
+            multiline={!category}
+            w={!category ? 180 : undefined}
+            ta={!category ? 'center' : undefined}
+            label={
+              <Text component="span" inherit>
+                Tasks
+                {!category && (
+                  <>
+                    <br />
+                    (Select a project to enable)
+                  </>
+                )}
+              </Text>
+            }
+          >
             <Group justify="center">
               <IconCheckbox size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
             </Group>
@@ -48,9 +78,13 @@ export default function Right() {
         </TabsTab>
       </TabsList>
 
-      <TabsPanel value="sessions">Sessions</TabsPanel>
+      <TabsPanel value="sessions">
+        <PartialTabAsideSessions />
+      </TabsPanel>
 
-      <TabsPanel value="tasks">Tasks</TabsPanel>
+      <TabsPanel value="tasks">
+        <PartialTabAsideTasks />
+      </TabsPanel>
 
       <TabsPanel value="analytics">Analytics</TabsPanel>
     </Tabs>

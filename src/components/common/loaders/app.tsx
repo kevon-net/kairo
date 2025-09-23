@@ -22,7 +22,6 @@ export default function Main() {
         width={80}
         alt={appName}
         fit="contain"
-        ml={7}
       />
 
       <SpinnerApp />

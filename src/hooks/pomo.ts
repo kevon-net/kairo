@@ -5,7 +5,8 @@ import {
   POMO_CYCLE_LENGTH,
   POMO_SESSION_LENGTH,
 } from '@/data/constants';
-import { Status } from '@generated/prisma';
+import { SessionType, Status } from '@generated/prisma';
+import { SessionGet } from '@/types/models/session';
 
 type PomoPhase = 'work' | 'shortBreak' | 'longBreak';
 
@@ -16,9 +17,7 @@ interface UsePomoCyclesOptions {
   cyclesBeforeLongBreak?: number;
 }
 
-export const usePomoCycles = ({
-  cyclesBeforeLongBreak = POMO_CYCLE_LENGTH,
-}: UsePomoCyclesOptions = {}) => {
+export const usePomoCycles = (params?: { options?: UsePomoCyclesOptions }) => {
   // inside usePomoCycles
   const {
     session,
@@ -35,9 +34,16 @@ export const usePomoCycles = ({
   const phaseTime = getPhaseTime({ phase });
 
   // Start current phase
-  const startPhase = useCallback(() => {
-    startTimer({ pomoDuration: phaseTime });
-  }, [phaseTime, startTimer]);
+  const startPhase = useCallback(
+    (params?: { values?: Partial<SessionGet> }) => {
+      startTimer({
+        duration: phaseTime.duration,
+        type: phaseTime.type,
+        ...params?.values,
+      });
+    },
+    [phaseTime, startTimer]
+  );
 
   // Skip to next phase manually
   const skipPhase = useCallback(() => {
@@ -47,6 +53,9 @@ export const usePomoCycles = ({
 
   // Advance phase logic
   const advancePhase = useCallback(() => {
+    const cyclesBeforeLongBreak =
+      params?.options?.cyclesBeforeLongBreak || POMO_CYCLE_LENGTH;
+
     if (phase === 'work') {
       setCompletedWorkSessions((prev) => {
         const next = prev + 1;
@@ -61,7 +70,7 @@ export const usePomoCycles = ({
       // After any break → always return to work
       setPhase('work');
     }
-  }, [phase, cyclesBeforeLongBreak]);
+  }, [phase, params?.options?.cyclesBeforeLongBreak]);
 
   // Auto-advance when timer ends
   useEffect(() => {
@@ -109,12 +118,24 @@ const getPhaseTime = (params: { phase: string }) => {
   // switch to get respective phase lengths
   switch (params.phase) {
     case 'work':
-      return POMO_SESSION_LENGTH * 60;
+      return {
+        type: SessionType.POMO_FOCUS,
+        duration: POMO_SESSION_LENGTH * 60,
+      };
     case 'shortBreak':
-      return POMO_BREAK_LENGTH.SHORT * 60;
+      return {
+        type: SessionType.POMO_BREAK,
+        duration: POMO_BREAK_LENGTH.SHORT * 60,
+      };
     case 'longBreak':
-      return POMO_BREAK_LENGTH.LONG * 60;
+      return {
+        type: SessionType.POMO_BREAK,
+        duration: POMO_BREAK_LENGTH.LONG * 60,
+      };
     default:
-      return POMO_SESSION_LENGTH * 60;
+      return {
+        type: SessionType.POMO_FOCUS,
+        duration: POMO_SESSION_LENGTH * 60,
+      };
   }
 };

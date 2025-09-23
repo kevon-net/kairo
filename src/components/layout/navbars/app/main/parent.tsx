@@ -5,7 +5,7 @@ import {
   ICON_STROKE_WIDTH,
   ICON_WRAPPER_SIZE,
 } from '@/data/constants';
-import { ActionIcon, Stack, Tooltip } from '@mantine/core';
+import { ActionIcon, Skeleton, Stack, Tooltip } from '@mantine/core';
 import {
   IconClockPlus,
   IconHome,
@@ -19,8 +19,12 @@ import SpotlightCommands from '@/components/spotlights/commands';
 import { usePomo } from '@/components/contexts/pomo-cycles';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAppSelector } from '@/hooks/redux';
 
 export default function Main() {
+  const sessions = useAppSelector((state) => state.sessions.value);
+  const categories = useAppSelector((state) => state.categories.value);
+
   const { startPhase, session } = usePomo();
   const pathname = usePathname();
   const router = useRouter();
@@ -39,19 +43,23 @@ export default function Main() {
         </ActionIcon>
       </Tooltip>
 
-      <Tooltip label={'Start quick session'} position={'right'}>
-        <ActionIcon
-          variant="subtle"
-          size={ICON_WRAPPER_SIZE}
-          disabled={!!session}
-          onClick={() => {
-            if (pathname != appHomePath) router.push(appHomePath);
-            startPhase();
-          }}
-        >
-          <IconClockPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-        </ActionIcon>
-      </Tooltip>
+      {sessions == null ? (
+        <Skeleton h={ICON_WRAPPER_SIZE} w={ICON_WRAPPER_SIZE} />
+      ) : (
+        <Tooltip label={'Start quick session'} position={'right'}>
+          <ActionIcon
+            variant="subtle"
+            size={ICON_WRAPPER_SIZE}
+            disabled={!!session}
+            onClick={() => {
+              if (pathname != appHomePath) router.push(appHomePath);
+              startPhase();
+            }}
+          >
+            <IconClockPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+          </ActionIcon>
+        </Tooltip>
+      )}
 
       <Tooltip label={'See full timeline'} position={'right'}>
         <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
@@ -59,21 +67,29 @@ export default function Main() {
         </ActionIcon>
       </Tooltip>
 
-      <SpotlightSearch>
-        <Tooltip label={'Open project finder'} position={'right'}>
-          <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
-            <IconInputSearch size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          </ActionIcon>
-        </Tooltip>
-      </SpotlightSearch>
+      {categories == null ? (
+        <Skeleton h={ICON_WRAPPER_SIZE} w={ICON_WRAPPER_SIZE} />
+      ) : (
+        <SpotlightSearch>
+          <Tooltip label={'Open project finder'} position={'right'}>
+            <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
+              <IconInputSearch size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ActionIcon>
+          </Tooltip>
+        </SpotlightSearch>
+      )}
 
-      <SpotlightCommands>
-        <Tooltip label={'Open command palette'} position={'right'}>
-          <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
-            <IconTerminal size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-          </ActionIcon>
-        </Tooltip>
-      </SpotlightCommands>
+      {categories == null || sessions == null ? (
+        <Skeleton h={ICON_WRAPPER_SIZE} w={ICON_WRAPPER_SIZE} />
+      ) : (
+        <SpotlightCommands>
+          <Tooltip label={'Open command palette'} position={'right'}>
+            <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
+              <IconTerminal size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+            </ActionIcon>
+          </Tooltip>
+        </SpotlightCommands>
+      )}
     </Stack>
   );
 }

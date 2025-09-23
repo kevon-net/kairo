@@ -35,7 +35,6 @@ import InputTextRename from '@/components/common/inputs/text/rename';
 
 export default function Child() {
   const pathname = usePathname();
-  const categories = useAppSelector((state) => state.categories.value);
   const tasks = useAppSelector((state) => state.tasks.value);
   const sessions = useAppSelector((state) => state.sessions.value);
   const appShell = useAppSelector((state) => state.appShell.value);
@@ -43,6 +42,7 @@ export default function Child() {
   const desktop = useMediaQuery('(min-width: 62em)');
 
   const {
+    categories,
     createCategory,
     copyCategory,
     updateCategory,
@@ -63,16 +63,20 @@ export default function Child() {
         </Title>
 
         <Group>
-          <Tooltip label={'Create project'}>
-            <ActionIcon
-              size={ICON_WRAPPER_SIZE}
-              variant="subtle"
-              color="pri.5"
-              onClick={() => createCategory()}
-            >
-              <IconCategoryPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-            </ActionIcon>
-          </Tooltip>
+          {categories == null ? (
+            <Skeleton h={ICON_WRAPPER_SIZE} w={ICON_WRAPPER_SIZE} />
+          ) : (
+            <Tooltip label={'Create project'}>
+              <ActionIcon
+                size={ICON_WRAPPER_SIZE}
+                variant="subtle"
+                color="pri.5"
+                onClick={() => createCategory()}
+              >
+                <IconCategoryPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              </ActionIcon>
+            </Tooltip>
+          )}
         </Group>
       </Group>
 

@@ -30,6 +30,7 @@ export const COOKIE_NAME = {
   COLOR_SCHEME: 'theme.color-scheme',
   COLOR_SCHEME_STATE: 'theme.color-scheme-state',
   APP_SHELL: 'app-shell',
+  TIMER_MODE: 'timer-mode',
 };
 
 export const LOCAL_STORAGE_NAME = {

@@ -7,6 +7,7 @@ import AppshellMain from '@/components/common/appshells/main';
 import { createClient } from '@/libraries/supabase/server';
 import ItemEditProvider from '@/components/providers/item-edit';
 import PomoCyclesProvider from '@/components/providers/pomo-cycles';
+import SessionTimerProvider from '@/components/providers/session-timer';
 
 export default async function LayoutApp({
   children, // will be a page or nested layout
@@ -22,9 +23,11 @@ export default async function LayoutApp({
         <ProviderStore session={session.user}>
           <ProviderSync>
             <ItemEditProvider>
-              <PomoCyclesProvider>
-                <AppshellMain>{children}</AppshellMain>
-              </PomoCyclesProvider>
+              <SessionTimerProvider>
+                <PomoCyclesProvider>
+                  <AppshellMain>{children}</AppshellMain>
+                </PomoCyclesProvider>
+              </SessionTimerProvider>
             </ItemEditProvider>
           </ProviderSync>
         </ProviderStore>

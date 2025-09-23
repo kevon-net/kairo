@@ -28,7 +28,7 @@ import {
 } from '@tabler/icons-react';
 import React from 'react';
 
-export default function Live({ props }: { props?: { categoryId?: string } }) {
+export default function Timer({ props }: { props?: { categoryId?: string } }) {
   const { category } = useTabAside();
 
   const {

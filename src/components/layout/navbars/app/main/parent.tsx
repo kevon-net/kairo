@@ -7,12 +7,14 @@ import {
   ICON_WRAPPER_SIZE,
   WEEK,
 } from '@/data/constants';
-import { ActionIcon, Skeleton, Stack, Tooltip } from '@mantine/core';
+import { ActionIcon, Skeleton, Stack, Text, Tooltip } from '@mantine/core';
 import {
   IconClockPlus,
   IconHome,
   IconInputSearch,
+  IconStopwatch,
   IconTerminal,
+  IconTimeDuration5,
   IconTimeline,
 } from '@tabler/icons-react';
 import React from 'react';
@@ -25,6 +27,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { AppShell } from '@/types/components/app-shell';
 import { updateAppShell } from '@/libraries/redux/slices/app-shell';
 import { setCookieClient } from '@/utilities/helpers/cookie-client';
+import { useTimerMode } from '@/hooks/actions/timer-mode';
 
 export default function Main() {
   const sessions = useAppSelector((state) => state.sessions.value);
@@ -46,6 +49,14 @@ export default function Main() {
     setCookieClient(COOKIE_NAME.APP_SHELL, params, {
       expiryInSeconds: WEEK,
     });
+  };
+
+  const { timerMode, toogleTimerMode } = useTimerMode();
+
+  const timerModeProps = {
+    icon: timerMode?.mode == 'stopwatch' ? IconStopwatch : IconTimeDuration5,
+    tooltip: timerMode?.mode == 'stopwatch' ? 'Pomodoro' : 'Logging',
+    label: timerMode?.mode == 'stopwatch' ? 'Logging' : 'Pomodoro',
   };
 
   return (
@@ -124,6 +135,29 @@ export default function Main() {
             </ActionIcon>
           </Tooltip>
         </SpotlightCommands>
+      )}
+
+      {timerMode == null ? (
+        <Skeleton h={ICON_WRAPPER_SIZE} w={ICON_WRAPPER_SIZE} />
+      ) : (
+        <Tooltip
+          label={
+            <Text component="span" inherit>
+              <span>Current timer mode: {timerModeProps.label}</span>
+              <br />
+              <span>Switch to {timerModeProps.tooltip}</span>
+            </Text>
+          }
+          multiline
+          maw={240}
+          ta={'center'}
+          position={'right'}
+          onClick={toogleTimerMode}
+        >
+          <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
+            <timerModeProps.icon size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+          </ActionIcon>
+        </Tooltip>
       )}
     </Stack>
   );

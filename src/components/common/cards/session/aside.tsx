@@ -47,13 +47,13 @@ export default function Aside({ item }: { item: SessionGet }) {
           {!category ? selectedCategory?.title || item.title : item.title}
         </Title>
 
-        <Transition mounted={!category}>
+        <Transition mounted={!category && !!selectedCategory}>
           {(styles) => (
             <div style={styles}>
               <Tooltip label={`Start '${selectedCategory?.title}' session`}>
                 <Button
                   size="compact-xs"
-                  color="dark"
+                  variant="default"
                   fw={'normal'}
                   leftSection={
                     <IconPlayerPlayFilled

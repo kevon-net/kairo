@@ -30,8 +30,6 @@ export const useSessionTimer = () => {
   const handleStopTimer = (params?: { options?: { noFinalize?: boolean } }) => {
     if (!session) return;
 
-    console.log('trigger');
-
     const now = new Date();
 
     if (!params?.options?.noFinalize) {

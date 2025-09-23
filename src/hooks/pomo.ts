@@ -74,6 +74,8 @@ export const usePomoCycles = (params?: { options?: UsePomoCyclesOptions }) => {
 
   // Auto-advance when timer ends
   useEffect(() => {
+    if (!session?.duration || session.type == SessionType.STOPWATCH) return;
+
     if (session && remainingTime === 0 && session.status === Status.ACTIVE) {
       setTimeout(() => {
         stopTimer();

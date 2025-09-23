@@ -210,7 +210,7 @@ export default function Live({ props }: { props?: { categoryId?: string } }) {
 
       <Stack mih={72}>
         <Group justify="center" wrap="nowrap">
-          <Transition mounted={!!session}>
+          <Transition mounted={!!session || completedWorkSessions > 0}>
             {(styles) => (
               <Group style={styles}>
                 <Tooltip label={'Stop session'}>
@@ -218,6 +218,7 @@ export default function Live({ props }: { props?: { categoryId?: string } }) {
                     variant={'light'}
                     color="pri.5"
                     onClick={() => stopTimer()}
+                    disabled={!session}
                   >
                     <IconPlayerStop
                       size={ICON_SIZE}
@@ -261,7 +262,7 @@ export default function Live({ props }: { props?: { categoryId?: string } }) {
             </Tooltip>
           )}
 
-          <Transition mounted={!!session}>
+          <Transition mounted={!!session || completedWorkSessions > 0}>
             {(styles) => (
               <Group style={styles}>
                 <Tooltip label={'Skip to next session'}>

@@ -12,6 +12,9 @@ import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
 import { prependZeros } from '@/utilities/formatters/number';
 import { usePomo } from '@/components/contexts/pomo-cycles';
 import { useTotalElapsedTask } from '@/hooks/session';
+import { useSessionTimer } from '@/components/contexts/session-timer';
+import { useAppSelector } from '@/hooks/redux';
+import { SessionType } from '@generated/prisma';
 
 export default function Main({ item }: { item: TaskGet }) {
   const {
@@ -24,7 +27,10 @@ export default function Main({ item }: { item: TaskGet }) {
     taskInputRefs,
   } = useTaskActions();
 
-  const { session, startPhase } = usePomo();
+  const timerMode = useAppSelector((state) => state.timerMode.value);
+
+  const { session: sessionPomo, startPhase } = usePomo();
+  const { session: sessionStopwatch, startTimer } = useSessionTimer();
 
   const { hourMinSec } = useTotalElapsedTask({ task: item });
 
@@ -75,11 +81,23 @@ export default function Main({ item }: { item: TaskGet }) {
                   stroke={ICON_STROKE_WIDTH}
                 />
               }
-              disabled={!!session}
+              disabled={!!sessionPomo || !!sessionStopwatch}
               onClick={() => {
-                startPhase({
-                  values: { task_id: item.id, category_id: item.category_id },
-                });
+                if (timerMode == null) return;
+
+                if (timerMode.mode == 'timer') {
+                  startPhase({
+                    values: { task_id: item.id, category_id: item.category_id },
+                  });
+                }
+
+                if (timerMode.mode == 'stopwatch') {
+                  startTimer({
+                    type: SessionType.STOPWATCH,
+                    task_id: item.id,
+                    category_id: item.category_id,
+                  });
+                }
               }}
             >
               {prependZeros(Number(hourMinSec?.hours || 0), 2)}:

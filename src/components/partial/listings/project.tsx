@@ -3,7 +3,7 @@
 import React from 'react';
 import PlaceholderEmpty from '@/components/placeholder/empty';
 import { SECTION_SPACING } from '@/data/constants';
-import { Container, Stack } from '@mantine/core';
+import { Container, Stack, Transition } from '@mantine/core';
 import { useSessionActions } from '@/hooks/actions/sessions';
 import CardSessionTimer from '@/components/common/cards/session/timer';
 import CardSessionStopwatch from '@/components/common/cards/session/stopwatch';
@@ -58,7 +58,13 @@ export default function Project() {
             </>
           )}
 
-          {asideChildclosed && <TabCategory />}
+          <Transition mounted={!!asideChildclosed}>
+            {(styles) => (
+              <div style={styles}>
+                <TabCategory />
+              </div>
+            )}
+          </Transition>
         </Stack>
       )}
     </Container>

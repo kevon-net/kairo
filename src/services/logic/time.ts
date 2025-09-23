@@ -182,3 +182,33 @@ export const getReminderButtonLabel = (params: { date: Date }) => {
 
   return label;
 };
+
+interface DayGroup<T> {
+  day: Date; // normalized to midnight
+  items: T[];
+}
+
+/**
+ * Groups items by calendar day using a date selector
+ */
+export function groupByDay<T>(
+  items: T[],
+  selector: (item: T) => Date
+): DayGroup<T>[] {
+  const groups: Record<string, T[]> = {};
+
+  for (const item of items) {
+    const d = selector(item);
+    const key = d.toISOString().split('T')[0]; // YYYY-MM-DD (UTC)
+
+    if (!groups[key]) {
+      groups[key] = [];
+    }
+    groups[key].push(item);
+  }
+
+  return Object.entries(groups).map(([key, items]) => ({
+    day: new Date(key), // reconstruct at midnight UTC
+    items,
+  }));
+}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { SessionGet } from '@/types/models/session';
 import { useSessionActions } from '../actions/sessions';
-import { SessionType, Status } from '@generated/prisma';
+import { Status } from '@generated/prisma';
 import { getRegionalDate } from '@/utilities/formatters/date';
 
 type StopReason = 'manual' | 'finished';
@@ -23,7 +23,6 @@ export const useSessionTimer = () => {
       setSession({
         ...newSession,
         status: Status.ACTIVE,
-        type: SessionType.STOPWATCH,
         ...params,
       });
     }

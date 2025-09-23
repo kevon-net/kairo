@@ -6,20 +6,36 @@ import { SessionType } from '@generated/prisma';
 import { useAppSelector } from '@/hooks/redux';
 import InputCheckboxTask from '../../inputs/checkboxes/task';
 import { usePomo } from '@/components/contexts/pomo-cycles';
+import { useSessionTimer } from '@/components/contexts/session-timer';
 
 export default function Main({ item }: { item: SessionGet }) {
   const tasks = useAppSelector((state) => state.tasks.value);
   const selectedTask = tasks?.find((t) => t.id == item.task_id);
 
-  const { session } = usePomo();
+  const timerMode = useAppSelector((state) => state.timerMode.value);
+
+  const { session: sessionPomo } = usePomo();
+  const { session: sessionStopwatch } = useSessionTimer();
 
   const [elapsedTime, setElapsedTime] = useState(item.elapsed);
 
   const hourMinSec = secToHourMinSec(elapsedTime);
 
   useEffect(() => {
-    if (session && session.id == item.id) setElapsedTime(session.elapsed || 0);
-  }, [session]);
+    if (timerMode == null) return;
+    if (timerMode.mode == 'stopwatch') return;
+
+    if (sessionPomo && sessionPomo.id == item.id)
+      setElapsedTime(sessionPomo.elapsed || 0);
+  }, [sessionPomo]);
+
+  useEffect(() => {
+    if (timerMode == null) return;
+    if (timerMode.mode == 'timer') return;
+
+    if (sessionStopwatch && sessionStopwatch.id == item.id)
+      setElapsedTime(sessionStopwatch.elapsed || 0);
+  }, [sessionStopwatch]);
 
   return (
     <Stack gap={'xs'}>

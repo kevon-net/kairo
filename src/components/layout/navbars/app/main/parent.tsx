@@ -28,12 +28,16 @@ import { AppShell } from '@/types/components/app-shell';
 import { updateAppShell } from '@/libraries/redux/slices/app-shell';
 import { setCookieClient } from '@/utilities/helpers/cookie-client';
 import { useTimerMode } from '@/hooks/actions/timer-mode';
+import { useSessionTimer } from '@/components/contexts/session-timer';
+import { SessionType } from '@generated/prisma';
 
 export default function Main() {
   const sessions = useAppSelector((state) => state.sessions.value);
   const categories = useAppSelector((state) => state.categories.value);
 
-  const { startPhase, session } = usePomo();
+  const { session: sessionPomo, startPhase } = usePomo();
+  const { session: sessionStopwatch, startTimer } = useSessionTimer();
+
   const pathname = usePathname();
   const router = useRouter();
   const appHomePath = '/app/home';
@@ -79,10 +83,16 @@ export default function Main() {
           <ActionIcon
             variant="subtle"
             size={ICON_WRAPPER_SIZE}
-            disabled={!!session}
+            disabled={!!sessionPomo || !!sessionStopwatch}
             onClick={() => {
+              if (timerMode == null) return;
+
+              if (timerMode.mode == 'timer') startPhase();
+
+              if (timerMode.mode == 'stopwatch')
+                startTimer({ type: SessionType.STOPWATCH });
+
               if (pathname != appHomePath) router.push(appHomePath);
-              startPhase();
             }}
           >
             <IconClockPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />

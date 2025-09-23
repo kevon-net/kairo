@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Group, Stack, Text, Title, Tooltip } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Stack,
+  Text,
+  Title,
+  Tooltip,
+  Transition,
+} from '@mantine/core';
 import { SessionGet } from '@/types/models/session';
 import { prependZeros, secToHourMinSec } from '@/utilities/formatters/number';
 import { useTabAside } from '@/hooks/tab/navbar';
@@ -29,7 +37,7 @@ export default function Aside({ item }: { item: SessionGet }) {
 
   return (
     <Stack gap={5}>
-      <Group justify="space-between">
+      <Group justify="space-between" mih={24.8}>
         <Title
           order={3}
           fz={'sm'}
@@ -39,37 +47,43 @@ export default function Aside({ item }: { item: SessionGet }) {
           {!category ? selectedCategory?.title || item.title : item.title}
         </Title>
 
-        <Tooltip label={`Start '${selectedCategory?.title}' session`}>
-          <Button
-            size="compact-xs"
-            color="dark"
-            fw={'normal'}
-            leftSection={
-              <IconPlayerPlayFilled
-                size={ICON_SIZE - 8}
-                stroke={ICON_STROKE_WIDTH}
-              />
-            }
-            disabled={!!session}
-            onClick={() => {
-              startPhase({
-                values: {
-                  task_id: item.task_id,
-                  category_id: selectedCategory?.id || null,
-                },
-              });
+        <Transition mounted={!category}>
+          {(styles) => (
+            <div style={styles}>
+              <Tooltip label={`Start '${selectedCategory?.title}' session`}>
+                <Button
+                  size="compact-xs"
+                  color="dark"
+                  fw={'normal'}
+                  leftSection={
+                    <IconPlayerPlayFilled
+                      size={ICON_SIZE - 8}
+                      stroke={ICON_STROKE_WIDTH}
+                    />
+                  }
+                  disabled={!!session}
+                  onClick={() => {
+                    startPhase({
+                      values: {
+                        task_id: item.task_id,
+                        category_id: selectedCategory?.id || null,
+                      },
+                    });
 
-              if (!category)
-                router.push(`/app/projects/${selectedCategory?.id}`);
-            }}
-          >
-            <Text inherit c={'dimmed'} fz={'xs'} ta={'end'}>
-              {prependZeros(Number(hourMinSec?.hours || 0), 2)}:
-              {prependZeros(Number(hourMinSec?.minutes || 0), 2)}:
-              {prependZeros(Number(hourMinSec?.seconds || 0), 2)}
-            </Text>
-          </Button>
-        </Tooltip>
+                    if (!category)
+                      router.push(`/app/projects/${selectedCategory?.id}`);
+                  }}
+                >
+                  <Text inherit c={'dimmed'} fz={'xs'} ta={'end'}>
+                    {prependZeros(Number(hourMinSec?.hours || 0), 2)}:
+                    {prependZeros(Number(hourMinSec?.minutes || 0), 2)}:
+                    {prependZeros(Number(hourMinSec?.seconds || 0), 2)}
+                  </Text>
+                </Button>
+              </Tooltip>
+            </div>
+          )}
+        </Transition>
       </Group>
 
       {selectedTask && (

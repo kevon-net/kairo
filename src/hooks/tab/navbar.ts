@@ -16,7 +16,7 @@ export const useTabAside = () => {
   const category = categories?.find((c) => c.id == currentCategoryId);
 
   const filteredSessions = !category
-    ? sessions
+    ? sessions || []
     : (sessions || []).filter((s) => s.category_id == category.id);
 
   const filteredTasks = !category

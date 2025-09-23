@@ -5,17 +5,8 @@ import {
   ICON_STROKE_WIDTH,
   ICON_WRAPPER_SIZE,
 } from '@/data/constants';
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Divider,
-  Group,
-  Skeleton,
-  Stack,
-  Tooltip,
-} from '@mantine/core';
-import { IconClockPlus } from '@tabler/icons-react';
+import { Box, Button, Divider, Group, Skeleton, Stack } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import React from 'react';
 import PlaceholderEmpty from '@/components/placeholder/empty';
 import { useSessionActions } from '@/hooks/actions/sessions';
@@ -31,34 +22,36 @@ export default function Sessions() {
 
   return (
     <div>
-      <Box
-        pos={'sticky'}
-        top={48}
-        bg={
-          'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7))'
-        }
-        style={{ zIndex: 1 }}
-      >
-        <Divider />
+      {filteredSessions.length > 0 && (
+        <Box
+          pos={'sticky'}
+          top={48}
+          bg={
+            'light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7))'
+          }
+          style={{ zIndex: 1 }}
+        >
+          <Divider />
 
-        <Group gap={5} pos={'sticky'} top={48} py={'xs'}>
-          {filteredSessions == null ? (
-            <Skeleton w={ICON_WRAPPER_SIZE} h={ICON_WRAPPER_SIZE} />
-          ) : (
-            <Tooltip label={'New Session'}>
-              <ActionIcon
-                size={ICON_WRAPPER_SIZE}
-                variant={'subtle'}
+          <Group gap={5} pos={'sticky'} top={48} py={'xs'} justify="center">
+            {filteredSessions == null ? (
+              <Skeleton w={ICON_WRAPPER_SIZE} h={ICON_WRAPPER_SIZE} />
+            ) : (
+              <Button
+                size="xs"
+                leftSection={
+                  <IconPlus size={ICON_SIZE - 2} stroke={ICON_STROKE_WIDTH} />
+                }
                 onClick={() =>
                   createSession({ values: { category_id: category?.id } })
                 }
               >
-                <IconClockPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
-              </ActionIcon>
-            </Tooltip>
-          )}
-        </Group>
-      </Box>
+                Start new session
+              </Button>
+            )}
+          </Group>
+        </Box>
+      )}
 
       <Stack gap={'xs'} pb={'xs'}>
         {filteredSessions == null ? (
@@ -93,6 +86,8 @@ export default function Sessions() {
           ))
         )}
       </Stack>
+
+      <div style={{ minHeight: '100vh' }}></div>
     </div>
   );
 }

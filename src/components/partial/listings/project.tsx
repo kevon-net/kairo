@@ -5,13 +5,15 @@ import PlaceholderEmpty from '@/components/placeholder/empty';
 import { SECTION_SPACING } from '@/data/constants';
 import { Container, Stack } from '@mantine/core';
 import { useSessionActions } from '@/hooks/actions/sessions';
-import CardSessionLive from '@/components/common/cards/session/live';
+import CardSessionTimer from '@/components/common/cards/session/timer';
+import CardSessionStopwatch from '@/components/common/cards/session/stopwatch';
 import { useAppSelector } from '@/hooks/redux';
 import { useTabAside } from '@/hooks/tab/navbar';
 import TabCategory from '@/components/common/tabs/category';
 
 export default function Project() {
   const appShell = useAppSelector((state) => state.appShell.value);
+  const timerMode = useAppSelector((state) => state.timerMode.value);
 
   const { sessions, categories } = useSessionActions();
   const { category, filteredSessions } = useTabAside();
@@ -44,7 +46,17 @@ export default function Project() {
             asideChildclosed && filteredSessions?.length ? undefined : 'center'
           }
         >
-          <CardSessionLive props={{ categoryId: category.id }} />
+          {timerMode != null && (
+            <>
+              {timerMode.mode == 'timer' && (
+                <CardSessionTimer props={{ categoryId: category.id }} />
+              )}
+
+              {timerMode.mode == 'stopwatch' && (
+                <CardSessionStopwatch props={{ categoryId: category.id }} />
+              )}
+            </>
+          )}
 
           {asideChildclosed && <TabCategory />}
         </Stack>

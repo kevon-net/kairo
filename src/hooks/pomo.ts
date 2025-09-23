@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useSessionTimer } from './timer/session';
 import {
   POMO_BREAK_LENGTH,
   POMO_CYCLE_LENGTH,
@@ -7,6 +6,7 @@ import {
 } from '@/data/constants';
 import { SessionType, Status } from '@generated/prisma';
 import { SessionGet } from '@/types/models/session';
+import { usePomodoroTimer } from './timer/pomodoro';
 
 type PomoPhase = 'work' | 'shortBreak' | 'longBreak';
 
@@ -27,7 +27,7 @@ export const usePomoCycles = (params?: { options?: UsePomoCyclesOptions }) => {
     stopTimer,
     pauseTimer,
     resumeTimer,
-  } = useSessionTimer();
+  } = usePomodoroTimer();
   const [phase, setPhase] = useState<PomoPhase>('work');
   const [completedWorkSessions, setCompletedWorkSessions] = useState(0);
 

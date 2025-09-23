@@ -36,6 +36,10 @@ import { setViews } from '@/libraries/redux/slices/views';
 import { setNotifications } from '@/libraries/redux/slices/notifications';
 import { setPomoCycles } from '@/libraries/redux/slices/pomo-cycles';
 import { pomoCyclesGet } from '@/handlers/requests/database/pomo-cycle';
+import {
+  TimerMode,
+  updateTimerMode,
+} from '@/libraries/redux/slices/timer-mode';
 
 export default function Store({
   session,
@@ -95,6 +99,27 @@ export default function Store({
 
     initializeAppShell();
   }, [desktop]);
+
+  // initialize timer mode
+  useEffect(() => {
+    const initializeTimerMode = () => {
+      const cookie = getCookieClient(COOKIE_NAME.TIMER_MODE);
+      const timerModeCookie = !cookie ? null : JSON.parse(cookie);
+
+      const timerModeValue: TimerMode = {
+        mode: timerModeCookie ? timerModeCookie.mode : 'stopwatch',
+      };
+
+      storeRef.current?.dispatch(updateTimerMode(timerModeValue));
+
+      if (timerModeCookie == null)
+        setCookieClient(COOKIE_NAME.TIMER_MODE, timerModeValue, {
+          expiryInSeconds: WEEK,
+        });
+    };
+
+    initializeTimerMode();
+  }, []);
 
   // Helper function to merge local and server items
   const mergeItems = async (

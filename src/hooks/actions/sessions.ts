@@ -1,3 +1,5 @@
+'use client';
+
 import { generateUUID } from '@/utilities/generators/id';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { SessionGet } from '@/types/models/session';

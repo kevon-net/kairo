@@ -11,12 +11,14 @@ type StopReason = 'manual' | 'finished';
 export type TimerEvent = SessionGet & { reason?: StopReason };
 
 export const useSessionTimer = () => {
-  const { createSession, updateSession } = useSessionActions();
+  const { createSession, updateSession, deleteSession } = useSessionActions();
   const [session, setSession] = useState<Partial<SessionGet> | null>(null);
 
   const handleStartTimer = (params?: Partial<SessionGet>) => {
     if (session) return;
+
     const newSession = createSession({ values: { ...params } });
+
     if (newSession) {
       setSession({
         ...newSession,
@@ -25,27 +27,60 @@ export const useSessionTimer = () => {
         ...params,
       });
     }
+
+    return newSession;
   };
 
-  const handleStopTimer = (params?: { options?: { noFinalize?: boolean } }) => {
+  const handleStopTimer = (params?: {
+    options?: {
+      skipping?: boolean;
+      cycleReset?: boolean;
+      noFinalize?: boolean; // used by pomo to avoid double finalization
+    };
+  }) => {
     if (!session) return;
 
     const now = new Date();
 
-    if (!params?.options?.noFinalize) {
-      const stoppedSession = {
-        ...session,
-        status: Status.INACTIVE,
-        title: `${session.title ?? ''} ${getRegionalDate(now).time}`,
-        end: now.toISOString() as any,
-      };
+    const skipping = params?.options?.skipping;
+    const cycleReset = params?.options?.cycleReset;
+    const noFinalize = params?.options?.noFinalize;
 
-      // let caller handle delete/skip logic
-      updateSession({
-        values: stoppedSession as SessionGet,
+    const finished = !session?.duration || session.duration === session.elapsed;
+
+    const stoppedSession = {
+      ...session,
+      status: Status.INACTIVE,
+      title: `${session.title ?? ''} ${getRegionalDate(now).time}`,
+      end: now.toISOString() as any,
+    };
+
+    // 🔹 Case 1: cycle reset → always delete
+    if (cycleReset) {
+      deleteSession({
+        values: { ...session, status: Status.INACTIVE } as SessionGet,
       });
+      setSession(null);
+      return;
     }
 
+    // 🔹 Case 2: skip/finish → finalize session
+    if (skipping || finished) {
+      updateSession({ values: stoppedSession as SessionGet });
+      setSession(null);
+      return;
+    }
+
+    // 🔹 Case 3: premature stop but noFinalize requested → just clear local
+    if (noFinalize) {
+      setSession(null);
+      return;
+    }
+
+    // 🔹 Case 4: default premature stop → delete session
+    deleteSession({
+      values: { ...session, status: Status.INACTIVE } as SessionGet,
+    });
     setSession(null);
   };
 

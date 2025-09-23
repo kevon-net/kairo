@@ -23,6 +23,7 @@ export const usePomoCycles = (params?: { options?: UsePomoCyclesOptions }) => {
     session,
     remainingTime,
     elapsedTime,
+    setPomoCycle,
     startTimer,
     stopTimer,
     pauseTimer,
@@ -86,12 +87,16 @@ export const usePomoCycles = (params?: { options?: UsePomoCyclesOptions }) => {
 
   // 🔹 Reset cycle completely
   const resetCycle = useCallback(() => {
-    stopTimer({ options: { cycleReset: true } }); // stop any active session
+    // stop timer with reset flag → will trigger deletePomoCycle inside handleStopTimer
+    stopTimer({ options: { cycleReset: true } });
 
-    // reset local state
+    // reset local phase + work session count
     setPhase('work');
     setCompletedWorkSessions(0);
-  }, [stopTimer]);
+
+    // ensure local state clears even if stopTimer's delete is async
+    setPomoCycle(null);
+  }, [stopTimer, setPomoCycle]);
 
   return {
     // Pomodoro state

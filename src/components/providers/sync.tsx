@@ -125,7 +125,7 @@ export default function Sync({ children }: { children: React.ReactNode }) {
   const debounceSync = useThrottledCallback(handleSync, 1000);
   const debounceSyncToServer = useDebouncedCallback(
     syncToServerAfterDelay,
-    15000000000000
+    15000
   );
 
   const tasks = useAppSelector((state) => state.tasks.value);

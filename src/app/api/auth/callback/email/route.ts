@@ -6,7 +6,6 @@ import { profileCreate } from '@/services/database/profile';
 import { getEmailLocalPart } from '@/utilities/helpers/string';
 import { emailSendOnboardSignUp } from '@/libraries/wrappers/email/on-board/sign-up';
 import { segmentFullName } from '@/utilities/formatters/string';
-import { contactAdd } from '@/services/api/email/contacts';
 import { getSafeRedirectUrl } from '@/utilities/helpers/url';
 
 export const dynamic = 'force-dynamic';
@@ -62,10 +61,10 @@ export async function GET(request: NextRequest) {
           segmentFullName(userData?.user_metadata.name).first || userData.email,
       });
 
-      await contactAdd(
-        { email: userData.email, name: userData.user_metadata.name },
-        false
-      );
+      // await contactAdd(
+      //   { email: userData.email, name: userData.user_metadata.name },
+      //   false
+      // );
     }
 
     // if "next" is in param, use it as the redirect URL

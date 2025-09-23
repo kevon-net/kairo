@@ -15,12 +15,28 @@ import {
 import React from 'react';
 import SpotlightSearch from '@/components/spotlights/search';
 import SpotlightCommands from '@/components/spotlights/commands';
+import { usePomo } from '@/components/contexts/pomo-cycles';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Main() {
+  const { startPhase, session } = usePomo();
+  const pathname = usePathname();
+  const router = useRouter();
+
   return (
     <Stack p={`xs`} gap={5}>
-      <Tooltip label={'Quick create session'} position={'right'}>
-        <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
+      <Tooltip label={'Start quick session'} position={'right'}>
+        <ActionIcon
+          variant="subtle"
+          size={ICON_WRAPPER_SIZE}
+          disabled={!!session}
+          onClick={() => {
+            const appHomePath = '/app/home';
+            if (pathname != appHomePath) router.push(appHomePath);
+
+            startPhase();
+          }}
+        >
           <IconClockPlus size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
         </ActionIcon>
       </Tooltip>

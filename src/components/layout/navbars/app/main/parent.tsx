@@ -1,9 +1,11 @@
 'use client';
 
 import {
+  COOKIE_NAME,
   ICON_SIZE,
   ICON_STROKE_WIDTH,
   ICON_WRAPPER_SIZE,
+  WEEK,
 } from '@/data/constants';
 import { ActionIcon, Skeleton, Stack, Tooltip } from '@mantine/core';
 import {
@@ -19,7 +21,10 @@ import SpotlightCommands from '@/components/spotlights/commands';
 import { usePomo } from '@/components/contexts/pomo-cycles';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { AppShell } from '@/types/components/app-shell';
+import { updateAppShell } from '@/libraries/redux/slices/app-shell';
+import { setCookieClient } from '@/utilities/helpers/cookie-client';
 
 export default function Main() {
   const sessions = useAppSelector((state) => state.sessions.value);
@@ -29,6 +34,19 @@ export default function Main() {
   const pathname = usePathname();
   const router = useRouter();
   const appHomePath = '/app/home';
+
+  const appShell = useAppSelector((state) => state.appShell.value);
+  const dispatch = useAppDispatch();
+
+  const handleAppshellChange = (params: AppShell) => {
+    if (!appShell) return;
+
+    dispatch(updateAppShell(params));
+
+    setCookieClient(COOKIE_NAME.APP_SHELL, params, {
+      expiryInSeconds: WEEK,
+    });
+  };
 
   return (
     <Stack p={`xs`} gap={5}>
@@ -61,7 +79,24 @@ export default function Main() {
         </Tooltip>
       )}
 
-      <Tooltip label={'See full timeline'} position={'right'}>
+      <Tooltip
+        label={'See full timeline'}
+        position={'right'}
+        onClick={() => {
+          if (appShell == null) return;
+
+          if (pathname != appHomePath) router.push(appHomePath);
+
+          if (appShell.child.aside == true) {
+            // shift focus to child aside
+          } else {
+            handleAppshellChange({
+              ...appShell,
+              child: { ...appShell.child, aside: true },
+            });
+          }
+        }}
+      >
         <ActionIcon variant="subtle" size={ICON_WRAPPER_SIZE}>
           <IconTimeline size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
         </ActionIcon>

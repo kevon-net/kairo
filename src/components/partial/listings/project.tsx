@@ -3,23 +3,32 @@
 import React from 'react';
 import PlaceholderEmpty from '@/components/placeholder/empty';
 import { SECTION_SPACING } from '@/data/constants';
-import { Button, Container } from '@mantine/core';
-import { capitalizeWords } from '@/utilities/formatters/string';
-import { useTaskActions } from '@/hooks/actions/tasks';
+import { Container, Stack } from '@mantine/core';
+import { useSessionActions } from '@/hooks/actions/sessions';
+import CardSessionLive from '@/components/common/cards/session/live';
+import { useAppSelector } from '@/hooks/redux';
+import { useTabAside } from '@/hooks/tab/navbar';
+import TabCategory from '@/components/common/tabs/category';
 
-export default function Project({
-  props,
-}: {
-  props: { projectTitle: string | null; projectId: string | null };
-}) {
-  const { tasks, categories, createTask } = useTaskActions();
+export default function Project() {
+  const appShell = useAppSelector((state) => state.appShell.value);
 
-  const categoryTasks = tasks?.filter((t) => t.category_id == props.projectId);
-  const category = categories?.find((c) => c.id == props.projectId);
+  const { sessions, categories } = useSessionActions();
+  const { category, filteredSessions } = useTabAside();
+
+  const asideChildclosed = appShell && appShell.child.aside == false;
 
   return (
-    <Container p={{ md: SECTION_SPACING }} py={SECTION_SPACING / 2}>
-      {tasks == null || categories == null ? (
+    <Container
+      p={{ md: SECTION_SPACING }}
+      py={SECTION_SPACING / 2}
+      h={
+        asideChildclosed && filteredSessions?.length
+          ? undefined
+          : 'calc(100vh - 55px)'
+      }
+    >
+      {sessions == null || categories == null ? (
         'loading ui goes here' // Avoid rendering mismatched DOM before hydration
       ) : !category ? (
         <PlaceholderEmpty
@@ -28,24 +37,17 @@ export default function Project({
             desc: "The project doesn't seem to exist.",
           }}
         />
-      ) : !categoryTasks?.length ? (
-        <PlaceholderEmpty
-          props={{
-            title: `No ${capitalizeWords(props.projectTitle || '')} Tasks Found`,
-            desc: 'Add some tasks to get started',
-          }}
-        >
-          <Button
-            size="xs"
-            onClick={() =>
-              createTask({ values: { category_id: props.projectId } })
-            }
-          >
-            Add task
-          </Button>
-        </PlaceholderEmpty>
       ) : (
-        'list tasks here'
+        <Stack
+          h={'100%'}
+          justify={
+            asideChildclosed && filteredSessions?.length ? undefined : 'center'
+          }
+        >
+          <CardSessionLive props={{ categoryId: category.id }} />
+
+          {asideChildclosed && <TabCategory />}
+        </Stack>
       )}
     </Container>
   );

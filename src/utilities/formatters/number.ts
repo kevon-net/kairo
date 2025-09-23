@@ -19,7 +19,7 @@ export const millToMinSec = (milliseconds: number): MinSec | null => {
   }
 };
 
-// helpet that takes in seconds and returns minutes and seconds
+// helper that takes in seconds and returns minutes and seconds
 export const secToMinSec = (seconds: number): MinSec | null => {
   try {
     if (seconds < 0) throw new Error('Seconds value cannot be negative.');
@@ -28,6 +28,24 @@ export const secToMinSec = (seconds: number): MinSec | null => {
     const remainingSeconds = (seconds % 60).toString();
 
     return { minutes, seconds: remainingSeconds };
+  } catch (error) {
+    console.error('x-> Time convertion failure:', error);
+    return null;
+  }
+};
+
+// helper that takes in seconds and returns hours, minutes, and seconds
+export const secToHourMinSec = (
+  seconds: number
+): (MinSec & { hours: string }) | null => {
+  try {
+    if (seconds < 0) throw new Error('Seconds value cannot be negative.');
+
+    const hours = Math.floor(seconds / 3600).toString();
+    const minutes = Math.floor((seconds % 3600) / 60).toString();
+    const remainingSeconds = (seconds % 60).toString();
+
+    return { hours, minutes, seconds: remainingSeconds };
   } catch (error) {
     console.error('x-> Time convertion failure:', error);
     return null;

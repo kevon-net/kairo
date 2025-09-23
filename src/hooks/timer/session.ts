@@ -13,7 +13,8 @@ export type TimerEvent = SessionGet & { reason?: StopReason };
 
 export const useSessionTimer = () => {
   const { createSession, updateSession, deleteSession } = useSessionActions();
-  const { createPomoCycle, updatePomoCycle } = usePomoCycleActions();
+  const { createPomoCycle, updatePomoCycle, deletePomoCycle } =
+    usePomoCycleActions();
 
   const [session, setSession] = useState<Partial<SessionGet> | null>(null);
   const [pomoCycle, setPomoCycle] = useState<Partial<PomoCycleGet> | null>(
@@ -21,13 +22,13 @@ export const useSessionTimer = () => {
   );
 
   // handler to start new session timer
-  const handleStartTimer = (params?: { pomoDuration?: number }) => {
+  const handleStartTimer = (params?: Partial<SessionGet>) => {
     if (session) return;
 
     const cycleId = generateUUID();
 
     const newSession = createSession({
-      values: { duration: params?.pomoDuration, cycle_id: cycleId },
+      values: { cycle_id: cycleId, ...params },
     });
 
     if (newSession) {
@@ -50,10 +51,7 @@ export const useSessionTimer = () => {
         });
       }
 
-      setSession({
-        ...newSession,
-        duration: !params?.pomoDuration ? null : params.pomoDuration,
-      });
+      setSession({ ...newSession, ...params });
     }
   };
 
@@ -100,20 +98,23 @@ export const useSessionTimer = () => {
       (session && (!session.duration || session.duration == session.elapsed))
     ) {
       updateSession({ values: stoppedSession as SessionGet });
-    } else {
-      deleteSession({
-        values: { ...session, status: Status.INACTIVE } as SessionGet,
-      });
-
-      if (params?.options?.cycleReset) setPomoCycle(null);
 
       updatePomoCycle({
         values: {
           ...pomoCycle,
-          status: Status.INACTIVE,
           current_session_id: null,
         } as PomoCycleGet,
       });
+    } else {
+      if (session)
+        deleteSession({
+          values: { ...session, status: Status.INACTIVE } as SessionGet,
+        });
+
+      if (params?.options?.cycleReset && pomoCycle) {
+        deletePomoCycle({ values: pomoCycle as PomoCycleGet });
+        setPomoCycle(null);
+      }
     }
   };
 
@@ -168,7 +169,7 @@ export const useSessionTimer = () => {
       0,
       (session?.duration || 0) - (session?.elapsed || 0)
     ),
-    elapsedTime: session?.elapsed,
+    elapsedTime: session?.elapsed || 0,
     startTimer: handleStartTimer,
     pauseTimer: handlePauseTimer,
     resumeTimer: handleResumeTimer,

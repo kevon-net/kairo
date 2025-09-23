@@ -55,7 +55,7 @@ export const useSessionActions = () => {
     // add to state
     dispatch(addSession(sessionNew));
 
-    if (pathname != path) router.push(path);
+    if (pathname != path && !sessionNew.category_id) router.push(path);
 
     return sessionNew;
   };

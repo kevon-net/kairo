@@ -1,11 +1,13 @@
 'use client';
 
+import { usePomo } from '@/components/contexts/pomo-cycles';
 import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
-import { usePomoCycles } from '@/hooks/pomo';
+import { useTabAside } from '@/hooks/tab/navbar';
 import { prependZeros, secToMinSec } from '@/utilities/formatters/number';
 import { Status } from '@generated/prisma';
 import {
   ActionIcon,
+  Badge,
   Box,
   Center,
   Group,
@@ -26,7 +28,9 @@ import {
 } from '@tabler/icons-react';
 import React from 'react';
 
-export default function Live() {
+export default function Live({ props }: { props?: { categoryId?: string } }) {
+  const { category } = useTabAside();
+
   const {
     phase,
     phaseTime,
@@ -40,11 +44,11 @@ export default function Live() {
     resumeTimer,
     skipPhase,
     stopTimer,
-  } = usePomoCycles();
+  } = usePomo();
 
   const progressValue =
-    ((elapsedTime || 0) / (session?.duration || phaseTime)) * 100;
-  const defaultMinSec = { minutes: phaseTime, seconds: '00' };
+    ((elapsedTime || 0) / (session?.duration || phaseTime.duration)) * 100;
+  const defaultMinSec = { minutes: phaseTime.duration, seconds: '00' };
   const minSec = secToMinSec(remainingTime || defaultMinSec.minutes);
 
   return (
@@ -155,6 +159,20 @@ export default function Live() {
       </Box>
 
       <Box pos={'relative'}>
+        {category && (
+          <Center
+            pos={'absolute'}
+            top={60}
+            left={0}
+            right={0}
+            style={{ zIndex: -1 }}
+          >
+            <Badge size="xs" color={`${category.color}.6` || undefined}>
+              {category.title}
+            </Badge>
+          </Center>
+        )}
+
         <Center
           pos={'absolute'}
           top={0}
@@ -213,7 +231,15 @@ export default function Live() {
 
           {!session && (
             <Tooltip label={'Start session'}>
-              <ActionIcon variant={'light'} color="pri.5" onClick={startPhase}>
+              <ActionIcon
+                variant={'light'}
+                color="pri.5"
+                onClick={() =>
+                  startPhase({
+                    values: { category_id: props?.categoryId || null },
+                  })
+                }
+              >
                 <IconPlayerPlay size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
               </ActionIcon>
             </Tooltip>

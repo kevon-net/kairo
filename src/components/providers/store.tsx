@@ -45,7 +45,7 @@ export default function Store({
   session,
   children,
 }: {
-  session: User | null;
+  session?: User | null;
   children: React.ReactNode;
 }) {
   const storeRef = useRef<AppStore | null>(null);

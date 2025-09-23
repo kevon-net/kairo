@@ -28,7 +28,7 @@ export const useFormUserAccountNotifications = () => {
       } catch (error) {
         notifications.show({
           id: 'notifications-update-failed',
-          icon: IconNotification({ variant: Variant.FAILED }),
+          icon: IconNotification({ props: { variant: Variant.FAILED } }),
           title: `Send Failed`,
           message: (error as Error).message,
           variant: 'failed',

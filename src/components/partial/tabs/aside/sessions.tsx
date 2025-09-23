@@ -15,10 +15,12 @@ import { capitalizeWords } from '@/utilities/formatters/string';
 import CardSessionAside from '@/components/common/cards/session/aside';
 import { Order } from '@/enums/sort';
 import { sortArray } from '@/utilities/helpers/array';
+import { usePomo } from '@/components/contexts/pomo-cycles';
 
 export default function Sessions() {
   const { category, filteredSessions } = useTabAside();
   const { createSession } = useSessionActions();
+  const { startPhase, session } = usePomo();
 
   return (
     <div>
@@ -39,11 +41,12 @@ export default function Sessions() {
             ) : (
               <Button
                 size="xs"
+                disabled={!!session}
                 leftSection={
                   <IconPlus size={ICON_SIZE - 2} stroke={ICON_STROKE_WIDTH} />
                 }
                 onClick={() =>
-                  createSession({ values: { category_id: category?.id } })
+                  startPhase({ values: { category_id: category?.id } })
                 }
               >
                 Start new session
@@ -86,8 +89,6 @@ export default function Sessions() {
           ))
         )}
       </Stack>
-
-      <div style={{ minHeight: '100vh' }}></div>
     </div>
   );
 }

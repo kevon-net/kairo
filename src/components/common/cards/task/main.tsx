@@ -67,7 +67,7 @@ export default function Main({ item }: { item: TaskGet }) {
           >
             <Button
               size="compact-xs"
-              color="dark"
+              variant="default"
               fw={'normal'}
               leftSection={
                 <IconPlayerPlayFilled

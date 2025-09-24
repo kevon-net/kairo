@@ -95,7 +95,7 @@ export default function Sessions() {
         </Box>
       )}
 
-      <Stack gap={'xl'} pb={'xs'}>
+      <Stack gap={'xl'} mt={'xs'}>
         {sessions == null ? (
           <>skeletons</>
         ) : filteredSessions.length == 0 ? (

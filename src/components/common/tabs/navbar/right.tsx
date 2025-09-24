@@ -8,11 +8,16 @@ import {
   TabsPanel,
   TabsTab,
   Text,
+  ThemeIcon,
   Tooltip,
 } from '@mantine/core';
 import classes from './right.module.scss';
 import { IconChartDots, IconCheckbox, IconLogs } from '@tabler/icons-react';
-import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/data/constants';
+import {
+  ICON_SIZE,
+  ICON_STROKE_WIDTH,
+  ICON_WRAPPER_SIZE,
+} from '@/data/constants';
 import { useTabAside } from '@/hooks/tab/navbar';
 import PartialTabAsideTasks from '@/components/partial/tabs/aside/tasks';
 import PartialTabAsideSessions from '@/components/partial/tabs/aside/sessions';
@@ -41,7 +46,9 @@ export default function Right() {
         <TabsTab value="sessions">
           <Tooltip label={'Sessions'}>
             <Group justify="center">
-              <IconLogs size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              <ThemeIcon size={ICON_WRAPPER_SIZE} variant={'transparent'}>
+                <IconLogs size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              </ThemeIcon>
             </Group>
           </Tooltip>
         </TabsTab>
@@ -64,7 +71,9 @@ export default function Right() {
             }
           >
             <Group justify="center">
-              <IconCheckbox size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              <ThemeIcon size={ICON_WRAPPER_SIZE} variant={'transparent'}>
+                <IconCheckbox size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              </ThemeIcon>
             </Group>
           </Tooltip>
         </TabsTab>
@@ -72,7 +81,9 @@ export default function Right() {
         <TabsTab value="analytics">
           <Tooltip label={'Analytics'}>
             <Group justify="center">
-              <IconChartDots size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              <ThemeIcon size={ICON_WRAPPER_SIZE} variant={'transparent'}>
+                <IconChartDots size={ICON_SIZE} stroke={ICON_STROKE_WIDTH} />
+              </ThemeIcon>
             </Group>
           </Tooltip>
         </TabsTab>

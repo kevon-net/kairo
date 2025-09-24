@@ -53,7 +53,7 @@ export default function Tasks() {
         </Box>
       )}
 
-      <Stack gap={'xs'}>
+      <Stack gap={'xs'} mt={'xs'}>
         {filteredTasks == null ? (
           <>skeletons</>
         ) : filteredTasks.length == 0 ? (

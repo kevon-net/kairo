@@ -26,7 +26,7 @@ export default function Aside({ item }: { item: SessionGet }) {
     category || categories?.find((c) => c.id == item.category_id);
   const selectedTask = tasks?.find((t) => t.id == item.task_id);
 
-  const [elapsedTime, setElapsedTime] = useState(item.elapsed);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   const hourMinSec = secToHourMinSec(elapsedTime);
 
@@ -34,16 +34,22 @@ export default function Aside({ item }: { item: SessionGet }) {
     if (timerMode == null) return;
     if (timerMode.mode == 'stopwatch') return;
 
-    if (sessionPomo && sessionPomo.id == item.id)
+    if (sessionPomo && sessionPomo.id == item.id) {
       setElapsedTime(sessionPomo.elapsed || 0);
+    } else {
+      if (!elapsedTime) setElapsedTime(item.elapsed);
+    }
   }, [sessionPomo]);
 
   useEffect(() => {
     if (timerMode == null) return;
     if (timerMode.mode == 'timer') return;
 
-    if (sessionStopwatch && sessionStopwatch.id == item.id)
+    if (sessionStopwatch && sessionStopwatch.id == item.id) {
       setElapsedTime(sessionStopwatch.elapsed || 0);
+    } else {
+      if (!elapsedTime) setElapsedTime(item.elapsed);
+    }
   }, [sessionStopwatch]);
 
   const duration = (

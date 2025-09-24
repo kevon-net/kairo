@@ -17,7 +17,7 @@ export default function Main({ item }: { item: SessionGet }) {
   const { session: sessionPomo } = usePomo();
   const { session: sessionStopwatch } = useSessionTimer();
 
-  const [elapsedTime, setElapsedTime] = useState(item.elapsed);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   const hourMinSec = secToHourMinSec(elapsedTime);
 
@@ -25,16 +25,22 @@ export default function Main({ item }: { item: SessionGet }) {
     if (timerMode == null) return;
     if (timerMode.mode == 'stopwatch') return;
 
-    if (sessionPomo && sessionPomo.id == item.id)
+    if (sessionPomo && sessionPomo.id == item.id) {
       setElapsedTime(sessionPomo.elapsed || 0);
+    } else {
+      if (!elapsedTime) setElapsedTime(item.elapsed);
+    }
   }, [sessionPomo]);
 
   useEffect(() => {
     if (timerMode == null) return;
     if (timerMode.mode == 'timer') return;
 
-    if (sessionStopwatch && sessionStopwatch.id == item.id)
+    if (sessionStopwatch && sessionStopwatch.id == item.id) {
       setElapsedTime(sessionStopwatch.elapsed || 0);
+    } else {
+      if (!elapsedTime) setElapsedTime(item.elapsed);
+    }
   }, [sessionStopwatch]);
 
   return (
